@@ -39,6 +39,12 @@
 		79FC9E48294D6F5A00EBD520 /* SignUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC9E47294D6F5A00EBD520 /* SignUp.swift */; };
 		79FC9E4B294D74B900EBD520 /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC9E4A294D74B900EBD520 /* FirebaseDynamicLinks */; };
 		9BBC17BC18BCF405431DDF7A /* Pods_Slide.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 535A26981279339B76C5137D /* Pods_Slide.framework */; };
+		E8AF9E572978091000D3E007 /* EventPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AF9E562978091000D3E007 /* EventPostView.swift */; };
+		E8AF9E5B29780C0C00D3E007 /* LocationSearchActivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AF9E5A29780C0C00D3E007 /* LocationSearchActivationView.swift */; };
+		E8AF9E642978107000D3E007 /* EventSearchHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AF9E632978107000D3E007 /* EventSearchHomeView.swift */; };
+		E8AF9E66297810D200D3E007 /* EventLocationRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AF9E65297810D200D3E007 /* EventLocationRepresentable.swift */; };
+		E8AF9E69297811C900D3E007 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AF9E68297811C900D3E007 /* LocationManager.swift */; };
+		E8AF9E6E297815DD00D3E007 /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AF9E6D297815DD00D3E007 /* LocationSearchView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +95,12 @@
 		A62C57F2A1972928D6636155 /* Pods-Slide-SlideUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Slide-SlideUITests.debug.xcconfig"; path = "Target Support Files/Pods-Slide-SlideUITests/Pods-Slide-SlideUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D6FE6A74FB855C9A2A61329C /* Pods-Slide-SlideUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Slide-SlideUITests.release.xcconfig"; path = "Target Support Files/Pods-Slide-SlideUITests/Pods-Slide-SlideUITests.release.xcconfig"; sourceTree = "<group>"; };
 		DBC652B361FCDE4E14DBCAA5 /* Pods-Slide.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Slide.debug.xcconfig"; path = "Target Support Files/Pods-Slide/Pods-Slide.debug.xcconfig"; sourceTree = "<group>"; };
+		E8AF9E562978091000D3E007 /* EventPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPostView.swift; sourceTree = "<group>"; };
+		E8AF9E5A29780C0C00D3E007 /* LocationSearchActivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchActivationView.swift; sourceTree = "<group>"; };
+		E8AF9E632978107000D3E007 /* EventSearchHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSearchHomeView.swift; sourceTree = "<group>"; };
+		E8AF9E65297810D200D3E007 /* EventLocationRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLocationRepresentable.swift; sourceTree = "<group>"; };
+		E8AF9E68297811C900D3E007 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		E8AF9E6D297815DD00D3E007 /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
 		FDE084974153F08459712170 /* Pods-SlideTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SlideTests.debug.xcconfig"; path = "Target Support Files/Pods-SlideTests/Pods-SlideTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -186,6 +198,11 @@
 		79BB5D732950B515007E5342 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E8AF9E6A297815AE00D3E007 /* LocationSearchView */,
+				E8AF9E622978104200D3E007 /* EventSearchHomeView */,
+				E8AF9E5C29780D1D00D3E007 /* EventLocationRepresentable */,
+				E8AF9E5829780BB700D3E007 /* LocationSearchActivationView */,
+				E8AF9E55297808D900D3E007 /* EventPost */,
 				79FC9E07294D605300EBD520 /* ContentView.swift */,
 				795C5BF9295418D7007FDA83 /* MainView.swift */,
 				79BB5D742950B522007E5342 /* Authentication */,
@@ -232,6 +249,7 @@
 		79FC9E04294D605300EBD520 /* Slide */ = {
 			isa = PBXGroup;
 			children = (
+				E8AF9E67297811AE00D3E007 /* Managers */,
 				79FC9E05294D605300EBD520 /* SlideApp.swift */,
 				79BB5D732950B515007E5342 /* Views */,
 				79FC9E09294D605300EBD520 /* Assets.xcassets */,
@@ -265,6 +283,54 @@
 				79FC9E22294D605300EBD520 /* SlideUITestsLaunchTests.swift */,
 			);
 			path = SlideUITests;
+			sourceTree = "<group>";
+		};
+		E8AF9E55297808D900D3E007 /* EventPost */ = {
+			isa = PBXGroup;
+			children = (
+				E8AF9E562978091000D3E007 /* EventPostView.swift */,
+			);
+			path = EventPost;
+			sourceTree = "<group>";
+		};
+		E8AF9E5829780BB700D3E007 /* LocationSearchActivationView */ = {
+			isa = PBXGroup;
+			children = (
+				E8AF9E5A29780C0C00D3E007 /* LocationSearchActivationView.swift */,
+			);
+			path = LocationSearchActivationView;
+			sourceTree = "<group>";
+		};
+		E8AF9E5C29780D1D00D3E007 /* EventLocationRepresentable */ = {
+			isa = PBXGroup;
+			children = (
+				E8AF9E65297810D200D3E007 /* EventLocationRepresentable.swift */,
+			);
+			path = EventLocationRepresentable;
+			sourceTree = "<group>";
+		};
+		E8AF9E622978104200D3E007 /* EventSearchHomeView */ = {
+			isa = PBXGroup;
+			children = (
+				E8AF9E632978107000D3E007 /* EventSearchHomeView.swift */,
+			);
+			path = EventSearchHomeView;
+			sourceTree = "<group>";
+		};
+		E8AF9E67297811AE00D3E007 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				E8AF9E68297811C900D3E007 /* LocationManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		E8AF9E6A297815AE00D3E007 /* LocationSearchView */ = {
+			isa = PBXGroup;
+			children = (
+				E8AF9E6D297815DD00D3E007 /* LocationSearchView.swift */,
+			);
+			path = LocationSearchView;
 			sourceTree = "<group>";
 		};
 		EC23291506F331E25E21E665 /* Pods */ = {
@@ -499,18 +565,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8AF9E642978107000D3E007 /* EventSearchHomeView.swift in Sources */,
+				E8AF9E69297811C900D3E007 /* LocationManager.swift in Sources */,
 				795C5BFA295418D7007FDA83 /* MainView.swift in Sources */,
 				795C5BEE2953FEEB007FDA83 /* ListPage.swift in Sources */,
 				79FC9E08294D605300EBD520 /* ContentView.swift in Sources */,
+				E8AF9E66297810D200D3E007 /* EventLocationRepresentable.swift in Sources */,
 				795C5BFD29541A26007FDA83 /* MessagesTab.swift in Sources */,
+				E8AF9E6E297815DD00D3E007 /* LocationSearchView.swift in Sources */,
 				79FC9E48294D6F5A00EBD520 /* SignUp.swift in Sources */,
 				795C5BF629540B00007FDA83 /* SettingsView.swift in Sources */,
 				79DCC255295611D6000FCD6F /* MapPage.swift in Sources */,
 				795C5BEC2953FEDD007FDA83 /* MapOnly.swift in Sources */,
 				79FC9E06294D605300EBD520 /* SlideApp.swift in Sources */,
 				795C5BF829540B10007FDA83 /* Profile View.swift in Sources */,
+				E8AF9E572978091000D3E007 /* EventPostView.swift in Sources */,
 				795C5BF02953FF00007FDA83 /* Highlights.swift in Sources */,
 				79FC9E46294D6A6300EBD520 /* LogIn.swift in Sources */,
+				E8AF9E5B29780C0C00D3E007 /* LocationSearchActivationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -670,7 +742,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Slide/Preview Content\"";
-				DEVELOPMENT_TEAM = DVVP87F8GY;
+				DEVELOPMENT_TEAM = S875H4AZ6G;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Slide/Info.plist;
@@ -704,7 +776,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Slide/Preview Content\"";
-				DEVELOPMENT_TEAM = DVVP87F8GY;
+				DEVELOPMENT_TEAM = S875H4AZ6G;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Slide/Info.plist;
