@@ -3,7 +3,6 @@
   use_frameworks!
 
 target 'Slide' do
- pod 'AEOTPTextField'
 
   target 'SlideTests' do
     inherit! :search_paths
