@@ -23,18 +23,23 @@ struct Highlights: View {
                         Rectangle()
                             .frame(width: 400, height: 400)
                             .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                        
+                            
+                        Image("Highlight1")
+                            .resizable()
+                            .clipped()
+                            .clipShape(Rectangle())
+                            .frame(width: 400, height: 400)
                         
                         VStack {
                             HStack {
                                     
-                                    Image("ProfilePic")
+                                    Image("ProfilePic2")
                                     .resizable()
                                     .clipShape(Circle())
                                     .frame(width: 35, height: 35)
                                     .padding(7.5)
                                 
-                                Text("TomHolland")
+                                Text("Zendaya")
                                 
                                 Spacer()
 

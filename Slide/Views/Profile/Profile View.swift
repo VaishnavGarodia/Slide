@@ -18,14 +18,14 @@ struct Profile_View: View {
         VStack {
             ZStack {
                 Circle()
-                    .frame(width: 150.0, height: 150.0)
+                    .frame(width: 120.0, height: 120.0)
                     .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
                     .padding()
                 
                 Image("ProfilePic")
                     .resizable()
                     .clipShape(Circle())
-                    .frame(width: 140.0, height: 140.0)
+                    .frame(width: 110.0, height: 110.0)
             }
             
             Text("TomHolland")
@@ -175,7 +175,6 @@ struct Profile_View: View {
                 }
             }
         }
-        .ignoresSafeArea()
     }
 
 

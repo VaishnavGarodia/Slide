@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MessagesTab: View {
-    @State public var numGroups = 5
+    @State public var numGroups = 1
     @State public var searchMessages = ""
     var body: some View {
         VStack {
@@ -40,9 +40,12 @@ struct MessagesTab: View {
                                     .padding()
                                 .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
                                 
-                                Image(systemName: "map")
+                                Image("Group Pic")
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width:50, height:50)
                             }
-                            Text("Group")
+                            Text("Avengers")
                                 .padding(.leading, -10.0)
                             Spacer()
                                 
@@ -56,13 +59,157 @@ struct MessagesTab: View {
                                     .padding()
                                     .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
                                 
-                                Image(systemName: "person")
+                                Image("ProfilePic2")
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width:50,  height:50)
+                                    
                             }
-                            Text("Person")
+                            Text("Zendaya")
                                 .padding(.leading, -10.0)
                             Spacer()
                                 
-                            Text("1m")
+                            Text("3m")
+                                .padding()
+                        }
+                        HStack {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 50)
+                                    .padding()
+                                    .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                                
+                                Image("ProfilePic3")
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width:50,  height:50)
+                                    
+                            }
+                            Text("Robert Downey Jr.")
+                                .padding(.leading, -10.0)
+                            Spacer()
+                                
+                            Text("15m")
+                                .padding()
+                        }
+                        HStack {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 50)
+                                    .padding()
+                                    .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                                
+                                Image(systemName: "person")
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width:30,  height:30)
+                                    
+                            }
+                            Text("Fan")
+                                .padding(.leading, -10.0)
+                            Spacer()
+                                
+                            Text("35m")
+                                .padding()
+                        }
+                        HStack {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 50)
+                                    .padding()
+                                    .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                                
+                                Image(systemName: "person")
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width:30,  height:30)
+                                    
+                            }
+                            Text("Fan")
+                                .padding(.leading, -10.0)
+                            Spacer()
+                                
+                            Text("1h")
+                                .padding()
+                        }
+                        HStack {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 50)
+                                    .padding()
+                                    .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                                
+                                Image(systemName: "person")
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width:30,  height:30)
+                                    
+                            }
+                            Text("Fan")
+                                .padding(.leading, -10.0)
+                            Spacer()
+                                
+                            Text("2h")
+                                .padding()
+                        }
+                        HStack {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 50)
+                                    .padding()
+                                    .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                                
+                                Image(systemName: "person")
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width:30,  height:30)
+                                    
+                            }
+                            Text("Fan")
+                                .padding(.leading, -10.0)
+                            Spacer()
+                                
+                            Text("7h")
+                                .padding()
+                        }
+                        HStack {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 50)
+                                    .padding()
+                                    .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                                
+                                Image(systemName: "person")
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width:30,  height:30)
+                                    
+                            }
+                            Text("Fan")
+                                .padding(.leading, -10.0)
+                            Spacer()
+                                
+                            Text("1h")
+                                .padding()
+                        }
+                        HStack {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 50)
+                                    .padding()
+                                    .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                                
+                                Image(systemName: "person")
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .frame(width:30,  height:30)
+                                    
+                            }
+                            Text("Fan")
+                                .padding(.leading, -10.0)
+                            Spacer()
+                                
+                            Text("1h")
                                 .padding()
                         }
                     }

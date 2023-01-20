@@ -8,7 +8,9 @@
 import SwiftUI
 import Firebase
 import FirebaseFirestore
+import FirebaseStorage
 
+let storage = Storage.storage()
 let db = Firestore.firestore()
 
 struct SignUp: View {

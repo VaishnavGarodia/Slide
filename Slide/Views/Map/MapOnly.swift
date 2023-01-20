@@ -22,7 +22,7 @@ struct MapOnly: UIViewRepresentable {
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         if let location = locationManager.location?.coordinate {
-            let span = MKCoordinateSpan(latitudeDelta: 0.025, longitudeDelta: 0.025)
+            let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
             let region = MKCoordinateRegion(center: location, span: span)
             mapView.setRegion(region, animated: true)
         }

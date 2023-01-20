@@ -8,6 +8,9 @@
 import SwiftUI
 import FirebaseCore
 import FirebaseFirestore
+import FirebaseAuth
+
+var handle: AuthStateDidChangeListenerHandle?
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
@@ -16,6 +19,20 @@ class AppDelegate: NSObject, UIApplicationDelegate {
       
     return true
   }
+}
+
+class MainViewController: UITableViewController {
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        handle = Auth.auth().addStateDidChangeListener { auth, user in
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+          Auth.auth().removeStateDidChangeListener(handle!)
+        }
 }
 
 @main
