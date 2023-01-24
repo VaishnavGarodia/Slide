@@ -9,13 +9,15 @@ import SwiftUI
 
 struct LocationSearchView: View {
     @State private var location = ""
+    @StateObject var viewModel = LocationSearchViewModel()
+    
     
     var body: some View {
         VStack {
             VStack {
                 // you could make this a zstack with a rounded rectangle so the shape is more modernized (see map page for example)
                 // just a cosmetic thing ofc
-                TextField("Event Location", text: $location)
+                TextField("Event Location", text: $viewModel.queryFragment)
                     .frame(height:30)
                     .background(Color(.systemGray4))
                     .padding(.leading)
@@ -28,7 +30,7 @@ struct LocationSearchView: View {
             
             ScrollView {
                 VStack(alignment: .leading) {
-                    ForEach(0 ..< 20, id: \.self) { _ in
+                    ForEach(viewModel.results, id: \.self) {result in
                         HStack {
                             Image(systemName: "mappin.circle.fill")
                                 .resizable()
@@ -37,10 +39,10 @@ struct LocationSearchView: View {
                                 .frame(width:40, height: 40)
                             
                             VStack {
-                                Text("Sig Ep")
+                                Text(result.title)
                                     .font(.body)
                                 
-                                Text("Santa Teresa Drive, Stanford CA")
+                                Text(result.subtitle)
                                     .font(.system(size: 15))
                                     .foregroundColor(.gray)
                                 
@@ -52,7 +54,7 @@ struct LocationSearchView: View {
                 }
             }
             
-        }
+        }.background(.black)
     }
 }
 
