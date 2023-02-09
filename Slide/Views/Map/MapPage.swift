@@ -14,6 +14,8 @@ struct MapPage: View {
             MapOnly()
                 .ignoresSafeArea()
             
+            LocationSearchView()
+            
             VStack {
                 HStack {
                     Spacer()
@@ -46,24 +48,6 @@ struct MapPage: View {
                 Spacer()
             }
             .padding()
-            
-            VStack (alignment: .center){
-                ZStack {
-                    RoundedRectangle(cornerRadius: 25)
-                        .foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.5))
-                        .clipped()
-                        .frame(width: 250, height: 40)
-                    HStack {
-                         Image(systemName: "magnifyingglass")
-                            
-                         TextField("Search", text: $searchText)
-                     }
-                    .padding()
-                }
-                .frame(width:220)
-                Spacer()
-            }
-            
 
         }
     }

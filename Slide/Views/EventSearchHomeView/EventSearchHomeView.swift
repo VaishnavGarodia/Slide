@@ -11,9 +11,6 @@ struct EventSearchHomeView: View {
     @State private var showLocationSearchView = false
     var body: some View {
         ZStack(alignment: .top) {
-//             would it be possible to use the map page for this?
-//            EventLocationRepresentable()
-//                .ignoresSafeArea()
             MapOnly()
                 .ignoresSafeArea()
             

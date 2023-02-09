@@ -66,7 +66,7 @@ struct SignUp: View {
                             .stroke(Color("OppositeColor")))
                 
                 HStack {
-                    Button(action: { signup() }) {
+                    Button(action: {signup() }) {
                         Text("Sign up")
                         Image(systemName: "mappin")
                     }
@@ -91,7 +91,9 @@ struct SignUp: View {
                 Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
                     if error != nil {
                         errormessage = (error?.localizedDescription ?? "")
-                    } else {
+                    } else if let result = result{
+                        let changeRequest = result.user.createProfileChangeRequest()
+                                changeRequest.displayName = username
                         addUser()
                     }
                 }

@@ -42,6 +42,12 @@ struct Highlights: View {
                                 Text("Zendaya")
                                 
                                 Spacer()
+                                
+                                Text("Spider-Man Photoshoot")
+                                    .font(.caption)
+                                    .fontWeight(.thin)
+                                    .foregroundColor(Color.white)
+                                    .padding()
 
                             }
                             Spacer()

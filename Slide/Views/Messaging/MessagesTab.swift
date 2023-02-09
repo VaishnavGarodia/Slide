@@ -49,7 +49,7 @@ struct MessagesTab: View {
                                 .padding(.leading, -10.0)
                             Spacer()
                                 
-                            Text("1m")
+                            Text("1m •")
                                 .padding()
                         }
                         HStack {
@@ -69,7 +69,7 @@ struct MessagesTab: View {
                                 .padding(.leading, -10.0)
                             Spacer()
                                 
-                            Text("3m")
+                            Text("3m •")
                                 .padding()
                         }
                         HStack {
@@ -99,13 +99,13 @@ struct MessagesTab: View {
                                     .padding()
                                     .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
                                 
-                                Image(systemName: "person")
+                                Image("profilepic4")
                                     .resizable()
                                     .clipShape(Circle())
-                                    .frame(width:30,  height:30)
+                                    .frame(width:50,  height:50)
                                     
                             }
-                            Text("Fan")
+                            Text("Chris Evans")
                                 .padding(.leading, -10.0)
                             Spacer()
                                 
@@ -119,17 +119,17 @@ struct MessagesTab: View {
                                     .padding()
                                     .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
                                 
-                                Image(systemName: "person")
+                                Image( "profilepic5")
                                     .resizable()
                                     .clipShape(Circle())
-                                    .frame(width:30,  height:30)
+                                    .frame(width:50,  height:50)
                                     
                             }
-                            Text("Fan")
+                            Text("Andrew Garfield")
                                 .padding(.leading, -10.0)
                             Spacer()
                                 
-                            Text("1h")
+                            Text("1h •")
                                 .padding()
                         }
                         HStack {
@@ -139,13 +139,13 @@ struct MessagesTab: View {
                                     .padding()
                                     .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
                                 
-                                Image(systemName: "person")
+                                Image("profilepic6")
                                     .resizable()
                                     .clipShape(Circle())
-                                    .frame(width:30,  height:30)
+                                    .frame(width:50,  height:50)
                                     
                             }
-                            Text("Fan")
+                            Text("Tobey Maguire")
                                 .padding(.leading, -10.0)
                             Spacer()
                                 

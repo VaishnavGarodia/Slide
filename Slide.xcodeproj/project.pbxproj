@@ -10,6 +10,7 @@
 		36614A166FC1BBF2782EC5A2 /* Pods_SlideTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C4436BE782A842DA8B304B9 /* Pods_SlideTests.framework */; };
 		3E9CFC0660AE53F4DB270BF5 /* Pods_Slide_SlideUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 373F23F270F6DE74FA6C661D /* Pods_Slide_SlideUITests.framework */; };
 		79017B652954EE1600257EED /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 79017B642954EE1600257EED /* FirebaseFirestore */; };
+		7935E7C52997111F00CC893F /* UserListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935E7C42997111F00CC893F /* UserListener.swift */; };
 		795C5BEC2953FEDD007FDA83 /* MapOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795C5BEB2953FEDD007FDA83 /* MapOnly.swift */; };
 		795C5BEE2953FEEB007FDA83 /* ListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795C5BED2953FEEB007FDA83 /* ListPage.swift */; };
 		795C5BF02953FF00007FDA83 /* Highlights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795C5BEF2953FF00007FDA83 /* Highlights.swift */; };
@@ -70,6 +71,7 @@
 		3C4436BE782A842DA8B304B9 /* Pods_SlideTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SlideTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43FA22D754FC9BB9C9A5F85A /* Pods-Slide.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Slide.release.xcconfig"; path = "Target Support Files/Pods-Slide/Pods-Slide.release.xcconfig"; sourceTree = "<group>"; };
 		535A26981279339B76C5137D /* Pods_Slide.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Slide.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7935E7C42997111F00CC893F /* UserListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListener.swift; sourceTree = "<group>"; };
 		795C5BEB2953FEDD007FDA83 /* MapOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapOnly.swift; sourceTree = "<group>"; };
 		795C5BED2953FEEB007FDA83 /* ListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPage.swift; sourceTree = "<group>"; };
 		795C5BEF2953FF00007FDA83 /* Highlights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Highlights.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 			children = (
 				795C5BEB2953FEDD007FDA83 /* MapOnly.swift */,
 				79DCC254295611D6000FCD6F /* MapPage.swift */,
+				E8AF9E6D297815DD00D3E007 /* LocationSearchView.swift */,
 				795C5BED2953FEEB007FDA83 /* ListPage.swift */,
 			);
 			path = Map;
@@ -201,7 +204,6 @@
 			isa = PBXGroup;
 			children = (
 				E886058929812D5000BDD9E4 /* LocationSearchViewModel */,
-				E8AF9E6A297815AE00D3E007 /* LocationSearchView */,
 				E8AF9E622978104200D3E007 /* EventSearchHomeView */,
 				E8AF9E5C29780D1D00D3E007 /* EventLocationRepresentable */,
 				E8AF9E5829780BB700D3E007 /* LocationSearchActivationView */,
@@ -252,7 +254,7 @@
 		79FC9E04294D605300EBD520 /* Slide */ = {
 			isa = PBXGroup;
 			children = (
-				E8AF9E67297811AE00D3E007 /* Managers */,
+				E8AF9E67297811AE00D3E007 /* Managers-Classes */,
 				79FC9E05294D605300EBD520 /* SlideApp.swift */,
 				79BB5D732950B515007E5342 /* Views */,
 				79FC9E09294D605300EBD520 /* Assets.xcassets */,
@@ -328,20 +330,13 @@
 			path = EventSearchHomeView;
 			sourceTree = "<group>";
 		};
-		E8AF9E67297811AE00D3E007 /* Managers */ = {
+		E8AF9E67297811AE00D3E007 /* Managers-Classes */ = {
 			isa = PBXGroup;
 			children = (
 				E8AF9E68297811C900D3E007 /* LocationManager.swift */,
+				7935E7C42997111F00CC893F /* UserListener.swift */,
 			);
-			path = Managers;
-			sourceTree = "<group>";
-		};
-		E8AF9E6A297815AE00D3E007 /* LocationSearchView */ = {
-			isa = PBXGroup;
-			children = (
-				E8AF9E6D297815DD00D3E007 /* LocationSearchView.swift */,
-			);
-			path = LocationSearchView;
+			path = "Managers-Classes";
 			sourceTree = "<group>";
 		};
 		EC23291506F331E25E21E665 /* Pods */ = {
@@ -578,6 +573,7 @@
 			files = (
 				E8AF9E642978107000D3E007 /* EventSearchHomeView.swift in Sources */,
 				E8AF9E69297811C900D3E007 /* LocationManager.swift in Sources */,
+				7935E7C52997111F00CC893F /* UserListener.swift in Sources */,
 				795C5BFA295418D7007FDA83 /* MainView.swift in Sources */,
 				795C5BEE2953FEEB007FDA83 /* ListPage.swift in Sources */,
 				79FC9E08294D605300EBD520 /* ContentView.swift in Sources */,
@@ -754,7 +750,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Slide/Preview Content\"";
-				DEVELOPMENT_TEAM = S875H4AZ6G;
+				DEVELOPMENT_TEAM = DVVP87F8GY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Slide/Info.plist;
@@ -788,7 +784,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Slide/Preview Content\"";
-				DEVELOPMENT_TEAM = S875H4AZ6G;
+				DEVELOPMENT_TEAM = DVVP87F8GY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Slide/Info.plist;

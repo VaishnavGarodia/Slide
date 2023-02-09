@@ -45,7 +45,7 @@ struct ListPage: View {
                                         Image(systemName: "mappin")
                                             .padding(.leading,  40)
                                             .padding(.trailing,  -5)
-                                        Text("")
+                                        Text("Arcade")
                                         .padding(.bottom,  2.5)
                                     }
                                     Text("7:00 PM")

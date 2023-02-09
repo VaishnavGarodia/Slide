@@ -7,9 +7,16 @@
 
 import SwiftUI
 
+
 struct ContentView: View {
+    @ObservedObject var userListener = UserListener()
+    
     var body: some View {
-    LogIn()
+        if userListener.user != nil {
+            MainView()
+                    } else {
+                        LogIn()
+                    }
     }
 }
 
