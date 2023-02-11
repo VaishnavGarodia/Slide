@@ -40,6 +40,11 @@
 		79FC9E48294D6F5A00EBD520 /* SignUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC9E47294D6F5A00EBD520 /* SignUp.swift */; };
 		79FC9E4B294D74B900EBD520 /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC9E4A294D74B900EBD520 /* FirebaseDynamicLinks */; };
 		9BBC17BC18BCF405431DDF7A /* Pods_Slide.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 535A26981279339B76C5137D /* Pods_Slide.framework */; };
+		E807DF4529A238050093C87C /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807DF4429A238050093C87C /* UserService.swift */; };
+		E807DF4829A23C0E0093C87C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E807DF4729A23C0E0093C87C /* User.swift */; };
+		E807DF4A29A2B06B0093C87C /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E807DF4929A2B06B0093C87C /* FirebaseFirestoreSwift */; };
+		E81B7A6229A22A49005AA4EE /* NewEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81B7A6129A22A49005AA4EE /* NewEventView.swift */; };
+		E81B7A6829A22CE6005AA4EE /* TextAreaEventDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81B7A6729A22CE6005AA4EE /* TextAreaEventDescription.swift */; };
 		E886058B29812D5F00BDD9E4 /* LocationSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886058A29812D5F00BDD9E4 /* LocationSearchViewModel.swift */; };
 		E8AF9E572978091000D3E007 /* EventPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AF9E562978091000D3E007 /* EventPostView.swift */; };
 		E8AF9E5B29780C0C00D3E007 /* LocationSearchActivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AF9E5A29780C0C00D3E007 /* LocationSearchActivationView.swift */; };
@@ -98,6 +103,10 @@
 		A62C57F2A1972928D6636155 /* Pods-Slide-SlideUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Slide-SlideUITests.debug.xcconfig"; path = "Target Support Files/Pods-Slide-SlideUITests/Pods-Slide-SlideUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D6FE6A74FB855C9A2A61329C /* Pods-Slide-SlideUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Slide-SlideUITests.release.xcconfig"; path = "Target Support Files/Pods-Slide-SlideUITests/Pods-Slide-SlideUITests.release.xcconfig"; sourceTree = "<group>"; };
 		DBC652B361FCDE4E14DBCAA5 /* Pods-Slide.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Slide.debug.xcconfig"; path = "Target Support Files/Pods-Slide/Pods-Slide.debug.xcconfig"; sourceTree = "<group>"; };
+		E807DF4429A238050093C87C /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		E807DF4729A23C0E0093C87C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		E81B7A6129A22A49005AA4EE /* NewEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEventView.swift; sourceTree = "<group>"; };
+		E81B7A6729A22CE6005AA4EE /* TextAreaEventDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAreaEventDescription.swift; sourceTree = "<group>"; };
 		E886058A29812D5F00BDD9E4 /* LocationSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewModel.swift; sourceTree = "<group>"; };
 		E8AF9E562978091000D3E007 /* EventPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPostView.swift; sourceTree = "<group>"; };
 		E8AF9E5A29780C0C00D3E007 /* LocationSearchActivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchActivationView.swift; sourceTree = "<group>"; };
@@ -120,6 +129,7 @@
 				79FC9E3A294D67EA00EBD520 /* FirebaseDatabase in Frameworks */,
 				79017B652954EE1600257EED /* FirebaseFirestore in Frameworks */,
 				79FC9E34294D67EA00EBD520 /* FirebaseAnalytics in Frameworks */,
+				E807DF4A29A2B06B0093C87C /* FirebaseFirestoreSwift in Frameworks */,
 				79FC9E3E294D67EA00EBD520 /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
 				79FC9E3C294D67EA00EBD520 /* FirebaseInAppMessaging-Beta in Frameworks */,
 				79FC9E42294D67EA00EBD520 /* FirebaseRemoteConfig in Frameworks */,
@@ -203,6 +213,7 @@
 		79BB5D732950B515007E5342 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E81B7A6029A229F6005AA4EE /* Create Event */,
 				E886058929812D5000BDD9E4 /* LocationSearchViewModel */,
 				E8AF9E622978104200D3E007 /* EventSearchHomeView */,
 				E8AF9E5C29780D1D00D3E007 /* EventLocationRepresentable */,
@@ -254,6 +265,8 @@
 		79FC9E04294D605300EBD520 /* Slide */ = {
 			isa = PBXGroup;
 			children = (
+				E807DF4629A23BFF0093C87C /* Model */,
+				E807DF4329A237E30093C87C /* Service */,
 				E8AF9E67297811AE00D3E007 /* Managers-Classes */,
 				79FC9E05294D605300EBD520 /* SlideApp.swift */,
 				79BB5D732950B515007E5342 /* Views */,
@@ -288,6 +301,31 @@
 				79FC9E22294D605300EBD520 /* SlideUITestsLaunchTests.swift */,
 			);
 			path = SlideUITests;
+			sourceTree = "<group>";
+		};
+		E807DF4329A237E30093C87C /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				E807DF4429A238050093C87C /* UserService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		E807DF4629A23BFF0093C87C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E807DF4729A23C0E0093C87C /* User.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		E81B7A6029A229F6005AA4EE /* Create Event */ = {
+			isa = PBXGroup;
+			children = (
+				E81B7A6129A22A49005AA4EE /* NewEventView.swift */,
+				E81B7A6729A22CE6005AA4EE /* TextAreaEventDescription.swift */,
+			);
+			path = "Create Event";
 			sourceTree = "<group>";
 		};
 		E886058929812D5000BDD9E4 /* LocationSearchViewModel */ = {
@@ -381,6 +419,7 @@
 				79FC9E43294D67EA00EBD520 /* FirebaseStorage */,
 				79FC9E4A294D74B900EBD520 /* FirebaseDynamicLinks */,
 				79017B642954EE1600257EED /* FirebaseFirestore */,
+				E807DF4929A2B06B0093C87C /* FirebaseFirestoreSwift */,
 			);
 			productName = Slide;
 			productReference = 79FC9E02294D605300EBD520 /* Slide.app */;
@@ -578,16 +617,20 @@
 				795C5BEE2953FEEB007FDA83 /* ListPage.swift in Sources */,
 				79FC9E08294D605300EBD520 /* ContentView.swift in Sources */,
 				E8AF9E66297810D200D3E007 /* EventLocationRepresentable.swift in Sources */,
+				E807DF4529A238050093C87C /* UserService.swift in Sources */,
 				795C5BFD29541A26007FDA83 /* MessagesTab.swift in Sources */,
 				E8AF9E6E297815DD00D3E007 /* LocationSearchView.swift in Sources */,
+				E81B7A6829A22CE6005AA4EE /* TextAreaEventDescription.swift in Sources */,
 				79FC9E48294D6F5A00EBD520 /* SignUp.swift in Sources */,
 				795C5BF629540B00007FDA83 /* SettingsView.swift in Sources */,
 				79DCC255295611D6000FCD6F /* MapPage.swift in Sources */,
 				795C5BEC2953FEDD007FDA83 /* MapOnly.swift in Sources */,
+				E81B7A6229A22A49005AA4EE /* NewEventView.swift in Sources */,
 				79FC9E06294D605300EBD520 /* SlideApp.swift in Sources */,
 				E886058B29812D5F00BDD9E4 /* LocationSearchViewModel.swift in Sources */,
 				795C5BF829540B10007FDA83 /* Profile View.swift in Sources */,
 				E8AF9E572978091000D3E007 /* EventPostView.swift in Sources */,
+				E807DF4829A23C0E0093C87C /* User.swift in Sources */,
 				795C5BF02953FF00007FDA83 /* Highlights.swift in Sources */,
 				79FC9E46294D6A6300EBD520 /* LogIn.swift in Sources */,
 				E8AF9E5B29780C0C00D3E007 /* LocationSearchActivationView.swift in Sources */,
@@ -750,7 +793,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Slide/Preview Content\"";
-				DEVELOPMENT_TEAM = DVVP87F8GY;
+				DEVELOPMENT_TEAM = S875H4AZ6G;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Slide/Info.plist;
@@ -767,7 +810,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "SlideiOS-THOMAS";
+				PRODUCT_BUNDLE_IDENTIFIER = "SlideiOS-THOMASNEW";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -784,7 +827,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Slide/Preview Content\"";
-				DEVELOPMENT_TEAM = DVVP87F8GY;
+				DEVELOPMENT_TEAM = S875H4AZ6G;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Slide/Info.plist;
@@ -801,7 +844,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "SlideiOS-THOMAS";
+				PRODUCT_BUNDLE_IDENTIFIER = "SlideiOS-THOMASNEW";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -992,6 +1035,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 79FC9E32294D67EA00EBD520 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseDynamicLinks;
+		};
+		E807DF4929A2B06B0093C87C /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 79FC9E32294D67EA00EBD520 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestoreSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

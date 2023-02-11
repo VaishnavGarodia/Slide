@@ -17,6 +17,7 @@ struct LogIn: View {
     @State var loggedIn = false
     @State var errormessage = ""
     @State var emailChange = false
+    
     // body of View
     var body: some View {
         if loggedIn {
