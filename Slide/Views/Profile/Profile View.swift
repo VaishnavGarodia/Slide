@@ -6,16 +6,32 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct Profile_View: View {
     @State public var recSize = 100.0
     @State public var numEvents = 1
     @State public var numHighlights = 1
     @State public var numSaved = 1
+    @State public var user = Auth.auth().currentUser
+//    
+//    func downloadpic()  -> Image {
+//        var profilePic = Image("")
+//        var profilePicRef = storageRef.child("profilePics/" + (user?.uid ?? "default") + ".jpg")
+//        profilePicRef.getData(maxSize: 1 * 1024 * 1024) { data, error in
+//
+//          if let error = error {
+//            return
+//          } else {
+//              profilePic =  Image(uiImage: UIImage(data: data) ?? "ProfilePic")
+//          }
+//        }
+//        return profilePic
+//    }
     
     var body: some View {
-        
         VStack {
+            
             ZStack {
                 Circle()
                     .frame(width: 120.0, height: 120.0)
@@ -28,8 +44,8 @@ struct Profile_View: View {
                     .frame(width: 110.0, height: 110.0)
             }
             
-            Text("TomHolland")
-                .padding(-20.0)
+            Text(user?.displayName ?? "")
+            
             
             VStack (alignment: .leading) {
                 
@@ -176,7 +192,6 @@ struct Profile_View: View {
             }
         }
     }
-
 
 }
 

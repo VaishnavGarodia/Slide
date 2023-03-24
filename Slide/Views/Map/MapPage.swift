@@ -26,8 +26,11 @@ struct MapPage: View {
                                 .clipped()
                                 .frame(width: 35)
                                 .foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.5))
-                            Image(systemName: "plus")
-                                .imageScale(.large)
+                            NavigationLink(destination:  CreatingNewEventView()) {
+                                    Image(systemName: "plus")
+                                        .imageScale(.large)
+                            }
+                            .foregroundColor(.white)
                         }
 
                         ZStack {

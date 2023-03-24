@@ -13,8 +13,16 @@ class UserListener: ObservableObject {
     @Published var user: User?
 
     init() {
-        _ = Auth.auth().addStateDidChangeListener { (auth, user) in
-            self.user = user
+        listenForAuthChanges()
+    }
+
+    private func listenForAuthChanges() {
+        Auth.auth().addStateDidChangeListener { (auth, user) in
+            if let user = user {
+                self.user = user
+            } else {
+                self.user = nil
+            }
         }
     }
 }

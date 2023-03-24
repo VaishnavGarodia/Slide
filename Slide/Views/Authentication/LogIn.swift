@@ -59,6 +59,7 @@ struct LogIn: View {
                     Capsule(style: .continuous)
                         .stroke(Color.cyan))
                 
+                // sign up view
                 NavigationLink(destination: SignUp()) {
                     Text("Don't have an account?")
                         .foregroundColor(.gray)
@@ -68,7 +69,7 @@ struct LogIn: View {
         }
     }
 
-    
+    // logs user in
     func login() {
         if  !emailChange {
             email2 = email
@@ -80,7 +81,7 @@ struct LogIn: View {
                     
                     switch authErrorCode {
                     case .invalidEmail:
-                        let emailRef = db.collection("users").document(email)
+                        let emailRef = db.collection("Users").document(email)
                         emailRef.getDocument(source: .cache) { (document, error) in
                                 if let document = document {
                                     email2 = document.get("email") as! String

@@ -9,6 +9,8 @@ import SwiftUI
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseAuth
+import FirebaseStorage
+import Firebase
 
 var handle: AuthStateDidChangeListenerHandle?
 
@@ -48,3 +50,7 @@ struct SlideApp: App {
     }
   }
 }
+
+let storage = Storage.storage()
+let storageRef = storage.reference()
+let db = Firestore.firestore()

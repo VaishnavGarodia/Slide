@@ -13,17 +13,17 @@ struct EventSearchHomeView: View {
         ZStack(alignment: .top) {
             MapOnly()
                 .ignoresSafeArea()
-            
-            if showLocationSearchView {
-                LocationSearchView()
-            }
-            else {
-                LocationSearchActivationView()
-                    .padding(.top, 30)
-                    .onTapGesture {
-                        showLocationSearchView.toggle()
-                    }
-            }
+            LocationSearchView()
+//            if showLocationSearchView {
+//                LocationSearchView()
+//            }
+//            else {
+//                LocationSearchActivationView()
+//                    .padding(.top, 30)
+//                    .onTapGesture {
+//                        showLocationSearchView.toggle()
+//                    }
+//            }
         }
     }
 }
