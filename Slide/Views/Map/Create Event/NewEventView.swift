@@ -5,9 +5,9 @@
 //  Created by Thomas Shundi on 2/19/23.
 //
 
-import SwiftUI
 import FirebaseAuth
 import FirebaseStorage
+import SwiftUI
 
 struct NewEventView: View {
     @State private var eventName = ""
@@ -16,7 +16,6 @@ struct NewEventView: View {
     @State private var eventEnd = Date()
     @State private var user = Auth.auth().currentUser
     var body: some View {
-        
         VStack {
             HStack(alignment: .top) {
                 Button {
@@ -39,12 +38,11 @@ struct NewEventView: View {
                         .background(Color(.lightGray))
                         .clipShape(Capsule())
                 }
-                
             }
             .padding()
             
             // link this to other bs you dumbass mf
-            NavigationLink(destination:  EventSearchHomeView()) {
+            NavigationLink(destination: EventSearchHomeView()) {
                 Text("Location")
                     .foregroundColor(Color(.systemTeal))
                     .bold()
@@ -53,7 +51,7 @@ struct NewEventView: View {
                 
                     .background(
                         Capsule()
-                            .frame(width:150, height:50)
+                            .frame(width: 150, height: 50)
                     )
             }
             
@@ -67,15 +65,16 @@ struct NewEventView: View {
             Spacer()
         }
     }
+
     func addEvent() {
-        let username = user?.displayName ??  ""
+        let username = user?.displayName ?? ""
         let eventsRef = db.collection("Events").document(username + eventName + eventStart.formatted(date: .numeric, time: .shortened))
-        eventsRef.getDocument {(document, error) in
+        eventsRef.getDocument { document, _ in
             if let document = document, document.exists {
                 print("error")
             }
             eventsRef.setData([
-                "eventName" : eventName,
+                "eventName": eventName,
                 "eventDescription": eventDescription,
                 "eventStart": eventStart,
                 "eventEnd": eventEnd,

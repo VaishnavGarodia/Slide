@@ -5,28 +5,28 @@
 //  Created by Ethan Harianto on 12/16/22.
 //
 
-import SwiftUI
+import Contacts
 import Firebase
 import FirebaseFirestore
 import FirebaseStorage
-import Contacts
+import SwiftUI
 
-struct ContactInfo : Identifiable{
+struct ContactInfo: Identifiable {
     var id = UUID()
     var firstName: String
     var lastName: String
     var phoneNumber: CNPhoneNumber?
 }
 
-func fetchingContacts() -> [ContactInfo]{
+func fetchingContacts() -> [ContactInfo] {
     var contacts = [ContactInfo]()
     let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey]
     let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
     do {
-        try CNContactStore().enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
+        try CNContactStore().enumerateContacts(with: request, usingBlock: { contact, _ in
             contacts.append(ContactInfo(firstName: contact.givenName, lastName: contact.familyName, phoneNumber: contact.phoneNumbers.first?.value))
         })
-    } catch let error {
+    } catch {
         print("Failed", error)
     }
     contacts = contacts.sorted {
@@ -47,8 +47,7 @@ struct SignUp: View {
     @State private var contactList = [ContactInfo]()
     
     var body: some View {
-        
-        if emailSwitch {            
+        if emailSwitch {
             VStack {
                 Image("logo")
                     .padding(.all, -120.0)
@@ -58,7 +57,6 @@ struct SignUp: View {
             .padding()
             .transition(.slide)
         } else {
-            
             VStack {
                 Image("logo")
                     .padding(.all, -120.0)
@@ -96,7 +94,7 @@ struct SignUp: View {
                             .stroke(Color("OppositeColor")))
                 
                 HStack {
-                    Button(action: {signup() }) {
+                    Button(action: { signup() }) {
                         Text("Sign up")
                         Image(systemName: "mappin")
                     }
@@ -117,15 +115,15 @@ struct SignUp: View {
     
     func signup() {
         if password != confirmpass {
-            errormessage = ("Passwords were not spelt the same.")
+            errormessage = "Passwords were not spelt the same."
         } else {
-            Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+            Auth.auth().createUser(withEmail: email, password: password) { result, error in
                 if error != nil {
                     errormessage = (error?.localizedDescription ?? "")
-                } else if let result = result{
+                } else if let result = result {
                     let changeRequest = result.user.createProfileChangeRequest()
                     changeRequest.displayName = username
-                    changeRequest.commitChanges { (error) in}
+                    changeRequest.commitChanges { _ in }
                     
                     let contactsGranted = requestContactsPermission()
                     if contactsGranted {
@@ -141,7 +139,7 @@ struct SignUp: View {
     func requestContactsPermission() -> Bool {
         let store = CNContactStore()
         var allowed = true
-        store.requestAccess(for: .contacts) { granted, error in
+        store.requestAccess(for: .contacts) { granted, _ in
             if granted {
                 print("Contacts access granted")
                 allowed = true
@@ -155,9 +153,9 @@ struct SignUp: View {
     
     func addContact(contact: ContactInfo) {
         let contactRef = db.collection("Contacts").document(username + "-" + contact.id.uuidString)
-        contactRef.getDocument {(document, error) in
+        contactRef.getDocument { document, _ in
             if let document = document, document.exists {
-                errormessage = ("BIG ISSUE: Somehow username + id exists")
+                errormessage = "BIG ISSUE: Somehow username + id exists"
             } else {
                 contactRef.setData([
                     "ContactUsername": username,
@@ -165,8 +163,7 @@ struct SignUp: View {
                     "id": contact.id.uuidString,
                     "lastName": contact.lastName,
                     "phoneNumber": contact.phoneNumber?.stringValue
-                ])
-                { err in
+                ]) { err in
                     if let err = err {
                         print("Error adding document: \(err)")
                     } else {
@@ -186,9 +183,9 @@ struct SignUp: View {
     
     func addUser() {
         let usersRef = db.collection("Users").document(username)
-        usersRef.getDocument {(document, error) in
+        usersRef.getDocument { document, _ in
             if let document = document, document.exists {
-                errormessage = ("Username taken.")
+                errormessage = "Username taken."
             } else {
                 addAllContacts()
                 var contactIdList = []
@@ -201,8 +198,7 @@ struct SignUp: View {
                     "Username": username,
                     "Phone": phoneNumber,
                     "Concats": contactIdList
-                    ])
-                { err in
+                ]) { err in
                     if let err = err {
                         print("Error adding document: \(err)")
                     } else {
@@ -211,11 +207,10 @@ struct SignUp: View {
                     }
                 }
             }
-        }		    
+        }
     }
 }
             
-
 struct SignUp_Previews: PreviewProvider {
     static var previews: some View {
         SignUp()

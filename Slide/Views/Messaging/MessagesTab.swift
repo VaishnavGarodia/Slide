@@ -20,8 +20,8 @@ struct MessagesTab: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                     TextField("Search", text: $searchMessages)
-                         }
-                        .padding()
+                }
+                .padding()
                 Spacer()
                 Image(systemName: "person.badge.plus")
                     .padding()
@@ -32,18 +32,18 @@ struct MessagesTab: View {
             
             ScrollView {
                 VStack {
-                    ForEach(0..<numGroups, id: \.self) {_ in
+                    ForEach(0 ..< numGroups, id: \.self) { _ in
                         HStack {
                             ZStack {
                                 Circle()
                                     .frame(width: 50)
                                     .padding()
-                                .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                                    .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
                                 
                                 Image("Group Pic")
                                     .resizable()
                                     .clipShape(Circle())
-                                    .frame(width:50, height:50)
+                                    .frame(width: 50, height: 50)
                             }
                             Text("Avengers")
                                 .padding(.leading, -10.0)
@@ -62,8 +62,7 @@ struct MessagesTab: View {
                                 Image("ProfilePic2")
                                     .resizable()
                                     .clipShape(Circle())
-                                    .frame(width:50,  height:50)
-                                    
+                                    .frame(width: 50, height: 50)
                             }
                             Text("Zendaya")
                                 .padding(.leading, -10.0)
@@ -82,8 +81,7 @@ struct MessagesTab: View {
                                 Image("ProfilePic3")
                                     .resizable()
                                     .clipShape(Circle())
-                                    .frame(width:50,  height:50)
-                                    
+                                    .frame(width: 50, height: 50)
                             }
                             Text("Robert Downey Jr.")
                                 .padding(.leading, -10.0)
@@ -102,8 +100,7 @@ struct MessagesTab: View {
                                 Image("profilepic4")
                                     .resizable()
                                     .clipShape(Circle())
-                                    .frame(width:50,  height:50)
-                                    
+                                    .frame(width: 50, height: 50)
                             }
                             Text("Chris Evans")
                                 .padding(.leading, -10.0)
@@ -119,11 +116,10 @@ struct MessagesTab: View {
                                     .padding()
                                     .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
                                 
-                                Image( "profilepic5")
+                                Image("profilepic5")
                                     .resizable()
                                     .clipShape(Circle())
-                                    .frame(width:50,  height:50)
-                                    
+                                    .frame(width: 50, height: 50)
                             }
                             Text("Andrew Garfield")
                                 .padding(.leading, -10.0)
@@ -142,8 +138,7 @@ struct MessagesTab: View {
                                 Image("profilepic6")
                                     .resizable()
                                     .clipShape(Circle())
-                                    .frame(width:50,  height:50)
-                                    
+                                    .frame(width: 50, height: 50)
                             }
                             Text("Tobey Maguire")
                                 .padding(.leading, -10.0)
@@ -162,8 +157,7 @@ struct MessagesTab: View {
                                 Image(systemName: "person")
                                     .resizable()
                                     .clipShape(Circle())
-                                    .frame(width:30,  height:30)
-                                    
+                                    .frame(width: 30, height: 30)
                             }
                             Text("Fan")
                                 .padding(.leading, -10.0)
@@ -182,8 +176,7 @@ struct MessagesTab: View {
                                 Image(systemName: "person")
                                     .resizable()
                                     .clipShape(Circle())
-                                    .frame(width:30,  height:30)
-                                    
+                                    .frame(width: 30, height: 30)
                             }
                             Text("Fan")
                                 .padding(.leading, -10.0)
@@ -202,8 +195,7 @@ struct MessagesTab: View {
                                 Image(systemName: "person")
                                     .resizable()
                                     .clipShape(Circle())
-                                    .frame(width:30,  height:30)
-                                    
+                                    .frame(width: 30, height: 30)
                             }
                             Text("Fan")
                                 .padding(.leading, -10.0)

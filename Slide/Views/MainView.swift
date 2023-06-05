@@ -20,41 +20,39 @@ struct MainView: View {
     @State private var selection = 2
     var body: some View {
         // tab view means theres a tab bar and the selection makes it so it depends on the variable we called selection
-            TabView(selection:$selection) {
+        TabView(selection: $selection) {
+            Highlights()
+                .tabItem {
+                    Label("", systemImage: "light.ribbon")
+                }
+                .tag(0)
                 
-                Highlights()
-                    .tabItem {
-                        Label("", systemImage: "light.ribbon")
-                    }
-                    .tag(0)
+            MessagesTab()
+                .tabItem {
+                    Label("", systemImage: "person.2")
+                }
+                .tag(1)
                 
-                MessagesTab()
-                    .tabItem {
-                        Label("", systemImage: "person.2")
-                    }
-                    .tag(1)
+            MapPage()
+                .tabItem {
+                    Label("", systemImage: "map")
+                }
+                .tag(2)
                 
-                MapPage()
-                    .tabItem {
-                        Label("", systemImage: "map")
-                    }
-                    .tag(2)
+            Profile_View()
+                .tabItem {
+                    Label("", systemImage: "person.circle")
+                }
+                .tag(3)
                 
-                Profile_View()
-                    .tabItem {
-                        Label("", systemImage: "person.circle")
-                    }
-                    .tag(3)
-                
-                SettingsView()
-                    .tabItem {
-                        Label("", systemImage: "gear")
-                    }
-                    .tag(4)
-            }
-        
+            SettingsView()
+                .tabItem {
+                    Label("", systemImage: "gear")
+                }
+                .tag(4)
         }
     }
+}
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {

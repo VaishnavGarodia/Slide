@@ -5,13 +5,12 @@
 //  Created by Ethan Harianto on 3/4/23.
 //
 
-import SwiftUI
-import SwiftUI
 import FirebaseAuth
-import FirebaseStorage
 import FirebaseFirestore
+import FirebaseStorage
+import SwiftUI
 
-class selectedLocation : ObservableObject {
+class selectedLocation: ObservableObject {
     @Published var details: String
     
     init() {
@@ -34,7 +33,7 @@ struct findLocationView: View {
             }
             
             VStack {
-                VStack (alignment: .center){
+                VStack(alignment: .center) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 25)
                             .foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.5))
@@ -42,27 +41,27 @@ struct findLocationView: View {
                             .frame(width: 250, height: 40)
                         HStack {
                             Image(systemName: "magnifyingglass")
-                            TextField("Search", text: $viewModel.queryFragment, onEditingChanged: { (editingChanged) in
+                            TextField("Search", text: $viewModel.queryFragment, onEditingChanged: { editingChanged in
                                 if editingChanged {
                                     click.toggle()
-                                } else {
+                                }
+                                else {
                                     click.toggle()
                                 }
-                            }
-                            )
+                            })
                         }
                         .padding()
                     }
-                    .frame(width:220)
+                    .frame(width: 220)
                 }
                 
                 Divider()
                     .padding(.top, -5)
                 
-                if (click && viewModel.queryFragment != "")   {
+                if click && viewModel.queryFragment != "" {
                     ScrollView {
                         VStack(alignment: .leading) {
-                            ForEach(viewModel.results, id: \.self) {result in
+                            ForEach(viewModel.results, id: \.self) { result in
                                 if result.subtitle != "Search Nearby" {
                                     Button(action: {
                                         location.details = result.subtitle
@@ -74,7 +73,7 @@ struct findLocationView: View {
                                                 .resizable()
                                                 .foregroundColor(.blue)
                                                 .accentColor(.white)
-                                                .frame(width:40, height: 40)
+                                                .frame(width: 40, height: 40)
                                             
                                             VStack {
                                                 Text(result.title)
@@ -85,7 +84,6 @@ struct findLocationView: View {
                                                     .foregroundColor(.gray)
                                                 
                                                 Divider()
-                                                
                                             }
                                         }
                                     }
@@ -103,7 +101,6 @@ struct findLocationView: View {
     }
 }
 
-
 // OutsideView
 struct CreatingNewEventView: View {
     @ObservedObject var location = selectedLocation()
@@ -113,10 +110,8 @@ struct CreatingNewEventView: View {
     @State private var eventEnd = Date()
     @State private var user = Auth.auth().currentUser
     var body: some View {
-        
         VStack {
             HStack(alignment: .top) {
-                
                 Spacer()
                 
                 Button {
@@ -131,7 +126,6 @@ struct CreatingNewEventView: View {
                         .clipShape(Capsule())
                 }
                 .buttonStyle(.borderless)
-                
             }
             .padding()
             
@@ -143,11 +137,10 @@ struct CreatingNewEventView: View {
                     .padding(.vertical, 10)
                     .background(
                         RoundedRectangle(cornerRadius: 25)
-                            .frame(width:150, height:50)
+                            .frame(width: 150, height: 50)
                             .foregroundColor(.gray)
                     )
             }
-            
             
             // I'm keeping this page simpler for now. This will eventually only represent the event name but im allowing it to span the whole page just for the time being since I want to get to the backend functionality sooner. The location buttton kinda weird too...
             // I will also add other text input boxes. Ie times, other notes, overall description, etc.
@@ -170,18 +163,18 @@ struct CreatingNewEventView: View {
     
     // fix conflicts
     func addEvent() {
-        if (location.details != "") {
-            let username = user?.displayName ??  ""
+        if location.details != "" {
+            let username = user?.displayName ?? ""
             let eventsRef = db.collection("Events").document(username + eventName + eventStart.formatted(date: .long, time: .shortened))
             print("Check:")
             print(eventsRef)
-            eventsRef.getDocument {(document, error) in
+            eventsRef.getDocument { document, _ in
                 if let document = document, document.exists {
                     print("")
                 }
                 eventsRef.setData([
-                    "location" : location.details,
-                    "eventName" : eventName,
+                    "location": location.details,
+                    "eventName": eventName,
                     "eventDescription": eventDescription,
                     "eventStart": eventStart,
                     "eventEnd": eventEnd,
@@ -194,8 +187,6 @@ struct CreatingNewEventView: View {
         }
     }
 }
-
-
 
 struct CreatingNewEventView_Previews: PreviewProvider {
     static var previews: some View {

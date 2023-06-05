@@ -13,12 +13,11 @@ struct Highlights: View {
     var body: some View {
         ScrollView {
             VStack {
-                ForEach(0..<numHighlights, id: \.self) {_ in
+                ForEach(0 ..< numHighlights, id: \.self) { _ in
                     ZStack {
-                                                
                         RoundedRectangle(cornerRadius: 25)
                             .frame(width: 400, height: 500)
-                            .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2 ))
+                            .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
                             
                         Rectangle()
                             .frame(width: 400, height: 400)
@@ -32,8 +31,7 @@ struct Highlights: View {
                         
                         VStack {
                             HStack {
-                                    
-                                    Image("ProfilePic2")
+                                Image("ProfilePic2")
                                     .resizable()
                                     .clipShape(Circle())
                                     .frame(width: 35, height: 35)
@@ -48,20 +46,18 @@ struct Highlights: View {
                                     .fontWeight(.thin)
                                     .foregroundColor(Color.white)
                                     .padding()
-
                             }
                             Spacer()
                             HStack {
                                 Spacer()
                                 Image(systemName: "bubble.left")
                                     .imageScale(.medium)
-                                .padding()
+                                    .padding()
                                 Image(systemName: "bookmark")
                                     .imageScale(.medium)
-                                .padding()
+                                    .padding()
                             }
                         }
-                        
                     }
                     .padding(75)
                 }

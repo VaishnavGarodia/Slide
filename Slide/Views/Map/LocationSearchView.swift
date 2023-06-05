@@ -21,7 +21,7 @@ struct LocationSearchView: View {
             }
             
             VStack {
-                VStack (alignment: .center){
+                VStack(alignment: .center) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 25)
                             .foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.5))
@@ -29,27 +29,26 @@ struct LocationSearchView: View {
                             .frame(width: 250, height: 40)
                         HStack {
                             Image(systemName: "magnifyingglass")
-                            TextField("Search", text: $viewModel.queryFragment, onEditingChanged: { (editingChanged) in
+                            TextField("Search", text: $viewModel.queryFragment, onEditingChanged: { editingChanged in
                                 if editingChanged {
                                     click.toggle()
                                 } else {
                                     click.toggle()
                                 }
-                            }
-                            )
+                            })
                         }
                         .padding()
                     }
-                    .frame(width:220)
+                    .frame(width: 220)
                 }
                 
                 Divider()
                     .padding(.top, -5)
                 
-                if (click && viewModel.queryFragment != "")   {
+                if click && viewModel.queryFragment != "" {
                     ScrollView {
                         VStack(alignment: .leading) {
-                            ForEach(viewModel.results, id: \.self) {result in
+                            ForEach(viewModel.results, id: \.self) { result in
                                 if result.subtitle != "Search Nearby" {
                                     ZStack {
                                         HStack {
@@ -57,7 +56,7 @@ struct LocationSearchView: View {
                                                 .resizable()
                                                 .foregroundColor(.blue)
                                                 .accentColor(.white)
-                                                .frame(width:40, height: 40)
+                                                .frame(width: 40, height: 40)
                                             
                                             VStack {
                                                 Text(result.title)
@@ -68,7 +67,6 @@ struct LocationSearchView: View {
                                                     .foregroundColor(.gray)
                                                 
                                                 Divider()
-                                                
                                             }
                                         }
                                     }
@@ -76,8 +74,7 @@ struct LocationSearchView: View {
                             }
                         }
                     }
-                }
-                else {
+                } else {
                     Spacer()
                 }
             }

@@ -5,9 +5,9 @@
 //  Created by Ethan Harianto on 12/16/22.
 //
 
-import SwiftUI
 import Firebase
 import FirebaseFirestore
+import SwiftUI
 
 struct LogIn: View {
     // initializaes variables to which email and password are linked to
@@ -25,7 +25,6 @@ struct LogIn: View {
                 .navigationBarBackButtonHidden()
         } else {
             VStack {
-                    
                 // logo with -120 pixel border
                 Image("logo")
                     .padding(.all, -120.0)
@@ -71,28 +70,26 @@ struct LogIn: View {
 
     // logs user in
     func login() {
-        if  !emailChange {
+        if !emailChange {
             email2 = email
         }
-        Auth.auth().signIn(withEmail: email2, password: password) { (result, error) in
+        Auth.auth().signIn(withEmail: email2, password: password) { _, error in
             if let error = error {
                 let err = error as NSError
                 if let authErrorCode = AuthErrorCode.Code(rawValue: err.code) {
-                    
                     switch authErrorCode {
                     case .invalidEmail:
                         let emailRef = db.collection("Users").document(email)
-                        emailRef.getDocument(source: .cache) { (document, error) in
-                                if let document = document {
-                                    email2 = document.get("email") as! String
-                                    emailChange.toggle()
-                                    login()
-                                    } else {
-                                        errormessage = "Invalid username"
-                                    }
-                                }
+                        emailRef.getDocument(source: .cache) { document, _ in
+                            if let document = document {
+                                email2 = document.get("email") as! String
+                                emailChange.toggle()
+                                login()
+                            } else {
+                                errormessage = "Invalid username"
+                            }
+                        }
                         Auth.auth().signIn(withEmail: email2, password: password)
-                        break
                     default:
                         errormessage = error.localizedDescription
                     }

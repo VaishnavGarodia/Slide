@@ -5,9 +5,9 @@
 //  Created by Ethan Harianto on 2/10/23.
 //
 
+import FirebaseAuth
 import Foundation
 import SwiftUI
-import FirebaseAuth
 
 class UserListener: ObservableObject {
     @Published var user: User?
@@ -17,7 +17,7 @@ class UserListener: ObservableObject {
     }
 
     private func listenForAuthChanges() {
-        Auth.auth().addStateDidChangeListener { (auth, user) in
+        Auth.auth().addStateDidChangeListener { _, user in
             if let user = user {
                 self.user = user
             } else {

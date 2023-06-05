@@ -5,18 +5,18 @@
 //  Created by Ethan Harianto on 12/21/22.
 //
 
-import SwiftUI
-import MapKit
 import CoreLocation
+import MapKit
+import SwiftUI
 
 struct MapOnly: UIViewRepresentable {
     let mapView = MKMapView()
-    
+
     func makeUIView(context: Context) -> MKMapView {
         mapView.showsUserLocation = true
         return mapView
     }
-    
+
     func updateUIView(_ uiView: MKMapView, context: Context) {
         let locationManager = CLLocationManager()
         locationManager.requestWhenInUseAuthorization()
@@ -28,7 +28,6 @@ struct MapOnly: UIViewRepresentable {
         }
     }
 }
-
 
 struct MapOnly_Previews: PreviewProvider {
     static var previews: some View {
