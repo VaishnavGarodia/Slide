@@ -10,23 +10,19 @@ import FirebaseFirestore
 import FirebaseStorage
 import SwiftUI
 
-class selectedLocation: ObservableObject {
-    @Published var details: String
-    
-    init() {
-        details = ""
-    }
+class SelectedLocation: ObservableObject {
+    @Published var details: String = ""
 }
 
-// Inside view
-struct findLocationView: View {
-    @EnvironmentObject var location: selectedLocation
+struct FindLocationView: View {
+    @EnvironmentObject var location: SelectedLocation
     @Environment(\.dismiss) var dismiss
     @StateObject var viewModel = LocationSearchViewModel()
-    @State private var click = false
+    @State private var isSearching = false
+    
     var body: some View {
         ZStack {
-            if click {
+            if isSearching {
                 Rectangle()
                     .foregroundColor(.black.opacity(0.5))
                     .ignoresSafeArea()
@@ -39,15 +35,11 @@ struct findLocationView: View {
                             .foregroundColor(Color(red: 0, green: 0, blue: 0, opacity: 0.5))
                             .clipped()
                             .frame(width: 250, height: 40)
+                        
                         HStack {
                             Image(systemName: "magnifyingglass")
-                            TextField("Search", text: $viewModel.queryFragment, onEditingChanged: { editingChanged in
-                                if editingChanged {
-                                    click.toggle()
-                                }
-                                else {
-                                    click.toggle()
-                                }
+                            TextField("Search", text: $viewModel.queryFragment, onEditingChanged: { isEditing in
+                                isSearching = isEditing
                             })
                         }
                         .padding()
@@ -58,42 +50,38 @@ struct findLocationView: View {
                 Divider()
                     .padding(.top, -5)
                 
-                if click && viewModel.queryFragment != "" {
+                if isSearching && !viewModel.queryFragment.isEmpty {
                     ScrollView {
                         VStack(alignment: .leading) {
-                            ForEach(viewModel.results, id: \.self) { result in
-                                if result.subtitle != "Search Nearby" {
-                                    Button(action: {
-                                        location.details = result.subtitle
-                                        print(location.details)
-                                        dismiss()
-                                    }) {
-                                        HStack {
-                                            Image(systemName: "mappin.circle.fill")
-                                                .resizable()
-                                                .foregroundColor(.blue)
-                                                .accentColor(.white)
-                                                .frame(width: 40, height: 40)
+                            ForEach(viewModel.results.filter { $0.subtitle != "Search Nearby" }, id: \.self) { result in
+                                Button(action: {
+                                    location.details = result.subtitle
+                                    dismiss()
+                                }) {
+                                    HStack {
+                                        Image(systemName: "mappin.circle.fill")
+                                            .resizable()
+                                            .foregroundColor(.blue)
+                                            .accentColor(.white)
+                                            .frame(width: 40, height: 40)
+                                        
+                                        VStack {
+                                            Text(result.title)
+                                                .font(.body)
                                             
-                                            VStack {
-                                                Text(result.title)
-                                                    .font(.body)
-                                                
-                                                Text(result.subtitle)
-                                                    .font(.system(size: 15))
-                                                    .foregroundColor(.gray)
-                                                
-                                                Divider()
-                                            }
+                                            Text(result.subtitle)
+                                                .font(.system(size: 15))
+                                                .foregroundColor(.gray)
+                                            
+                                            Divider()
                                         }
                                     }
-                                    .buttonStyle(.borderless)
                                 }
+                                .buttonStyle(.borderless)
                             }
                         }
                     }
-                }
-                else {
+                } else {
                     Spacer()
                 }
             }
@@ -101,22 +89,22 @@ struct findLocationView: View {
     }
 }
 
-// OutsideView
 struct CreatingNewEventView: View {
-    @ObservedObject var location = selectedLocation()
+    @ObservedObject var location = SelectedLocation()
     @State private var eventName = ""
     @State private var eventDescription = ""
     @State private var eventStart = Date()
     @State private var eventEnd = Date()
     @State private var user = Auth.auth().currentUser
+    
     var body: some View {
         VStack {
             HStack(alignment: .top) {
                 Spacer()
                 
-                Button {
+                Button(action: {
                     addEvent()
-                } label: {
+                }) {
                     Text("Post")
                         .foregroundColor(Color(.systemBlue))
                         .bold()
@@ -129,7 +117,7 @@ struct CreatingNewEventView: View {
             }
             .padding()
             
-            NavigationLink(destination: findLocationView().environmentObject(location)) {
+            NavigationLink(destination: FindLocationView().environmentObject(location)) {
                 Text("Location")
                     .foregroundColor(.teal)
                     .bold()
@@ -142,18 +130,15 @@ struct CreatingNewEventView: View {
                     )
             }
             
-            // I'm keeping this page simpler for now. This will eventually only represent the event name but im allowing it to span the whole page just for the time being since I want to get to the backend functionality sooner. The location buttton kinda weird too...
-            // I will also add other text input boxes. Ie times, other notes, overall description, etc.
-            //            TextAreaEventDescription("Event Description", text: $eventName)
             VStack(alignment: .leading) {
                 Text("Event Name")
-                TextField(" Your Event Name", text: $eventName)
+                TextField("Your Event Name", text: $eventName)
                 DatePicker("Start Time", selection: $eventStart, displayedComponents: [.date, .hourAndMinute])
                     .padding(5)
                 DatePicker("End Time", selection: $eventEnd, displayedComponents: [.date, .hourAndMinute])
                     .padding(5)
                 Text("Event Description")
-                TextField(" Your Event Description", text: $eventDescription)
+                TextField("Your Event Description", text: $eventDescription)
             }
             .padding()
             
@@ -161,29 +146,30 @@ struct CreatingNewEventView: View {
         }
     }
     
-    // fix conflicts
     func addEvent() {
-        if location.details != "" {
-            let username = user?.displayName ?? ""
+        if !location.details.isEmpty {
+            guard let username = user?.displayName else {
+                return
+            }
+            
             let eventsRef = db.collection("Events").document(username + eventName + eventStart.formatted(date: .long, time: .shortened))
-            print("Check:")
-            print(eventsRef)
+            
             eventsRef.getDocument { document, _ in
                 if let document = document, document.exists {
-                    print("")
+                    print("Document already exists.")
+                } else {
+                    eventsRef.setData([
+                        "location": location.details,
+                        "eventName": eventName,
+                        "eventDescription": eventDescription,
+                        "eventStart": eventStart,
+                        "eventEnd": eventEnd,
+                        "username": username
+                    ])
                 }
-                eventsRef.setData([
-                    "location": location.details,
-                    "eventName": eventName,
-                    "eventDescription": eventDescription,
-                    "eventStart": eventStart,
-                    "eventEnd": eventEnd,
-                    "username": username
-                ])
             }
-        }
-        else {
-            print("error")
+        } else {
+            print("Location is empty.")
         }
     }
 }

@@ -82,14 +82,19 @@ struct LogIn: View {
                         let emailRef = db.collection("Users").document(email)
                         emailRef.getDocument(source: .cache) { document, _ in
                             if let document = document {
-                                email2 = document.get("email") as! String
-                                emailChange.toggle()
-                                login()
+                                if let emailValue = document.get("email") as? String {
+                                    email2 = emailValue
+                                    emailChange.toggle()
+                                    login()
+                                } else {
+                                    errormessage = "Wrong password"
+                                }
                             } else {
                                 errormessage = "Invalid username"
                             }
                         }
-                        Auth.auth().signIn(withEmail: email2, password: password)
+                    case .wrongPassword:
+                        errormessage = "Wrong password"
                     default:
                         errormessage = error.localizedDescription
                     }

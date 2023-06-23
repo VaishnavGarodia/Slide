@@ -10,6 +10,8 @@ import Firebase
 import FirebaseFirestore
 import FirebaseStorage
 import SwiftUI
+import UIKit
+import iPhoneNumberField
 
 struct ContactInfo: Identifiable {
     var id = UUID()
@@ -75,11 +77,13 @@ struct SignUp: View {
                         Capsule(style: .continuous)
                             .stroke(Color("OppositeColor")))
                 
-                TextField("Phone Number", text: $phoneNumber)
+                iPhoneNumberField("Phone Number", text: $phoneNumber)
+                    .maximumDigits(10)
                     .padding(12.0)
                     .overlay(
                         Capsule(style: .continuous)
                             .stroke(Color("OppositeColor")))
+                    .keyboardType(UIKeyboardType.numberPad)
                 
                 SecureField("Password", text: $password)
                     .padding(12.0)

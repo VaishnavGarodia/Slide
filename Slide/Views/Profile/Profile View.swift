@@ -20,7 +20,7 @@ struct ProfileView: View {
             ZStack {
                 Circle()
                     .frame(width: 120.0, height: 120.0)
-                    .foregroundColor(Color(.blue))
+                    .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
                     .padding()
                 
                 ProfilePictureView()

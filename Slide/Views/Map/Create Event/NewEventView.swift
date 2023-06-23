@@ -15,21 +15,22 @@ struct NewEventView: View {
     @State private var eventStart = Date()
     @State private var eventEnd = Date()
     @State private var user = Auth.auth().currentUser
+    
     var body: some View {
         VStack {
             HStack(alignment: .top) {
-                Button {
+                Button(action: {
                     print("Dismiss")
-                } label: {
+                }) {
                     Text("Cancel")
                         .foregroundColor(Color(.systemBlue))
                 }
                 
                 Spacer()
                 
-                Button {
+                Button(action: {
                     addEvent()
-                } label: {
+                }) {
                     Text("Post")
                         .foregroundColor(Color(.systemBlue))
                         .bold()
@@ -41,45 +42,46 @@ struct NewEventView: View {
             }
             .padding()
             
-            // link this to other bs you dumbass mf
             NavigationLink(destination: EventSearchHomeView()) {
                 Text("Location")
                     .foregroundColor(Color(.systemTeal))
                     .bold()
                     .padding(.horizontal)
                     .padding(.vertical, 10)
-                
                     .background(
                         Capsule()
                             .frame(width: 150, height: 50)
                     )
             }
             
-            // I'm keeping this page simpler for now. This will eventually only represent the event name but im allowing it to span the whole page just for the time being since I want to get to the backend functionality sooner. The location buttton kinda weird too...
-            // I will also add other text input boxes. Ie times, other notes, overall description, etc.
-            //            TextAreaEventDescription("Event Description", text: $eventName)
             TextField("Event Name", text: $eventName)
             DatePicker("Start Time", selection: $eventStart, displayedComponents: [.date, .hourAndMinute])
             DatePicker("End Time", selection: $eventEnd, displayedComponents: [.date, .hourAndMinute])
             TextField("Event Description", text: $eventDescription)
+            
             Spacer()
         }
     }
 
     func addEvent() {
-        let username = user?.displayName ?? ""
+        guard let username = user?.displayName else {
+            return
+        }
+        
         let eventsRef = db.collection("Events").document(username + eventName + eventStart.formatted(date: .numeric, time: .shortened))
+        
         eventsRef.getDocument { document, _ in
             if let document = document, document.exists {
-                print("error")
+                print("Document already exists.")
+            } else {
+                eventsRef.setData([
+                    "eventName": eventName,
+                    "eventDescription": eventDescription,
+                    "eventStart": eventStart,
+                    "eventEnd": eventEnd,
+                    "username": username
+                ])
             }
-            eventsRef.setData([
-                "eventName": eventName,
-                "eventDescription": eventDescription,
-                "eventStart": eventStart,
-                "eventEnd": eventEnd,
-                "username": username
-            ])
         }
     }
 }
