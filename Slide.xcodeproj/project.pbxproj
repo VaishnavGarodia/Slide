@@ -10,8 +10,9 @@
 		36614A166FC1BBF2782EC5A2 /* Pods_SlideTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C4436BE782A842DA8B304B9 /* Pods_SlideTests.framework */; };
 		3E9CFC0660AE53F4DB270BF5 /* Pods_Slide_SlideUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 373F23F270F6DE74FA6C661D /* Pods_Slide_SlideUITests.framework */; };
 		79017B652954EE1600257EED /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 79017B642954EE1600257EED /* FirebaseFirestore */; };
+		790BD0372A4526CF0006213A /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = 790BD0362A4526CF0006213A /* iPhoneNumberField */; };
 		791D259529CE6CC0003611AE /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791D259429CE6CC0003611AE /* ChatView.swift */; };
-		792C03DE2A2DC2F1004F1A42 /* PPView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792C03DD2A2DC2F1004F1A42 /* PPView.swift */; };
+		792C03DE2A2DC2F1004F1A42 /* ProfilePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792C03DD2A2DC2F1004F1A42 /* ProfilePicture.swift */; };
 		7935E7C52997111F00CC893F /* UserListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935E7C42997111F00CC893F /* UserListener.swift */; };
 		7953518529CE53FC00C99B48 /* CreatingNewEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7953518429CE53FC00C99B48 /* CreatingNewEventView.swift */; };
 		7953525C29CE577C00C99B48 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7953525B29CE577C00C99B48 /* MessageKit */; };
@@ -82,7 +83,7 @@
 		43FA22D754FC9BB9C9A5F85A /* Pods-Slide.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Slide.release.xcconfig"; path = "Target Support Files/Pods-Slide/Pods-Slide.release.xcconfig"; sourceTree = "<group>"; };
 		535A26981279339B76C5137D /* Pods_Slide.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Slide.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		791D259429CE6CC0003611AE /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
-		792C03DD2A2DC2F1004F1A42 /* PPView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PPView.swift; sourceTree = "<group>"; };
+		792C03DD2A2DC2F1004F1A42 /* ProfilePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePicture.swift; sourceTree = "<group>"; };
 		7935E7C42997111F00CC893F /* UserListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListener.swift; sourceTree = "<group>"; };
 		7953518429CE53FC00C99B48 /* CreatingNewEventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatingNewEventView.swift; sourceTree = "<group>"; };
 		795C5BEB2953FEDD007FDA83 /* MapOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapOnly.swift; sourceTree = "<group>"; };
@@ -131,6 +132,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				79FC9E36294D67EA00EBD520 /* FirebaseAppCheck in Frameworks */,
+				790BD0372A4526CF0006213A /* iPhoneNumberField in Frameworks */,
 				79FC9E38294D67EA00EBD520 /* FirebaseAuth in Frameworks */,
 				79FC9E44294D67EA00EBD520 /* FirebaseStorage in Frameworks */,
 				7953525C29CE577C00C99B48 /* MessageKit in Frameworks */,
@@ -195,7 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				795C5BF729540B10007FDA83 /* Profile View.swift */,
-				792C03DD2A2DC2F1004F1A42 /* PPView.swift */,
+				792C03DD2A2DC2F1004F1A42 /* ProfilePicture.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -443,6 +445,7 @@
 				E807DF4929A2B06B0093C87C /* FirebaseFirestoreSwift */,
 				7953525B29CE577C00C99B48 /* MessageKit */,
 				7953525E29CE587700C99B48 /* Kingfisher */,
+				790BD0362A4526CF0006213A /* iPhoneNumberField */,
 			);
 			productName = Slide;
 			productReference = 79FC9E02294D605300EBD520 /* Slide.app */;
@@ -522,6 +525,7 @@
 				79FC9E32294D67EA00EBD520 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				7953525A29CE577C00C99B48 /* XCRemoteSwiftPackageReference "MessageKit" */,
 				7953525D29CE587700C99B48 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				790BD0352A4526CF0006213A /* XCRemoteSwiftPackageReference "iPhoneNumberField" */,
 			);
 			productRefGroup = 79FC9E03294D605300EBD520 /* Products */;
 			projectDirPath = "";
@@ -646,7 +650,7 @@
 				E8AF9E66297810D200D3E007 /* EventLocationRepresentable.swift in Sources */,
 				E807DF4529A238050093C87C /* UserService.swift in Sources */,
 				795C5BFD29541A26007FDA83 /* MessagesTab.swift in Sources */,
-				792C03DE2A2DC2F1004F1A42 /* PPView.swift in Sources */,
+				792C03DE2A2DC2F1004F1A42 /* ProfilePicture.swift in Sources */,
 				E8AF9E6E297815DD00D3E007 /* LocationSearchView.swift in Sources */,
 				E81B7A6829A22CE6005AA4EE /* TextAreaEventDescription.swift in Sources */,
 				79FC9E48294D6F5A00EBD520 /* SignUp.swift in Sources */,
@@ -827,8 +831,9 @@
 				INFOPLIST_FILE = Slide/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Slide;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
-				INFOPLIST_KEY_NSContactsUsageDescription = "Slide PP";
+				INFOPLIST_KEY_NSContactsUsageDescription = "Slide needs access to your contacts to find your friends easier.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Slide needs your location to display the events around you.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = YAAA;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -862,8 +867,9 @@
 				INFOPLIST_FILE = Slide/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Slide;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
-				INFOPLIST_KEY_NSContactsUsageDescription = "Slide PP";
+				INFOPLIST_KEY_NSContactsUsageDescription = "Slide needs access to your contacts to find your friends easier.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Slide needs your location to display the events around you.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = YAAA;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -1000,6 +1006,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		790BD0352A4526CF0006213A /* XCRemoteSwiftPackageReference "iPhoneNumberField" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MojtabaHs/iPhoneNumberField";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.1;
+			};
+		};
 		7953525A29CE577C00C99B48 /* XCRemoteSwiftPackageReference "MessageKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/MessageKit/MessageKit";
@@ -1031,6 +1045,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 79FC9E32294D67EA00EBD520 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		790BD0362A4526CF0006213A /* iPhoneNumberField */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 790BD0352A4526CF0006213A /* XCRemoteSwiftPackageReference "iPhoneNumberField" */;
+			productName = iPhoneNumberField;
 		};
 		7953525B29CE577C00C99B48 /* MessageKit */ = {
 			isa = XCSwiftPackageProductDependency;

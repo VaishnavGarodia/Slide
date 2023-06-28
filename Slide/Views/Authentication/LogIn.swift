@@ -79,15 +79,15 @@ struct LogIn: View {
                 if let authErrorCode = AuthErrorCode.Code(rawValue: err.code) {
                     switch authErrorCode {
                     case .invalidEmail:
-                        let emailRef = db.collection("Users").document(email)
+                        let emailRef = db.collection("Users").document(email2)
                         emailRef.getDocument(source: .cache) { document, _ in
                             if let document = document {
-                                if let emailValue = document.get("email") as? String {
+                                if let emailValue = document.get("Email") as? String {
                                     email2 = emailValue
                                     emailChange.toggle()
                                     login()
                                 } else {
-                                    errormessage = "Wrong password"
+                                    errormessage = "Invalid username"
                                 }
                             } else {
                                 errormessage = "Invalid username"

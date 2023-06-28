@@ -9,9 +9,9 @@ import Contacts
 import Firebase
 import FirebaseFirestore
 import FirebaseStorage
+import iPhoneNumberField
 import SwiftUI
 import UIKit
-import iPhoneNumberField
 
 struct ContactInfo: Identifiable {
     var id = UUID()
@@ -121,20 +121,24 @@ struct SignUp: View {
         if password != confirmpass {
             errormessage = "Passwords were not spelt the same."
         } else {
-            Auth.auth().createUser(withEmail: email, password: password) { result, error in
-                if error != nil {
-                    errormessage = (error?.localizedDescription ?? "")
-                } else if let result = result {
-                    let changeRequest = result.user.createProfileChangeRequest()
-                    changeRequest.displayName = username
-                    changeRequest.commitChanges { _ in }
-                    
-                    let contactsGranted = requestContactsPermission()
-                    if contactsGranted {
-                        contactList = fetchingContacts()
+            if email.hasSuffix("@stanford.edu") {
+                Auth.auth().createUser(withEmail: email, password: password) { result, error in
+                    if error != nil {
+                        errormessage = (error?.localizedDescription ?? "")
+                    } else if let result = result {
+                        let changeRequest = result.user.createProfileChangeRequest()
+                        changeRequest.displayName = username
+                        changeRequest.commitChanges { _ in }
+                        
+                        let contactsGranted = requestContactsPermission()
+                        if contactsGranted {
+                            contactList = fetchingContacts()
+                        }
+                        addUser()
                     }
-                    addUser()
                 }
+            } else {
+                errormessage = "Slide isn't available at your school yet!"
             }
         }
     }

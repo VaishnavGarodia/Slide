@@ -2,6 +2,7 @@ import SwiftUI
 import UIKit
 import FirebaseStorage
 import Firebase
+import FirebaseFirestore
 
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var selectedImage: UIImage?
