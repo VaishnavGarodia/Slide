@@ -1,8 +1,8 @@
 //
-//  Highlights.swift
-//  Slide
+//  Highlights.swift
+//  Slide
 //
-//  Created by Ethan Harianto on 12/21/22.
+//  Created by Ethan Harianto on 12/21/22.
 //
 
 import SwiftUI
@@ -21,13 +21,21 @@ struct Highlights: View {
     ]
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                ForEach(highlights) { highlight in
-                    HighlightCard(highlight: highlight)
+        VStack {
+            NavigationLink(destination: PostCreationView()) {
+                Image(systemName: "person")
+                    .padding()
+                    .imageScale(.large)
+            }.foregroundColor(.white)
+
+            ScrollView {
+                VStack(spacing: 16) {
+                    ForEach(highlights) { highlight in
+                        HighlightCard(highlight: highlight)
+                    }
                 }
+                .padding()
             }
-            .padding()
         }
     }
 }

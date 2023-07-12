@@ -10,7 +10,7 @@ import FirebaseFirestore
 import SwiftUI
 
 struct LogIn: View {
-    // initializaes variables to which email and password are linked to
+    // initializes variables to which email and password are linked to
     @State var email = ""
     @State var email2 = ""
     @State var password = ""

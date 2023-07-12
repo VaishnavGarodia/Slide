@@ -10,8 +10,12 @@ import FirebaseAuth
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseStorage
+import GoogleSignIn
 import SwiftUI
 
+let storage = Storage.storage()
+let storageRef = storage.reference()
+let db = Firestore.firestore()
 var handle: AuthStateDidChangeListenerHandle?
 
 class AppDelegate: NSObject, UIApplicationDelegate {
@@ -22,7 +26,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         return true
     }
+    
+    func application(_ app: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool
+    {
+        return GIDSignIn.sharedInstance.handle(url)
+    }
 }
+
 
 class MainViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
@@ -50,7 +62,3 @@ struct SlideApp: App {
         }
     }
 }
-
-let storage = Storage.storage()
-let storageRef = storage.reference()
-let db = Firestore.firestore()

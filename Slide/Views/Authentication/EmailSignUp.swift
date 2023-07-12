@@ -1,5 +1,5 @@
 //
-//  Authentication.swift
+//  EmailSignUp.swift
 //  Slide
 //
 //  Created by Ethan Harianto on 12/16/22.
@@ -8,8 +8,6 @@
 import Contacts
 import Firebase
 import FirebaseFirestore
-import FirebaseStorage
-import iPhoneNumberField
 import SwiftUI
 import UIKit
 
@@ -38,9 +36,8 @@ func fetchingContacts() -> [ContactInfo] {
     return contacts
 }
 
-struct SignUp: View {
+struct EmailSignUp: View {
     @State public var email = ""
-    @State public var phoneNumber = ""
     @State public var password = ""
     @State public var confirmpass = ""
     @State public var errormessage = ""
@@ -76,14 +73,6 @@ struct SignUp: View {
                     .overlay(
                         Capsule(style: .continuous)
                             .stroke(Color("OppositeColor")))
-                
-                iPhoneNumberField("Phone Number", text: $phoneNumber)
-                    .maximumDigits(10)
-                    .padding(12.0)
-                    .overlay(
-                        Capsule(style: .continuous)
-                            .stroke(Color("OppositeColor")))
-                    .keyboardType(UIKeyboardType.numberPad)
                 
                 SecureField("Password", text: $password)
                     .padding(12.0)
@@ -204,8 +193,7 @@ struct SignUp: View {
                     "Email": email,
                     "Password": password,
                     "Username": username,
-                    "Phone": phoneNumber,
-                    "Concats": contactIdList
+                    "Contacts": contactIdList
                 ]) { err in
                     if let err = err {
                         print("Error adding document: \(err)")
@@ -219,8 +207,8 @@ struct SignUp: View {
     }
 }
             
-struct SignUp_Previews: PreviewProvider {
+struct EmailSignUp_Previews: PreviewProvider {
     static var previews: some View {
-        SignUp()
+        EmailSignUp()
     }
 }
