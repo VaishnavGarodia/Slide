@@ -13,9 +13,6 @@ import FirebaseStorage
 import GoogleSignIn
 import SwiftUI
 
-let storage = Storage.storage()
-let storageRef = storage.reference()
-let db = Firestore.firestore()
 var handle: AuthStateDidChangeListenerHandle?
 
 class AppDelegate: NSObject, UIApplicationDelegate {

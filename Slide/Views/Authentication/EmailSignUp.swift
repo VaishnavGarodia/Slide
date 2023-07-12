@@ -11,30 +11,6 @@ import FirebaseFirestore
 import SwiftUI
 import UIKit
 
-struct ContactInfo: Identifiable {
-    var id = UUID()
-    var firstName: String
-    var lastName: String
-    var phoneNumber: CNPhoneNumber?
-}
-
-func fetchingContacts() -> [ContactInfo] {
-    var contacts = [ContactInfo]()
-    let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey]
-    let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
-    do {
-        try CNContactStore().enumerateContacts(with: request, usingBlock: { contact, _ in
-            contacts.append(ContactInfo(firstName: contact.givenName, lastName: contact.familyName, phoneNumber: contact.phoneNumbers.first?.value))
-        })
-    } catch {
-        print("Failed", error)
-    }
-    contacts = contacts.sorted {
-        $0.firstName < $1.firstName
-    }
-    print(contacts)
-    return contacts
-}
 
 struct EmailSignUp: View {
     @State public var email = ""
@@ -132,59 +108,13 @@ struct EmailSignUp: View {
         }
     }
     
-    // See above comments
-    func requestContactsPermission() -> Bool {
-        let store = CNContactStore()
-        var allowed = true
-        store.requestAccess(for: .contacts) { granted, _ in
-            if granted {
-                print("Contacts access granted")
-                allowed = true
-            } else {
-                print("Contacts access denied")
-                allowed = false
-            }
-        }
-        return allowed
-    }
-    
-    func addContact(contact: ContactInfo) {
-        let contactRef = db.collection("Contacts").document(username + "-" + contact.id.uuidString)
-        contactRef.getDocument { document, _ in
-            if let document = document, document.exists {
-                errormessage = "BIG ISSUE: Somehow username + id exists"
-            } else {
-                contactRef.setData([
-                    "ContactUsername": username,
-                    "firstName": contact.firstName,
-                    "id": contact.id.uuidString,
-                    "lastName": contact.lastName,
-                    "phoneNumber": contact.phoneNumber?.stringValue
-                ]) { err in
-                    if let err = err {
-                        print("Error adding document: \(err)")
-                    } else {
-                        print("Document successfully written.")
-                    }
-                }
-            }
-        }
-    }
-    
-    func addAllContacts() {
-        print("Started saving contacts")
-        for contact in contactList {
-            addContact(contact: contact)
-        }
-    }
-    
     func addUser() {
         let usersRef = db.collection("Users").document(username)
         usersRef.getDocument { document, _ in
             if let document = document, document.exists {
                 errormessage = "Username taken."
             } else {
-                addAllContacts()
+                addAllContacts(contactList: contactList)
                 var contactIdList = []
                 for contact in contactList {
                     contactIdList.append(username + "-" + contact.id.uuidString)

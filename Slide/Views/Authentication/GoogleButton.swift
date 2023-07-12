@@ -5,11 +5,18 @@
 //  Created by Ethan Harianto on 7/12/23.
 //
 
-import SwiftUI
-import GoogleSignIn
 import Firebase
+import GoogleSignIn
+import SwiftUI
 
-struct GoogleSignInButton: View {
+struct GoogleButton: View {
+    @State private var buttonText: String
+    @State private var errorMessage: String = ""
+    
+    init(text: String) {
+        _buttonText = State(initialValue: text)
+    }
+    
     var body: some View {
         VStack {
             // Add your other UI components here
@@ -27,13 +34,14 @@ struct GoogleSignInButton: View {
                             if let rootViewController = window?.rootViewController {
                                 GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { signResult, error in
                                     if let error = error {
-                                        // Handle error
+                                        errorMessage = error.localizedDescription
                                         return
                                     }
                                     
                                     guard let user = signResult?.user,
-                                          let idToken = user.idToken else {
-                                        // Handle missing user or ID token
+                                          let idToken = user.idToken
+                                    else {
+                                        errorMessage = "Failed to get user or ID token."
                                         return
                                     }
                                     
@@ -42,6 +50,14 @@ struct GoogleSignInButton: View {
                                     let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
                                     
                                     // Use the credential to authenticate with Firebase
+                                    Auth.auth().signIn(with: credential) { _, error in
+                                        if let error = error {
+                                            errorMessage = error.localizedDescription
+                                            return
+                                        }
+                                        
+                                        // Handle successful authentication
+                                    }
                                 }
                             }
                         }
@@ -49,19 +65,19 @@ struct GoogleSignInButton: View {
                 }
                 
             }) {
-                Text("Sign in with Google")
+                Text(buttonText)
                     .foregroundColor(.white)
                     .padding()
                     .background(Color.blue)
                     .cornerRadius(10)
             }
+            
+            if !errorMessage.isEmpty {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .padding(.top)
+            }
         }
-    }
-}
-
-struct GoogleSignInButton_Previews: PreviewProvider {
-    static var previews: some View {
-        GoogleSignInButton()
     }
 }
 
@@ -76,7 +92,12 @@ extension View {
             return .init()
         }
         
-
         return root
+    }
+}
+
+struct GoogleButton_Previews: PreviewProvider {
+    static var previews: some View {
+        GoogleButton(text: "Sign in with Google")
     }
 }
