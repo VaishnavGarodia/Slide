@@ -32,20 +32,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 }
 
-
-class MainViewController: UITableViewController {
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        handle = Auth.auth().addStateDidChangeListener { _, _ in
-        }
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        Auth.auth().removeStateDidChangeListener(handle!)
-    }
-}
-
 @main
 struct SlideApp: App {
     // register app delegate for Firebase setup

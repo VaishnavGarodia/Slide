@@ -36,7 +36,6 @@
 		79FC9E06294D605300EBD520 /* SlideApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC9E05294D605300EBD520 /* SlideApp.swift */; };
 		79FC9E08294D605300EBD520 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC9E07294D605300EBD520 /* ContentView.swift */; };
 		79FC9E0A294D605300EBD520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 79FC9E09294D605300EBD520 /* Assets.xcassets */; };
-		79FC9E0D294D605300EBD520 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 79FC9E0C294D605300EBD520 /* Preview Assets.xcassets */; };
 		79FC9E31294D655B00EBD520 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 79FC9E30294D655B00EBD520 /* GoogleService-Info.plist */; };
 		79FC9E34294D67EA00EBD520 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC9E33294D67EA00EBD520 /* FirebaseAnalytics */; };
 		79FC9E36294D67EA00EBD520 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC9E35294D67EA00EBD520 /* FirebaseAppCheck */; };
@@ -103,10 +102,8 @@
 		79FC9E05294D605300EBD520 /* SlideApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideApp.swift; sourceTree = "<group>"; };
 		79FC9E07294D605300EBD520 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		79FC9E09294D605300EBD520 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		79FC9E0C294D605300EBD520 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		79FC9E12294D605300EBD520 /* SlideTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SlideTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		79FC9E1C294D605300EBD520 /* SlideUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SlideUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		79FC9E2F294D61E600EBD520 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		79FC9E30294D655B00EBD520 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		79FC9E45294D6A6300EBD520 /* LogIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogIn.swift; sourceTree = "<group>"; };
 		79FC9E47294D6F5A00EBD520 /* SignUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUp.swift; sourceTree = "<group>"; };
@@ -237,6 +234,14 @@
 			path = Contacts;
 			sourceTree = "<group>";
 		};
+		797B1ACF2A5F5E5100DD6B89 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				7935E7C42997111F00CC893F /* UserListener.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
 		797FE3C12A5E262D00F6A69C /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -297,24 +302,15 @@
 			children = (
 				797B1ACC2A5F449400DD6B89 /* GlobalVariables.swift */,
 				79FC9E05294D605300EBD520 /* SlideApp.swift */,
+				797B1ACF2A5F5E5100DD6B89 /* Classes */,
 				797B1AC42A5F42C400DD6B89 /* Functions */,
 				797B1AC12A5F405B00DD6B89 /* Models */,
-				E8AF9E67297811AE00D3E007 /* Managers-Classes */,
+				E8AF9E67297811AE00D3E007 /* Managers */,
 				79BB5D732950B515007E5342 /* Views */,
 				79FC9E09294D605300EBD520 /* Assets.xcassets */,
 				79FC9E30294D655B00EBD520 /* GoogleService-Info.plist */,
-				79FC9E2F294D61E600EBD520 /* Info.plist */,
-				79FC9E0B294D605300EBD520 /* Preview Content */,
 			);
 			path = Slide;
-			sourceTree = "<group>";
-		};
-		79FC9E0B294D605300EBD520 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				79FC9E0C294D605300EBD520 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		E81B7A6029A229F6005AA4EE /* Create Event */ = {
@@ -366,13 +362,12 @@
 			path = EventSearchHomeView;
 			sourceTree = "<group>";
 		};
-		E8AF9E67297811AE00D3E007 /* Managers-Classes */ = {
+		E8AF9E67297811AE00D3E007 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
 				E8AF9E68297811C900D3E007 /* LocationManager.swift */,
-				7935E7C42997111F00CC893F /* UserListener.swift */,
 			);
-			path = "Managers-Classes";
+			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -505,7 +500,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				79FC9E0D294D605300EBD520 /* Preview Assets.xcassets in Resources */,
 				79FC9E0A294D605300EBD520 /* Assets.xcassets in Resources */,
 				79FC9E31294D655B00EBD520 /* GoogleService-Info.plist in Resources */,
 			);

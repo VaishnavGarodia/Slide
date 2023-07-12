@@ -13,7 +13,6 @@ struct ProfileView: View {
     @State private var numEvents = 1
     @State private var numHighlights = 1
     @State private var numSaved = 1
-    @State private var user = Auth.auth().currentUser
     
     var body: some View {
         VStack {
