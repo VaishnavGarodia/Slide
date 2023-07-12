@@ -10,62 +10,56 @@ import FirebaseFirestore
 import SwiftUI
 
 struct LogIn: View {
-    // initializaes variables to which email and password are linked to
+    // initializes variables to which email and password are linked to
     @State var email = ""
     @State var email2 = ""
     @State var password = ""
-    @State var loggedIn = false
     @State var errormessage = ""
     @State var emailChange = false
     
     // body of View
     var body: some View {
-        if loggedIn {
-            MainView()
-                .navigationBarBackButtonHidden()
-        } else {
-            VStack {
-                // logo with -120 pixel border
-                Image("logo")
-                    .padding(.all, -120.0)
+        VStack {
+            // logo with -120 pixel border
+            Image("logo")
+                .padding(.all, -120.0)
                 
-                Text(errormessage)
+            Text(errormessage)
                     
-                // Email text field with rounded input field
-                TextField("Email/Username", text: $email)
-                    .padding(12.0)
-                    .overlay(
-                        Capsule(style: .continuous)
-                            .stroke(Color("OppositeColor")))
-                    
-                // Password text field with rounded input field
-                SecureField("Password", text: $password)
-                    .padding(12.0)
-                    .overlay(
-                        Capsule(style: .continuous)
-                            .stroke(Color("OppositeColor")))
-                    
-                // sign in button with rounded cyan border
-                HStack {
-                    Button(action: { login() }) {
-                        Text("Log in")
-                            
-                        Image(systemName: "mappin")
-                    }
-                }
+            // Email text field with rounded input field
+            TextField("Email/Username", text: $email)
                 .padding(12.0)
                 .overlay(
                     Capsule(style: .continuous)
-                        .stroke(Color.cyan))
-                
-                // sign up view
-                NavigationLink(destination: SignUp()) {
-                    Text("Don't have an account?")
-                        .foregroundColor(.gray)
+                        .stroke(Color("OppositeColor")))
+                    
+            // Password text field with rounded input field
+            SecureField("Password", text: $password)
+                .padding(12.0)
+                .overlay(
+                    Capsule(style: .continuous)
+                        .stroke(Color("OppositeColor")))
+                    
+            // sign in button with rounded cyan border
+            HStack {
+                Button(action: { login() }) {
+                    Text("Log in")
+                            
+                    Image(systemName: "mappin")
                 }
             }
-            .padding()
+            .padding(12.0)
+            .overlay(
+                Capsule(style: .continuous)
+                    .stroke(Color.cyan))
+                
+            // sign up view
+            NavigationLink(destination: SignUp()) {
+                Text("Don't have an account?")
+                    .foregroundColor(.gray)
+            }
         }
+        .padding()
     }
 
     // logs user in
@@ -79,15 +73,15 @@ struct LogIn: View {
                 if let authErrorCode = AuthErrorCode.Code(rawValue: err.code) {
                     switch authErrorCode {
                     case .invalidEmail:
-                        let emailRef = db.collection("Users").document(email)
+                        let emailRef = db.collection("Users").document(email2)
                         emailRef.getDocument(source: .cache) { document, _ in
                             if let document = document {
-                                if let emailValue = document.get("email") as? String {
+                                if let emailValue = document.get("Email") as? String {
                                     email2 = emailValue
                                     emailChange.toggle()
                                     login()
                                 } else {
-                                    errormessage = "Wrong password"
+                                    errormessage = "Invalid username"
                                 }
                             } else {
                                 errormessage = "Invalid username"
@@ -99,14 +93,12 @@ struct LogIn: View {
                         errormessage = error.localizedDescription
                     }
                 }
-            } else {
-                loggedIn.toggle()
             }
         }
     }
 }
 
-struct SignIn_Previews: PreviewProvider {
+struct LogIn_Previews: PreviewProvider {
     static var previews: some View {
         LogIn()
     }
