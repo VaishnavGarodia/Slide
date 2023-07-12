@@ -52,7 +52,6 @@
 		E807DF4A29A2B06B0093C87C /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E807DF4929A2B06B0093C87C /* FirebaseFirestoreSwift */; };
 		E81B7A6829A22CE6005AA4EE /* TextAreaEventDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81B7A6729A22CE6005AA4EE /* TextAreaEventDescription.swift */; };
 		E886058B29812D5F00BDD9E4 /* LocationSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E886058A29812D5F00BDD9E4 /* LocationSearchViewModel.swift */; };
-		E8AF9E572978091000D3E007 /* EventPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AF9E562978091000D3E007 /* EventPostView.swift */; };
 		E8AF9E5B29780C0C00D3E007 /* LocationSearchActivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AF9E5A29780C0C00D3E007 /* LocationSearchActivationView.swift */; };
 		E8AF9E642978107000D3E007 /* EventSearchHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AF9E632978107000D3E007 /* EventSearchHomeView.swift */; };
 		E8AF9E66297810D200D3E007 /* EventLocationRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AF9E65297810D200D3E007 /* EventLocationRepresentable.swift */; };
@@ -109,7 +108,6 @@
 		79FC9E47294D6F5A00EBD520 /* SignUp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUp.swift; sourceTree = "<group>"; };
 		E81B7A6729A22CE6005AA4EE /* TextAreaEventDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAreaEventDescription.swift; sourceTree = "<group>"; };
 		E886058A29812D5F00BDD9E4 /* LocationSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewModel.swift; sourceTree = "<group>"; };
-		E8AF9E562978091000D3E007 /* EventPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPostView.swift; sourceTree = "<group>"; };
 		E8AF9E5A29780C0C00D3E007 /* LocationSearchActivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchActivationView.swift; sourceTree = "<group>"; };
 		E8AF9E632978107000D3E007 /* EventSearchHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSearchHomeView.swift; sourceTree = "<group>"; };
 		E8AF9E65297810D200D3E007 /* EventLocationRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventLocationRepresentable.swift; sourceTree = "<group>"; };
@@ -186,7 +184,6 @@
 				792E49082A5E31D300D73D7C /* MapWithEvents.swift */,
 				E8AF9E6D297815DD00D3E007 /* LocationSearchView.swift */,
 				795C5BED2953FEEB007FDA83 /* ListPage.swift */,
-				E8AF9E55297808D900D3E007 /* EventPost */,
 				E81B7A6029A229F6005AA4EE /* Create Event */,
 			);
 			path = Map;
@@ -211,6 +208,8 @@
 		797B1AC12A5F405B00DD6B89 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E8AF9E5C29780D1D00D3E007 /* EventLocationRepresentable */,
+				E886058929812D5000BDD9E4 /* LocationSearchViewModel */,
 				797B1AC22A5F407800DD6B89 /* ContactInfo.swift */,
 			);
 			path = Models;
@@ -234,20 +233,19 @@
 			path = Contacts;
 			sourceTree = "<group>";
 		};
-		797B1ACF2A5F5E5100DD6B89 /* Classes */ = {
+		797B1ACF2A5F5E5100DD6B89 /* Listeners */ = {
 			isa = PBXGroup;
 			children = (
+				E8AF9E68297811C900D3E007 /* LocationManager.swift */,
 				7935E7C42997111F00CC893F /* UserListener.swift */,
 			);
-			path = Classes;
+			path = Listeners;
 			sourceTree = "<group>";
 		};
 		797FE3C12A5E262D00F6A69C /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				E886058929812D5000BDD9E4 /* LocationSearchViewModel */,
 				E8AF9E622978104200D3E007 /* EventSearchHomeView */,
-				E8AF9E5C29780D1D00D3E007 /* EventLocationRepresentable */,
 				E8AF9E5829780BB700D3E007 /* LocationSearchActivationView */,
 			);
 			path = Models;
@@ -302,10 +300,9 @@
 			children = (
 				797B1ACC2A5F449400DD6B89 /* GlobalVariables.swift */,
 				79FC9E05294D605300EBD520 /* SlideApp.swift */,
-				797B1ACF2A5F5E5100DD6B89 /* Classes */,
+				797B1ACF2A5F5E5100DD6B89 /* Listeners */,
 				797B1AC42A5F42C400DD6B89 /* Functions */,
 				797B1AC12A5F405B00DD6B89 /* Models */,
-				E8AF9E67297811AE00D3E007 /* Managers */,
 				79BB5D732950B515007E5342 /* Views */,
 				79FC9E09294D605300EBD520 /* Assets.xcassets */,
 				79FC9E30294D655B00EBD520 /* GoogleService-Info.plist */,
@@ -330,14 +327,6 @@
 			path = LocationSearchViewModel;
 			sourceTree = "<group>";
 		};
-		E8AF9E55297808D900D3E007 /* EventPost */ = {
-			isa = PBXGroup;
-			children = (
-				E8AF9E562978091000D3E007 /* EventPostView.swift */,
-			);
-			path = EventPost;
-			sourceTree = "<group>";
-		};
 		E8AF9E5829780BB700D3E007 /* LocationSearchActivationView */ = {
 			isa = PBXGroup;
 			children = (
@@ -360,14 +349,6 @@
 				E8AF9E632978107000D3E007 /* EventSearchHomeView.swift */,
 			);
 			path = EventSearchHomeView;
-			sourceTree = "<group>";
-		};
-		E8AF9E67297811AE00D3E007 /* Managers */ = {
-			isa = PBXGroup;
-			children = (
-				E8AF9E68297811C900D3E007 /* LocationManager.swift */,
-			);
-			path = Managers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -551,7 +532,6 @@
 				E886058B29812D5F00BDD9E4 /* LocationSearchViewModel.swift in Sources */,
 				795C5BF829540B10007FDA83 /* Profile View.swift in Sources */,
 				797B1AC92A5F437A00DD6B89 /* RequestContactsPermission.swift in Sources */,
-				E8AF9E572978091000D3E007 /* EventPostView.swift in Sources */,
 				797B1ACD2A5F449400DD6B89 /* GlobalVariables.swift in Sources */,
 				795C5BF02953FF00007FDA83 /* Highlights.swift in Sources */,
 				79FC9E46294D6A6300EBD520 /* LogIn.swift in Sources */,
