@@ -12,10 +12,8 @@ import SwiftUI
 struct LogIn: View {
     // initializes variables to which email and password are linked to
     @State var email = ""
-    @State var email2 = ""
     @State var password = ""
-    @State var errormessage = ""
-    @State var emailChange = false
+    @State var errorMessage = ""
     
     // body of View
     var body: some View {
@@ -24,77 +22,66 @@ struct LogIn: View {
             Image("logo")
                 .padding(.all, -120.0)
                 
-            Text(errormessage)
+            Text(errorMessage)
+                .foregroundColor(.red)
                     
-            // Email text field with rounded input field
-            TextField("Email/Username", text: $email)
-                .padding(12.0)
-                .overlay(
-                    Capsule(style: .continuous)
-                        .stroke(Color("OppositeColor")))
+            VStack(alignment: .leading, spacing: 15) {
+                // Email text field with rounded input field
+                Section("Username") {
+                    TextField("Enter your email/username", text: $email)
+                        .checkMarkTextField()
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                        .bubbleStyle(color: Color("OppositeColor"))
+                        .onChange(of: email) { _ in
+                            isGoogleUser(email: email) { isGoogleUser, error in
+                                if let error = error {
+                                    // Handle the error
+                                    print("Error: \(error.localizedDescription)")
+                                } else {
+                                    if isGoogleUser {
+                                        errorMessage = "This email was registered using Google. Please use the Google button below to log in."
+                                    } else {
+                                        print("The user is not a Google user.")
+                                    }
+                                }
+                            }
+
+                        }
                     
-            // Password text field with rounded input field
-            SecureField("Password", text: $password)
-                .padding(12.0)
-                .overlay(
-                    Capsule(style: .continuous)
-                        .stroke(Color("OppositeColor")))
-                    
-            // sign in button with rounded cyan border
-            HStack {
-                Button(action: { login() }) {
-                    Text("Log in")
-                            
-                    Image(systemName: "mappin")
+                }
+                
+                // Password text field with rounded input field
+                Section("Password") {
+                    PasswordField(password: $password, text: "Enter your password")
+                        .checkMarkTextField()
+                        .bubbleStyle(color: Color("OppositeColor"))
                 }
             }
-            .padding(12.0)
-            .overlay(
-                Capsule(style: .continuous)
-                    .stroke(Color.cyan))
+                                
+            // sign in button with rounded cyan border
+            Button("Log In", action: {
+                login(email: email, password: password) { error in
+                    errorMessage = error
+                }
+            })
+            .filledBubble()
                 
             // sign up view
-            NavigationLink(destination: SignUp()) {
+            HStack {
                 Text("Don't have an account?")
                     .foregroundColor(.gray)
+                NavigationLink(destination: Register()) {
+                    Text("Sign Up")
+                        .foregroundColor(.white)
+                        .fontWeight(.bold)
+                }
+                .navigationBarBackButtonHidden(true)
             }
+            
+            GoogleButton(registered: false)
         }
         .padding()
-    }
-
-    // logs user in
-    func login() {
-        if !emailChange {
-            email2 = email
-        }
-        Auth.auth().signIn(withEmail: email2, password: password) { _, error in
-            if let error = error {
-                let err = error as NSError
-                if let authErrorCode = AuthErrorCode.Code(rawValue: err.code) {
-                    switch authErrorCode {
-                    case .invalidEmail:
-                        let emailRef = db.collection("Users").document(email2)
-                        emailRef.getDocument(source: .cache) { document, _ in
-                            if let document = document {
-                                if let emailValue = document.get("Email") as? String {
-                                    email2 = emailValue
-                                    emailChange.toggle()
-                                    login()
-                                } else {
-                                    errormessage = "Invalid username"
-                                }
-                            } else {
-                                errormessage = "Invalid username"
-                            }
-                        }
-                    case .wrongPassword:
-                        errormessage = "Wrong password"
-                    default:
-                        errormessage = error.localizedDescription
-                    }
-                }
-            }
-        }
     }
 }
 
