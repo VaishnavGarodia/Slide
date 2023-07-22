@@ -8,8 +8,10 @@
 import Foundation
 import Firebase
 import FirebaseStorage
+import MapKit
 
 let storage = Storage.storage()
 let storageRef = storage.reference()
 let db = Firestore.firestore()
+let user = Auth.auth().currentUser
 

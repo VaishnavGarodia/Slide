@@ -7,26 +7,28 @@
 
 import Firebase
 import SwiftUI
+import FirebaseAuth
 
 struct ProfileView: View {
     @State private var recSize = 100.0
     @State private var numEvents = 1
     @State private var numHighlights = 1
     @State private var numSaved = 1
-    @State private var user = Auth.auth().currentUser
+    let username = Auth.auth().currentUser?.displayName
     
     var body: some View {
         VStack {
             ZStack {
                 Circle()
                     .frame(width: 120.0, height: 120.0)
-                    .foregroundStyle(.linearGradient(Gradient(colors: [.accentColor, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .foregroundStyle(.linearGradient(Gradient(colors: [.cyan, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing))
                     .padding()
                 
                 ProfilePictureView()
             }
             
-            Text(user?.displayName ?? "")
+            Text(username ?? "Fuck")
+                .foregroundColor(.white)
             
             VStack(alignment: .leading) {
                 HStack {
