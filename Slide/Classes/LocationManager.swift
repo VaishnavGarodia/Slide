@@ -5,8 +5,6 @@
 //  Created by Thomas Shundi on 1/18/23.
 //
 
-// Maybe we can combine this and the location manager I created in Map Page - E
-
 import CoreLocation
 
 class LocationManager: NSObject, ObservableObject {
