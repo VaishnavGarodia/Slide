@@ -1,67 +1,178 @@
-//
-//  PostCreationView.swift
-//  Slide
-//
-//  Created by Ethan Harianto on 7/12/23.
-//
-
 import SwiftUI
+import FirebaseFirestore
+import FirebaseAuth
+import FirebaseStorage
+import UIKit
+
 
 struct PostCreationView: View {
     @State private var showImagePicker = false
-    @State private var image: Image? = nil
-    @State private var isImageSelected = false // Track if an image is selected
-    @State private var isSubmitTapped = false // Track if the submit button is tapped
+    @State private var image: UIImage?
+    @State private var isImageSelected = false
+    @State private var isSubmitTapped = false
+    @State private var imageCaption = ""
+    @State private var user = Auth.auth().currentUser
+    @State private var selectedSourceType: UIImagePickerController.SourceType = .photoLibrary
+
+    
     var body: some View {
-        VStack {
+        VStack(spacing: 20) {
             if let image = image {
-                image
+                Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
+                    .cornerRadius(10)
                     .padding()
+                
+                TextField("Image Caption", text: $imageCaption)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.horizontal, 20)
+                
                 Button(action: {
-                    isSubmitTapped = true
+                    isSubmitTapped = true;
+                    savePostToFirestore();
                 }) {
                     Text("Submit")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(10)
                 }
-                .padding()
+                .padding(.horizontal, 20)
             } else {
-                Button(action: {
-                    showImagePicker = true
-                }) {
-                    Text("Add Photo")
-                }
-                .padding()
-            }
-        }
-        .sheet(isPresented: $showImagePicker) {
-            CameraView(isImageSelected: $isImageSelected, image: $image)
-                .onDisappear {
-                    // Check if an image is selected before dismissing
-                    if !isImageSelected && !isSubmitTapped {
-                        showImagePicker = false
+                VStack(spacing: 20) {
+                    Button(action: {
+                        selectedSourceType = .camera // Set the source type to camera
+                        showImagePicker = true
+                    }) {
+                        Text("Take Picture")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                    }
+                    
+                    Button(action: {
+                        selectedSourceType = .photoLibrary // Set the source type to photo library
+                        showImagePicker = true
+                    }) {
+                        Text("Choose from Library")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(10)
                     }
                 }
+                .padding(.horizontal, 20)
+                .sheet(isPresented: $showImagePicker) {
+                    ImagePickerPost(isImageSelected: $isImageSelected, image: $image, sourceType: selectedSourceType)
+                        .onDisappear {
+                            if !isImageSelected && !isSubmitTapped {
+                                showImagePicker = false
+                            }
+                        }
+                }
+            }
         }
         .onChange(of: isSubmitTapped) { newValue in
             if newValue {
-                // Handle the submission action here, e.g., save the image or perform any necessary processing
+                // Handle the submission action here
+                
                 // Dismiss the view
                 showImagePicker = false
             }
         }
     }
+                       
+   func savePostToFirestore() {
+       guard let currentUser = Auth.auth().currentUser else {
+           print("User not authenticated")
+           return
+       }
+       
+       let db = Firestore.firestore()
+       let postsCollection = db.collection("Posts")
+       
+       let postTime = Date()
+       
+       var postDocument: [String: Any] = [
+           "User": currentUser.uid,
+           "ImageCaption": imageCaption,
+           "Likes": 0,
+           "PostTime": postTime
+       ]
+       
+       let newPostDocument = postsCollection.document()
+       
+       // Save the post document to Firestore
+       newPostDocument.setData(postDocument) { error in
+           if let error = error {
+               print("Error saving post to Firestore: \(error.localizedDescription)")
+           } else {
+               print("Post saved to Firestore successfully")
+               
+               // Upload the image to Firebase Storage
+               uploadImageToFirebaseStorage(image: image ?? UIImage(), documentID: newPostDocument.documentID)
+           }
+       }
+   }
+    
+    
+    func uploadImageToFirebaseStorage(image: UIImage, documentID: String) {
+        guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+            print("Failed to convert image to data")
+            return
+        }
+        
+        let storageRef = Storage.storage().reference().child("PostImages/\(documentID).jpg")
+        
+        let uploadTask = storageRef.putData(imageData, metadata: nil) { (metadata, error) in
+            if let error = error {
+                print("Error uploading image to Firebase Storage: \(error.localizedDescription)")
+            } else {
+                storageRef.downloadURL { (url, error) in
+                    if let error = error {
+                        print("Error getting download URL: \(error.localizedDescription)")
+                    } else if let downloadURL = url {
+                        // Update the post document with the image download URL
+                        let db = Firestore.firestore()
+                        let postDocumentRef = db.collection("Posts").document(documentID)
+                        
+                        postDocumentRef.updateData(["PostImage": downloadURL.absoluteString]) { error in
+                            if let error = error {
+                                print("Error updating post document: \(error.localizedDescription)")
+                            } else {
+                                print("Post document updated successfully with image URL")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        uploadTask.resume()
+    }
 }
 
-struct CameraView: UIViewControllerRepresentable {
+
+
+struct ImagePickerPost: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
-    @Binding var isImageSelected: Bool // Track if an image is selected
-    @Binding var image: Image?
+    @Binding var isImageSelected: Bool
+    @Binding var image: UIImage?
+    
+    var sourceType: UIImagePickerController.SourceType
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = context.coordinator
-        imagePicker.sourceType = .camera
+        imagePicker.sourceType = sourceType
         return imagePicker
     }
     
@@ -74,22 +185,18 @@ struct CameraView: UIViewControllerRepresentable {
     }
     
     class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        let parent: CameraView
-        init(_ parent: CameraView) {
+        let parent: ImagePickerPost
+        
+        init(_ parent: ImagePickerPost) {
             self.parent = parent
         }
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let image = info[.originalImage] as? UIImage {
-                parent.image = Image(uiImage: image)
-                parent.isImageSelected = true // Set the flag to true when an image is selected
+                parent.image = image
+                parent.isImageSelected = true
             }
             parent.presentationMode.wrappedValue.dismiss()
         }
-    }
-}
-
-struct PostCreationView_Previews: PreviewProvider {
-    static var previews: some View {
-        PostCreationView()
     }
 }
