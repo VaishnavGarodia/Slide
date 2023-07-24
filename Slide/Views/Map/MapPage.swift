@@ -14,7 +14,7 @@ struct MapPage: View {
     
     var body: some View {
         ZStack {
-            MapOnly()
+            MapWithEvents()
                 .ignoresSafeArea()
             
             LocationSearchView()
