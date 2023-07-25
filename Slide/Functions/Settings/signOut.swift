@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseAuth
 
+// signs out the current user
 func signOut() {
     do {
         try Auth.auth().signOut()

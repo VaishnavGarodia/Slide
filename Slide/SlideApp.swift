@@ -6,10 +6,6 @@
 //
 
 import Firebase
-import FirebaseAuth
-import FirebaseCore
-import FirebaseFirestore
-import FirebaseStorage
 import GoogleSignIn
 import SwiftUI
 
@@ -22,7 +18,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     {
         return GIDSignIn.sharedInstance.handle(url)
     }
-    
+
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool
     {
@@ -34,14 +30,26 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct SlideApp: App {
-    // register app delegate for Firebase setup
+    @AppStorage("colorSchemePreference") var colorSchemePreference: String = "system"
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
     var body: some Scene {
         WindowGroup {
             NavigationView {
                 ContentView()
+                    .preferredColorScheme(getColorScheme())
             }
+        }
+    }
+
+    func getColorScheme() -> ColorScheme {
+        switch colorSchemePreference {
+        case "light":
+            return .light
+        case "dark":
+            return .dark
+        default:
+            return .dark
         }
     }
 }

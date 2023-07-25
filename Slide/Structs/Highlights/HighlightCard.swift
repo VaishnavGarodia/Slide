@@ -29,7 +29,7 @@ struct HighlightCard: View {
                         .scaledToFill()
                         .frame(width: 400, height: 400)
                         .clipped()
-                        
+
                 case .failure(let error):
                     // In case of an error, you can show an error placeholder or message
                     Text("Error loading image: \(error.localizedDescription)")

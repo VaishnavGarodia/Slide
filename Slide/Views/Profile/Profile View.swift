@@ -108,8 +108,7 @@ struct ProfileView: View {
                     }
                 }
                 
-                if tab == "Events" {
-                    
+                if tab == "Highlights" {
                 }
                 
                 Spacer()

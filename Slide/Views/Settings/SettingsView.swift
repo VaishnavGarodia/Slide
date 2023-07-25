@@ -9,9 +9,12 @@ import Firebase
 import SwiftUI
 
 struct SettingsView: View {
+    @State private var selectedColorScheme: String = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "dark"
+
     let username = user?.displayName
     let phoneNumber = user?.phoneNumber
     let email = user?.email
+
     var body: some View {
         NavigationView {
             VStack {
@@ -35,9 +38,25 @@ struct SettingsView: View {
                     Text(email ?? "")
                         .foregroundColor(user?.isEmailVerified ?? false ? .primary : .red)
                 }
+
+                // Color Scheme Picker
+                Picker("Color Scheme", selection: $selectedColorScheme) {
+                    Text("Light").tag("light")
+                    Text("Dark").tag("dark")
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
+
                 Button("Sign Out", action: signOut)
+                Spacer()
             }
             .padding()
+        }
+        .onChange(of: selectedColorScheme) { value in
+            UserDefaults.standard.set(value, forKey: "colorSchemePreference")
+        }
+        .onAppear {
+            selectedColorScheme = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "system"
         }
     }
 }

@@ -28,7 +28,6 @@ func createFirebaseAccount(email: String, password: String, username: String, co
                     print("Error committing profile changes: \(error)")
                 }
             }
-//            let contactList = getContacts()
             let errorMessage = addUserToDatabases(username: username, email: email, password: password, google: false)
             completion(errorMessage)
         }

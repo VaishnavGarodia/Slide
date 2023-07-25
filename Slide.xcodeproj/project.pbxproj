@@ -54,6 +54,7 @@
 		79B1FF7E2A6B39F000012B38 /* addContactsToUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B1FF7D2A6B39F000012B38 /* addContactsToUser.swift */; };
 		79B822702A647262003133BC /* LocationPermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B8226F2A647262003133BC /* LocationPermissionsView.swift */; };
 		79DCC255295611D6000FCD6F /* MapPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DCC254295611D6000FCD6F /* MapPage.swift */; };
+		79E4912D2A707FF6009348EF /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E4912C2A707FF6009348EF /* ImagePicker.swift */; };
 		79FC9E06294D605300EBD520 /* SlideApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC9E05294D605300EBD520 /* SlideApp.swift */; };
 		79FC9E08294D605300EBD520 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC9E07294D605300EBD520 /* ContentView.swift */; };
 		79FC9E0A294D605300EBD520 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 79FC9E09294D605300EBD520 /* Assets.xcassets */; };
@@ -122,6 +123,7 @@
 		79B1FF7D2A6B39F000012B38 /* addContactsToUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addContactsToUser.swift; sourceTree = "<group>"; };
 		79B8226F2A647262003133BC /* LocationPermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPermissionsView.swift; sourceTree = "<group>"; };
 		79DCC254295611D6000FCD6F /* MapPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPage.swift; sourceTree = "<group>"; };
+		79E4912C2A707FF6009348EF /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		79FC9E02294D605300EBD520 /* Slide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slide.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		79FC9E05294D605300EBD520 /* SlideApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideApp.swift; sourceTree = "<group>"; };
 		79FC9E07294D605300EBD520 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				79A27C8B2A6A1439003DE383 /* Map */,
 				79A27C852A69F390003DE383 /* Highlights */,
 				791C33792A61B6BE0020DEAC /* Authentication */,
+				79E4912C2A707FF6009348EF /* ImagePicker.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -543,6 +546,7 @@
 				79FC9E08294D605300EBD520 /* ContentView.swift in Sources */,
 				7953518529CE53FC00C99B48 /* CreatingNewEventView.swift in Sources */,
 				7965E08F2A702C10003F46C4 /* signOut.swift in Sources */,
+				79E4912D2A707FF6009348EF /* ImagePicker.swift in Sources */,
 				E8AF9E66297810D200D3E007 /* EventLocationRepresentable.swift in Sources */,
 				799F4EC12A6C53B700F14074 /* AccountCreationBottom.swift in Sources */,
 				791C33732A619E150020DEAC /* googleSignIn.swift in Sources */,
