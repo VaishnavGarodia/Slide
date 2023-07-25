@@ -9,13 +9,13 @@ import SwiftUI
 
 struct HighlightCard: View {
     var highlight: HighlightInfo
-    
+
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 25)
                 .frame(width: 400, height: 500)
                 .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.2))
-            
+
             // Use AsyncImage to fetch and display the image
             AsyncImage(url: URL(string: highlight.imageName)) { phase in
                 switch phase {
@@ -26,9 +26,10 @@ struct HighlightCard: View {
                     // The actual image loaded successfully
                     image
                         .resizable()
-                        .clipped()
-                        .clipShape(Rectangle())
+                        .scaledToFill()
                         .frame(width: 400, height: 400)
+                        .clipped()
+                        
                 case .failure(let error):
                     // In case of an error, you can show an error placeholder or message
                     Text("Error loading image: \(error.localizedDescription)")

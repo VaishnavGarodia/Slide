@@ -3,9 +3,8 @@ import Firebase
 import FirebaseFirestore
 
 struct Highlights: View {
-    @State private var highlights: [HighlightInfo] = [
-        HighlightInfo(imageName: "Highlight1", profileImageName: "ProfilePic2", username: "Zendaya", highlightTitle: "Spider-Man Photoshoot")
-    ]
+    @State private var highlights: [HighlightInfo] = []
+    
     @State private var isPresentingPostCreationView = false
     
     var body: some View {
