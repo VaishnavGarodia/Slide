@@ -2,10 +2,11 @@
 //  LocationSearchView.swift
 //  Slide
 //
-//  Created by Thomas Shundi on 1/18/23.
+//  Created by Vaishnav Garodia
 //
 
 import SwiftUI
+import MapKit
 
 struct LocationSearchView: View {
     @Environment(\.dismiss) var dismiss
@@ -51,22 +52,28 @@ struct LocationSearchView: View {
                             ForEach(viewModel.results, id: \.self) { result in
                                 if result.subtitle != "Search Nearby" {
                                     ZStack {
-                                        HStack {
-                                            Image(systemName: "mappin.circle.fill")
-                                                .resizable()
-                                                .foregroundColor(.blue)
-                                                .accentColor(.white)
-                                                .frame(width: 40, height: 40)
+                                        Button(action: {
+                                        viewModel.makeAnnotation(completion: result)
+                                            print("button clicked" + result.title)
                                             
-                                            VStack {
-                                                Text(result.title)
-                                                    .font(.body)
+                                        }){
+                                            HStack {
+                                                Image(systemName: "mappin.circle.fill")
+                                                    .resizable()
+                                                    .foregroundColor(.blue)
+                                                    .accentColor(.white)
+                                                    .frame(width: 40, height: 40)
                                                 
-                                                Text(result.subtitle)
-                                                    .font(.system(size: 15))
-                                                    .foregroundColor(.gray)
-                                                
-                                                Divider()
+                                                VStack {
+                                                    Text(result.title)
+                                                        .font(.body)
+                                                    
+                                                    Text(result.subtitle)
+                                                        .font(.system(size: 15))
+                                                        .foregroundColor(.gray)
+                                                    
+                                                    Divider()
+                                                }
                                             }
                                         }
                                     }
@@ -80,12 +87,6 @@ struct LocationSearchView: View {
             }
         }
     }
-    //    func outputResult(location: String) {
-    //        selectedResult = location
-    //    }
-    //    func enterSearchToggle() {
-    //        enteredSearch.toggle()
-    //    }
 }
 
 struct LocationSearchView_Previews: PreviewProvider {

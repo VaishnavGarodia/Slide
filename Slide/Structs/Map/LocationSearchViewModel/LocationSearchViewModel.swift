@@ -24,6 +24,10 @@ class LocationSearchViewModel:NSObject, ObservableObject {
         searchCompleter.delegate = self
         searchCompleter.queryFragment = queryFragment
     }
+    
+    func makeAnnotation(completion: MKLocalSearchCompletion) {
+        print("Make annotation called with", completion)
+    }
 }
 
 extension LocationSearchViewModel: MKLocalSearchCompleterDelegate {
