@@ -10,10 +10,18 @@ import MapKit
 import SwiftUI
 
 struct MapOnly: UIViewRepresentable {
+    let configuration: MKStandardMapConfiguration
     let mapView = MKMapView()
+
+    init() {
+        configuration = MKStandardMapConfiguration()
+        configuration.pointOfInterestFilter = MKPointOfInterestFilter(including: [])
+    }
 
     func makeUIView(context: Context) -> MKMapView {
         mapView.showsUserLocation = true
+        mapView.showsCompass = false
+        mapView.preferredConfiguration = configuration
         return mapView
     }
 

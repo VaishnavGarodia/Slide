@@ -29,16 +29,10 @@ func addUserToDatabases(username: String, email: String, password: String, googl
         if let document = document, document.exists {
             errormessage = "Username taken."
         } else {
-//            addAllContacts(contactList: contactList)
-//            var contactIdList = [String]()
-//            for contact in contactList {
-//                contactIdList.append(username + "-" + contact.id.uuidString)
-//            }
             let userData: [String: Any] = [
                 "Email": email,
                 "Password": password,
                 "Username": username,
-//                "Contacts": contactIdList,
             ]
             usersRef.setData(userData) { error in
                 if let error = error {

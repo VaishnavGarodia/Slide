@@ -10,18 +10,20 @@ import UserNotifications
 
 class NotificationPermission: NSObject, ObservableObject {
     @Published var isNotificationPermission: Bool = false
+    @Published var authorizationStatus: UNAuthorizationStatus = .notDetermined
 
     override init() {
         super.init()
-        checkNotificationPermission()
+        self.authorizationStatus = checkNotificationPermission()
     }
 
-    func checkNotificationPermission() {
+    func checkNotificationPermission() -> UNAuthorizationStatus {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             DispatchQueue.main.async {
-                self.handleNotificationPermissionStatus(settings.authorizationStatus)
+                self.authorizationStatus = settings.authorizationStatus
             }
         }
+        return self.authorizationStatus
     }
 
     func requestNotificationPermission() {

@@ -11,7 +11,7 @@ import MapKit
 struct EventLocationRepresentable: UIViewRepresentable {
     
     let mapView = MKMapView()
-    let locationManager = LocationManager()
+    let locationManager = CLLocationManager()
     
     func makeUIView(context: Context) -> some UIView {
         mapView.delegate = context.coordinator

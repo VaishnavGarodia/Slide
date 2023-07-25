@@ -11,6 +11,7 @@
           "value" : "light"
         }
       ],
+      "filename" : "camera_permissions.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -21,6 +22,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "camera_permissions 1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -49,7 +51,6 @@
       "scale" : "2x"
     },
     {
-      "filename" : "google_logo.png",
       "idiom" : "universal",
       "scale" : "3x"
     },
@@ -60,7 +61,6 @@
           "value" : "light"
         }
       ],
-      "filename" : "google_logo 1.png",
       "idiom" : "universal",
       "scale" : "3x"
     },
@@ -71,7 +71,6 @@
           "value" : "dark"
         }
       ],
-      "filename" : "google_logo 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

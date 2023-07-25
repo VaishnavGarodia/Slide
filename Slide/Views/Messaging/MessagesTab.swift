@@ -23,9 +23,11 @@ struct MessagesTab: View {
                 }
                 .padding()
                 Spacer()
-                Image(systemName: "person.badge.plus")
-                    .padding()
-                    .imageScale(.large)
+                NavigationLink(destination: UserSearchAndFriendView()) {
+                    Image(systemName: "person.badge.plus")
+                        .padding()
+                        .imageScale(.large)
+                }
             }
             .padding(.bottom, -10)
             .padding(.top, -10)

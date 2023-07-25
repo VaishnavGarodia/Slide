@@ -41,7 +41,7 @@ struct ImagePicker: UIViewControllerRepresentable {
     }
 }
 
-struct ProfilePictureView: View {
+struct ProfilePicture: View {
     @State private var selectedImage: UIImage?
     @State private var isShowingImagePicker = false
     @State private var profilePictureURL: URL?
@@ -54,11 +54,20 @@ struct ProfilePictureView: View {
         }) {
             Group {
                 if let image = selectedImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 110, height: 110)
-                        .clipShape(Circle())
+                    ZStack {
+                        Color.accentColor
+                            .frame(width: 130, height: 130)
+                            .clipShape(Circle())
+                        Color.black
+                            .frame(width: 125, height: 125)
+                            .clipShape(Circle())
+
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 110, height: 110)
+                            .clipShape(Circle())
+                    }
                 } else if let url = profilePictureURL {
                     AsyncImage(url: url) { image in
                         image

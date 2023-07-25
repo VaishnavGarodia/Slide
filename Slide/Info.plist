@@ -25,7 +25,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.1019532523456-2v5pck3gtcpvfjogp2up7tumigubcncq</string>
+				<string>com.googleusercontent.apps.1019532523456-9ndru8n9k0thbpphs89s1lhi3oqhrqse</string>
 			</array>
 		</dict>
 	</array>
@@ -61,7 +61,5 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>UIUserInterfaceStyle</key>
-	<string>Dark</string>
 </dict>
 </plist>

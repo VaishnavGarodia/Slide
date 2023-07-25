@@ -18,7 +18,6 @@ func login(email: String, password: String, completion: @escaping (String) -> Vo
                     searchUserByUsername(username: email) { document, _ in
                         if let document = document {
                             if let emailValue = document.get("Email") as? String {
-                                // Perform login with the retrieved email value
                                 login(email: emailValue, password: password, completion: completion)
                             } else {
                                 completion("Invalid username")

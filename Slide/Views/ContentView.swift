@@ -17,22 +17,27 @@ struct ContentView: View {
     var body: some View {
         if userListener.user != nil {
             switch locationPermission.authorizationStatus {
-                case .authorizedAlways, .authorizedWhenInUse:
-                if contactsPermission.isContactsPermission {
-                    if cameraPermission.isCameraPermission {
-                        MainView()
-                    } else {
-                        CameraPermissionsView(cameraPermission: cameraPermission)
-                    }
-                } else {
-                    ContactsPermissionsView(contactsPermission: contactsPermission)
-                }
-                    
-                default:
+                case .notDetermined:
                     LocationPermissionsView(locationPermission: locationPermission)
+
+                default:
+                    if contactsPermission.checkContactsPermission() == .notDetermined {
+                        ContactsPermissionsView(contactsPermission: contactsPermission)
+                    } else {
+                        if cameraPermission.checkCameraPermission() == .notDetermined {
+                            CameraPermissionsView(cameraPermission: cameraPermission)
+                        } else {
+                            if notificationsPermission.checkNotificationPermission() == .notDetermined {
+                                NotificationPermissionsView(notificationsPermission: notificationsPermission)
+
+                            } else {
+                                MainView()
+                            }
+                        }
+                    }
             }
         } else {
-            LogIn()
+            AccountCreationView()
         }
     }
 }

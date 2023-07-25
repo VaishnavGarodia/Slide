@@ -5,23 +5,22 @@
 //  Created by Ethan Harianto on 7/21/23.
 //
 
-import Foundation
 import CoreLocation
+import Foundation
 
-class LocationPermission:NSObject, ObservableObject, CLLocationManagerDelegate {
-    
-    @Published var authorizationStatus : CLAuthorizationStatus = .notDetermined
+class LocationPermission: NSObject, ObservableObject, CLLocationManagerDelegate {
+    @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
     private let locationManager = CLLocationManager()
-    @Published var cordinates : CLLocationCoordinate2D?
+    @Published var coordinates: CLLocationCoordinate2D?
     
     override init() {
         super.init()
-        locationManager.delegate=self
-        locationManager.desiredAccuracy=kCLLocationAccuracyBest
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.startUpdatingLocation()
     }
     
-    func requestLocationPermission()  {
+    func requestLocationPermission() {
         locationManager.requestWhenInUseAuthorization()
     }
     
@@ -30,10 +29,8 @@ class LocationPermission:NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else {return}
+        guard let location = locations.last else { return }
         
-        cordinates = location.coordinate
+        coordinates = location.coordinate
     }
-    
-    
 }
