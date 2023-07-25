@@ -16,39 +16,6 @@ struct tempUserOtherData: Codable {
     // Other properties and methods as needed
 }
 
-class FirebaseManager {
-    let db = Firestore.firestore()
-    // Function to search for users by username
-    func searchUsersByUsername(username: String, completion: @escaping ([tempUserOtherData]) -> Void) {
-        let query = db.collection("Users")
-            .whereField("Username", isGreaterThanOrEqualTo: username)
-            .whereField("Username", isLessThan: username + "z")
-        query.getDocuments { snapshot, error in
-            if let error = error {
-                print("Error searching users: \(error.localizedDescription)")
-                completion([])
-                return
-            }
-            var users: [tempUserOtherData] = []
-            for document in snapshot?.documents ?? [] {
-                if let username = document.data()["Username"] as? String,
-                   let password = document.data()["Password"] as? String,
-                   let email = document.data()["Email"] as? String
-                {
-                    let user = tempUserOtherData(
-                        userID: document.documentID,
-                        username: username,
-                        password: password,
-                        email: email
-                    )
-                    users.append(user)
-                }
-            }
-            completion(users)
-        }
-    }
-}
-
 struct UserSearchAndFriendView: View {
     @State private var searchQuery = ""
     @State private var searchResults: [tempUserOtherData] = []
@@ -56,7 +23,6 @@ struct UserSearchAndFriendView: View {
     @State private var showingConfirmationDialog = false
     @State private var showPendingFriendRequests = false
     @State private var pendingFriendRequests: [tempUserOtherData] = []
-    let firebaseManager = FirebaseManager()
     var body: some View {
         VStack {
             TextField("Search", text: $searchQuery, onEditingChanged: { _ in
@@ -113,8 +79,37 @@ struct UserSearchAndFriendView: View {
         }
     }
 
+    func searchUsersByUsername(username: String, completion: @escaping ([tempUserOtherData]) -> Void) {
+        let query = db.collection("Users")
+            .whereField("Username", isGreaterThanOrEqualTo: username)
+            .whereField("Username", isLessThan: username + "z")
+        query.getDocuments { snapshot, error in
+            if let error = error {
+                print("Error searching users: \(error.localizedDescription)")
+                completion([])
+                return
+            }
+            var users: [tempUserOtherData] = []
+            for document in snapshot?.documents ?? [] {
+                if let username = document.data()["Username"] as? String,
+                   let password = document.data()["Password"] as? String,
+                   let email = document.data()["Email"] as? String
+                {
+                    let user = tempUserOtherData(
+                        userID: document.documentID,
+                        username: username,
+                        password: password,
+                        email: email
+                    )
+                    users.append(user)
+                }
+            }
+            completion(users)
+        }
+    }
+
     func searchUsers() {
-        firebaseManager.searchUsersByUsername(username: searchQuery) { users in
+        searchUsersByUsername(username: searchQuery) { users in
             DispatchQueue.main.async {
                 self.searchResults = users
             }
@@ -128,8 +123,7 @@ struct UserSearchAndFriendView: View {
             return
         }
         // First update the outgoing request
-        let db = Firestore.firestore()
-        let currentUserDocumentRef = db.collection("User").document(currentUserID)
+        let currentUserDocumentRef = db.collection("Users").document(currentUserID)
         // Step 1: Access the User document using the given document ID
         currentUserDocumentRef.getDocument { document, error in
             if let document = document, document.exists {
@@ -157,7 +151,7 @@ struct UserSearchAndFriendView: View {
             }
         }
         // Now update the incoming request
-        let selectedUserDocumentRef = db.collection("User").document(selectedUserID)
+        let selectedUserDocumentRef = db.collection("Users").document(selectedUserID)
         selectedUserDocumentRef.getDocument { document, error in
             if let document = document, document.exists {
                 let outgoingList = document.data()?["Outgoing"] as? [String] ?? []
@@ -189,23 +183,29 @@ struct UserSearchAndFriendView: View {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             return
         }
-        let db = Firestore.firestore()
-        let userDocumentRef = db.collection("User").document(currentUserID)
+        let userDocumentRef = db.collection("Users").document(currentUserID)
         var pendingRequests: [tempUserOtherData] = []
         // Step 1: Access the User document using the given document ID
         userDocumentRef.getDocument { document, _ in
             if let document = document, document.exists {
-                let incomingList = document.data()?["Incoming"] as? [String] ?? []
+                var incomingList = document.data()?["Incoming"] as? [String] ?? []
                 for otherID in incomingList {
                     fetchUserDetails(userID: otherID) { userDetails in
                         if let userDetails = userDetails {
                             // Handle userDetails if it's not nil
                             pendingRequests.append(userDetails)
+                            print("???")
+                            print(userDetails)
+                            print(pendingRequests)
                         }
                     }
                 }
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    print("All fetchUserDetails calls completed")
+                    print(pendingRequests)
+                    self.pendingFriendRequests = pendingRequests
+                }
             }
-            self.pendingFriendRequests = pendingRequests
         }
     }
 
@@ -239,7 +239,7 @@ struct UserSearchAndFriendView: View {
         }
         let db = Firestore.firestore()
         // First update the first user
-        let u1DocRef = db.collection("User").document(u1)
+        let u1DocRef = db.collection("Users").document(u1)
         // Step 1: Access the User document using the given document ID
         u1DocRef.getDocument { document, _ in
             if let document = document, document.exists {
@@ -262,7 +262,7 @@ struct UserSearchAndFriendView: View {
             }
         }
         // Now update user2
-        let u2DocRef = db.collection("User").document(u2)
+        let u2DocRef = db.collection("Users").document(u2)
         // Step 1: Access the User document using the given document ID
         u2DocRef.getDocument { document, _ in
             if let document = document, document.exists {

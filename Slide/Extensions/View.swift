@@ -16,6 +16,9 @@ extension View {
     func filledBubble() -> some View {
         modifier(FilledBubble())
     }
+    func emptyBubble() -> some View {
+        modifier(EmptyBubble())
+    }
     func checkMarkTextField() -> some View {
         self.modifier(CheckMarkTextField())
     }
@@ -60,6 +63,21 @@ struct FilledBubble: ViewModifier {
             .foregroundColor(.white)
             .fontWeight(.bold)
             .cornerRadius(15)
+            .padding(.top)
+    }
+}
+
+struct EmptyBubble: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 15)
+                    .stroke(.clear, lineWidth: 2)
+            )
+            .foregroundColor(.gray)
+            .font(.system(size: 16, weight: .bold))
             .padding(.top)
     }
 }

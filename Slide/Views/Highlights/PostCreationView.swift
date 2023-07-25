@@ -11,8 +11,7 @@ struct PostCreationView: View {
     @State private var isImageSelected = false
     @State private var isSubmitTapped = false
     @State private var imageCaption = ""
-    @State private var user = Auth.auth().currentUser
-    @State private var selectedSourceType: UIImagePickerController.SourceType = .photoLibrary
+    @State private var selectedSourceType: UIImagePickerController.SourceType = .camera
 
     
     var body: some View {
