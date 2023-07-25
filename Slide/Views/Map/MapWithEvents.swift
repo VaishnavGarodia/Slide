@@ -19,7 +19,6 @@ struct MapWithEvents: UIViewRepresentable {
     
     func makeUIView(context: Context) -> MKMapView {
         mapView.showsUserLocation = true
-        print("map with events initialized")
         // Retrieve events from Firebase
         let db = Firestore.firestore()
         db.collection("Events").getDocuments { (querySnapshot, err) in

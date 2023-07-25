@@ -55,28 +55,23 @@ func googleSignIn(registered: Bool, completion: @escaping (String) -> Void) {
                 }
             }
             
-            if !registered {
-                var errorMessage = ""
-                let username = email.components(separatedBy: "@").first
-                let password = ""
-//                let contactList: [ContactInfo] = getContacts()
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                    errorMessage = addUserToDatabases(username: username!, email: email, password: password, google: true)
-                    let changeRequest = user?.createProfileChangeRequest()
-                    changeRequest?.displayName = username
-                    changeRequest?.commitChanges { error in
-                        errorMessage = error?.localizedDescription ?? "no error"
-                    }
+            var errorMessage = ""
+            let username = email.components(separatedBy: "@").first
+            let password = ""
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                errorMessage = addUserToDatabases(username: username!, email: email, password: password, google: true)
+                let changeRequest = user?.createProfileChangeRequest()
+                changeRequest?.displayName = username
+                changeRequest?.commitChanges { error in
+                    errorMessage = error?.localizedDescription ?? "no error"
                 }
+            }
                 
-                if errorMessage.isEmpty {
-                    print("no error")
-                    completion("") // No error, empty string
-                } else {
-                    completion(errorMessage)
-                }
-            } else {
+            if errorMessage.isEmpty {
+                print("no error")
                 completion("") // No error, empty string
+            } else {
+                completion(errorMessage)
             }
         }
     } else {

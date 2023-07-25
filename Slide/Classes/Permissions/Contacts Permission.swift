@@ -10,17 +10,18 @@ import Contacts
 
 class ContactsPermission: NSObject, ObservableObject {
     @Published var isContactsPermission: Bool = false
+    @Published var authorizationStatus: CNAuthorizationStatus = .notDetermined
 
     override init() {
         super.init()
-        checkContactsPermission()
+        self.authorizationStatus = checkContactsPermission()
     }
 
-    func checkContactsPermission() {
+    func checkContactsPermission() -> CNAuthorizationStatus {
         let status = CNContactStore.authorizationStatus(for: .contacts)
-        handleContactsPermissionStatus(status)
+        return status
     }
-
+    
     func requestContactsPermission() {
         CNContactStore().requestAccess(for: .contacts) { granted, error in
             DispatchQueue.main.async {

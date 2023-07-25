@@ -86,5 +86,6 @@ struct CheckMarkTextField: ViewModifier {
                 .animation(.easeIn, value: isFocused)
             }
         }
+        
     }
 }

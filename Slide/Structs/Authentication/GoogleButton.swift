@@ -34,7 +34,7 @@ struct GoogleButton: View {
                     .resizable()
                     .frame(width: 20, height: 20)
             }
-            .bubbleStyle(color: .white)
+            .bubbleStyle(color: Color("OppositeColor"))
             
             if !errorMessage.isEmpty {
                 Text(errorMessage)

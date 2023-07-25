@@ -9,16 +9,35 @@ import Firebase
 import SwiftUI
 
 struct SettingsView: View {
+    let username = user?.displayName
+    let phoneNumber = user?.phoneNumber
+    let email = user?.email
     var body: some View {
-        Button("Sign Out", action: SignOut)
-    }
-
-    func SignOut() {
-        let firebaseAuth = Auth.auth()
-        do {
-            try firebaseAuth.signOut()
-        } catch let signOutError as NSError {
-            print("Error signing out: %@", signOutError)
+        NavigationView {
+            VStack {
+                HStack {
+                    Text("Username")
+                    Spacer()
+                    Text(username ?? "")
+                }
+                HStack {
+                    Text("Password")
+                    Spacer()
+                }
+                HStack {
+                    Text("Phone Number")
+                    Spacer()
+                    Text(phoneNumber ?? "")
+                }
+                HStack {
+                    Text("Email")
+                    Spacer()
+                    Text(email ?? "")
+                        .foregroundColor(user?.isEmailVerified ?? false ? .primary : .red)
+                }
+                Button("Sign Out", action: signOut)
+            }
+            .padding()
         }
     }
 }

@@ -11,15 +11,16 @@ import PhotosUI
 class CameraPermission: NSObject, ObservableObject {
     
     @Published var isCameraPermission: Bool = false
+    @Published var authorizationStatus: AVAuthorizationStatus = .notDetermined
     
     override init() {
         super.init()
-        checkCameraPermission()
+        self.authorizationStatus = checkCameraPermission()
     }
     
-    func checkCameraPermission() {
+    func checkCameraPermission() -> AVAuthorizationStatus {
         let status = AVCaptureDevice.authorizationStatus(for: .video)
-        handleCameraPermissionStatus(status)
+        return status
     }
     
     func requestCameraPermission() {
