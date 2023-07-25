@@ -185,11 +185,15 @@ struct UserSearchAndFriendView: View {
         }
         let userDocumentRef = db.collection("Users").document(currentUserID)
         var pendingRequests: [tempUserOtherData] = []
+        
+        let group = DispatchGroup() // Create a DispatchGroup
+        
         // Step 1: Access the User document using the given document ID
         userDocumentRef.getDocument { document, _ in
             if let document = document, document.exists {
-                var incomingList = document.data()?["Incoming"] as? [String] ?? []
+                let incomingList = document.data()?["Incoming"] as? [String] ?? []
                 for otherID in incomingList {
+                    group.enter() // Enter the DispatchGroup before starting each fetchUserDetails call
                     fetchUserDetails(userID: otherID) { userDetails in
                         if let userDetails = userDetails {
                             // Handle userDetails if it's not nil
@@ -198,9 +202,12 @@ struct UserSearchAndFriendView: View {
                             print(userDetails)
                             print(pendingRequests)
                         }
+                        group.leave() // Leave the DispatchGroup after the fetchUserDetails call is completed
                     }
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                
+                group.notify(queue: .main) {
+                    // This closure will be called when all fetchUserDetails calls are completed
                     print("All fetchUserDetails calls completed")
                     print(pendingRequests)
                     self.pendingFriendRequests = pendingRequests
@@ -209,29 +216,30 @@ struct UserSearchAndFriendView: View {
         }
     }
 
+
     func fetchUserDetails(userID: String, completion: @escaping (tempUserOtherData?) -> Void) {
         let db = Firestore.firestore()
         db.collection("Users").document(userID).getDocument { document, error in
             if let error = error {
                 print("Error fetching user details: \(error.localizedDescription)")
-                completion(nil)
+                completion(nil) // Call completion with nil in case of an error
                 return
             }
+            
+            // Check if the document exists and contains the required fields
             if let document = document,
                let username = document.data()?["Username"] as? String,
                let password = document.data()?["Password"] as? String,
                let email = document.data()?["Email"] as? String
             {
-                let match = tempUserOtherData(userID: userID,
-                                              username: username,
-                                              password: password,
-                                              email: email)
-                completion(match)
-                return
+                let userDetails = tempUserOtherData(userID: userID, username: username, password: password, email: email)
+                completion(userDetails)
+            } else {
+                completion(nil) // Call completion with nil if document is missing required fields
             }
         }
-        completion(nil)
     }
+
 
     func confirmFriendship(u1: String, u2: String) {
         if u1 == "" || u2 == "" {
