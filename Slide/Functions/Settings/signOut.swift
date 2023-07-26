@@ -8,10 +8,4 @@
 import Foundation
 import FirebaseAuth
 
-func signOut() {
-    do {
-        try Auth.auth().signOut()
-    } catch let signOutError as NSError {
-        print("Error signing out: %@", signOutError)
-    }
-}
+// signs out the current user

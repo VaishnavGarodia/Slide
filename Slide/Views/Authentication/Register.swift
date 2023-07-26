@@ -21,7 +21,6 @@ struct Register: View {
             VStack {
                 VStack {
                     Image("logo")
-                        .padding(.all, -120.0)
                         
                     Text(errorMessage)
                         .foregroundColor(.red)

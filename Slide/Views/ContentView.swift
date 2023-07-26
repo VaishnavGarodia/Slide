@@ -1,13 +1,13 @@
-//
 //  ContentView.swift
 //  Slide
-//
 //  Created by Ethan Harianto on 12/16/22.
-//
 
 import SwiftUI
 
 struct ContentView: View {
+    /*
+     Each of these permissions are defined in the Classes/Permissions Folder. However, the User Listener is simply in the Classes Folder.
+     */
     @ObservedObject var userListener = UserListener()
     @StateObject private var cameraPermission = CameraPermission()
     @StateObject private var locationPermission = LocationPermission()
@@ -15,6 +15,9 @@ struct ContentView: View {
     @StateObject private var notificationsPermission = NotificationPermission()
 
     var body: some View {
+        /*
+         Although there may be a better way to do this, I check each of the classes defined above for their published variables (user for the user listener and authorization status for the permissions). Depending on the published booleans, the view changes from account creation to location to contacts to camera to notification to the main view.
+         */
         if userListener.user != nil {
             switch locationPermission.authorizationStatus {
                 case .notDetermined:
