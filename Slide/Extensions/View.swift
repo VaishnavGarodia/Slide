@@ -22,6 +22,10 @@ extension View {
     func checkMarkTextField() -> some View {
         self.modifier(CheckMarkTextField())
     }
+    
+    func underlineGradient() -> some View {
+        self.modifier(UnderlinedGradient())
+    }
 
     func getRootViewController() -> UIViewController {
         guard let screen = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
@@ -67,6 +71,25 @@ struct FilledBubble: ViewModifier {
     }
 }
 
+struct UnderlinedGradient: ViewModifier {
+    
+    func body(content: Content) -> some View {
+        ZStack(alignment: .bottom) {
+            LinearGradient(gradient: Gradient(colors: [.cyan, .blue]), startPoint: .leading, endPoint: .trailing)
+                .frame(height: 4)
+            
+            content
+                .foregroundColor(.primary)
+                .fontWeight(.bold)
+                .padding(.bottom, 4)
+        }
+        .frame(maxWidth: .infinity)
+        .padding()
+        .background(Color.clear)
+    }
+}
+
+
 struct EmptyBubble: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -78,7 +101,6 @@ struct EmptyBubble: ViewModifier {
             )
             .foregroundColor(.gray)
             .font(.system(size: 16, weight: .bold))
-            .padding(.top)
     }
 }
 

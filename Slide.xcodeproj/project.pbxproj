@@ -202,7 +202,6 @@
 			isa = PBXGroup;
 			children = (
 				795C5BF729540B10007FDA83 /* Profile View.swift */,
-				792C03DD2A2DC2F1004F1A42 /* ProfilePicture.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -260,6 +259,7 @@
 				79A27C852A69F390003DE383 /* Highlights */,
 				791C33792A61B6BE0020DEAC /* Authentication */,
 				79E4912C2A707FF6009348EF /* ImagePicker.swift */,
+				792C03DD2A2DC2F1004F1A42 /* ProfilePicture.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";

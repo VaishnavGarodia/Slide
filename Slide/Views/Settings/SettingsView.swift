@@ -5,13 +5,12 @@
 //  Created by Ethan Harianto on 12/21/22.
 //
 
-import Firebase
+import FirebaseAuth
 import SwiftUI
 
 struct SettingsView: View {
     @State private var selectedColorScheme: String = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "dark"
 
-    let username = user?.displayName
     let phoneNumber = user?.phoneNumber
     let email = user?.email
 
@@ -21,7 +20,7 @@ struct SettingsView: View {
                 HStack {
                     Text("Username")
                     Spacer()
-                    Text(username ?? "")
+                    Text(user?.displayName ?? "")
                 }
                 HStack {
                     Text("Password")
@@ -57,6 +56,15 @@ struct SettingsView: View {
         }
         .onAppear {
             selectedColorScheme = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "system"
+        }
+    }
+    func signOut() {
+        let auth = Auth.auth()
+        do {
+            try auth.signOut()
+            print("signed out")
+        } catch let signOutError as NSError {
+            print("Error signing out: %@" + signOutError.localizedDescription)
         }
     }
 }

@@ -72,3 +72,35 @@ struct HighlightCard: View {
         .padding(75)
     }
 }
+
+struct SmallHighlightCard: View {
+    var highlight: HighlightInfo
+
+    var body: some View {
+        ZStack {
+            // Use AsyncImage to fetch and display the image
+            AsyncImage(url: URL(string: highlight.imageName)) { phase in
+                switch phase {
+                case .empty:
+                    // Placeholder view while loading
+                    ProgressView()
+                case .success(let image):
+                    // The actual image loaded successfully
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 100, height: 100)
+                        .clipped()
+                        .clipShape(RoundedRectangle(cornerRadius: 25))
+                    
+                case .failure(let error):
+                    // In case of an error, you can show an error placeholder or message
+                    Text("Error loading image: \(error.localizedDescription)")
+                @unknown default:
+                    // Placeholder view while loading (handles potential future changes)
+                    ProgressView()
+                }
+            }
+        }
+    }
+}

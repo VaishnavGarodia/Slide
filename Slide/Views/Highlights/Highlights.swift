@@ -4,7 +4,6 @@ import FirebaseFirestore
 
 struct Highlights: View {
     @State private var highlights: [HighlightInfo] = []
-    
     @State private var isPresentingPostCreationView = false
     
     var body: some View {
@@ -97,22 +96,21 @@ struct Highlights: View {
             }
         }
     }
+}
 
-    func fetchUsername(for documentID: String, completion: @escaping (String?) -> Void) {
-        let db = Firestore.firestore()
-        let userDocumentRef = db.collection("Users").document(documentID)
+func fetchUsername(for documentID: String, completion: @escaping (String?) -> Void) {
+    let userDocumentRef = db.collection("Users").document(documentID)
 
-        userDocumentRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                if let username = document.data()?["Username"] as? String {
-                    completion(username)
-                } else {
-                    completion(nil)
-                }
+    userDocumentRef.getDocument { (document, error) in
+        if let document = document, document.exists {
+            if let username = document.data()?["Username"] as? String {
+                completion(username)
             } else {
-                print("Error fetching user document: \(error?.localizedDescription ?? "Unknown error")")
                 completion(nil)
             }
+        } else {
+            print("Error fetching user document: \(error?.localizedDescription ?? "Unknown error")")
+            completion(nil)
         }
     }
 }

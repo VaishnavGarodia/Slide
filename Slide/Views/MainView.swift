@@ -1,25 +1,20 @@
-//
 //  MainView.swift
 //  Slide
-//
 //  Created by Ethan Harianto on 12/21/22.
-//
 
 import SwiftUI
 import UIKit
 
 struct MainView: View {
-    // makes tab bar pretty
     init() {
+        /* When initialized, the following code changes the tab bar so that unselected items are white and the bar is opaque. */
         UITabBar.appearance().unselectedItemTintColor = UIColor.white
-        UITabBar.appearance().barTintColor = UIColor(red: 0.00, green: 0.00, blue: 0.00, alpha: 1.00)
         UITabBar.appearance().isTranslucent = false
     }
-
-    // selection variable which dictates which tab shows up when mainview is called
+    
+    /* The selection variable here defines which tab on the tab view the app initially starts on (the map) */
     @State private var selection = 2
     var body: some View {
-        // tab view means theres a tab bar and the selection makes it so it depends on the variable we called selection
         TabView(selection: $selection) {
             Highlights()
                 .tabItem {
