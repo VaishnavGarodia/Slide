@@ -1,13 +1,16 @@
+import FirebaseAuth
+import FirebaseFirestore
+import FirebaseStorage
 import SwiftUI
 import UIKit
-import FirebaseStorage
-import FirebaseFirestore
-import FirebaseAuth
+import PhotosUI
 
 struct ProfilePicture: View {
+    @State private var isImageSelected = false
     @State private var selectedImage: UIImage?
     @State private var isShowingImagePicker = false
     @State private var profilePictureURL: URL?
+    @State private var isPhotoLibraryAuthorized = false
     
     private let profilePictureKey = "ProfilePictureURL"
     
@@ -19,10 +22,10 @@ struct ProfilePicture: View {
                 if let image = selectedImage {
                     ZStack {
                         Color.accentColor
-                            .frame(width: 130, height: 130)
+                            .frame(width: 120, height: 120)
                             .clipShape(Circle())
                         Color.black
-                            .frame(width: 125, height: 125)
+                            .frame(width: 115, height: 115)
                             .clipShape(Circle())
 
                         Image(uiImage: image)
@@ -55,7 +58,14 @@ struct ProfilePicture: View {
             }
         }
         .sheet(isPresented: $isShowingImagePicker) {
-            ImagePicker(selectedImage: $selectedImage)
+            ImagePicker(isImageSelected: $isImageSelected, image: $selectedImage, sourceType: .photoLibrary)
+                .onAppear {
+                    checkPhotoLibraryPermission()
+                    if isPhotoLibraryAuthorized {
+                    } else {
+                        requestPhotoLibraryPermission()
+                    }
+                }
                 .onDisappear {
                     uploadProfilePicture()
                 }
@@ -69,10 +79,10 @@ struct ProfilePicture: View {
         guard let image = selectedImage else { return }
         
         let imageName = UUID().uuidString
-        let storageRef = Storage.storage().reference().child("profilePictures/\(imageName).jpg")
+        let storageRef = storageRef.child("profilePictures/\(imageName).jpg")
         
         if let imageData = image.jpegData(compressionQuality: 0.75) {
-            storageRef.putData(imageData, metadata: nil) { metadata, error in
+            storageRef.putData(imageData, metadata: nil) { _, error in
                 if let error = error {
                     print("Error uploading image to storage: \(error.localizedDescription)")
                 } else {
@@ -94,8 +104,8 @@ struct ProfilePicture: View {
         guard let currentUser = Auth.auth().currentUser,
               let profilePictureURL = profilePictureURL else { return }
         
-        let userRef = Firestore.firestore().collection("users").document(currentUser.uid)
-        userRef.updateData(["profilePictureURL": profilePictureURL.absoluteString]) { error in
+        let userRef = Firestore.firestore().collection("Users").document(currentUser.uid)
+        userRef.updateData(["_rofilePictureURL": profilePictureURL.absoluteString]) { error in
             if let error = error {
                 print("Error updating user profile picture URL: \(error.localizedDescription)")
             }
@@ -115,5 +125,18 @@ struct ProfilePicture: View {
               let url = URL(string: urlString) else { return }
         
         profilePictureURL = url
+    }
+    
+    func checkPhotoLibraryPermission() {
+        let status = PHPhotoLibrary.authorizationStatus()
+        isPhotoLibraryAuthorized = (status == .authorized)
+    }
+
+    func requestPhotoLibraryPermission() {
+        PHPhotoLibrary.requestAuthorization { status in
+            DispatchQueue.main.async {
+                isPhotoLibraryAuthorized = (status == .authorized)
+            }
+        }
     }
 }

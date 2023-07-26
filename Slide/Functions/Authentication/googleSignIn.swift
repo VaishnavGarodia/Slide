@@ -45,7 +45,6 @@ func googleSignIn(registered: Bool, completion: @escaping (String) -> Void) {
             }
             
             let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
-            print("okay")
             
             // Use the credential to authenticate with Firebase
             Auth.auth().signIn(with: credential) { _, error in
@@ -56,14 +55,33 @@ func googleSignIn(registered: Bool, completion: @escaping (String) -> Void) {
             }
             
             var errorMessage = ""
-            let username = email.components(separatedBy: "@").first
             let password = ""
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                let username = email.components(separatedBy: "@").first
                 errorMessage = addUserToDatabases(username: username!, email: email, password: password, google: true)
-                let changeRequest = user?.createProfileChangeRequest()
-                changeRequest?.displayName = username
-                changeRequest?.commitChanges { error in
-                    errorMessage = error?.localizedDescription ?? "no error"
+                let usernameRef = db.collection("Usernames").document(username!)
+                usernameRef.getDocument { document, error in
+                    if let error = error {
+                        completion("Error checking username: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    if let document = document, document.exists {
+                        // The username is already taken, handle this scenario (e.g., show an error message)
+                        completion("")
+                    } else {
+                        // The username is available, update the display name
+                        let changeRequest = user!.createProfileChangeRequest()
+                        changeRequest.displayName = username
+                        changeRequest.commitChanges { error in
+                            if let error = error {
+                                completion("Error updating display name: \(error.localizedDescription)")
+                            } else {
+                                // Now the display name is updated, call the completion handler with the username
+                                completion(username!)
+                            }
+                        }
+                    }
                 }
             }
                 

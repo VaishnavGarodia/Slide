@@ -77,6 +77,7 @@ struct UnderlinedGradient: ViewModifier {
         ZStack(alignment: .bottom) {
             LinearGradient(gradient: Gradient(colors: [.cyan, .blue]), startPoint: .leading, endPoint: .trailing)
                 .frame(height: 4)
+                .overlay(Capsule())
             
             content
                 .foregroundColor(.primary)

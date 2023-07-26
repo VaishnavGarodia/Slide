@@ -58,7 +58,6 @@ struct Highlights: View {
     }
 
     func fetchHighlights() {
-        let db = Firestore.firestore()
         let postsCollectionRef = db.collection("Posts")
 
         postsCollectionRef.getDocuments { (snapshot, error) in
@@ -78,10 +77,10 @@ struct Highlights: View {
                     dispatchGroup.enter() // Enter the DispatchGroup before starting an asynchronous task
 
                     // Fetch username from the "Users" database using the userDocumentID
-                    fetchUsername(for: userDocumentID) { username in
-                        if let username = username {
+                    fetchUsername(for: userDocumentID) { username, photoURL in
+                        if let username = username, let photoURL = photoURL {
                             let highlight = HighlightInfo(
-                                imageName: imagePath, profileImageName: "ProfilePic2", username: username, highlightTitle: caption)
+                                imageName: imagePath, profileImageName: photoURL, username: username, highlightTitle: caption)
                             newHighlights.append(highlight)
 
                             dispatchGroup.leave() // Leave the DispatchGroup when the task is complete
@@ -94,23 +93,6 @@ struct Highlights: View {
                 // This block is called when all the tasks inside the DispatchGroup are completed
                 self.highlights = newHighlights
             }
-        }
-    }
-}
-
-func fetchUsername(for documentID: String, completion: @escaping (String?) -> Void) {
-    let userDocumentRef = db.collection("Users").document(documentID)
-
-    userDocumentRef.getDocument { (document, error) in
-        if let document = document, document.exists {
-            if let username = document.data()?["Username"] as? String {
-                completion(username)
-            } else {
-                completion(nil)
-            }
-        } else {
-            print("Error fetching user document: \(error?.localizedDescription ?? "Unknown error")")
-            completion(nil)
         }
     }
 }

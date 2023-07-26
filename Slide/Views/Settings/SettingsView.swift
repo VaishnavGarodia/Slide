@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @State private var selectedColorScheme: String = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "dark"
-
+    @State private var username = ""
     let phoneNumber = user?.phoneNumber
     let email = user?.email
 
@@ -20,7 +20,13 @@ struct SettingsView: View {
                 HStack {
                     Text("Username")
                     Spacer()
-                    Text(user?.displayName ?? "")
+                    TextField(user?.displayName ?? "", text: $username)
+//                        .onSubmit {
+//                            updateUsername(username: username) { value in
+//                                print(value)
+//                                print("done")
+//                            }
+//                        }
                 }
                 HStack {
                     Text("Password")
