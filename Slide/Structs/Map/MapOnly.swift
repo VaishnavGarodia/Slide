@@ -27,7 +27,6 @@ struct MapOnly: UIViewRepresentable {
 
     func updateUIView(_ uiView: MKMapView, context: Context) {
         let locationManager = CLLocationManager()
-        locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         if let location = locationManager.location?.coordinate {
             let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)

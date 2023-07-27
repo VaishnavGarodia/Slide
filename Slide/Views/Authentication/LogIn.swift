@@ -1,34 +1,30 @@
-//
-//  Authentication.swift
+//  LogIn.swift
 //  Slide
-//
 //  Created by Ethan Harianto on 12/16/22.
-//
 
 import Firebase
 import FirebaseFirestore
 import SwiftUI
 
 struct LogIn: View {
-    // initializes variables to which email and password are linked to
+    // email variable is linked to the username text field
     @State var email = ""
+    // password variable is linked to the password text field
     @State var password = ""
+    // error message only pops up when there is an error during log-in
     @State var errorMessage = ""
+    // variable passed in by a parent view and passed to the AccountCreationBottom
     @Binding var logIn: Bool
     
-    // body of View
     var body: some View {
         VStack {
             VStack {
-                // logo with -120 pixel border
                 Image("logo")
-                    .padding(.all, -120.0)
                     
                 Text(errorMessage)
                     .foregroundColor(.red)
                         
                 VStack(alignment: .leading, spacing: 15) {
-                    // Email text field with rounded input field
                     Section("Username") {
                         TextField("Enter your email/username", text: $email)
                             .checkMarkTextField()
@@ -38,22 +34,16 @@ struct LogIn: View {
                             .onChange(of: email) { _ in
                                 isGoogleUser(email: email) { isGoogleUser, error in
                                     if let error = error {
-                                        // Handle the error
-                                        print("Error: \(error.localizedDescription)")
+                                        errorMessage = error.localizedDescription
                                     } else {
                                         if isGoogleUser {
                                             errorMessage = "This email was registered using Google. Please use the Google button below to log in."
-                                        } else {
-                                            print("The user is not a Google user.")
                                         }
                                     }
                                 }
-
                             }
-                        
                     }
-                    
-                    // Password text field with rounded input field
+
                     Section("Password") {
                         PasswordField(password: $password, text: "Enter your password")
                             .checkMarkTextField()
@@ -69,12 +59,10 @@ struct LogIn: View {
                 } label: {
                     Text("Log In").filledBubble()
                 }
-                
             }
             .padding()
             AccountCreationBottom(text: "Don't have an account?", buttonText: "Sign Up", logIn: $logIn)
         }
-       
     }
 }
 
