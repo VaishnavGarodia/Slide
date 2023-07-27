@@ -5,18 +5,17 @@
 //  Created by Vaishnav Garodia
 //
 
-import SwiftUI
-import MapKit
 import CoreLocation
 import FirebaseFirestore
+import MapKit
+import SwiftUI
 
-struct MapPage : View {
-    
+struct MapPage: View {
     @State var map = MKMapView()
     @State var manager = CLLocationManager()
     @State var alert = false
-    @State var source : CLLocationCoordinate2D!
-    @State var destination : CLLocationCoordinate2D!
+    @State var source: CLLocationCoordinate2D!
+    @State var destination: CLLocationCoordinate2D!
     @State var name = ""
     @State var distance = ""
     @State var time = ""
@@ -24,26 +23,24 @@ struct MapPage : View {
     @State var loading = false
     @State var book = false
     @State var doc = ""
-    @State var data : Data = .init(count: 0)
+    @State var data: Data = .init(count: 0)
     @State var search = false
     
-    var body: some View{
-        
-        ZStack{
-            
-            ZStack(alignment: .bottom){
-                
-                VStack(spacing: 0){
-                    
-                    HStack{
-                        
+    var body: some View {
+        ZStack {
+            MapView(map: self.$map, manager: self.$manager, alert: self.$alert, source: self.$source, destination: self.$destination, name: self.$name, distance: self.$distance, time: self.$time, show: self.$show)
+                .ignoresSafeArea()
+                .onAppear {
+                    self.manager.requestAlwaysAuthorization()
+                }
+            ZStack {
+                VStack {
+                    HStack {
                         VStack(alignment: .leading, spacing: 15) {
-                            
                             Text(self.destination != nil ? "Destination" : "Pick a Location")
                                 .font(.title)
                             
-                            if self.destination != nil{
-                                
+                            if self.destination != nil {
                                 Text(self.name)
                                     .fontWeight(.bold)
                             }
@@ -51,55 +48,62 @@ struct MapPage : View {
                         
                         Spacer()
                         
-                        Button(action: {
+                        Button {
                             
+                        } label: {
+                            Image(systemName: "plus")
+                                .foregroundColor(.primary)
+                        }
+                        .padding()
+                        .background(Circle().foregroundColor(.accentColor))
+                        
+                        Button(action: {
                             self.search.toggle()
                             
                         }) {
-                            
                             Image(systemName: "magnifyingglass")
-                                .foregroundColor(.black)
+                                .foregroundColor(.primary)
                         }
+                        .padding()
+                        .background(Circle().foregroundColor(.accentColor))
                     }
                     .padding()
-                    .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top)
-                    .background(Color.white)
+                    .background()
                     
-                    MapView(map: self.$map, manager: self.$manager, alert: self.$alert, source: self.$source, destination: self.$destination, name: self.$name,distance: self.$distance,time: self.$time, show: self.$show)
-                    .onAppear {
+                    Spacer()
                     
-                        self.manager.requestAlwaysAuthorization()
-                            
+                    if self.loading {
+                        Loader()
+                    }
+                    
+                    if self.book {
+                        Booked(data: self.$data, doc: self.$doc, loading: self.$loading, book: self.$book)
+                    }
+                    
+                    if self.search {
+                        SearchView(show: self.$search, map: self.$map, source: self.$source, destination: self.$destination, name: self.$name, distance: self.$distance, time: self.$time, detail: self.$show)
                     }
                 }
                 
-                if self.destination != nil && self.show{
-                    
-                    ZStack(alignment: .topTrailing){
-                        
-                        VStack(spacing: 20){
-                            
-                            HStack{
-                                
-                                VStack(alignment: .leading,spacing: 15){
-                                    
+                if self.destination != nil && self.show {
+                    ZStack(alignment: .topTrailing) {
+                        VStack(spacing: 20) {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 15) {
                                     Text("Destination")
                                         .fontWeight(.bold)
                                     Text(self.name)
-                                    
                                 }
                                 
                                 Spacer()
                             }
                             
                             Button(action: {
-                                
                                 self.loading.toggle()
                                 
                                 self.createEvent()
                                 
                             }) {
-                                
                                 Text("Create Event")
                                     .foregroundColor(.white)
                                     .padding(.vertical, 10)
@@ -107,11 +111,9 @@ struct MapPage : View {
                             }
                             .background(Color.red)
                             .clipShape(Capsule())
-                        
                         }
                         
                         Button(action: {
-                            
                             self.map.removeOverlays(self.map.overlays)
                             self.map.removeAnnotations(self.map.annotations)
                             self.destination = nil
@@ -119,7 +121,6 @@ struct MapPage : View {
                             self.show.toggle()
                             
                         }) {
-                            
                             Image(systemName: "xmark")
                                 .foregroundColor(.black)
                         }
@@ -131,48 +132,35 @@ struct MapPage : View {
                 }
             }
             
-            if self.loading{
-                
-                Loader()
-            }
             
-            if self.book{
-                
-                Booked(data: self.$data, doc: self.$doc, loading: self.$loading, book: self.$book)
-            }
-            
-            if self.search{
-                
-                SearchView(show: self.$search, map: self.$map, source: self.$source, destination: self.$destination, name: self.$name, distance: self.$distance, time: self.$time,detail: self.$show)
-            }
         }
-        .edgesIgnoringSafeArea(.all)
         .alert(isPresented: self.$alert) { () -> Alert in
             
             Alert(title: Text("Error"), message: Text("Please Enable Location In Settings !!!"), dismissButton: .destructive(Text("Ok")))
         }
     }
     
-    func createEvent(){
-        
-        let db = Firestore.firestore()
+    func createEvent() {
         let doc = db.collection("Events").document()
         self.doc = doc.documentID
         
         let location = GeoPoint(latitude: self.destination.latitude, longitude: self.destination.longitude)
         
-        doc.setData(["name":"Kavsoft","location":location]) { (err) in
+        doc.setData(["name": "Kavsoft", "location": location]) { err in
             
-            if err != nil{
-                
+            if err != nil {
                 print((err?.localizedDescription)!)
                 return
             }
             
-        self.loading.toggle()
-        self.book.toggle()
-            
+            self.loading.toggle()
+            self.book.toggle()
         }
     }
 }
 
+struct MapPage_Previews: PreviewProvider {
+    static var previews: some View {
+        MapPage()
+    }
+}

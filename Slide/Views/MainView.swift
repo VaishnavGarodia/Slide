@@ -6,10 +6,12 @@ import SwiftUI
 import UIKit
 
 struct MainView: View {
+    @State private var selectedColorScheme: String = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "dark"
     init() {
         /* When initialized, the following code changes the tab bar so that unselected items are white and the bar is opaque. */
         UITabBar.appearance().unselectedItemTintColor = UIColor.white
-        UITabBar.appearance().isTranslucent = false
+        UITabBar.appearance().backgroundColor = (selectedColorScheme == "dark" ? .black : .white)
+        UINavigationBar.appearance().backgroundColor = (selectedColorScheme == "dark" ? .black : .white)
     }
     
     /* The selection variable here defines which tab on the tab view the app initially starts on (the map) */

@@ -9,61 +9,170 @@ import FirebaseAuth
 import SwiftUI
 
 struct SettingsView: View {
+    @State private var clicks = [false, false, false, false, false, false]
     @State private var selectedColorScheme: String = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "dark"
-    @State private var username = ""
-    let phoneNumber = user?.phoneNumber
-    let email = user?.email
 
+    @State private var usernameChange = ""
+    
     var body: some View {
         NavigationView {
-            VStack {
-                HStack {
-                    Text("Username")
-                    Spacer()
-                    TextField(user?.displayName ?? "", text: $username)
-//                        .onSubmit {
-//                            updateUsername(username: username) { value in
-//                                print(value)
-//                                print("done")
-//                            }
-//                        }
+            List {
+                // Username
+                Button {
+                    withAnimation {
+                        toggleClicks(count: 0)
+                    }
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Username")
+                                .foregroundColor(.primary)
+                            Text(user?.displayName ?? "SimUser")
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(.degrees(clicks[0] ? 90 : 0))
+                            .animation(.default)
+                    }
                 }
-                HStack {
-                    Text("Password")
-                    Spacer()
+                
+                if clicks[0] {
+                    VStack(alignment: .leading) {
+                        Text("Your username is how people find you on Slide. ")
+                            .foregroundColor(.secondary)
+                        TextField(user?.displayName ?? "SimUser", text: $usernameChange)
+                            .checkMarkTextField()
+                            .bubbleStyle(color: .primary)
+                        Button {} label: {
+                            Text("Change Username").filledBubble()
+                        }
+                    }
+                    .padding()
+                    .transition(.opacity)
                 }
-                HStack {
-                    Text("Phone Number")
-                    Spacer()
-                    Text(phoneNumber ?? "")
+                    
+                // Email
+                Button {
+                    withAnimation {
+                        toggleClicks(count: 1)
+                    }
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Email")
+                                .foregroundColor(.primary)
+                            Text(user?.email ?? "SimUser@stanford.edu")
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        if !(user?.isEmailVerified ?? false) {
+                            Image(systemName: "exclamationmark.circle")
+                                .foregroundColor(.red)
+                        }
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(.degrees(clicks[1] ? 90 : 0))
+                    }
                 }
-                HStack {
-                    Text("Email")
-                    Spacer()
-                    Text(email ?? "")
-                        .foregroundColor(user?.isEmailVerified ?? false ? .primary : .red)
+                
+                // Phone Number
+                Button {
+                    withAnimation {
+                        toggleClicks(count: 2)
+                    }
+                } label: {
+                    HStack {
+                        VStack {
+                            Text("Phone Number")
+                                .foregroundColor(.primary)
+                            if !(user?.phoneNumber ?? "").isEmpty {
+                                Text(user?.phoneNumber ?? "")
+                            }
+                        }
+                        Spacer()
+                        if (user?.phoneNumber ?? "").isEmpty {
+                            Image(systemName: "exclamationmark.circle")
+                                .foregroundColor(.red)
+                        }
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(.degrees(clicks[2] ? 90 : 0))
+                    }
                 }
-
-                // Color Scheme Picker
-                Picker("Color Scheme", selection: $selectedColorScheme) {
-                    Text("Light").tag("light")
-                    Text("Dark").tag("dark")
+                
+                // Password
+                Button {
+                    withAnimation {
+                        toggleClicks(count: 3)
+                    }
+                } label: {
+                    HStack {
+                        Text("Password")
+                            .foregroundColor(.primary)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(.degrees(clicks[3] ? 90 : 0))
+                    }
                 }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding()
-
-                Button("Sign Out", action: signOut)
-                Spacer()
+                
+                // App Appearance
+                Button {
+                    withAnimation {
+                        toggleClicks(count: 4)
+                    }
+                } label: {
+                    HStack {
+                        Text("App Appearance")
+                            .foregroundColor(.primary)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(.degrees(clicks[4] ? 90 : 0))
+                    }
+                }
+                
+                // Sign Out
+                if clicks[4] {
+                    Picker("Color Scheme", selection: $selectedColorScheme) {
+                        Text("Light").tag("light")
+                        Text("Dark").tag("dark")
+                    }
+                    .padding(.vertical)
+                    .pickerStyle(.segmented)
+                }
+                
+                Button {
+                    withAnimation {
+                        toggleClicks(count: 5)
+                    }
+                } label: {
+                    HStack {
+                        Text("Sign Out")
+                            .foregroundColor(.primary)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(.degrees(clicks[5] ? 90 : 0))
+                    }
+                }
+                
+                if clicks[5] {
+                    Button {
+                        signOut()
+                    } label: {
+                        Text("Sign Out")
+                            .filledBubble()
+                    }
+                    .padding(.vertical)
+                }
             }
-            .padding()
+            .navigationTitle("Settings")
         }
         .onChange(of: selectedColorScheme) { value in
             UserDefaults.standard.set(value, forKey: "colorSchemePreference")
         }
         .onAppear {
-            selectedColorScheme = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "system"
+            selectedColorScheme = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "dark"
         }
     }
+
     func signOut() {
         let auth = Auth.auth()
         do {
@@ -72,6 +181,15 @@ struct SettingsView: View {
         } catch let signOutError as NSError {
             print("Error signing out: %@" + signOutError.localizedDescription)
         }
+    }
+    
+    func toggleClicks(count: Int) {
+        for index in 0 ..< clicks.count {
+            if index != count {
+                clicks[index] = false
+            }
+        }
+        clicks[count].toggle()
     }
 }
 

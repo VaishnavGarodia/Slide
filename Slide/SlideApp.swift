@@ -30,7 +30,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct SlideApp: App {
-    @AppStorage("colorSchemePreference") var colorSchemePreference: String = "system"
+    @AppStorage("colorSchemePreference") var colorSchemePreference: String = "dark"
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
     var body: some Scene {

@@ -9,9 +9,7 @@ import SwiftUI
 import UIKit
 
 struct HighlightCard: View {
-    
     var highlight: HighlightInfo
-
 
     var body: some View {
         ZStack {
@@ -22,11 +20,9 @@ struct HighlightCard: View {
                     // Placeholder view while loading
                     ProgressView()
                 case .success(let image):
-                    
+
                     // The actual image loaded successfully
                     HighlightImage(uiImage: image.asUIImage())
-                        .clipShape(RoundedRectangle(cornerRadius: 25))
-                        
 
                 case .failure(let error):
                     // In case of an error, you can show an error placeholder or message
@@ -151,7 +147,6 @@ struct SmallHighlightCard: View {
                     .cornerRadius(10) // Add corner radius to make it rounded
             }
         }
-            .padding()
+        .padding()
     }
 }
-

@@ -351,7 +351,6 @@
 				E8AF9E622978104200D3E007 /* EventSearchHomeView */,
 				E8AF9E5829780BB700D3E007 /* LocationSearchActivationView */,
 				E8AF9E5C29780D1D00D3E007 /* EventLocationRepresentable */,
-				E886058929812D5000BDD9E4 /* LocationSearchViewModel */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -436,13 +435,6 @@
 				9B7E8D0F2A71F1E90053B875 /* CreateEventPage.swift */,
 			);
 			path = "Create Event";
-			sourceTree = "<group>";
-		};
-		E886058929812D5000BDD9E4 /* LocationSearchViewModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = LocationSearchViewModel;
 			sourceTree = "<group>";
 		};
 		E8AF9E5829780BB700D3E007 /* LocationSearchActivationView */ = {
@@ -592,8 +584,6 @@
 				792C03DE2A2DC2F1004F1A42 /* ProfilePicture.swift in Sources */,
 				799F4EC32A6C954000F14074 /* ProgressIndicator.swift in Sources */,
 				797FE3C82A5E2A1100F6A69C /* GoogleButton.swift in Sources */,
-				E8AF9E6E297815DD00D3E007 /* LocationSearchView.swift in Sources */,
-				E81B7A6829A22CE6005AA4EE /* TextAreaEventDescription.swift in Sources */,
 				796CD01A2A71E0A5008599EA /* fetchUsername.swift in Sources */,
 				E9CD46FA2A6C5E5300E24317 /* PostCreationView.swift in Sources */,
 				7957B2ED2A6AFA7700F94CB4 /* Camera Permission.swift in Sources */,
@@ -610,7 +600,6 @@
 				795C5BEC2953FEDD007FDA83 /* MapOnly.swift in Sources */,
 				79FC9E06294D605300EBD520 /* SlideApp.swift in Sources */,
 				796CD0182A718CA2008599EA /* HighlightHolder.swift in Sources */,
-				E886058B29812D5F00BDD9E4 /* LocationSearchViewModel.swift in Sources */,
 				7957B2E72A6A15EE00F94CB4 /* EmailAndPasswordChecks.swift in Sources */,
 				7948CA062A71F2D00074F901 /* HighlightImage.swift in Sources */,
 				796CD0142A7189C4008599EA /* ProfileHighlightsView.swift in Sources */,
@@ -755,7 +744,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 75HZ39WC5M;
+				DEVELOPMENT_TEAM = SCXLS2Y3XJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Slide/Info.plist;
@@ -774,7 +763,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.slide.social1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.slide.social2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -789,7 +778,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 75HZ39WC5M;
+				DEVELOPMENT_TEAM = SCXLS2Y3XJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Slide/Info.plist;
@@ -808,7 +797,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.slide.social1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.slide.social2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
