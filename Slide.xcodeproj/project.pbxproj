@@ -22,6 +22,7 @@
 		792E490E2A5EDF0F00D73D7C /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 792E490D2A5EDF0F00D73D7C /* GoogleSignInSwift */; };
 		7935E7C52997111F00CC893F /* UserListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935E7C42997111F00CC893F /* UserListener.swift */; };
 		793F554F2A6D6D3200215845 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 793F554E2A6D6D3200215845 /* GoogleService-Info.plist */; };
+		7948CA062A71F2D00074F901 /* HighlightImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7948CA052A71F2D00074F901 /* HighlightImage.swift */; };
 		7953518529CE53FC00C99B48 /* CreatingNewEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7953518429CE53FC00C99B48 /* CreatingNewEventView.swift */; };
 		7953525C29CE577C00C99B48 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7953525B29CE577C00C99B48 /* MessageKit */; };
 		7953525F29CE587700C99B48 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 7953525E29CE587700C99B48 /* Kingfisher */; };
@@ -98,6 +99,7 @@
 		792E49082A5E31D300D73D7C /* MapWithEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapWithEvents.swift; sourceTree = "<group>"; };
 		7935E7C42997111F00CC893F /* UserListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListener.swift; sourceTree = "<group>"; };
 		793F554E2A6D6D3200215845 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7948CA052A71F2D00074F901 /* HighlightImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightImage.swift; sourceTree = "<group>"; };
 		7953518429CE53FC00C99B48 /* CreatingNewEventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatingNewEventView.swift; sourceTree = "<group>"; };
 		7957B2E62A6A15EE00F94CB4 /* EmailAndPasswordChecks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailAndPasswordChecks.swift; sourceTree = "<group>"; };
 		7957B2EC2A6AFA7700F94CB4 /* Camera Permission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Camera Permission.swift"; sourceTree = "<group>"; };
@@ -324,6 +326,7 @@
 			children = (
 				79A27C862A69F3A7003DE383 /* HighlightInfo.swift */,
 				79A27C882A69F3D5003DE383 /* HighlightCard.swift */,
+				7948CA052A71F2D00074F901 /* HighlightImage.swift */,
 			);
 			path = Highlights;
 			sourceTree = "<group>";
@@ -590,6 +593,7 @@
 				796CD0182A718CA2008599EA /* HighlightHolder.swift in Sources */,
 				E886058B29812D5F00BDD9E4 /* LocationSearchViewModel.swift in Sources */,
 				7957B2E72A6A15EE00F94CB4 /* EmailAndPasswordChecks.swift in Sources */,
+				7948CA062A71F2D00074F901 /* HighlightImage.swift in Sources */,
 				796CD0142A7189C4008599EA /* ProfileHighlightsView.swift in Sources */,
 				791C337D2A6339410020DEAC /* LogInFunction.swift in Sources */,
 				79B1FF7C2A6B35AF00012B38 /* ContactsPermissionsView.swift in Sources */,
