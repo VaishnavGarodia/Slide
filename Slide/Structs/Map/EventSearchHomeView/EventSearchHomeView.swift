@@ -13,7 +13,7 @@ struct EventSearchHomeView: View {
         ZStack(alignment: .top) {
             MapOnly()
                 .ignoresSafeArea()
-            LocationSearchView()
+            //LocationSearchView()
 //            if showLocationSearchView {
 //                LocationSearchView()
 //            }
