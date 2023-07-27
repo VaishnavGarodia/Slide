@@ -48,12 +48,12 @@ struct SearchView: View {
                             self.show.toggle()
                         }
                     }
-                    .frame(height: UIScreen.main.bounds.height / 2)
                 }
             }
-            .padding(.horizontal, 25)
+            
         }
-        .background(Color.black.opacity(0.2).edgesIgnoringSafeArea(.all)
+        .padding()
+        .background(Color.black.opacity(0.4).ignoresSafeArea()
         .onTapGesture {
             self.show.toggle()
         })
