@@ -32,33 +32,17 @@ struct CreateEventView : UIViewRepresentable {
         map.delegate = context.coordinator
         manager.delegate = context.coordinator
         map.showsUserLocation = true
+        if let location = self.manager.location?.coordinate {
+            let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+            let region = MKCoordinateRegion(center: location, span: span)
+            self.map.setRegion(region, animated: true)
+        }
         let gesture = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.tap(ges:)))
         map.addGestureRecognizer(gesture)
-        
         return map
     }
     
     func updateUIView(_ uiView:  MKMapView, context: Context) {
-        //get events from firebase and show them
-        let db = Firestore.firestore()
-                db.collection("Events").getDocuments { (querySnapshot, err) in
-                    if let err = err {
-                        print("Error getting documents: \(err)")
-                    } else {
-                        for document in querySnapshot!.documents {
-                            print(document.data())
-                            let data = document.data()
-                            let eventName = data["eventName"]
-                            let location = data["location"] as? GeoPoint ?? GeoPoint(latitude: 0.0, longitude: 0.0)
-                            let annotation = MKPointAnnotation()
-                            annotation.coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude )
-                            map.addAnnotation(annotation)
-                            print("eventName", eventName ?? "?")
-                            print("lat", location.latitude)
-                            print("long", location.longitude)
-                        }
-                    }
-                }
     }
     
     class Coordinator : NSObject,MKMapViewDelegate,CLLocationManagerDelegate{
@@ -79,15 +63,13 @@ struct CreateEventView : UIViewRepresentable {
             else{
                 
                 self.parent.manager.startUpdatingLocation()
+                if let location = self.parent.manager.location?.coordinate {
+                    let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+                    let region = MKCoordinateRegion(center: location, span: span)
+                    self.parent.map.setRegion(region, animated: true)
+                    
+                }
             }
-        }
-        
-        func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-            
-            let region = MKCoordinateRegion(center: locations.last!.coordinate, latitudinalMeters: 10000, longitudinalMeters: 10000)
-            self.parent.source = locations.last!.coordinate
-            
-            self.parent.map.region = region
         }
         
         @objc func tap(ges: UITapGestureRecognizer){
@@ -96,7 +78,7 @@ struct CreateEventView : UIViewRepresentable {
             let mplocation = self.parent.map.convert(location, toCoordinateFrom: self.parent.map)
             
             let point = MKPointAnnotation()
-            point.subtitle = "Destination"
+            point.subtitle = "Event"
             point.coordinate = mplocation
             
             self.parent.destination = mplocation
@@ -120,14 +102,6 @@ struct CreateEventView : UIViewRepresentable {
             
             self.parent.map.removeAnnotations(self.parent.map.annotations)
             self.parent.map.addAnnotation(point)
-        }
-        
-        func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-            
-            let over = MKPolylineRenderer(overlay: overlay)
-            over.strokeColor = .red
-            over.lineWidth = 3
-            return over
         }
     }
 }

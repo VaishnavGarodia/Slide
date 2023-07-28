@@ -237,7 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				9B8081F72A71D8AC001153E5 /* ShowEvents */,
-				E81B7A6029A229F6005AA4EE /* Create Event */,
+				E81B7A6029A229F6005AA4EE /* CreateEvent */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -427,14 +427,14 @@
 			path = ShowEvents;
 			sourceTree = "<group>";
 		};
-		E81B7A6029A229F6005AA4EE /* Create Event */ = {
+		E81B7A6029A229F6005AA4EE /* CreateEvent */ = {
 			isa = PBXGroup;
 			children = (
 				7953518429CE53FC00C99B48 /* CreatingNewEventView.swift */,
 				9B7E8D0D2A71F1AA0053B875 /* CreateEventView.swift */,
 				9B7E8D0F2A71F1E90053B875 /* CreateEventPage.swift */,
 			);
-			path = "Create Event";
+			path = CreateEvent;
 			sourceTree = "<group>";
 		};
 		E8AF9E5829780BB700D3E007 /* LocationSearchActivationView */ = {
