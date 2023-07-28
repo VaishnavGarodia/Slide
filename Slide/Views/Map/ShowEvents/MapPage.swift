@@ -25,7 +25,7 @@ struct MapPage: View {
     @State var doc = ""
     @State var data: Data = .init(count: 0)
     @State var search = false
-    
+    let createEventSearch : Bool = false
     var body: some View {
         ZStack {
             MapView(map: self.$map, manager: self.$manager, alert: self.$alert, source: self.$source, destination: self.$destination, name: self.$name, distance: self.$distance, time: self.$time, show: self.$show)
@@ -37,9 +37,9 @@ struct MapPage: View {
                 VStack {
                     HStack {
                         VStack(alignment: .leading, spacing: 15) {
-                            Text(self.destination != nil ? "Destination" : "Pick a Location")
+                            Text(self.destination != nil ? "Destination" : "Events Around You")
                                 .font(.title)
-                            
+                            //TODO: Remove this text view and everything. Should be a single full screen map.
                             if self.destination != nil {
                                 Text(self.name)
                                     .fontWeight(.bold)
@@ -48,12 +48,10 @@ struct MapPage: View {
                         
                         Spacer()
                         
-                        Button {
-                            
-                        } label: {
-                            Image(systemName: "plus")
-                                .foregroundColor(.primary)
-                        }
+                        NavigationLink(destination: CreateEventPage()) {
+                                        Image(systemName: "plus")
+                                            .foregroundColor(.primary)
+                                    }
                         .padding()
                         .background(Circle().foregroundColor(.accentColor))
                         
@@ -72,89 +70,15 @@ struct MapPage: View {
                     
                     Spacer()
                     
-                    if self.loading {
-                        Loader()
-                    }
-                    
-                    if self.book {
-                        Booked(data: self.$data, doc: self.$doc, loading: self.$loading, book: self.$book)
-                    }
-                    
                     if self.search {
-                        SearchView(show: self.$search, map: self.$map, source: self.$source, destination: self.$destination, name: self.$name, distance: self.$distance, time: self.$time, detail: self.$show)
+                        SearchView(show: self.$search, map: self.$map, source: self.$source, location: self.$destination, name: self.$name, distance: self.$distance, time: self.$time, detail: self.$show, createEventSearch: self.createEventSearch)
                     }
-                }
-                
-                if self.destination != nil && self.show {
-                    ZStack(alignment: .topTrailing) {
-                        VStack(spacing: 20) {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 15) {
-                                    Text("Destination")
-                                        .fontWeight(.bold)
-                                    Text(self.name)
-                                }
-                                
-                                Spacer()
-                            }
-                            
-                            Button(action: {
-                                self.loading.toggle()
-                                
-                                self.createEvent()
-                                
-                            }) {
-                                Text("Create Event")
-                                    .foregroundColor(.white)
-                                    .padding(.vertical, 10)
-                                    .frame(width: UIScreen.main.bounds.width / 2)
-                            }
-                            .background(Color.red)
-                            .clipShape(Capsule())
-                        }
-                        
-                        Button(action: {
-                            self.map.removeOverlays(self.map.overlays)
-                            self.map.removeAnnotations(self.map.annotations)
-                            self.destination = nil
-                            
-                            self.show.toggle()
-                            
-                        }) {
-                            Image(systemName: "xmark")
-                                .foregroundColor(.black)
-                        }
-                    }
-                    .padding(.vertical, 10)
-                    .padding(.horizontal)
-                    .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom)
-                    .background(Color.white)
                 }
             }
-            
-            
         }
         .alert(isPresented: self.$alert) { () -> Alert in
             
             Alert(title: Text("Error"), message: Text("Please Enable Location In Settings !!!"), dismissButton: .destructive(Text("Ok")))
-        }
-    }
-    
-    func createEvent() {
-        let doc = db.collection("Events").document()
-        self.doc = doc.documentID
-        
-        let location = GeoPoint(latitude: self.destination.latitude, longitude: self.destination.longitude)
-        
-        doc.setData(["name": "Kavsoft", "location": location]) { err in
-            
-            if err != nil {
-                print((err?.localizedDescription)!)
-                return
-            }
-            
-            self.loading.toggle()
-            self.book.toggle()
         }
     }
 }

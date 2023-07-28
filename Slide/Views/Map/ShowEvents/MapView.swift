@@ -30,12 +30,21 @@ struct MapView: UIViewRepresentable {
         manager.delegate = context.coordinator
         map.showsUserLocation = true
         // get events from firebase and show them
+        fetchEvents()
+        return map
+    }
+    
+    func updateUIView(_ uiView: MKMapView, context: Context) {}
+    
+    func fetchEvents(){
         let db = Firestore.firestore()
-        db.collection("Events").getDocuments { querySnapshot, err in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else {
-                for document in querySnapshot!.documents {
+        db.collection("Events")
+            .addSnapshotListener { querySnapshot, error in
+                guard let documents = querySnapshot?.documents else {
+                    print("Error fetching documents: \(error!)")
+                    return
+                }
+                for document in documents {
                     print(document.data())
                     let data = document.data()
                     let eventName = data["eventName"]
@@ -45,14 +54,9 @@ struct MapView: UIViewRepresentable {
                     map.addAnnotation(annotation)
                     print("eventName", eventName ?? "?")
                     print("lat", location.latitude)
-                    print("long", location.longitude)
-                }
+                    print("long", location.longitude)            }
             }
-        }
-        return map
     }
-    
-    func updateUIView(_ uiView: MKMapView, context: Context) {}
     
     class Coordinator: NSObject, MKMapViewDelegate, CLLocationManagerDelegate {
         var parent: MapView
@@ -69,7 +73,7 @@ struct MapView: UIViewRepresentable {
                 if let location = parent.manager.location?.coordinate {
                     let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
                     let region = MKCoordinateRegion(center: location, span: span)
-                    parent.map.setRegion(region, animated: true)
+                    self.parent.map.setRegion(region, animated: true)
                 }
             }
         }
