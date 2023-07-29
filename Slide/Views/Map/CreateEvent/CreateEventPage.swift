@@ -5,18 +5,24 @@
 //  Created by Vaishnav Garodia
 //
 
-import SwiftUI
-import MapKit
 import CoreLocation
 import FirebaseFirestore
+import MapKit
+import SwiftUI
 
-struct CreateEventPage : View {
-    
+struct Event {
+    var name, description, eventIcon: String
+    var start, end: Date
+    var address: CLLocationCoordinate2D!
+}
+
+struct CreateEventPage: View {
+    @State private var event = Event(name: "", description: "", eventIcon: "", start: Date.now, end: Date.now.addingTimeInterval(3600))
     @State var map = MKMapView()
     @State var manager = CLLocationManager()
     @State var alert = false
-    @State var source : CLLocationCoordinate2D!
-    @State var destination : CLLocationCoordinate2D!
+    @State var source: CLLocationCoordinate2D!
+    @State var destination: CLLocationCoordinate2D!
     @State var name = ""
     @State var distance = ""
     @State var time = ""
@@ -24,30 +30,25 @@ struct CreateEventPage : View {
     @State var loading = false
     @State var book = false
     @State var doc = ""
-    @State var data : Data = .init(count: 0)
+    @State var data: Data = .init(count: 0)
     @State var search = false
-    let createEventSearch : Bool = true
+    let createEventSearch: Bool = true
     
-    var body: some View{
+    var body: some View {
         ZStack {
             CreateEventView(map: self.$map, manager: self.$manager, alert: self.$alert, source: self.$source, destination: self.$destination, name: self.$name, distance: self.$distance, time: self.$time, show: self.$show)
                 .ignoresSafeArea()
                 .onAppear {
                     self.manager.requestAlwaysAuthorization()
                 }
-            ZStack {
-                
+            VStack {
                 VStack {
-                    
-                    HStack{
-                        
+                    HStack {
                         VStack(alignment: .leading, spacing: 15) {
-                            
                             Text(self.destination != nil ? "Destination" : "New Page")
                                 .font(.title)
                             
-                            if self.destination != nil{
-                                
+                            if self.destination != nil {
                                 Text(self.name)
                                     .fontWeight(.bold)
                             }
@@ -56,11 +57,9 @@ struct CreateEventPage : View {
                         Spacer()
                         
                         Button(action: {
-                            
                             self.search.toggle()
                             
                         }) {
-                            
                             Image(systemName: "magnifyingglass")
                                 .foregroundColor(.black)
                         }
@@ -70,33 +69,38 @@ struct CreateEventPage : View {
                     .padding()
                     .background()
                     
-                    if self.destination != nil && self.show{
-                        
-                        ZStack(alignment: .topTrailing){
-                            
-                            VStack(spacing: 20){
-                                
-                                HStack{
-                                    
-                                    VStack(alignment: .leading,spacing: 15){
-                                        
-                                        Text("Destination")
-                                            .fontWeight(.bold)
-                                        Text(self.name)
-                                        
+                    if self.destination != nil && self.show {
+                        ZStack(alignment: .topTrailing) {
+                            VStack(spacing: 20) {
+                                TextField("Name your event!", text: self.$event.name)
+                                    .bubbleStyle(color: .primary)
+                                    .padding(.top)
+                                TextField("Put an event description", text: self.$event.description)
+                                    .frame(height: 100, alignment: .topLeading)
+                                    .bubbleStyle(color: .primary)
+                                DatePicker("When does it start?", selection: self.$event.start, in: Date()...)
+                                    .onAppear {
+                                        UIDatePicker.appearance().minuteInterval = 15
                                     }
-                                    
-                                    Spacer()
+
+                                    .datePickerStyle(.compact)
+                                DatePicker("When does it end?", selection: self.$event.end, in: self.event.start...)
+                                    .onAppear {
+                                        UIDatePicker.appearance().minuteInterval = 15
+                                    }
+                                
+                                Picker("Event Icon", selection: self.$event.eventIcon) {
+                                    Image(systemName: "figure.basketball").tag("figure.basketball")
+                                    Image(systemName: "party.popper").tag("party.popper")
+                                    Image(systemName: "theatermasks").tag("theatersmasks")
                                 }
+                                .pickerStyle(.segmented)
                                 
                                 Button(action: {
-                                    
                                     self.loading.toggle()
-                                    
+                                    self.event.address = self.destination
                                     self.createEvent()
-                                    
                                 }) {
-                                    
                                     Text("Create Event")
                                         .foregroundColor(.white)
                                         .padding(.vertical, 10)
@@ -104,11 +108,9 @@ struct CreateEventPage : View {
                                 }
                                 .background(Color.red)
                                 .clipShape(Capsule())
-                                
                             }
                             
                             Button(action: {
-                                
                                 self.map.removeOverlays(self.map.overlays)
                                 self.map.removeAnnotations(self.map.annotations)
                                 self.destination = nil
@@ -116,30 +118,27 @@ struct CreateEventPage : View {
                                 self.show.toggle()
                                 
                             }) {
-                                
                                 Image(systemName: "xmark")
                                     .foregroundColor(.black)
                             }
                         }
-                        .padding(.vertical, 10)
-                        .padding(.horizontal)
+                        .padding()
                         .background(Color.white)
                     }
                 }
                 
-                if self.loading{
-                    
+                Spacer()
+                
+                if self.loading {
                     Loader()
                 }
                 
-                if self.book{
-                    
+                if self.book {
                     Booked(data: self.$data, doc: self.$doc, loading: self.$loading, book: self.$book)
                 }
                 
-                if self.search{
-                    
-                    SearchView(show: self.$search, map: self.$map, source: self.$source, location: self.$destination, name: self.$name, distance: self.$distance, time: self.$time,detail: self.$show, createEventSearch: self.createEventSearch)
+                if self.search {
+                    SearchView(show: self.$search, map: self.$map, source: self.$source, location: self.$destination, name: self.$name, distance: self.$distance, time: self.$time, detail: self.$show, createEventSearch: self.createEventSearch)
                 }
             }
         }
@@ -149,27 +148,28 @@ struct CreateEventPage : View {
         }
     }
     
-    func createEvent(){
-        
+    func createEvent() {
         let db = Firestore.firestore()
         let doc = db.collection("Events").document()
         self.doc = doc.documentID
         
         let location = GeoPoint(latitude: self.destination.latitude, longitude: self.destination.longitude)
         print("Creating event for location: ", location)
-        doc.setData(["name":"Kavsoft","location":location]) { (err) in
+        doc.setData(["name": "Kavsoft", "location": location]) { err in
             
-            if err != nil{
-                
+            if err != nil {
                 print((err?.localizedDescription)!)
                 return
             }
             
-        self.loading.toggle()
-        self.book.toggle()
-            
+            self.loading.toggle()
+            self.book.toggle()
         }
     }
 }
 
-
+struct CreateEventPage_Previews: PreviewProvider {
+    static var previews: some View {
+        CreateEventPage()
+    }
+}

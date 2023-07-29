@@ -5,7 +5,7 @@ import SwiftUI
 /* Tom Holland test data: [HighlightInfo(imageName: "https://m.media-amazon.com/images/M/MV5BNzZiNTEyNTItYjNhMS00YjI2LWIwMWQtZmYwYTRlNjMyZTJjXkEyXkFqcGdeQXVyMTExNzQzMDE0._V1_FMjpg_UX1000_.jpg", profileImageName: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", username: "User 1", highlightTitle: "Highlight 1"), HighlightInfo(imageName: "https://www.advocate.com/media-library/tom-holland.jpg?id=34342705&width=980&quality=85", profileImageName: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", username: "User 1", highlightTitle: "Highlight 1")] */
 
 struct Highlights: View {
-    @State private var highlights: [HighlightInfo] = [HighlightInfo(imageName: "https://m.media-amazon.com/images/M/MV5BNzZiNTEyNTItYjNhMS00YjI2LWIwMWQtZmYwYTRlNjMyZTJjXkEyXkFqcGdeQXVyMTExNzQzMDE0._V1_FMjpg_UX1000_.jpg", profileImageName: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", username: "User 1", highlightTitle: "Highlight 1"), HighlightInfo(imageName: "https://www.advocate.com/media-library/tom-holland.jpg?id=34342705&width=980&quality=85", profileImageName: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", username: "User 1", highlightTitle: "Highlight 1")]
+    @State private var highlights: [HighlightInfo] = []
     @State private var isPresentingPostCreationView = false
 
     var body: some View {
@@ -14,7 +14,7 @@ struct Highlights: View {
                 VStack(spacing: 30) {
                     ForEach(highlights) { highlight in
                         HighlightCard(highlight: highlight)
-                            .cornerRadius(25)
+                            .cornerRadius(15)
                             .padding()
                     }
                 }

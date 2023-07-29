@@ -11,21 +11,16 @@ import SwiftUI
 
 struct ProfileView: View {
     @StateObject private var highlightHolder = HighlightHolder()
-    @State private var userListener = UserListener()
+    let user = Auth.auth().currentUser
     @State private var tab = "Highlights"
+    
     var body: some View {
         VStack {
-            ProfilePicture()
+            UserProfilePictures(photoURL: user?.photoURL?.absoluteString ?? "", dimension: 120)
 
-            if let user = userListener.user {
-                Text(user.displayName!)
-                    .foregroundColor(.primary)
-                    .padding()
-            } else {
-                Text("SimUser")
-                    .foregroundColor(.primary)
-                    .padding()
-            }
+            Text(user?.displayName ?? "SimUser")
+                .foregroundColor(.primary)
+                .padding()
 
             VStack(alignment: .center) {
                 HStack {
@@ -62,8 +57,6 @@ struct ProfileView: View {
             }
         }
     }
-
-    
 }
 
 struct ProfileView_Previews: PreviewProvider {

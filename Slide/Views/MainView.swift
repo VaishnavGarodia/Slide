@@ -10,8 +10,7 @@ struct MainView: View {
     init() {
         /* When initialized, the following code changes the tab bar so that unselected items are white and the bar is opaque. */
         UITabBar.appearance().unselectedItemTintColor = UIColor.white
-        UITabBar.appearance().backgroundColor = (selectedColorScheme == "dark" ? .black : .white)
-        UINavigationBar.appearance().backgroundColor = (selectedColorScheme == "dark" ? .black : .white)
+        UITabBar.appearance().isTranslucent = false
     }
     
     /* The selection variable here defines which tab on the tab view the app initially starts on (the map) */
@@ -42,7 +41,7 @@ struct MainView: View {
                 }
                 .tag(3)
                 
-            SettingsView()
+            SettingsView(selectedColorScheme: $selectedColorScheme)
                 .tabItem {
                     Label("", systemImage: "gear")
                 }

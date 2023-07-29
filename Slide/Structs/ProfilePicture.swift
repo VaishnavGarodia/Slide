@@ -6,6 +6,7 @@ import UIKit
 import PhotosUI
 
 struct ProfilePicture: View {
+    let user = Auth.auth().currentUser
     @State private var isImageSelected = false
     @State private var selectedImage: UIImage?
     @State private var isShowingImagePicker = false
@@ -116,12 +117,12 @@ struct ProfilePicture: View {
         guard let profilePictureURL = profilePictureURL else { return }
         
         let defaults = UserDefaults.standard
-        defaults.set(profilePictureURL.absoluteString, forKey: profilePictureKey)
+        defaults.set(profilePictureURL.absoluteString, forKey: profilePictureKey + (user?.uid ?? ""))
     }
     
     func loadProfilePictureURL() {
         let defaults = UserDefaults.standard
-        guard let urlString = defaults.string(forKey: profilePictureKey),
+        guard let urlString = defaults.string(forKey: profilePictureKey + (user?.uid ?? "")),
               let url = URL(string: urlString) else { return }
         
         profilePictureURL = url
