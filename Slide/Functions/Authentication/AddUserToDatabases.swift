@@ -9,7 +9,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import Foundation
 
-func addUserToDatabases(username: String, email: String, password: String, google: Bool) -> String {
+func addUserToDatabases(username: String, email: String, password: String, google: Bool, profilePic: String) -> String {
     guard let user = Auth.auth().currentUser else {
         return "User is not signed in."
     }
@@ -33,7 +33,7 @@ func addUserToDatabases(username: String, email: String, password: String, googl
                 "Email": email,
                 "Password": password,
                 "Username": username,
-                "ProfilePictureURL": "",
+                "ProfilePictureURL": profilePic ?? "",
                 "Phone Number" : "",
             ]
             usersRef.setData(userData) { error in

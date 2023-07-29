@@ -7,8 +7,10 @@
 
 import SwiftUI
 import FirebaseFirestore
+import FirebaseAuth
 
 struct ProfileHighlightsView: View {
+    let user = Auth.auth().currentUser
     @ObservedObject var highlightHolder = HighlightHolder()
     
     var body: some View {
