@@ -6,12 +6,16 @@ import SwiftUI
 
 struct Highlights: View {
     @State private var highlights: [HighlightInfo] = []
+    @State private var galleries: [EventGalleryInfo] = []
     @State private var isPresentingPostCreationView = false
 
     var body: some View {
         ZStack {
             ScrollView {
                 VStack(spacing: 30) {
+                    ForEach(galleries) { gallery in
+                        EventGalleryCard(eventGalleryInfo: gallery)
+                    }
                     ForEach(highlights) { highlight in
                         HighlightCard(highlight: highlight)
                             .cornerRadius(15)
@@ -61,9 +65,11 @@ struct Highlights: View {
         )
         .refreshable {
             fetchHighlights()
+            fetchGalleries()
         }
         .onAppear {
             fetchHighlights()
+            fetchGalleries()
         }
     }
 
@@ -103,6 +109,20 @@ struct Highlights: View {
             dispatchGroup.notify(queue: .main) {
                 // This block is called when all the tasks inside the DispatchGroup are completed
                 self.highlights = newHighlights
+            }
+        }
+    }
+    
+    func fetchGalleries() {
+        getEventGalleryInfos { eventGalleries, error in
+            if let error = error {
+                print("Error fetching event galleries: \(error.localizedDescription)")
+                return
+            }
+
+            if let temp = eventGalleries {
+                galleries = temp
+                return
             }
         }
     }
