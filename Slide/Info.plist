@@ -28,6 +28,15 @@
 				<string>com.googleusercontent.apps.1019532523456-9ndru8n9k0thbpphs89s1lhi3oqhrqse</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-1019532523456-ios-f1f36f240dbc70b899fa25
+</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -39,6 +48,8 @@
 	<string>Slide needs your camera so you can post photos.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Slide needs access to your contacts to find your friends easier.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Slide needs your location to display the events around you.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Slide needs your location to display the events around you.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

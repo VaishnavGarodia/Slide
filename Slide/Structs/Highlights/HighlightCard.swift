@@ -9,9 +9,7 @@ import SwiftUI
 import UIKit
 
 struct HighlightCard: View {
-    
     var highlight: HighlightInfo
-
 
     var body: some View {
         ZStack {
@@ -22,11 +20,9 @@ struct HighlightCard: View {
                     // Placeholder view while loading
                     ProgressView()
                 case .success(let image):
-                    
+
                     // The actual image loaded successfully
                     HighlightImage(uiImage: image.asUIImage())
-                        .clipShape(RoundedRectangle(cornerRadius: 25))
-                        
 
                 case .failure(let error):
                     // In case of an error, you can show an error placeholder or message
@@ -40,55 +36,20 @@ struct HighlightCard: View {
             VStack {
                 HStack {
                     HStack {
-                        if highlight.profileImageName.isEmpty {
-                            Image(systemName: "person.circle")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 35, height: 35)
-                                .padding(7.5)
-                                .clipShape(Circle())
-                        } else if let profileImageURL = URL(string: highlight.profileImageName) {
-                            // Use AsyncImage to fetch and display the image
-                            AsyncImage(url: profileImageURL) { phase in
-                                switch phase {
-                                case .empty:
-                                    // Placeholder view while loading
-                                    ProgressView()
-                                case .success(let image):
-                                    // The actual image loaded successfully
-                                    image
-                                        .resizable()
-                                        .scaledToFill()
-                                        .clipShape(Circle())
-                                        .frame(width: 35, height: 35)
-                                        .padding(7.5)
-                                        .clipped()
-
-                                case .failure(let error):
-                                    // In case of an error, you can show an error placeholder or message
-                                    Text("Error loading image: \(error.localizedDescription)")
-                                        .frame(width: 35, height: 35)
-                                        .padding(7.5)
-                                @unknown default:
-                                    // Placeholder view while loading (handles potential future changes)
-                                    ProgressView()
-                                        .frame(width: 35, height: 35)
-                                        .padding(7.5)
-                                }
-                            }
-                        }
-                        VStack {
+                        UserProfilePictures(photoURL: highlight.profileImageName, dimension: 35)
+                        VStack (alignment: .leading){
                             Text(highlight.username)
+                                .foregroundColor(.white)
                             Text(highlight.highlightTitle)
                                 .font(.caption)
                                 .fontWeight(.thin)
-                                .foregroundColor(Color.white)
+                                .foregroundColor(.white)
                         }
                     }
-                    .padding(.horizontal)
-                    .background(RoundedRectangle(cornerRadius: 25)
+                    .padding(.horizontal, 5)
+                    .background(RoundedRectangle(cornerRadius: 15)
                         .foregroundColor(.black.opacity(0.5)))
-                    .padding()
+                    .padding(5)
 
                     Spacer()
                 }
@@ -97,17 +58,19 @@ struct HighlightCard: View {
                     Spacer()
                     VStack {
                         Image(systemName: "bubble.left")
+                            .foregroundColor(.white)
                             .imageScale(.medium)
                             .padding()
                             .background(Circle()
                                 .foregroundColor(.black.opacity(0.5)))
                         Image(systemName: "bookmark")
+                            .foregroundColor(.white)
                             .imageScale(.medium)
                             .padding()
                             .background(Circle()
                                 .foregroundColor(.black.opacity(0.5)))
                     }
-                    .padding()
+                    .padding(5)
                 }
             }
         }
@@ -151,7 +114,6 @@ struct SmallHighlightCard: View {
                     .cornerRadius(10) // Add corner radius to make it rounded
             }
         }
-            .padding()
+        .padding()
     }
 }
-

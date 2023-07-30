@@ -6,6 +6,7 @@ import SwiftUI
 import UIKit
 
 struct MainView: View {
+    @State private var selectedColorScheme: String = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "dark"
     init() {
         /* When initialized, the following code changes the tab bar so that unselected items are white and the bar is opaque. */
         UITabBar.appearance().unselectedItemTintColor = UIColor.white
@@ -40,7 +41,7 @@ struct MainView: View {
                 }
                 .tag(3)
                 
-            SettingsView()
+            SettingsView(selectedColorScheme: $selectedColorScheme)
                 .tabItem {
                     Label("", systemImage: "gear")
                 }

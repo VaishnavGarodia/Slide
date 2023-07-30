@@ -1,42 +1,39 @@
-import SwiftUI
 import Firebase
 import FirebaseFirestore
+import SwiftUI
 
 /* Tom Holland test data: [HighlightInfo(imageName: "https://m.media-amazon.com/images/M/MV5BNzZiNTEyNTItYjNhMS00YjI2LWIwMWQtZmYwYTRlNjMyZTJjXkEyXkFqcGdeQXVyMTExNzQzMDE0._V1_FMjpg_UX1000_.jpg", profileImageName: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", username: "User 1", highlightTitle: "Highlight 1"), HighlightInfo(imageName: "https://www.advocate.com/media-library/tom-holland.jpg?id=34342705&width=980&quality=85", profileImageName: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", username: "User 1", highlightTitle: "Highlight 1")] */
 
 struct Highlights: View {
-    @State private var highlights: [HighlightInfo] = [HighlightInfo(imageName: "https://m.media-amazon.com/images/M/MV5BNzZiNTEyNTItYjNhMS00YjI2LWIwMWQtZmYwYTRlNjMyZTJjXkEyXkFqcGdeQXVyMTExNzQzMDE0._V1_FMjpg_UX1000_.jpg", profileImageName: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", username: "User 1", highlightTitle: "Highlight 1"), HighlightInfo(imageName: "https://www.advocate.com/media-library/tom-holland.jpg?id=34342705&width=980&quality=85", profileImageName: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", username: "User 1", highlightTitle: "Highlight 1")]
+    @State private var highlights: [HighlightInfo] = []
     @State private var isPresentingPostCreationView = false
-    
+
     var body: some View {
         ZStack {
-            
-            
             ScrollView {
-                
-                
                 VStack(spacing: 30) {
                     ForEach(highlights) { highlight in
                         HighlightCard(highlight: highlight)
+                            .cornerRadius(15)
                             .padding()
                     }
                 }
                 .padding()
             }
             .scrollIndicators(.hidden)
-            
-            VStack (alignment: .center){
+
+            VStack(alignment: .center) {
                 Spacer()
-                    Button(action: {
-                        isPresentingPostCreationView = true
-                    }) {
-                        Image(systemName: "plus.app")
-                            .foregroundColor(.white)
-                            .padding()
-                            .imageScale(.large)
-                    }
-                    .background(Circle().foregroundColor(.accentColor))
-                    .padding()
+                Button(action: {
+                    isPresentingPostCreationView = true
+                }) {
+                    Image(systemName: "plus.app")
+                        .foregroundColor(.white)
+                        .padding()
+                        .imageScale(.large)
+                }
+                .background(Circle().foregroundColor(.accentColor))
+                .padding()
             }
         }
         .fullScreenCover(isPresented: $isPresentingPostCreationView) {
@@ -73,7 +70,7 @@ struct Highlights: View {
     func fetchHighlights() {
         let postsCollectionRef = db.collection("Posts")
 
-        postsCollectionRef.getDocuments { (snapshot, error) in
+        postsCollectionRef.getDocuments { snapshot, error in
             if let error = error {
                 print("Error fetching highlights: \(error.localizedDescription)")
                 return
@@ -85,15 +82,16 @@ struct Highlights: View {
             for document in snapshot?.documents ?? [] {
                 if let caption = document.data()["ImageCaption"] as? String,
                    let userDocumentID = document.data()["User"] as? String,
-                   let imagePath = document.data()["PostImage"] as? String {
-
+                   let imagePath = document.data()["PostImage"] as? String
+                {
                     dispatchGroup.enter() // Enter the DispatchGroup before starting an asynchronous task
 
                     // Fetch username from the "Users" database using the userDocumentID
                     fetchUsername(for: userDocumentID) { username, photoURL in
                         if let username = username, let photoURL = photoURL {
                             let highlight = HighlightInfo(
-                                imageName: imagePath, profileImageName: photoURL, username: username, highlightTitle: caption)
+                                imageName: imagePath, profileImageName: photoURL, username: username, highlightTitle: caption
+                            )
                             newHighlights.append(highlight)
 
                             dispatchGroup.leave() // Leave the DispatchGroup when the task is complete
