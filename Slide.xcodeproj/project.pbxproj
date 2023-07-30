@@ -78,6 +78,8 @@
 		79FC9E44294D67EA00EBD520 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC9E43294D67EA00EBD520 /* FirebaseStorage */; };
 		79FC9E46294D6A6300EBD520 /* LogIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC9E45294D6A6300EBD520 /* LogIn.swift */; };
 		79FC9E4B294D74B900EBD520 /* FirebaseDynamicLinks in Frameworks */ = {isa = PBXBuildFile; productRef = 79FC9E4A294D74B900EBD520 /* FirebaseDynamicLinks */; };
+		9BE277EE2A7218F4007AD2EC /* NewChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE277ED2A7218F4007AD2EC /* NewChat.swift */; };
+		9BE277F02A7218FE007AD2EC /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE277EF2A7218FE007AD2EC /* ChatView.swift */; };
 		9B7E8D0E2A71F1AA0053B875 /* CreateEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7E8D0D2A71F1AA0053B875 /* CreateEventView.swift */; };
 		9B7E8D102A71F1E90053B875 /* CreateEventPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7E8D0F2A71F1E90053B875 /* CreateEventPage.swift */; };
 		9B8081F02A71D08F001153E5 /* Loader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B8081EF2A71D08F001153E5 /* Loader.swift */; };
@@ -151,6 +153,10 @@
 		79FC9E07294D605300EBD520 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		79FC9E09294D605300EBD520 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		79FC9E45294D6A6300EBD520 /* LogIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogIn.swift; sourceTree = "<group>"; };
+		9BE277ED2A7218F4007AD2EC /* NewChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChat.swift; sourceTree = "<group>"; };
+		9BE277EF2A7218FE007AD2EC /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		E81B7A6729A22CE6005AA4EE /* TextAreaEventDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAreaEventDescription.swift; sourceTree = "<group>"; };
+		E886058A29812D5F00BDD9E4 /* LocationSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewModel.swift; sourceTree = "<group>"; };
 		9B7E8D0D2A71F1AA0053B875 /* CreateEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventView.swift; sourceTree = "<group>"; };
 		9B7E8D0F2A71F1E90053B875 /* CreateEventPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventPage.swift; sourceTree = "<group>"; };
 		9B8081EF2A71D08F001153E5 /* Loader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loader.swift; sourceTree = "<group>"; };
@@ -265,6 +271,8 @@
 			children = (
 				E9CD46F72A6BA65200E24317 /* UserSearchAndFriendView.swift */,
 				795C5BFC29541A26007FDA83 /* MessagesTab.swift */,
+				9BE277ED2A7218F4007AD2EC /* NewChat.swift */,
+				9BE277EF2A7218FE007AD2EC /* ChatView.swift */,
 			);
 			path = Messaging;
 			sourceTree = "<group>";
@@ -586,6 +594,7 @@
 				797FE3C92A5E2A1100F6A69C /* Register.swift in Sources */,
 				E8AF9E642978107000D3E007 /* EventSearchHomeView.swift in Sources */,
 				7957B2F12A6B013200F94CB4 /* CameraPermissionsView.swift in Sources */,
+				9BE277EE2A7218F4007AD2EC /* NewChat.swift in Sources */,
 				796BA08D2A6B126C00EB0DB4 /* Notification Permission.swift in Sources */,
 				796F0CB62A73FD15006538B9 /* SignOutView.swift in Sources */,
 				791C33712A6197B80020DEAC /* getContacts.swift in Sources */,
@@ -636,6 +645,7 @@
 				79B822702A647262003133BC /* LocationPermissionsView.swift in Sources */,
 				79B1FF7A2A6B337A00012B38 /* Contacts Permission.swift in Sources */,
 				7957B2EF2A6AFAAE00F94CB4 /* Location Permission.swift in Sources */,
+				9BE277F02A7218FE007AD2EC /* ChatView.swift in Sources */,
 				797B1ACD2A5F449400DD6B89 /* GlobalVariables.swift in Sources */,
 				791C336F2A6197300020DEAC /* createFirebaseAccount.swift in Sources */,
 				795C5BF02953FF00007FDA83 /* Highlights.swift in Sources */,

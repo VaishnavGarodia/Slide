@@ -5,7 +5,12 @@
 //  Created by Ethan Harianto on 12/21/22.
 //
 
+import FirebaseAuth
+import FirebaseFirestore
 import SwiftUI
+
+
+
 
 struct MessagesTab: View {
     @State public var numGroups = 1
@@ -20,6 +25,7 @@ struct MessagesTab: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                     TextField("Search", text: $searchMessages)
+                    
                 }
                 .padding()
                 Spacer()
@@ -28,6 +34,11 @@ struct MessagesTab: View {
                         .padding()
                         .imageScale(.large)
                 }
+                NavigationLink(destination: NewChat()) {
+                        Image(systemName: "square.and.pencil")
+                            .padding()
+                            .imageScale(.large)
+                    }
             }
             .padding(.bottom, -10)
             .padding(.top, -10)
