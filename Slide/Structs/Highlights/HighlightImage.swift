@@ -1,36 +1,43 @@
+// HighlightImage.swift
+// Slide
 //
-//  HighlightImage.swift
-//  Slide
+// Created by Ethan Harianto on 7/26/23.
 //
-//  Created by Ethan Harianto on 7/26/23.
-//
+
 
 import Foundation
 import SwiftUI
 import UIKit
+import Kingfisher
+
 
 struct HighlightImage: View {
-    @State private var height: CGFloat = 600
-    var uiImage: UIImage
-
-    var body: some View {
-        GeometryReader { geometry in
-            Image(uiImage: uiImage)
-                .resizable()
-                .scaledToFill()
-                .onAppear {
-                    let aspectRatio = uiImage.size.width / uiImage.size.height
-                    if aspectRatio > 1 {
-                        // Landscape image
-                        self.height = 300
-                    } else {
-                        // Portrait or square image
-                        self.height = 600
-                    }
-                }
-                
+  @State private var height: CGFloat = 600
+  var imageURL: URL
+  var body: some View {
+    GeometryReader { geometry in
+      KFImage(imageURL)
+        .resizable()
+        .fade(duration: 0.25)
+        .cacheMemoryOnly()
+        .onSuccess { imageResult in
+          let aspectRatio = imageResult.image.size.width / imageResult.image.size.height
+          if aspectRatio > 1 {
+            // Landscape image
+            self.height = 300
+          } else {
+            // Portrait or square image
+            self.height = 600
+          }
         }
-        .frame(width: 380, height: height)
+        .scaledToFill()
     }
+    .frame(width: 380, height: height)
+  }
 }
+
+
+
+
+
 
