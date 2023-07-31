@@ -1,16 +1,10 @@
-//
-//  GroupsTab.swift
+//  MessagesTab.swift
 //  Slide
-//
 //  Created by Ethan Harianto on 12/21/22.
-//
 
 import FirebaseAuth
 import FirebaseFirestore
 import SwiftUI
-
-
-
 
 struct MessagesTab: View {
     @State public var numGroups = 1
@@ -25,20 +19,19 @@ struct MessagesTab: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                     TextField("Search", text: $searchMessages)
-                    
                 }
                 .padding()
                 Spacer()
-                NavigationLink(destination: UserSearchAndFriendView()) {
+                NavigationLink(destination: AddFriendsView()) {
                     Image(systemName: "person.badge.plus")
                         .padding()
                         .imageScale(.large)
                 }
                 NavigationLink(destination: NewChat()) {
-                        Image(systemName: "square.and.pencil")
-                            .padding()
-                            .imageScale(.large)
-                    }
+                    Image(systemName: "square.and.pencil")
+                        .padding()
+                        .imageScale(.large)
+                }
             }
             .padding(.bottom, -10)
             .padding(.top, -10)
