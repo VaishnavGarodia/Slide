@@ -20,6 +20,14 @@
 		792E490C2A5EDF0F00D73D7C /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 792E490B2A5EDF0F00D73D7C /* GoogleSignIn */; };
 		792E490E2A5EDF0F00D73D7C /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 792E490D2A5EDF0F00D73D7C /* GoogleSignInSwift */; };
 		7935E7C52997111F00CC893F /* UserListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7935E7C42997111F00CC893F /* UserListener.swift */; };
+		7936F9F92A76C23D0057DB8A /* searchUsersByUsername.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7936F9F82A76C23D0057DB8A /* searchUsersByUsername.swift */; };
+		7936F9FC2A76C2A70057DB8A /* fetchUserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7936F9FB2A76C2A70057DB8A /* fetchUserDetails.swift */; };
+		7936F9FE2A76C2E60057DB8A /* confirmFriendship.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7936F9FD2A76C2E60057DB8A /* confirmFriendship.swift */; };
+		7936FA002A76C3020057DB8A /* rejectFriendship.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7936F9FF2A76C3020057DB8A /* rejectFriendship.swift */; };
+		7936FA022A76C38B0057DB8A /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7936FA012A76C38B0057DB8A /* UserData.swift */; };
+		7936FA042A76C4930057DB8A /* sendFriendRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7936FA032A76C4930057DB8A /* sendFriendRequest.swift */; };
+		7936FA062A7737AD0057DB8A /* PendingRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7936FA052A7737AD0057DB8A /* PendingRequests.swift */; };
+		7936FA082A773A400057DB8A /* UserSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7936FA072A773A400057DB8A /* UserSearchResults.swift */; };
 		793F554F2A6D6D3200215845 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 793F554E2A6D6D3200215845 /* GoogleService-Info.plist */; };
 		7948CA062A71F2D00074F901 /* HighlightImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7948CA052A71F2D00074F901 /* HighlightImage.swift */; };
 		7948CA0A2A734E5D0074F901 /* UserProfilePictures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7948CA092A734E5D0074F901 /* UserProfilePictures.swift */; };
@@ -96,7 +104,7 @@
 		E9C9024E2A7348620049FC81 /* EventDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C9024D2A7348620049FC81 /* EventDisplay.swift */; };
 		E9C902512A7348C40049FC81 /* EligibleEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C902502A7348C40049FC81 /* EligibleEvents.swift */; };
 		E9C902532A76413C0049FC81 /* getEventGalleryInfos.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C902522A76413C0049FC81 /* getEventGalleryInfos.swift */; };
-		E9CD46F82A6BA65200E24317 /* UserSearchAndFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CD46F72A6BA65200E24317 /* UserSearchAndFriendView.swift */; };
+		E9CD46F82A6BA65200E24317 /* AddFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CD46F72A6BA65200E24317 /* AddFriendsView.swift */; };
 		E9CD46FA2A6C5E5300E24317 /* PostCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CD46F92A6C5E5300E24317 /* PostCreationView.swift */; };
 /* End PBXBuildFile section */
 
@@ -112,6 +120,14 @@
 		792C03DD2A2DC2F1004F1A42 /* ProfilePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePicture.swift; sourceTree = "<group>"; };
 		79357EF32A745BED0042DB17 /* Slide.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Slide.entitlements; sourceTree = "<group>"; };
 		7935E7C42997111F00CC893F /* UserListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListener.swift; sourceTree = "<group>"; };
+		7936F9F82A76C23D0057DB8A /* searchUsersByUsername.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searchUsersByUsername.swift; sourceTree = "<group>"; };
+		7936F9FB2A76C2A70057DB8A /* fetchUserDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fetchUserDetails.swift; sourceTree = "<group>"; };
+		7936F9FD2A76C2E60057DB8A /* confirmFriendship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = confirmFriendship.swift; sourceTree = "<group>"; };
+		7936F9FF2A76C3020057DB8A /* rejectFriendship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rejectFriendship.swift; sourceTree = "<group>"; };
+		7936FA012A76C38B0057DB8A /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		7936FA032A76C4930057DB8A /* sendFriendRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sendFriendRequest.swift; sourceTree = "<group>"; };
+		7936FA052A7737AD0057DB8A /* PendingRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingRequests.swift; sourceTree = "<group>"; };
+		7936FA072A773A400057DB8A /* UserSearchResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchResults.swift; sourceTree = "<group>"; };
 		793F554E2A6D6D3200215845 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7948CA052A71F2D00074F901 /* HighlightImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightImage.swift; sourceTree = "<group>"; };
 		7948CA092A734E5D0074F901 /* UserProfilePictures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfilePictures.swift; sourceTree = "<group>"; };
@@ -176,7 +192,7 @@
 		E9C9024D2A7348620049FC81 /* EventDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDisplay.swift; sourceTree = "<group>"; };
 		E9C902502A7348C40049FC81 /* EligibleEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EligibleEvents.swift; sourceTree = "<group>"; };
 		E9C902522A76413C0049FC81 /* getEventGalleryInfos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getEventGalleryInfos.swift; sourceTree = "<group>"; };
-		E9CD46F72A6BA65200E24317 /* UserSearchAndFriendView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSearchAndFriendView.swift; sourceTree = "<group>"; };
+		E9CD46F72A6BA65200E24317 /* AddFriendsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFriendsView.swift; sourceTree = "<group>"; };
 		E9CD46F92A6C5E5300E24317 /* PostCreationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCreationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -226,6 +242,28 @@
 				799F4EC22A6C954000F14074 /* ProgressIndicator.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		7936F9FA2A76C2400057DB8A /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				7936F9F82A76C23D0057DB8A /* searchUsersByUsername.swift */,
+				7936F9FB2A76C2A70057DB8A /* fetchUserDetails.swift */,
+				7936F9FD2A76C2E60057DB8A /* confirmFriendship.swift */,
+				7936F9FF2A76C3020057DB8A /* rejectFriendship.swift */,
+				7936FA032A76C4930057DB8A /* sendFriendRequest.swift */,
+			);
+			path = Friends;
+			sourceTree = "<group>";
+		};
+		7936FA092A7749C80057DB8A /* Friendships */ = {
+			isa = PBXGroup;
+			children = (
+				E9CD46F72A6BA65200E24317 /* AddFriendsView.swift */,
+				7936FA072A773A400057DB8A /* UserSearchResults.swift */,
+				7936FA052A7737AD0057DB8A /* PendingRequests.swift */,
+			);
+			path = Friendships;
 			sourceTree = "<group>";
 		};
 		7957B2EB2A6AFA4E00F94CB4 /* Permissions */ = {
@@ -279,7 +317,7 @@
 		795C5BF229540ADF007FDA83 /* Messaging */ = {
 			isa = PBXGroup;
 			children = (
-				E9CD46F72A6BA65200E24317 /* UserSearchAndFriendView.swift */,
+				7936FA092A7749C80057DB8A /* Friendships */,
 				795C5BFC29541A26007FDA83 /* MessagesTab.swift */,
 				9BE277ED2A7218F4007AD2EC /* NewChat.swift */,
 				9BE277EF2A7218FE007AD2EC /* ChatView.swift */,
@@ -306,6 +344,7 @@
 				792C03DD2A2DC2F1004F1A42 /* ProfilePicture.swift */,
 				7948CA092A734E5D0074F901 /* UserProfilePictures.swift */,
 				79E4912C2A707FF6009348EF /* ImagePicker.swift */,
+				7936FA012A76C38B0057DB8A /* UserData.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -315,6 +354,7 @@
 			children = (
 				E9C9024F2A7348950049FC81 /* Events */,
 				E9C902492A7258680049FC81 /* Highlights */,
+				7936F9FA2A76C2400057DB8A /* Friends */,
 				7965E08D2A702C02003F46C4 /* Settings */,
 				79A27C8A2A69F453003DE383 /* Authentication */,
 				797B1AC72A5F435100DD6B89 /* Contacts */,
@@ -628,9 +668,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B7E8D0E2A71F1AA0053B875 /* CreateEventView.swift in Sources */,
+				7936F9F92A76C23D0057DB8A /* searchUsersByUsername.swift in Sources */,
 				7948CA0A2A734E5D0074F901 /* UserProfilePictures.swift in Sources */,
 				799F4EBF2A6C4DB700F14074 /* AccountCreationView.swift in Sources */,
 				799F4EC52A6CC1B500F14074 /* NotificationPermissionsView.swift in Sources */,
+				7936FA042A76C4930057DB8A /* sendFriendRequest.swift in Sources */,
 				797FE3C92A5E2A1100F6A69C /* Register.swift in Sources */,
 				E8AF9E642978107000D3E007 /* EventSearchHomeView.swift in Sources */,
 				7957B2F12A6B013200F94CB4 /* CameraPermissionsView.swift in Sources */,
@@ -643,6 +685,7 @@
 				7935E7C52997111F00CC893F /* UserListener.swift in Sources */,
 				9B8081F02A71D08F001153E5 /* Loader.swift in Sources */,
 				795C5BFA295418D7007FDA83 /* MainView.swift in Sources */,
+				7936F9FC2A76C2A70057DB8A /* fetchUserDetails.swift in Sources */,
 				795C5BEE2953FEEB007FDA83 /* ListPage.swift in Sources */,
 				79FC9E08294D605300EBD520 /* ContentView.swift in Sources */,
 				7953518529CE53FC00C99B48 /* CreatingNewEventView.swift in Sources */,
@@ -662,15 +705,19 @@
 				797FE3C82A5E2A1100F6A69C /* GoogleButton.swift in Sources */,
 				796CD01A2A71E0A5008599EA /* fetchUsername.swift in Sources */,
 				796F0CB82A73FDDB006538B9 /* AppAppearanceView.swift in Sources */,
+				7936FA002A76C3020057DB8A /* rejectFriendship.swift in Sources */,
 				E9CD46FA2A6C5E5300E24317 /* PostCreationView.swift in Sources */,
 				E9C9024B2A72587C0049FC81 /* getHighlightInfo.swift in Sources */,
+				7936FA082A773A400057DB8A /* UserSearchResults.swift in Sources */,
 				7957B2ED2A6AFA7700F94CB4 /* Camera Permission.swift in Sources */,
 				E9C9024E2A7348620049FC81 /* EventDisplay.swift in Sources */,
 				79A27C872A69F3A7003DE383 /* HighlightInfo.swift in Sources */,
 				79A27C892A69F3D5003DE383 /* HighlightCard.swift in Sources */,
 				796CD0122A716891008599EA /* updateUsername.swift in Sources */,
 				791C336D2A6193600020DEAC /* AddUserToDatabases.swift in Sources */,
+				7936F9FE2A76C2E60057DB8A /* confirmFriendship.swift in Sources */,
 				796F0CB42A73FCB2006538B9 /* updateUsernameView.swift in Sources */,
+				7936FA022A76C38B0057DB8A /* UserData.swift in Sources */,
 				9B7E8D102A71F1E90053B875 /* CreateEventPage.swift in Sources */,
 				797B1AC32A5F407800DD6B89 /* ContactInfo.swift in Sources */,
 				79B1FF7E2A6B39F000012B38 /* addContactsToUser.swift in Sources */,
@@ -684,10 +731,11 @@
 				7948CA062A71F2D00074F901 /* HighlightImage.swift in Sources */,
 				796CD0142A7189C4008599EA /* ProfileHighlightsView.swift in Sources */,
 				791C337D2A6339410020DEAC /* LogInFunction.swift in Sources */,
+				7936FA062A7737AD0057DB8A /* PendingRequests.swift in Sources */,
 				E9C902512A7348C40049FC81 /* EligibleEvents.swift in Sources */,
 				79B1FF7C2A6B35AF00012B38 /* ContactsPermissionsView.swift in Sources */,
 				795C5BF829540B10007FDA83 /* Profile View.swift in Sources */,
-				E9CD46F82A6BA65200E24317 /* UserSearchAndFriendView.swift in Sources */,
+				E9CD46F82A6BA65200E24317 /* AddFriendsView.swift in Sources */,
 				79B822702A647262003133BC /* LocationPermissionsView.swift in Sources */,
 				79B1FF7A2A6B337A00012B38 /* Contacts Permission.swift in Sources */,
 				7957B2EF2A6AFAAE00F94CB4 /* Location Permission.swift in Sources */,

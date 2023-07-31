@@ -13,11 +13,11 @@ import SwiftUI
 struct Event {
     var name, description, eventIcon: String
     var start, end: Date
-    var address: CLLocationCoordinate2D!
+    var address: String
 }
 
 struct CreateEventPage: View {
-    @State private var event = Event(name: "", description: "", eventIcon: "", start: Date.now, end: Date.now.addingTimeInterval(3600))
+    @State private var event = Event(name: "", description: "", eventIcon: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "")
     @State var map = MKMapView()
     @State var manager = CLLocationManager()
     @State var alert = false
@@ -78,6 +78,9 @@ struct CreateEventPage: View {
                                 TextField("Put an event description", text: self.$event.description)
                                     .frame(height: 100, alignment: .topLeading)
                                     .bubbleStyle(color: .primary)
+                                TextField("Address", text: self.$event.address)
+                                    .frame(height: 100, alignment: .topLeading)
+                                    .bubbleStyle(color: .primary)
                                 DatePicker("When does it start?", selection: self.$event.start, in: Date()...)
                                     .onAppear {
                                         UIDatePicker.appearance().minuteInterval = 15
@@ -98,7 +101,7 @@ struct CreateEventPage: View {
                                 
                                 Button(action: {
                                     self.loading.toggle()
-                                    self.event.address = self.destination
+                                    
                                     self.createEvent()
                                 }) {
                                     Text("Create Event")
