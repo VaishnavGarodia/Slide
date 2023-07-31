@@ -20,7 +20,6 @@ struct MapView: UIViewRepresentable {
     @Binding var alert: Bool
     @Binding var source: CLLocationCoordinate2D!
     @Binding var destination: CLLocationCoordinate2D!
-    @Binding var name: String
     @Binding var distance: String
     @Binding var time: String
     @Binding var show: Bool
