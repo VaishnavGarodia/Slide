@@ -15,11 +15,10 @@ struct AddFriendsView: View {
     let user = Auth.auth().currentUser
     @State private var searchQuery = ""
     @State private var searchResults: [UserData] = []
-    @State private var selectedUser: UserData? = nil
-    @State private var showingConfirmationDialog = false
-    @State private var showPendingFriendRequests = false
     @State private var pendingFriendRequests: [UserData] = []
+    @State private var friendList: [UserData] = []
     @State private var refreshPending = false
+    @State private var refreshSearch = false
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -42,7 +41,12 @@ struct AddFriendsView: View {
                 }
             } else {
                 if !searchResults.isEmpty {
-                    UserSearchResults(searchResults: $searchResults, selectedUser: $selectedUser, searchQuery: $searchQuery)
+                    UserSearchResults(searchResults: $searchResults)
+                } else if friendList.isEmpty {
+                    Spacer()
+                }
+                if !friendList.isEmpty {
+                    FriendsList(friendsList: $friendList)
                 } else {
                     Spacer()
                 }
@@ -93,9 +97,12 @@ struct AddFriendsView: View {
     }
 
     func searchUsers() {
-        searchUsersByUsername(username: searchQuery) { users in
+        searchResults.removeAll()
+        friendList.removeAll()
+        searchUsersByUsername(username: searchQuery.lowercased()) { users, friends in
             DispatchQueue.main.async {
                 self.searchResults = users
+                self.friendList = friends
             }
         }
     }

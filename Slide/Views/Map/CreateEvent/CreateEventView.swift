@@ -63,12 +63,11 @@ struct CreateEventView: UIViewRepresentable {
         }
         
         @objc func tap(ges: UITapGestureRecognizer) {
-            
-            //TOOD: Add a new box in the event creation view in this case asking for location name as that does not get updated correctly.
+            // TOOD: Add a new box in the event creation view in this case asking for location name as that does not get updated correctly.
             let location = ges.location(in: self.parent.map)
             let mplocation = self.parent.map.convert(location, toCoordinateFrom: self.parent.map)
             
-            var addressString : String = ""
+            var addressString = ""
             let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
             let region = MKCoordinateRegion(center: mplocation, span: span)
             let point = MKPointAnnotation()
@@ -87,35 +86,35 @@ struct CreateEventView: UIViewRepresentable {
                 
                 let pm = places! as [CLPlacemark]
                 if pm.count > 0 {
-                                    let pm = places![0]
-                                    print(pm.country)
-                                    print(pm.locality)
-                                    print(pm.subLocality)
-                                    print(pm.thoroughfare)
-                                    print(pm.subThoroughfare)
-                                    print(pm.postalCode)
-                                    print(pm.subThoroughfare)
-                                    if pm.subLocality != nil {
-                                        addressString = addressString + pm.subLocality! + ", "
-                                    }
-                                    if pm.subThoroughfare != nil {
-                                        addressString = addressString + pm.subThoroughfare! + " "
-                                    }
-                                    if pm.thoroughfare != nil {
-                                        addressString = addressString + pm.thoroughfare! + ", "
-                                    }
-                                    if pm.locality != nil {
-                                        addressString = addressString + pm.locality! + ", "
-                                    }
-                                    if pm.country != nil {
-                                        addressString = addressString + pm.country! + ", "
-                                    }
-                                    if pm.postalCode != nil {
-                                        addressString = addressString + pm.postalCode! + " "
-                                    }
+                    let pm = places![0]
+                    print(pm.country)
+                    print(pm.locality)
+                    print(pm.subLocality)
+                    print(pm.thoroughfare)
+                    print(pm.subThoroughfare)
+                    print(pm.postalCode)
+                    print(pm.subThoroughfare)
+                    if pm.subLocality != nil {
+                        addressString = addressString + pm.subLocality! + ", "
+                    }
+                    if pm.subThoroughfare != nil {
+                        addressString = addressString + pm.subThoroughfare! + " "
+                    }
+                    if pm.thoroughfare != nil {
+                        addressString = addressString + pm.thoroughfare! + ", "
+                    }
+                    if pm.locality != nil {
+                        addressString = addressString + pm.locality! + ", "
+                    }
+                    if pm.country != nil {
+                        addressString = addressString + pm.country! + ", "
+                    }
+                    if pm.postalCode != nil {
+                        addressString = addressString + pm.postalCode! + " "
+                    }
 
-                                    print(addressString)
-                              }
+                    print(addressString)
+                }
                 
                 self.parent.event.address = addressString
                 point.title = places?.first?.name ?? ""
@@ -132,6 +131,6 @@ struct CreateEventView: UIViewRepresentable {
 
 struct CreateEventView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateEventView(map: .constant(MKMapView()), manager: .constant(CLLocationManager()), alert: .constant(false), source: .constant(CLLocationCoordinate2D()), destination: .constant(CLLocationCoordinate2D()), event: .constant(Event(name: "", description: "", eventIcon: "", eventPoster: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))), distance: .constant(""), time: .constant(""), show: .constant(true))
+        CreateEventView(map: .constant(MKMapView()), manager: .constant(CLLocationManager()), alert: .constant(false), source: .constant(CLLocationCoordinate2D()), destination: .constant(CLLocationCoordinate2D()), event: .constant(Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))), distance: .constant(""), time: .constant(""), show: .constant(true))
     }
 }

@@ -15,7 +15,7 @@ func login(email: String, password: String, completion: @escaping (String) -> Vo
             if let authErrorCode = AuthErrorCode.Code(rawValue: err.code) {
                 switch authErrorCode {
                 case .invalidEmail:
-                    searchUserByUsername(username: email) { document, _ in
+                    searchUserByUsername(username: email.lowercased()) { document, _ in
                         if let document = document {
                             if let emailValue = document.get("Email") as? String {
                                 login(email: emailValue, password: password, completion: completion)

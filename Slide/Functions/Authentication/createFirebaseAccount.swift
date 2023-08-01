@@ -22,7 +22,7 @@ func createFirebaseAccount(email: String, password: String, username: String, co
             completion(error.localizedDescription)
         } else if let result = result {
             let changeRequest = result.user.createProfileChangeRequest()
-            changeRequest.displayName = username
+            changeRequest.displayName = username.lowercased()
             changeRequest.commitChanges { error in
                 if let error = error {
                     print("Error committing profile changes: \(error)")

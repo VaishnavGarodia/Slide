@@ -1,31 +1,26 @@
-import SwiftUI
 import Firebase
 import FirebaseFirestore
+import SwiftUI
 
-struct Booked : View {
+struct Booked: View {
+    @Binding var data: Data
+    @Binding var doc: String
+    @Binding var loading: Bool
+    @Binding var book: Bool
     
-    @Binding var data : Data
-    @Binding var doc : String
-    @Binding var loading : Bool
-    @Binding var book : Bool
-    
-    var body: some View{
-        
-        GeometryReader{_ in
+    var body: some View {
+        GeometryReader { _ in
             
-            VStack(spacing: 25){
-                
+            VStack(spacing: 25) {
                 Button(action: {
-                    
                     self.loading.toggle()
                     self.book.toggle()
                     
                     let db = Firestore.firestore()
                     
-                    db.collection("Booking").document(self.doc).delete { (err) in
+                    db.collection("Booking").document(self.doc).delete { err in
                         
-                        if err != nil{
-                            
+                        if err != nil {
                             print((err?.localizedDescription)!)
                             return
                         }
@@ -34,12 +29,10 @@ struct Booked : View {
                     }
                     
                 }) {
-                    
                     Text("Cancel")
                         .foregroundColor(.white)
-                        .padding(.vertical,10)
+                        .padding(.vertical, 10)
                         .frame(width: UIScreen.main.bounds.width / 2)
-                    
                 }
                 .background(Color.red)
                 .clipShape(Capsule())

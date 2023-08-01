@@ -35,7 +35,7 @@ struct MapView: UIViewRepresentable {
     
     func updateUIView(_ uiView: MKMapView, context: Context) {}
     
-    func fetchEvents(){
+    func fetchEvents() {
         let db = Firestore.firestore()
         db.collection("Events")
             .addSnapshotListener { querySnapshot, error in
@@ -53,7 +53,8 @@ struct MapView: UIViewRepresentable {
                     map.addAnnotation(annotation)
                     print("eventName", eventName ?? "?")
                     print("lat", location.latitude)
-                    print("long", location.longitude)            }
+                    print("long", location.longitude)
+                }
             }
     }
     
@@ -72,7 +73,7 @@ struct MapView: UIViewRepresentable {
                 if let location = parent.manager.location?.coordinate {
                     let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
                     let region = MKCoordinateRegion(center: location, span: span)
-                    self.parent.map.setRegion(region, animated: true)
+                    parent.map.setRegion(region, animated: true)
                 }
             }
         }

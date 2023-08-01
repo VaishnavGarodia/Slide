@@ -7,28 +7,23 @@
 
 import SwiftUI
 
-struct Loader : View {
-    
+struct Loader: View {
     @State var show = false
     
-    var body: some View{
-        
-        GeometryReader{_ in
+    var body: some View {
+        GeometryReader { _ in
             
-            VStack(spacing: 20){
-                
+            VStack(spacing: 20) {
                 Circle()
                     .trim(from: 0, to: 0.7)
                     .stroke(Color.red, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                     .frame(width: 30, height: 30)
                     .rotationEffect(.init(degrees: self.show ? 360 : 0))
                     .onAppear {
-                        
-                        withAnimation(Animation.default.speed(0.45).repeatForever(autoreverses: false)){
-                            
+                        withAnimation(Animation.default.speed(0.45).repeatForever(autoreverses: false)) {
                             self.show.toggle()
                         }
-                }
+                    }
                 
                 Text("Please Wait....")
             }

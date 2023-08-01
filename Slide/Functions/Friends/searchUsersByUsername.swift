@@ -6,7 +6,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseAuth
 
-func searchUsersByUsername(username: String, completion: @escaping ([UserData]) -> Void) {
+func searchUsersByUsername(username: String, completion: @escaping ([UserData], [UserData]) -> Void) {
     let user = Auth.auth().currentUser
     let query = db.collection("Users")
         .whereField("Username", isGreaterThanOrEqualTo: username)
@@ -15,15 +15,16 @@ func searchUsersByUsername(username: String, completion: @escaping ([UserData]) 
     query.getDocuments { snapshot, error in
         if let error = error {
             print("Error searching users: \(error.localizedDescription)")
-            completion([])
+            completion([], [])
             return
         }
         var users: [UserData] = []
+        var friends: [UserData] = []
         for document in snapshot?.documents ?? [] {
             if let username = document.data()["Username"] as? String,
                let photoURL = document.data()["ProfilePictureURL"] as? String,
                let incoming = document.data()["Incoming"] as? [String],
-               let friends = document.data()["Friends"] as? [String]
+               let friendsData = document.data()["Friends"] as? [String]
             {
                 let added = incoming.contains(user?.uid ?? "SimUser")
                 let potential = UserData(
@@ -32,11 +33,13 @@ func searchUsersByUsername(username: String, completion: @escaping ([UserData]) 
                     photoURL: photoURL,
                     added: added
                 )
-                if !friends.contains(user?.uid ?? "SimUser") {
+                if !friendsData.contains(user?.uid ?? "SimUser") {
                     users.append(potential)
+                } else {
+                    friends.append(potential)
                 }
             }
         }
-        completion(users)
+        completion(users, friends)
     }
 }
