@@ -16,7 +16,7 @@ struct MapPage: View {
     @State var alert = false
     @State var source: CLLocationCoordinate2D!
     @State var destination: CLLocationCoordinate2D!
-    @State var name = ""
+    @State var event = Event(name: "", description: "", eventIcon: "", eventPoster: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
     @State var distance = ""
     @State var time = ""
     @State var show = false
@@ -28,7 +28,7 @@ struct MapPage: View {
     let createEventSearch : Bool = false
     var body: some View {
         ZStack {
-            MapView(map: self.$map, manager: self.$manager, alert: self.$alert, source: self.$source, destination: self.$destination, name: self.$name, distance: self.$distance, time: self.$time, show: self.$show)
+            MapView(map: self.$map, manager: self.$manager, alert: self.$alert, source: self.$source, destination: self.$destination, distance: self.$distance, time: self.$time, show: self.$show)
                 .ignoresSafeArea()
                 .onAppear {
                     self.manager.requestAlwaysAuthorization()
@@ -39,11 +39,6 @@ struct MapPage: View {
                         VStack(alignment: .leading, spacing: 15) {
                             Text(self.destination != nil ? "Destination" : "Events Around You")
                                 .font(.title)
-                            //TODO: Remove this text view and everything. Should be a single full screen map.
-                            if self.destination != nil {
-                                Text(self.name)
-                                    .fontWeight(.bold)
-                            }
                         }
                         
                         Spacer()
@@ -71,7 +66,7 @@ struct MapPage: View {
                     Spacer()
                     
                     if self.search {
-                        SearchView(show: self.$search, map: self.$map, source: self.$source, location: self.$destination, name: self.$name, distance: self.$distance, time: self.$time, detail: self.$show, createEventSearch: self.createEventSearch)
+                        SearchView(show: self.$search, map: self.$map, source: self.$source, location: self.$destination, event: self.$event, distance: self.$distance, time: self.$time, detail: self.$show, createEventSearch: self.createEventSearch)
                     }
                 }
             }

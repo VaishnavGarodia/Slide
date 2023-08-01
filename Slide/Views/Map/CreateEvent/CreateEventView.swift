@@ -20,7 +20,7 @@ struct CreateEventView: UIViewRepresentable {
     @Binding var alert: Bool
     @Binding var source: CLLocationCoordinate2D!
     @Binding var destination: CLLocationCoordinate2D!
-    @Binding var name: String
+    @Binding var event: Event
     @Binding var distance: String
     @Binding var time: String
     @Binding var show: Bool
@@ -63,11 +63,16 @@ struct CreateEventView: UIViewRepresentable {
         }
         
         @objc func tap(ges: UITapGestureRecognizer) {
+            
+            //TOOD: Add a new box in the event creation view in this case asking for location name as that does not get updated correctly.
             let location = ges.location(in: self.parent.map)
             let mplocation = self.parent.map.convert(location, toCoordinateFrom: self.parent.map)
             
+            var addressString : String = ""
+            let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+            let region = MKCoordinateRegion(center: mplocation, span: span)
             let point = MKPointAnnotation()
-            point.subtitle = "Event"
+            point.subtitle = "Event location"
             point.coordinate = mplocation
             
             self.parent.destination = mplocation
@@ -80,13 +85,44 @@ struct CreateEventView: UIViewRepresentable {
                     return
                 }
                 
-                self.parent.name = places?.first?.name ?? ""
-                point.title = places?.first?.name ?? ""
+                let pm = places! as [CLPlacemark]
+                if pm.count > 0 {
+                                    let pm = places![0]
+                                    print(pm.country)
+                                    print(pm.locality)
+                                    print(pm.subLocality)
+                                    print(pm.thoroughfare)
+                                    print(pm.subThoroughfare)
+                                    print(pm.postalCode)
+                                    print(pm.subThoroughfare)
+                                    if pm.subLocality != nil {
+                                        addressString = addressString + pm.subLocality! + ", "
+                                    }
+                                    if pm.subThoroughfare != nil {
+                                        addressString = addressString + pm.subThoroughfare! + " "
+                                    }
+                                    if pm.thoroughfare != nil {
+                                        addressString = addressString + pm.thoroughfare! + ", "
+                                    }
+                                    if pm.locality != nil {
+                                        addressString = addressString + pm.locality! + ", "
+                                    }
+                                    if pm.country != nil {
+                                        addressString = addressString + pm.country! + ", "
+                                    }
+                                    if pm.postalCode != nil {
+                                        addressString = addressString + pm.postalCode! + " "
+                                    }
+
+                                    print(addressString)
+                              }
                 
+                self.parent.event.address = addressString
+                point.title = places?.first?.name ?? ""
                 self.parent.show = true
             }
                 
-            self.parent.map.setRegion(MKCoordinateRegion(center: mplocation, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)), animated: true)
+            self.parent.map.setRegion(region, animated: true)
             
             self.parent.map.removeAnnotations(self.parent.map.annotations)
             self.parent.map.addAnnotation(point)
@@ -96,6 +132,6 @@ struct CreateEventView: UIViewRepresentable {
 
 struct CreateEventView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateEventView(map: .constant(MKMapView()), manager: .constant(CLLocationManager()), alert: .constant(false), source: .constant(CLLocationCoordinate2D()), destination: .constant(CLLocationCoordinate2D()), name: .constant(""), distance: .constant(""), time: .constant(""), show: .constant(true))
+        CreateEventView(map: .constant(MKMapView()), manager: .constant(CLLocationManager()), alert: .constant(false), source: .constant(CLLocationCoordinate2D()), destination: .constant(CLLocationCoordinate2D()), event: .constant(Event(name: "", description: "", eventIcon: "", eventPoster: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))), distance: .constant(""), time: .constant(""), show: .constant(true))
     }
 }
