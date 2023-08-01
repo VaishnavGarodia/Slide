@@ -18,8 +18,9 @@ func addUserToDatabases(username: String, email: String, password: String, googl
     
     var errormessage = ""
     
+    
     let usersRef = db.collection("Users").document(uid)
-    let usernameRef = db.collection("Usernames").document(username)
+    let usernameRef = db.collection("Usernames").document(username.lowercased())
     
     usersRef.getDocument { document, error in
         if let error = error {
@@ -32,12 +33,13 @@ func addUserToDatabases(username: String, email: String, password: String, googl
             let userData: [String: Any] = [
                 "Email": email,
                 "Password": password,
-                "Username": username,
-                "ProfilePictureURL": profilePic ?? "",
+                "Username": username.lowercased(),
+                "ProfilePictureURL": profilePic ,
                 "Phone Number" : "",
                 "Incoming": [],
                 "Outgoing": [],
-                "Friends": []
+                "Friends": [],
+                "Blocked": []
             ]
             usersRef.setData(userData) { error in
                 if let error = error {

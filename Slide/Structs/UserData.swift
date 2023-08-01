@@ -12,5 +12,5 @@ struct UserData: Codable {
     let userID: String
     let username: String
     let photoURL: String
-    let added: Bool
+    var added: Bool
 }

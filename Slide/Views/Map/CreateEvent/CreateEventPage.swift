@@ -5,146 +5,150 @@
 // Created by Vaishnav Garodia
 //
 import CoreLocation
-import FirebaseFirestore
 import FirebaseAuth
+import FirebaseFirestore
 import MapKit
 import SwiftUI
+
 struct Event {
-    var name, description, eventIcon, eventPoster: String
+    var name, description, eventIcon, host: String
     var start, end: Date
     var address: String
     var location: CLLocationCoordinate2D
 }
+
 struct CreateEventPage: View {
-  @State var event = Event(name: "", description: "", eventIcon: "", eventPoster: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
-  @State var map = MKMapView()
-  @State var manager = CLLocationManager()
-  @State var alert = false
-  @State var source: CLLocationCoordinate2D!
-  @State var destination: CLLocationCoordinate2D!
-  @State var name = ""
-  @State var distance = ""
-  @State var txt = ""
-  @State var time = ""
-  @State var show = false
-  @State var loading = false
-  @State var book = false
-  @State var doc = ""
-  @State var data: Data = .init(count: 0)
-  @State var search = false
-  let createEventSearch: Bool = true
-  var body: some View {
-    ZStack {
-        CreateEventView(map: self.$map, manager: self.$manager, alert: self.$alert, source: self.$source, destination: self.$destination, event: self.$event, distance: self.$distance, time: self.$time, show: self.$show)
-        .ignoresSafeArea()
-        .onAppear {
-          self.manager.requestAlwaysAuthorization()
-        }
-      VStack {
-        VStack {
-          HStack {
-            VStack(alignment: .leading, spacing: 15) {
-              Text("Pick a location")
-                .font(.title)
-            }
-            Spacer()
-            Button(action: {
-              self.search.toggle()
-            }) {
-              Image(systemName: "magnifyingglass")
-                .foregroundColor(.black)
-            }
-            .padding()
-            .background(Circle().foregroundColor(.accentColor))
-          }
-          .padding()
-          .background()
-          if self.destination != nil && self.show {
-            ZStack(alignment: .topTrailing) {
-              VStack(spacing: 20) {
-                TextField("Name your event!", text: self.$event.name)
-                  .bubbleStyle(color: .primary)
-                  .padding(.top)
-                TextField("Put an event description", text: self.$event.description)
-                  .frame(height: 100, alignment: .topLeading)
-                  .bubbleStyle(color: .primary)
-                TextField("Address", text: self.$event.address)
-                  .frame(height: 100, alignment: .topLeading)
-                  .bubbleStyle(color: .primary)
-                DatePicker("When does it start?", selection: self.$event.start, in: Date()...)
-                  .onAppear {
-                    UIDatePicker.appearance().minuteInterval = 15
-                  }
-                  .datePickerStyle(.compact)
-                DatePicker("When does it end?", selection: self.$event.end, in: self.event.start...)
-                  .onAppear {
-                    UIDatePicker.appearance().minuteInterval = 15
-                  }
-                Picker("Event Icon", selection: self.$event.eventIcon) {
-                  Image(systemName: "figure.basketball").tag("figure.basketball")
-                  Image(systemName: "party.popper").tag("party.popper")
-                  Image(systemName: "theatermasks").tag("theatersmasks")
+    @State var event = Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
+    @State var map = MKMapView()
+    @State var manager = CLLocationManager()
+    @State var alert = false
+    @State var source: CLLocationCoordinate2D!
+    @State var destination: CLLocationCoordinate2D!
+    @State var name = ""
+    @State var distance = ""
+    @State var txt = ""
+    @State var time = ""
+    @State var show = false
+    @State var loading = false
+    @State var book = false
+    @State var doc = ""
+    @State var data: Data = .init(count: 0)
+    @State var search = false
+    let createEventSearch: Bool = true
+    var body: some View {
+        ZStack {
+            CreateEventView(map: self.$map, manager: self.$manager, alert: self.$alert, source: self.$source, destination: self.$destination, event: self.$event, distance: self.$distance, time: self.$time, show: self.$show)
+                .ignoresSafeArea()
+                .onAppear {
+                    self.manager.requestAlwaysAuthorization()
                 }
-                .pickerStyle(.segmented)
-                Button(action: {
-                  self.loading.toggle()
-                  self.event.location = CLLocationCoordinate2D(latitude: self.destination.latitude, longitude: self.destination.longitude)
-                  self.createEvent()
-                }) {
-                  Text("Create Event")
-                    .foregroundColor(.white)
-                    .padding(.vertical, 10)
-                    .frame(width: UIScreen.main.bounds.width / 2)
+            VStack {
+                VStack {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 15) {
+                            Text("Pick a location")
+                                .font(.title)
+                        }
+                        Spacer()
+                        Button(action: {
+                            self.search.toggle()
+                        }) {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundColor(.black)
+                        }
+                        .padding()
+                        .background(Circle().foregroundColor(.accentColor))
+                    }
+                    .padding()
+                    .background()
+                    if self.destination != nil && self.show {
+                        ZStack(alignment: .topTrailing) {
+                            VStack(spacing: 20) {
+                                TextField("Name your event!", text: self.$event.name)
+                                    .bubbleStyle(color: .primary)
+                                    .padding(.top)
+                                TextField("Put an event description", text: self.$event.description)
+                                    .frame(height: 100, alignment: .topLeading)
+                                    .bubbleStyle(color: .primary)
+                                TextField("Address", text: self.$event.address)
+                                    .frame(height: 100, alignment: .topLeading)
+                                    .bubbleStyle(color: .primary)
+                                DatePicker("When does it start?", selection: self.$event.start, in: Date()...)
+                                    .onAppear {
+                                        UIDatePicker.appearance().minuteInterval = 15
+                                    }
+                                    .datePickerStyle(.compact)
+                                DatePicker("When does it end?", selection: self.$event.end, in: self.event.start...)
+                                    .onAppear {
+                                        UIDatePicker.appearance().minuteInterval = 15
+                                    }
+                                Picker("Event Icon", selection: self.$event.eventIcon) {
+                                    Image(systemName: "figure.basketball").tag("figure.basketball")
+                                    Image(systemName: "party.popper").tag("party.popper")
+                                    Image(systemName: "theatermasks").tag("theatersmasks")
+                                }
+                                .pickerStyle(.segmented)
+                                Button(action: {
+                                    self.loading.toggle()
+                                    self.event.location = CLLocationCoordinate2D(latitude: self.destination.latitude, longitude: self.destination.longitude)
+                                    self.createEvent()
+                                }) {
+                                    Text("Create Event")
+                                        .foregroundColor(.white)
+                                        .padding(.vertical, 10)
+                                        .frame(width: UIScreen.main.bounds.width / 2)
+                                }
+                                .background(Color.red)
+                                .clipShape(Capsule())
+                            }
+                            Button(action: {
+                                self.map.removeOverlays(self.map.overlays)
+                                self.map.removeAnnotations(self.map.annotations)
+                                self.destination = nil
+                                self.show.toggle()
+                            }) {
+                                Image(systemName: "xmark")
+                                    .foregroundColor(.black)
+                            }
+                        }
+                        .padding()
+                        .background(Color.white)
+                    }
                 }
-                .background(Color.red)
-                .clipShape(Capsule())
-              }
-              Button(action: {
-                self.map.removeOverlays(self.map.overlays)
-                self.map.removeAnnotations(self.map.annotations)
-                self.destination = nil
-                self.show.toggle()
-              }) {
-                Image(systemName: "xmark")
-                  .foregroundColor(.black)
-              }
+                Spacer()
+                if self.loading {
+                    Loader()
+                }
+                if self.book {
+                    Booked(data: self.$data, doc: self.$doc, loading: self.$loading, book: self.$book)
+                }
+                if self.search {
+                    SearchView(map: self.$map, location: self.$destination, event: self.$event, detail: self.$show, createEventSearch: self.createEventSearch)
+                }
             }
-            .padding()
-            .background(Color.white)
-          }
         }
-        Spacer()
-        if self.loading {
-          Loader()
+        .alert(isPresented: self.$alert) { () -> Alert in
+            Alert(title: Text("Error"), message: Text("Please Enable Location In Settings !!!"), dismissButton: .destructive(Text("Ok")))
         }
-        if self.book {
-          Booked(data: self.$data, doc: self.$doc, loading: self.$loading, book: self.$book)
-        }
-        if self.search {
-            SearchView(show: self.$search, map: self.$map, source: self.$source, location: self.$destination, event: self.$event, distance: self.$distance, time: self.$time, detail: self.$show, createEventSearch: self.createEventSearch)
-        }
-      }
     }
-    .alert(isPresented: self.$alert) { () -> Alert in
-      Alert(title: Text("Error"), message: Text("Please Enable Location In Settings !!!"), dismissButton: .destructive(Text("Ok")))
+
+    func createEvent() {
+        let doc = db.collection("Events").document()
+        self.doc = doc.documentID
+        print("Creating event for location: ", self.event.location)
+        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": self.event.name, "Description": self.event.description, "Icon": self.event.eventIcon, "Host": Auth.auth().currentUser!.displayName!, "Address": self.event.address, "Location": GeoPoint(latitude: self.event.location.latitude, longitude: self.event.location.longitude)]) { err in
+            if err != nil {
+                print((err?.localizedDescription)!)
+                return
+            }
+            self.loading.toggle()
+            self.book.toggle()
+        }
     }
-  }
-  func createEvent() {
-    let doc = db.collection("Events").document()
-    self.doc = doc.documentID
-      print("Creating event for location: ", self.event.location)
-      doc.setData(["User": Auth.auth().currentUser!.uid ,"eventName": self.event.name, "eventDescription":self.event.description, "eventIcon":self.event.eventIcon, "eventPoster":self.event.eventPoster, "address":self.event.address, "location": GeoPoint(latitude: self.event.location.latitude, longitude: self.event.location.longitude)]) { err in
-      if err != nil {
-        print((err?.localizedDescription)!)
-        return
-      }
-      self.loading.toggle()
-      self.book.toggle()
-    }
-  }
 }
+
 struct CreateEventPage_Previews: PreviewProvider {
-  static var previews: some View {
-    CreateEventPage()
-  }
+    static var previews: some View {
+        CreateEventPage()
+    }
 }

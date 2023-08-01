@@ -16,7 +16,7 @@ struct ProfileView: View {
     
     var body: some View {
         VStack {
-            UserProfilePictures(photoURL: user?.photoURL?.absoluteString ?? "", dimension: 120)
+            UserProfilePictures(photoURL: user?.photoURL?.absoluteString ?? "", dimension: 125)
 
             Text(user?.displayName ?? "SimUser")
                 .foregroundColor(.primary)
