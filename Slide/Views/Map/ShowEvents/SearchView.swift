@@ -14,32 +14,52 @@ struct SearchView: View {
     @Binding var map: MKMapView
     @Binding var location: CLLocationCoordinate2D!
     @Binding var event: Event
-    @State var txt = ""
     @Binding var detail: Bool
+    @State var txt = ""
     @State var createEventSearch: Bool = false
-    
+    var frame: CGFloat
     var body: some View {
-        GeometryReader { _ in
-            
-            VStack(spacing: 0) {
-                SearchBar(map: self.$map, destination: self.$location, result: self.$result, txt: self.$txt)
-                
-                if self.txt != "" {
-                    List(self.result) { i in
-                        VStack(alignment: .leading) {
-                            Text(i.name)
-                            
-                            Text(i.address)
-                                .font(.caption)
+        ZStack {
+            if !self.result.isEmpty && self.txt != "" {
+                Rectangle()
+                    .foregroundColor(.black.opacity(0.5))
+                    .ignoresSafeArea()
+            }
+            GeometryReader { _ in
+                VStack(alignment: .leading) {
+                    SearchBar(map: self.$map, result: self.$result, txt: self.$txt)
+                        .frame(width: frame)
+                        .padding(-25)
+                        .bubbleStyle(color: .primary)
+                        
+                    if !self.result.isEmpty && self.txt != "" {
+                        List(self.result) { i in
+                            VStack(alignment: .leading) {
+                                Text(i.name)
+                                    .foregroundColor(.white)
+                                
+                                Text(i.address)
+                                    .font(.caption)
+                                    .foregroundColor(.white)
+                            }
+                            .listRowBackground(Color.clear)
+                            .onTapGesture {
+                                dismissKeyboard()
+                                self.searchLocation(query: i.result)
+                                // Clear the search results when list item is tapped
+                                self.result.removeAll()
+                            }
                         }
-                        .onTapGesture {
-                            self.searchLocation(query: i.result)
-                        }
+                        .scrollContentBackground(.hidden)
                     }
                 }
             }
+            .padding()
         }
-        .padding()
+    }
+
+    func dismissKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
     func searchLocation(query: MKLocalSearchCompletion) {
@@ -139,7 +159,6 @@ struct SearchView: View {
 
 struct SearchBar: UIViewRepresentable {
     @Binding var map: MKMapView
-    @Binding var destination: CLLocationCoordinate2D!
     @Binding var result: [SearchData]
     @Binding var txt: String
     
@@ -156,7 +175,7 @@ struct SearchBar: UIViewRepresentable {
         view.autocorrectionType = .no
         view.autocapitalizationType = .none
         view.delegate = context.coordinator
-        
+        view.clipsToBounds = true
         return view
     }
     
@@ -217,6 +236,6 @@ struct SearchData: Identifiable {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView(map: .constant(MKMapView()), location: .constant(CLLocationCoordinate2D()), event: .constant(Event(name: "", description: "", eventIcon: "", host: "", start: .now, end: .now, address: "", location: CLLocationCoordinate2D())), detail: .constant(true))
+        SearchView(map: .constant(MKMapView()), location: .constant(CLLocationCoordinate2D()), event: .constant(Event(name: "", description: "", eventIcon: "", host: "", start: .now, end: .now, address: "", location: CLLocationCoordinate2D())), detail: .constant(true), frame: 400)
     }
 }

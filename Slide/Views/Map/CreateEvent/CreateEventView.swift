@@ -14,7 +14,6 @@ struct CreateEventView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         return CreateEventView.Coordinator(parent1: self)
     }
-    
     @Binding var map: MKMapView
     @Binding var manager: CLLocationManager
     @Binding var alert: Bool

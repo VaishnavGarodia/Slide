@@ -38,7 +38,7 @@
 		7957B2EF2A6AFAAE00F94CB4 /* Location Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7957B2EE2A6AFAAE00F94CB4 /* Location Permission.swift */; };
 		7957B2F12A6B013200F94CB4 /* CameraPermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7957B2F02A6B013200F94CB4 /* CameraPermissionsView.swift */; };
 		795C5BEC2953FEDD007FDA83 /* MapOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795C5BEB2953FEDD007FDA83 /* MapOnly.swift */; };
-		795C5BEE2953FEEB007FDA83 /* ListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795C5BED2953FEEB007FDA83 /* ListPage.swift */; };
+		795C5BEE2953FEEB007FDA83 /* EventData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795C5BED2953FEEB007FDA83 /* EventData.swift */; };
 		795C5BF02953FF00007FDA83 /* Highlights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795C5BEF2953FF00007FDA83 /* Highlights.swift */; };
 		795C5BF629540B00007FDA83 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795C5BF529540B00007FDA83 /* SettingsView.swift */; };
 		795C5BF829540B10007FDA83 /* Profile View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795C5BF729540B10007FDA83 /* Profile View.swift */; };
@@ -74,6 +74,7 @@
 		79D6430F2A78A20F00BB42E3 /* unfriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D6430E2A78A20F00BB42E3 /* unfriend.swift */; };
 		79D643112A78AE4E00BB42E3 /* UISearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D643102A78AE4E00BB42E3 /* UISearchBar.swift */; };
 		79D643132A78BB8E00BB42E3 /* ListedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D643122A78BB8D00BB42E3 /* ListedEvent.swift */; };
+		79D643152A794E4B00BB42E3 /* ListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D643142A794E4B00BB42E3 /* ListPage.swift */; };
 		79DCC255295611D6000FCD6F /* MapPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DCC254295611D6000FCD6F /* MapPage.swift */; };
 		79E4912D2A707FF6009348EF /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E4912C2A707FF6009348EF /* ImagePicker.swift */; };
 		79FC9E06294D605300EBD520 /* SlideApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC9E05294D605300EBD520 /* SlideApp.swift */; };
@@ -137,7 +138,7 @@
 		7957B2EE2A6AFAAE00F94CB4 /* Location Permission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location Permission.swift"; sourceTree = "<group>"; };
 		7957B2F02A6B013200F94CB4 /* CameraPermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermissionsView.swift; sourceTree = "<group>"; };
 		795C5BEB2953FEDD007FDA83 /* MapOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapOnly.swift; sourceTree = "<group>"; };
-		795C5BED2953FEEB007FDA83 /* ListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPage.swift; sourceTree = "<group>"; };
+		795C5BED2953FEEB007FDA83 /* EventData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventData.swift; sourceTree = "<group>"; };
 		795C5BEF2953FF00007FDA83 /* Highlights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Highlights.swift; sourceTree = "<group>"; };
 		795C5BF529540B00007FDA83 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		795C5BF729540B10007FDA83 /* Profile View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Profile View.swift"; sourceTree = "<group>"; };
@@ -173,6 +174,7 @@
 		79D6430E2A78A20F00BB42E3 /* unfriend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = unfriend.swift; sourceTree = "<group>"; };
 		79D643102A78AE4E00BB42E3 /* UISearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISearchBar.swift; sourceTree = "<group>"; };
 		79D643122A78BB8D00BB42E3 /* ListedEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListedEvent.swift; sourceTree = "<group>"; };
+		79D643142A794E4B00BB42E3 /* ListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListPage.swift; sourceTree = "<group>"; };
 		79DCC254295611D6000FCD6F /* MapPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPage.swift; sourceTree = "<group>"; };
 		79E4912C2A707FF6009348EF /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		79FC9E02294D605300EBD520 /* Slide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slide.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -509,8 +511,8 @@
 				9B8081F32A71D0FD001153E5 /* SearchView.swift */,
 				9B8081F12A71D0C5001153E5 /* Booked.swift */,
 				79DCC254295611D6000FCD6F /* MapPage.swift */,
-				795C5BED2953FEEB007FDA83 /* ListPage.swift */,
 				79D643122A78BB8D00BB42E3 /* ListedEvent.swift */,
+				79D643142A794E4B00BB42E3 /* ListPage.swift */,
 				9B8081EF2A71D08F001153E5 /* Loader.swift */,
 			);
 			path = ShowEvents;
@@ -536,6 +538,7 @@
 		E9C9024C2A7347FA0049FC81 /* Events */ = {
 			isa = PBXGroup;
 			children = (
+				795C5BED2953FEEB007FDA83 /* EventData.swift */,
 				E9C9024D2A7348620049FC81 /* EventDisplay.swift */,
 			);
 			path = Events;
@@ -666,7 +669,7 @@
 				9B8081F02A71D08F001153E5 /* Loader.swift in Sources */,
 				795C5BFA295418D7007FDA83 /* MainView.swift in Sources */,
 				7936F9FC2A76C2A70057DB8A /* fetchUserDetails.swift in Sources */,
-				795C5BEE2953FEEB007FDA83 /* ListPage.swift in Sources */,
+				795C5BEE2953FEEB007FDA83 /* EventData.swift in Sources */,
 				79FC9E08294D605300EBD520 /* ContentView.swift in Sources */,
 				7965E08F2A702C10003F46C4 /* signOut.swift in Sources */,
 				79E4912D2A707FF6009348EF /* ImagePicker.swift in Sources */,
@@ -716,6 +719,7 @@
 				795C5BF829540B10007FDA83 /* Profile View.swift in Sources */,
 				E9CD46F82A6BA65200E24317 /* AddFriendsView.swift in Sources */,
 				79B822702A647262003133BC /* LocationPermissionsView.swift in Sources */,
+				79D643152A794E4B00BB42E3 /* ListPage.swift in Sources */,
 				79D643112A78AE4E00BB42E3 /* UISearchBar.swift in Sources */,
 				79B1FF7A2A6B337A00012B38 /* Contacts Permission.swift in Sources */,
 				7957B2EF2A6AFAAE00F94CB4 /* Location Permission.swift in Sources */,
@@ -856,7 +860,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SCXLS2Y3XJ;
+				DEVELOPMENT_TEAM = DVVP87F8GY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Slide/Info.plist;
@@ -875,7 +879,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.slide.social2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.slide.social;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -893,7 +897,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = SCXLS2Y3XJ;
+				DEVELOPMENT_TEAM = DVVP87F8GY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Slide/Info.plist;
@@ -912,7 +916,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.slide.social2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.slide.social;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
