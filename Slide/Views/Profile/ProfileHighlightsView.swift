@@ -1,18 +1,15 @@
-//
 //  ProfileHighlightsView.swift
 //  Slide
-//
 //  Created by Ethan Harianto on 7/26/23.
-//
 
-import SwiftUI
-import FirebaseFirestore
 import FirebaseAuth
+import FirebaseFirestore
+import SwiftUI
 
 struct ProfileHighlightsView: View {
     let user = Auth.auth().currentUser
     @ObservedObject var highlightHolder = HighlightHolder()
-    
+
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 4) {
@@ -31,7 +28,7 @@ struct ProfileHighlightsView: View {
             }
         }
     }
-    
+
     func fetchHighlights(for userID: String) {
         let postsCollectionRef = db.collection("Posts")
 

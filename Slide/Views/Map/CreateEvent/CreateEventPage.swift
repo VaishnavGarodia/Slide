@@ -42,43 +42,35 @@ struct CreateEventPage: View {
                 .onAppear {
                     self.manager.requestAlwaysAuthorization()
                 }
+
+            if self.destination != nil && self.show {
+                Rectangle()
+                    .ignoresSafeArea()
+                    .foregroundColor(.black.opacity(0.5))
+            }
             VStack {
-                VStack {
+                VStack (alignment: .center) {
                     HStack {
-                        VStack(alignment: .leading, spacing: 15) {
-                            Text("Pick a location")
-                                .font(.title)
-                        }
-                        Spacer()
-                        Button(action: {
-                            self.search.toggle()
-                        }) {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundColor(.black)
-                        }
-                        .padding()
-                        .background(Circle().foregroundColor(.accentColor))
+                        SearchView(map: self.$map, location: self.$destination, event: self.$event, detail: self.$show, createEventSearch: self.createEventSearch, frame: 360)
                     }
-                    .padding()
-                    .background()
                     if self.destination != nil && self.show {
                         ZStack(alignment: .topTrailing) {
-                            VStack(spacing: 20) {
-                                TextField("Name your event!", text: self.$event.name)
+                            VStack(spacing: 10) {
+                                TextField("Event Name", text: self.$event.name)
                                     .bubbleStyle(color: .primary)
                                     .padding(.top)
-                                TextField("Put an event description", text: self.$event.description)
-                                    .frame(height: 100, alignment: .topLeading)
+                                TextField("Event Description", text: self.$event.description, axis: .vertical)
+                                    .frame(height: 50, alignment: .topLeading)
                                     .bubbleStyle(color: .primary)
-                                TextField("Address", text: self.$event.address)
-                                    .frame(height: 100, alignment: .topLeading)
+                                TextField("Address", text: self.$event.address, axis: .vertical)
+                                    .frame(height: 50, alignment: .topLeading)
                                     .bubbleStyle(color: .primary)
-                                DatePicker("When does it start?", selection: self.$event.start, in: Date()...)
+                                DatePicker("Event Start", selection: self.$event.start, in: Date()...)
                                     .onAppear {
                                         UIDatePicker.appearance().minuteInterval = 15
                                     }
                                     .datePickerStyle(.compact)
-                                DatePicker("When does it end?", selection: self.$event.end, in: self.event.start...)
+                                DatePicker("Event End", selection: self.$event.end, in: self.event.start...)
                                     .onAppear {
                                         UIDatePicker.appearance().minuteInterval = 15
                                     }
@@ -98,8 +90,8 @@ struct CreateEventPage: View {
                                         .padding(.vertical, 10)
                                         .frame(width: UIScreen.main.bounds.width / 2)
                                 }
-                                .background(Color.red)
-                                .clipShape(Capsule())
+                                .filledBubble()
+                                .padding()
                             }
                             Button(action: {
                                 self.map.removeOverlays(self.map.overlays)
@@ -112,7 +104,6 @@ struct CreateEventPage: View {
                             }
                         }
                         .padding()
-                        .background(Color.white)
                     }
                 }
                 Spacer()
@@ -121,9 +112,6 @@ struct CreateEventPage: View {
                 }
                 if self.book {
                     Booked(data: self.$data, doc: self.$doc, loading: self.$loading, book: self.$book)
-                }
-                if self.search {
-                    SearchView(map: self.$map, location: self.$destination, event: self.$event, detail: self.$show, createEventSearch: self.createEventSearch)
                 }
             }
         }

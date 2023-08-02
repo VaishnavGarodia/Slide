@@ -11,6 +11,7 @@ struct MainView: View {
         /* When initialized, the following code changes the tab bar so that unselected items are white and the bar is opaque. */
         UITabBar.appearance().unselectedItemTintColor = UIColor.white
         UITabBar.appearance().isTranslucent = false
+        UITabBar.appearance().backgroundColor = .black
     }
     
     /* The selection variable here defines which tab on the tab view the app initially starts on (the map) */
@@ -29,7 +30,7 @@ struct MainView: View {
                 }
                 .tag(1)
                 
-            MapPage()
+            ListPage()
                 .tabItem {
                     Label("", systemImage: "map")
                 }
