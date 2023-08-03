@@ -55,6 +55,15 @@
       }
     },
     {
+      "identity" : "googlemapstileoverlay",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/thepeaklab/GoogleMapsTileOverlay",
+      "state" : {
+        "revision" : "a31bd418be8e49b7b118d93f1e79b3a91407e82a",
+        "version" : "0.5.0"
+      }
+    },
+    {
       "identity" : "googlesignin-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleSignIn-iOS",

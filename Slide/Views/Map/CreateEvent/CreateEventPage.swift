@@ -18,30 +18,18 @@ struct Event {
 }
 
 struct CreateEventPage: View {
+    
+    @Binding var creation: Bool
+    @State private var map = MKMapView()
     @State var event = Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
-    @State var map = MKMapView()
-    @State var manager = CLLocationManager()
-    @State var alert = false
-    @State var source: CLLocationCoordinate2D!
     @State var destination: CLLocationCoordinate2D!
-    @State var name = ""
-    @State var distance = ""
-    @State var txt = ""
-    @State var time = ""
     @State var show = false
-    @State var loading = false
-    @State var book = false
-    @State var doc = ""
-    @State var data: Data = .init(count: 0)
-    @State var search = false
-    let createEventSearch: Bool = true
+    @State private var createEventSearch: Bool = true
+    
     var body: some View {
         ZStack {
-            CreateEventView(map: self.$map, manager: self.$manager, alert: self.$alert, source: self.$source, destination: self.$destination, event: self.$event, distance: self.$distance, time: self.$time, show: self.$show)
+            CreateEventView(map: $map, event: $event, show: $show)
                 .ignoresSafeArea()
-                .onAppear {
-                    self.manager.requestAlwaysAuthorization()
-                }
 
             if self.destination != nil && self.show {
                 Rectangle()
@@ -49,9 +37,27 @@ struct CreateEventPage: View {
                     .foregroundColor(.black.opacity(0.5))
             }
             VStack {
-                VStack (alignment: .center) {
+                VStack(alignment: .center) {
                     HStack {
-                        SearchView(map: self.$map, location: self.$destination, event: self.$event, detail: self.$show, createEventSearch: self.createEventSearch, frame: 360)
+                        ZStack(alignment: .topLeading) {
+                            HStack {
+                                Spacer()
+                                Button {
+                                    withAnimation {
+                                        self.creation.toggle()
+                                    }
+                                } label: {
+                                    Image(systemName: "map")
+                                        .padding(-7)
+                                        .filledBubble()
+                                        .frame(width: 60)
+                                        .padding(.trailing, 30)
+                                        .padding(.top, -15)
+                                }
+                            }
+                            SearchView(map: $map, location: self.$destination, event: self.event, detail: self.$show, createEventSearch: self.createEventSearch, frame: 280)
+                                .padding(.top, -15)
+                        }
                     }
                     if self.destination != nil && self.show {
                         ZStack(alignment: .topTrailing) {
@@ -81,7 +87,7 @@ struct CreateEventPage: View {
                                 }
                                 .pickerStyle(.segmented)
                                 Button(action: {
-                                    self.loading.toggle()
+//                                    self.loading.toggle()
                                     self.event.location = CLLocationCoordinate2D(latitude: self.destination.latitude, longitude: self.destination.longitude)
                                     self.createEvent()
                                 }) {
@@ -107,36 +113,36 @@ struct CreateEventPage: View {
                     }
                 }
                 Spacer()
-                if self.loading {
-                    Loader()
-                }
-                if self.book {
-                    Booked(data: self.$data, doc: self.$doc, loading: self.$loading, book: self.$book)
-                }
+//                if self.loading {
+//                    Loader()
+//                }
+//                if self.book {
+//                    Booked(data: self.$data, doc: self.$doc, loading: self.$loading, book: self.$book)
+//                }
             }
         }
-        .alert(isPresented: self.$alert) { () -> Alert in
-            Alert(title: Text("Error"), message: Text("Please Enable Location In Settings !!!"), dismissButton: .destructive(Text("Ok")))
-        }
+//        .alert(isPresented: self.$alert) { () -> Alert in
+//            Alert(title: Text("Error"), message: Text("Please Enable Location In Settings !!!"), dismissButton: .destructive(Text("Ok")))
+//        }
     }
 
     func createEvent() {
         let doc = db.collection("Events").document()
-        self.doc = doc.documentID
+//        self.doc = doc.documentID
         print("Creating event for location: ", self.event.location)
         doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": self.event.name, "Description": self.event.description, "Icon": self.event.eventIcon, "Host": Auth.auth().currentUser!.displayName!, "Address": self.event.address, "Location": GeoPoint(latitude: self.event.location.latitude, longitude: self.event.location.longitude)]) { err in
             if err != nil {
                 print((err?.localizedDescription)!)
                 return
             }
-            self.loading.toggle()
-            self.book.toggle()
+//            self.loading.toggle()
+//            self.book.toggle()
         }
     }
 }
 
 struct CreateEventPage_Previews: PreviewProvider {
     static var previews: some View {
-        CreateEventPage()
+        CreateEventPage(creation: .constant(false))
     }
 }

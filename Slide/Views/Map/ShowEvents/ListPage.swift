@@ -8,18 +8,22 @@ import MapKit
 import FirebaseFirestore
 
 struct ListPage: View {
+    @State private var creation = false
     @State private var events: [EventData] = []
-    @State var searchText = ""
-    
-    // Gesture Properties...
-    @State var offset: CGFloat = 0
-    @State var lastOffset: CGFloat = 0
-    @GestureState var gestureOffset: CGFloat = 0
+    @State private var lastOffset: CGFloat = 0
+    @State private var offset: CGFloat = 0
+    @State private var searchText = ""
+    @GestureState private var gestureOffset: CGFloat = 0
     
     var body: some View {
         ZStack {
-            MapPage()
-//                .blur(radius: getBlurRadius())
+            if creation {
+                CreateEventPage(creation: $creation)
+                    .transition(.opacity)
+            } else {
+                MapPage(creation: $creation)
+                    .transition(.opacity)
+            }
 
             // For Getting Height For Drag Gesture
             GeometryReader { proxy -> AnyView in
@@ -34,15 +38,6 @@ struct ListPage: View {
                             Capsule()
                                 .fill(.white)
                                 .frame(width: 60, height: 4)
-
-                            // Content
-//                            HStack {
-//                                Image(systemName: "magnifyingglass")
-//                                TextField("Search", text: $searchText)
-//                            }
-//                            .checkMarkTextField()
-//                            .bubbleStyle(color: .primary)
-//                            .padding(.top)
                             
                             ScrollView {
                                 ForEach($events, id: \.name) { event in
@@ -79,9 +74,7 @@ struct ListPage: View {
                                 offset = 0
                             }
                         }
-                            
-                        // Storing Last Offset...
-                        // So that the gesture can contine from the last position....
+                    
                         lastOffset = offset
                             
                     })
@@ -134,27 +127,6 @@ struct ListPage: View {
             }
             self.events = newEvents
         }
-    }
-}
-
-struct BlurView: UIViewRepresentable {
-    var style: UIBlurEffect.Style
-    
-    func makeUIView(context: Context) -> some UIVisualEffectView {
-        let view = UIVisualEffectView(effect: UIBlurEffect(style: style))
-        return view
-    }
-    
-    func updateUIView(_ uiView: UIViewType, context: Context) {}
-}
-
-struct CustomCorner: Shape {
-    var corners: UIRectCorner
-    var radius: CGFloat
-    
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-        return Path(path.cgPath)
     }
 }
 

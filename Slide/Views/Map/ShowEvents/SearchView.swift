@@ -13,10 +13,11 @@ struct SearchView: View {
     @State var result: [SearchData] = []
     @Binding var map: MKMapView
     @Binding var location: CLLocationCoordinate2D!
-    @Binding var event: Event
+    @State var event: Event = Event(name: "", description: "", eventIcon: "", host: "", start: .now, end: .now, address: "", location: CLLocationCoordinate2D())
     @Binding var detail: Bool
     @State var txt = ""
     @State var createEventSearch: Bool = false
+    
     var frame: CGFloat
     var body: some View {
         ZStack {
@@ -28,9 +29,10 @@ struct SearchView: View {
             GeometryReader { _ in
                 VStack(alignment: .leading) {
                     SearchBar(map: self.$map, result: self.$result, txt: self.$txt)
-                        .frame(width: frame)
+                        .frame(width: self.frame)
                         .padding(-25)
                         .bubbleStyle(color: .primary)
+                        .padding(.leading,10)
                         
                     if !self.result.isEmpty && self.txt != "" {
                         List(self.result) { i in
@@ -44,7 +46,7 @@ struct SearchView: View {
                             }
                             .listRowBackground(Color.clear)
                             .onTapGesture {
-                                dismissKeyboard()
+                                self.dismissKeyboard()
                                 self.searchLocation(query: i.result)
                                 // Clear the search results when list item is tapped
                                 self.result.removeAll()
@@ -227,7 +229,7 @@ class Coordinator: NSObject, UISearchBarDelegate, MKLocalSearchCompleterDelegate
     }
 }
 
-struct SearchData: Identifiable {
+struct SearchData: Identifiable, Equatable {
     var id: Int
     var name: String
     var address: String
@@ -236,6 +238,6 @@ struct SearchData: Identifiable {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView(map: .constant(MKMapView()), location: .constant(CLLocationCoordinate2D()), event: .constant(Event(name: "", description: "", eventIcon: "", host: "", start: .now, end: .now, address: "", location: CLLocationCoordinate2D())), detail: .constant(true), frame: 400)
+        SearchView(map: .constant(MKMapView()), location: .constant(CLLocationCoordinate2D()), detail: .constant(true), frame: 400)
     }
 }
