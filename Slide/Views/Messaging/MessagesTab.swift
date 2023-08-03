@@ -16,6 +16,8 @@ class MainMessagesViewModel: ObservableObject {
     init() {
         fetchCurrentUser()
         fetchRecentMessages()
+        
+        
     }
 
     private func fetchRecentMessages() {
@@ -53,6 +55,16 @@ class MainMessagesViewModel: ObservableObject {
                 }
             }
     }
+    
+    func hideMessage(_ message: RecentMessage) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+
+        if let index = recentMessages[message.toId]?.firstIndex(where: { $0.documentId == message.documentId }) {
+            recentMessages[message.toId]?.remove(at: index)
+        }
+    }
 
     private func fetchCurrentUser() {
         guard let uid = Auth.auth().currentUser?.uid else {
@@ -83,6 +95,7 @@ struct RecentMessage: Identifiable {
     let fromId, toId: String
     let profileImageUrl: String
     let timestamp: Timestamp
+    
 
     init(documentId: String, data: [String: Any]) {
         self.documentId = documentId
@@ -96,11 +109,16 @@ struct RecentMessage: Identifiable {
 }
 
 struct MessagesTab: View {
-    
+    @State var viewState = CGSize.zero
     @State public var numGroups = 1
     @State public var searchMessages = ""
     @State private var username = ""
+    @State private var profileOffsets: [String: CGSize] = [:] // New state variable
     
+    func onHide(message: RecentMessage) {
+        vm.hideMessage(message)
+    }
+
     public func formatTimestamp(_ timestamp: Timestamp) -> String {
         let currentDate = Date()
         let messageDate = timestamp.dateValue()
@@ -150,11 +168,11 @@ struct MessagesTab: View {
             .padding(.bottom, -10)
             .padding(.top, -10)
 
-            ScrollView {
-                VStack {
-                    ForEach(vm.recentMessages.keys.sorted(), id: \.self) { chatUserId in
-                        if let messages = vm.recentMessages[chatUserId], let recentMessage = messages.last {
-                            NavigationLink(destination: ChatView(chatUser: ChatUser(uid: recentMessage.toId, email: recentMessage.email, profileImageUrl: recentMessage.profileImageUrl))) {
+            List {
+                
+                ForEach(vm.recentMessages.keys.sorted(), id: \.self) { chatUserId in
+                    if let messages = vm.recentMessages[chatUserId], let recentMessage = messages.last {
+                        NavigationLink(destination: ChatView(chatUser: ChatUser(uid: recentMessage.toId, email: recentMessage.email, profileImageUrl: recentMessage.profileImageUrl))) {
                                 HStack {
                                     ZStack {
                                         Circle()
@@ -174,12 +192,22 @@ struct MessagesTab: View {
                                     Spacer()
                                     Text(formatTimestamp(recentMessage.timestamp))
                                         .padding()
+                                    .swipeActions(edge: .trailing) {
+                                        Button() {
+                                            onHide(message: recentMessage)
+                                        } label: {
+                                                Label("", systemImage: "trash")
+                                        }
+
+                                    }
                                 }
                             }
                         }
-                    }
-                }
+                    }.listRowBackground(Color.black)
+                
+                
             }
+            
         }
     }
 }
