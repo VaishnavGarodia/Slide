@@ -59,20 +59,20 @@ struct ProfilePicture: View {
             }
         }
         .sheet(isPresented: $isShowingImagePicker) {
-            ImagePicker(isImageSelected: $isImageSelected, image: $selectedImage, sourceType: .photoLibrary)
-                .onAppear {
-                    checkPhotoLibraryPermission()
-                    if isPhotoLibraryAuthorized {
-                    } else {
-                        requestPhotoLibraryPermission()
-                    }
-                }
-                .onDisappear {
-                    uploadProfilePicture()
-                }
-        }
-        .onAppear {
-            loadProfilePictureURL()
+//            ImagePicker(isImageSelected: $isImageSelected, image: $selectedImage, sourceType: .photoLibrary)
+//                .onAppear {
+//                    checkPhotoLibraryPermission()
+//                    if isPhotoLibraryAuthorized {
+//                    } else {
+//                        requestPhotoLibraryPermission()
+//                    }
+//                }
+//                .onDisappear {
+//                    uploadProfilePicture()
+//                }
+//        }
+//        .onAppear {
+//            loadProfilePictureURL()
         }
     }
     

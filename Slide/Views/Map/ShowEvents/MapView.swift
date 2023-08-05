@@ -15,14 +15,12 @@ struct MapView: UIViewRepresentable {
         return MapView.Coordinator(parent1: self)
     }
     
-    @Binding var map: MKMapView
-    @Binding var manager: CLLocationManager
-    @Binding var alert: Bool
-    @Binding var source: CLLocationCoordinate2D!
-    @Binding var destination: CLLocationCoordinate2D!
-    @Binding var distance: String
-    @Binding var time: String
-    @Binding var show: Bool
+    @State var map = MKMapView()
+    @State var manager = CLLocationManager()
+    @State var source: CLLocationCoordinate2D!
+    @State var destination: CLLocationCoordinate2D!
+    @State var distance = ""
+    @State var time = ""
     
     func makeUIView(context: Context) -> MKMapView {
         map.delegate = context.coordinator
@@ -64,18 +62,18 @@ struct MapView: UIViewRepresentable {
         init(parent1: MapView) {
             parent = parent1
         }
-        
-        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-            if status == .denied {
-                parent.alert.toggle()
-            } else {
-                parent.manager.startUpdatingLocation()
-                if let location = parent.manager.location?.coordinate {
-                    let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
-                    let region = MKCoordinateRegion(center: location, span: span)
-                    parent.map.setRegion(region, animated: true)
-                }
-            }
-        }
+
+//        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+//            if status == .denied {
+//                parent.alert.toggle()
+//            } else {
+//                parent.manager.startUpdatingLocation()
+//                if let location = parent.manager.location?.coordinate {
+//                    let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+//                    let region = MKCoordinateRegion(center: location, span: span)
+//                    parent.map.setRegion(region, animated: true)
+//                }
+//            }
+//        }
     }
 }

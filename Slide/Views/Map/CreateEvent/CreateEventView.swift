@@ -14,20 +14,16 @@ struct CreateEventView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         return CreateEventView.Coordinator(parent1: self)
     }
+
     @Binding var map: MKMapView
-    @Binding var manager: CLLocationManager
-    @Binding var alert: Bool
-    @Binding var source: CLLocationCoordinate2D!
-    @Binding var destination: CLLocationCoordinate2D!
     @Binding var event: Event
-    @Binding var distance: String
-    @Binding var time: String
     @Binding var show: Bool
+    @State private var manager = CLLocationManager()
+    @State private var destination: CLLocationCoordinate2D!
     
     func makeUIView(context: Context) -> MKMapView {
         self.map.delegate = context.coordinator
         self.manager.delegate = context.coordinator
-        self.map.showsUserLocation = true
         if let location = self.manager.location?.coordinate {
             let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
             let region = MKCoordinateRegion(center: location, span: span)
@@ -47,19 +43,19 @@ struct CreateEventView: UIViewRepresentable {
             self.parent = parent1
         }
         
-        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-            if status == .denied {
-                self.parent.alert.toggle()
-            }
-            else {
-                self.parent.manager.startUpdatingLocation()
-                if let location = self.parent.manager.location?.coordinate {
-                    let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
-                    let region = MKCoordinateRegion(center: location, span: span)
-                    self.parent.map.setRegion(region, animated: true)
-                }
-            }
-        }
+//        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+//            if status == .denied {
+//                self.parent.alert.toggle()
+//            }
+//            else {
+//                self.parent.manager.startUpdatingLocation()
+//                if let location = self.parent.manager.location?.coordinate {
+//                    let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+//                    let region = MKCoordinateRegion(center: location, span: span)
+//                    self.parent.map.setRegion(region, animated: true)
+//                }
+//            }
+//        }
         
         @objc func tap(ges: UITapGestureRecognizer) {
             // TOOD: Add a new box in the event creation view in this case asking for location name as that does not get updated correctly.
@@ -121,7 +117,6 @@ struct CreateEventView: UIViewRepresentable {
             }
                 
             self.parent.map.setRegion(region, animated: true)
-            
             self.parent.map.removeAnnotations(self.parent.map.annotations)
             self.parent.map.addAnnotation(point)
         }
@@ -130,6 +125,6 @@ struct CreateEventView: UIViewRepresentable {
 
 struct CreateEventView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateEventView(map: .constant(MKMapView()), manager: .constant(CLLocationManager()), alert: .constant(false), source: .constant(CLLocationCoordinate2D()), destination: .constant(CLLocationCoordinate2D()), event: .constant(Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))), distance: .constant(""), time: .constant(""), show: .constant(true))
+        CreateEventView(map: .constant(MKMapView()), event: .constant(Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))), show: .constant(true))
     }
 }

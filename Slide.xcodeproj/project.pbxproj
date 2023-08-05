@@ -54,6 +54,12 @@
 		796F0CB42A73FCB2006538B9 /* updateUsernameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796F0CB32A73FCB2006538B9 /* updateUsernameView.swift */; };
 		796F0CB62A73FD15006538B9 /* SignOutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796F0CB52A73FD15006538B9 /* SignOutView.swift */; };
 		796F0CB82A73FDDB006538B9 /* AppAppearanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796F0CB72A73FDDB006538B9 /* AppAppearanceView.swift */; };
+		797A58DA2A7A9B3600F333DC /* CustomCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A58D92A7A9B3600F333DC /* CustomCorner.swift */; };
+		797A58DC2A7A9B5800F333DC /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A58DB2A7A9B5800F333DC /* BlurView.swift */; };
+		797A58E02A7AA44500F333DC /* GoogleMapsTileOverlay in Frameworks */ = {isa = PBXBuildFile; productRef = 797A58DF2A7AA44500F333DC /* GoogleMapsTileOverlay */; };
+		797A58E52A7AFC8E00F333DC /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A58E42A7AFC8E00F333DC /* Test.swift */; };
+		797A58E92A7B14E100F333DC /* UITabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A58E82A7B14E100F333DC /* UITabBar.swift */; };
+		797A58EB2A7B257800F333DC /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797A58EA2A7B257800F333DC /* Search.swift */; };
 		797B1AC32A5F407800DD6B89 /* ContactInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797B1AC22A5F407800DD6B89 /* ContactInfo.swift */; };
 		797B1AC62A5F42D600DD6B89 /* fetchingContacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797B1AC52A5F42D600DD6B89 /* fetchingContacts.swift */; };
 		797B1ACD2A5F449400DD6B89 /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797B1ACC2A5F449400DD6B89 /* GlobalVariables.swift */; };
@@ -154,6 +160,11 @@
 		796F0CB32A73FCB2006538B9 /* updateUsernameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = updateUsernameView.swift; sourceTree = "<group>"; };
 		796F0CB52A73FD15006538B9 /* SignOutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignOutView.swift; sourceTree = "<group>"; };
 		796F0CB72A73FDDB006538B9 /* AppAppearanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAppearanceView.swift; sourceTree = "<group>"; };
+		797A58D92A7A9B3600F333DC /* CustomCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCorner.swift; sourceTree = "<group>"; };
+		797A58DB2A7A9B5800F333DC /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		797A58E42A7AFC8E00F333DC /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		797A58E82A7B14E100F333DC /* UITabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITabBar.swift; sourceTree = "<group>"; };
+		797A58EA2A7B257800F333DC /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		797B1AC22A5F407800DD6B89 /* ContactInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactInfo.swift; sourceTree = "<group>"; };
 		797B1AC52A5F42D600DD6B89 /* fetchingContacts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fetchingContacts.swift; sourceTree = "<group>"; };
 		797B1ACC2A5F449400DD6B89 /* GlobalVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
@@ -222,6 +233,7 @@
 				79FC9E3C294D67EA00EBD520 /* FirebaseInAppMessaging-Beta in Frameworks */,
 				79FC9E42294D67EA00EBD520 /* FirebaseRemoteConfig in Frameworks */,
 				79FC9E4B294D74B900EBD520 /* FirebaseDynamicLinks in Frameworks */,
+				797A58E02A7AA44500F333DC /* GoogleMapsTileOverlay in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +244,7 @@
 			isa = PBXGroup;
 			children = (
 				791C33772A61AF590020DEAC /* View.swift */,
+				797A58E82A7B14E100F333DC /* UITabBar.swift */,
 				79D643102A78AE4E00BB42E3 /* UISearchBar.swift */,
 			);
 			path = Extensions;
@@ -342,17 +355,25 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		797A58DD2A7A9B8C00F333DC /* Users */ = {
+			isa = PBXGroup;
+			children = (
+				792C03DD2A2DC2F1004F1A42 /* ProfilePicture.swift */,
+				7948CA092A734E5D0074F901 /* UserProfilePictures.swift */,
+				7936FA012A76C38B0057DB8A /* UserData.swift */,
+			);
+			path = Users;
+			sourceTree = "<group>";
+		};
 		797B1AC12A5F405B00DD6B89 /* Structs */ = {
 			isa = PBXGroup;
 			children = (
+				797A58DD2A7A9B8C00F333DC /* Users */,
 				E9C9024C2A7347FA0049FC81 /* Events */,
 				79A27C8B2A6A1439003DE383 /* Map */,
 				79A27C852A69F390003DE383 /* Highlights */,
 				791C33792A61B6BE0020DEAC /* Authentication */,
-				792C03DD2A2DC2F1004F1A42 /* ProfilePicture.swift */,
-				7948CA092A734E5D0074F901 /* UserProfilePictures.swift */,
 				79E4912C2A707FF6009348EF /* ImagePicker.swift */,
-				7936FA012A76C38B0057DB8A /* UserData.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -430,6 +451,8 @@
 			isa = PBXGroup;
 			children = (
 				795C5BEB2953FEDD007FDA83 /* MapOnly.swift */,
+				797A58D92A7A9B3600F333DC /* CustomCorner.swift */,
+				797A58DB2A7A9B5800F333DC /* BlurView.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -439,6 +462,7 @@
 			children = (
 				79FC9E07294D605300EBD520 /* ContentView.swift */,
 				795C5BF9295418D7007FDA83 /* MainView.swift */,
+				797A58E42A7AFC8E00F333DC /* Test.swift */,
 				79BB5D742950B522007E5342 /* Authentication */,
 				795C5BE82953FEAD007FDA83 /* Highlights */,
 				795C5BF229540ADF007FDA83 /* Messaging */,
@@ -509,6 +533,7 @@
 			children = (
 				9B8081F52A71D13D001153E5 /* MapView.swift */,
 				9B8081F32A71D0FD001153E5 /* SearchView.swift */,
+				797A58EA2A7B257800F333DC /* Search.swift */,
 				9B8081F12A71D0C5001153E5 /* Booked.swift */,
 				79DCC254295611D6000FCD6F /* MapPage.swift */,
 				79D643122A78BB8D00BB42E3 /* ListedEvent.swift */,
@@ -587,6 +612,7 @@
 				790BD0362A4526CF0006213A /* iPhoneNumberField */,
 				792E490B2A5EDF0F00D73D7C /* GoogleSignIn */,
 				792E490D2A5EDF0F00D73D7C /* GoogleSignInSwift */,
+				797A58DF2A7AA44500F333DC /* GoogleMapsTileOverlay */,
 			);
 			productName = Slide;
 			productReference = 79FC9E02294D605300EBD520 /* Slide.app */;
@@ -622,6 +648,7 @@
 				7953525D29CE587700C99B48 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				790BD0352A4526CF0006213A /* XCRemoteSwiftPackageReference "iPhoneNumberField" */,
 				792E490A2A5EDF0F00D73D7C /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				797A58DE2A7AA44500F333DC /* XCRemoteSwiftPackageReference "GoogleMapsTileOverlay" */,
 			);
 			productRefGroup = 79FC9E03294D605300EBD520 /* Products */;
 			projectDirPath = "";
@@ -661,6 +688,7 @@
 				7957B2F12A6B013200F94CB4 /* CameraPermissionsView.swift in Sources */,
 				9BE277EE2A7218F4007AD2EC /* NewChat.swift in Sources */,
 				E9C902482A72569F0049FC81 /* EventGalleryCard.swift in Sources */,
+				797A58EB2A7B257800F333DC /* Search.swift in Sources */,
 				796BA08D2A6B126C00EB0DB4 /* Notification Permission.swift in Sources */,
 				796F0CB62A73FD15006538B9 /* SignOutView.swift in Sources */,
 				791C33712A6197B80020DEAC /* getContacts.swift in Sources */,
@@ -678,11 +706,13 @@
 				799F4EC12A6C53B700F14074 /* AccountCreationBottom.swift in Sources */,
 				791C33732A619E150020DEAC /* googleSignIn.swift in Sources */,
 				9B8081F42A71D0FD001153E5 /* SearchView.swift in Sources */,
+				797A58DC2A7A9B5800F333DC /* BlurView.swift in Sources */,
 				795C5BFD29541A26007FDA83 /* MessagesTab.swift in Sources */,
 				796CD0162A718A0F008599EA /* ProfileEventsView.swift in Sources */,
 				791C337B2A61B73A0020DEAC /* PasswordField.swift in Sources */,
 				792C03DE2A2DC2F1004F1A42 /* ProfilePicture.swift in Sources */,
 				799F4EC32A6C954000F14074 /* ProgressIndicator.swift in Sources */,
+				797A58DA2A7A9B3600F333DC /* CustomCorner.swift in Sources */,
 				797FE3C82A5E2A1100F6A69C /* GoogleButton.swift in Sources */,
 				796CD01A2A71E0A5008599EA /* fetchUsername.swift in Sources */,
 				796F0CB82A73FDDB006538B9 /* AppAppearanceView.swift in Sources */,
@@ -690,6 +720,7 @@
 				E9CD46FA2A6C5E5300E24317 /* PostCreationView.swift in Sources */,
 				E9C9024B2A72587C0049FC81 /* getHighlightInfo.swift in Sources */,
 				7936FA082A773A400057DB8A /* UserSearchResults.swift in Sources */,
+				797A58E92A7B14E100F333DC /* UITabBar.swift in Sources */,
 				7957B2ED2A6AFA7700F94CB4 /* Camera Permission.swift in Sources */,
 				79D6430F2A78A20F00BB42E3 /* unfriend.swift in Sources */,
 				E9C9024E2A7348620049FC81 /* EventDisplay.swift in Sources */,
@@ -719,6 +750,7 @@
 				795C5BF829540B10007FDA83 /* Profile View.swift in Sources */,
 				E9CD46F82A6BA65200E24317 /* AddFriendsView.swift in Sources */,
 				79B822702A647262003133BC /* LocationPermissionsView.swift in Sources */,
+				797A58E52A7AFC8E00F333DC /* Test.swift in Sources */,
 				79D643152A794E4B00BB42E3 /* ListPage.swift in Sources */,
 				79D643112A78AE4E00BB42E3 /* UISearchBar.swift in Sources */,
 				79B1FF7A2A6B337A00012B38 /* Contacts Permission.swift in Sources */,
@@ -981,6 +1013,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		797A58DE2A7AA44500F333DC /* XCRemoteSwiftPackageReference "GoogleMapsTileOverlay" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/thepeaklab/GoogleMapsTileOverlay";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.0;
+			};
+		};
 		79FC9E32294D67EA00EBD520 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -1021,6 +1061,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7953525D29CE587700C99B48 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		797A58DF2A7AA44500F333DC /* GoogleMapsTileOverlay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 797A58DE2A7AA44500F333DC /* XCRemoteSwiftPackageReference "GoogleMapsTileOverlay" */;
+			productName = GoogleMapsTileOverlay;
 		};
 		79FC9E33294D67EA00EBD520 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -1,16 +1,16 @@
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
+import PhotosUI
 import SwiftUI
 import UIKit
 
 // TODO: Extract this into a new file please
 struct PostCreationView: View {
-    @State private var showImagePicker = false
+    @State var isPhotoLibraryAuthorized = false
     @State private var showImagePickerCamera = false
     @State private var showImagePickerLibrary = false
-    @State private var image: UIImage?
-    @State private var isImageSelected = false
+    @State private var image = UIImage()
     @State private var isSubmitTapped = false
     @State private var imageCaption = ""
     @Environment(\.presentationMode) var presentationMode
@@ -21,25 +21,49 @@ struct PostCreationView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            Picker("Select an Event", selection: $selectedEvent) {
-                Text("Select an Event")
-                    .tag(nil as EventDisplay?) // Tag for the default value
-                ForEach(eligibleEvents, id: \.id) { event in
-                    Text(event.name).tag(event as EventDisplay?)
+            if image == UIImage() {
+                VStack(spacing: 20) {
+                    Text("Take Picture")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                        .onTapGesture {
+                            showImagePickerCamera = true
+                        }
+                    Text("Choose from Library")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                        .onTapGesture {
+                            showImagePickerLibrary = true
+                        }
                 }
-            }
-            .pickerStyle(MenuPickerStyle())
-            .onChange(of: selectedEvent, perform: { newValue in
-                if let selectedEvent = newValue {
-                    // Handle the selected event
-                    print("Selected event: \(selectedEvent.name)")
-                    hasSelected = true // Update the hasSelected state
-                } else {
-                    hasSelected = false // Update the hasSelected state
+                .padding(.horizontal, 20)
+            } else {
+                Picker("Select an Event", selection: $selectedEvent) {
+                    Text("Select an Event")
+                        .tag(nil as EventDisplay?) // Tag for the default value
+                    ForEach(eligibleEvents, id: \.id) { event in
+                        Text(event.name).tag(event as EventDisplay?)
+                    }
                 }
-            })
+                .pickerStyle(MenuPickerStyle())
+                .onChange(of: selectedEvent, perform: { newValue in
+                    if let selectedEvent = newValue {
+                        // Handle the selected event
+                        print("Selected event: \(selectedEvent.name)")
+                        hasSelected = true // Update the hasSelected state
+                    } else {
+                        hasSelected = false // Update the hasSelected state
+                    }
+                })
 
-            if let image = image {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -63,56 +87,6 @@ struct PostCreationView: View {
                 .padding(.horizontal, 20)
                 .disabled(!hasSelected) // Disable the submit button when "Select Event" is selected
                 .opacity(hasSelected ? 1.0 : 0.5) // Apply opacity to indicate disabled state
-            } else {
-                VStack(spacing: 20) {
-                    Button(action: {
-                        showImagePicker = true
-                        showImagePickerCamera = true
-                    }) {
-                        Text("Take Picture")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                    }
-                    Button(action: {
-                        showImagePicker = true
-                        showImagePickerLibrary = true
-                    }) {
-                        Text("Choose from Library")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                    }
-                }
-                .padding(.horizontal, 20)
-                .sheet(isPresented: $showImagePicker) {
-                    if showImagePickerCamera {
-                        ImagePickerPostCamera(isImageSelected: $isImageSelected, image: $image)
-                            .onDisappear {
-                                if !isImageSelected && !isSubmitTapped {
-                                    showImagePicker = false
-                                    showImagePickerCamera = false
-                                }
-                            }
-
-                    }
-                    else if showImagePickerLibrary{
-                        ImagePickerPostLibrary(isImageSelected: $isImageSelected, image: $image)
-                            .onDisappear {
-                                if !isImageSelected && !isSubmitTapped {
-                                    showImagePicker = false
-                                    showImagePickerLibrary = false
-                                }
-                            }
-
-                    }
-                }
             }
         }
         .onChange(of: isSubmitTapped) { _ in
@@ -122,6 +96,10 @@ struct PostCreationView: View {
             }
         }
         .onAppear {
+            checkPhotoLibraryPermission()
+            if !isPhotoLibraryAuthorized {
+                requestPhotoLibraryPermission()
+            }
             // Fetch eligible events when the view appears
             getEligibleEvents { events, error in
                 if let events = events {
@@ -132,8 +110,25 @@ struct PostCreationView: View {
                 }
             }
         }
+        .sheet(isPresented: $showImagePickerCamera) {
+            ImagePicker(sourceType: .camera, selectedImage: $image)
+        }
+        .sheet(isPresented: $showImagePickerLibrary) {
+            ImagePicker(sourceType: .photoLibrary, selectedImage: $image)
+                .onAppear {
+                    // Reset UITabBar appearance properties to default values
+                    UITabBar.appearance().unselectedItemTintColor = nil
+                    UITabBar.appearance().isTranslucent = true
+                    UITabBar.appearance().backgroundColor = nil
+                }
+                .onDisappear {
+                    UITabBar.appearance().unselectedItemTintColor = .white
+                    UITabBar.appearance().isTranslucent = false
+                    UITabBar.appearance().backgroundColor = .black
+                }
+        }
     }
-    
+
     func fetchEligibleEvents() {
         getEligibleEvents { events, error in
             if let error = error {
@@ -145,7 +140,7 @@ struct PostCreationView: View {
             }
         }
     }
-    
+
     func savePostToFirestore() {
         guard let currentUser = Auth.auth().currentUser else {
             print("User not authenticated")
@@ -172,7 +167,7 @@ struct PostCreationView: View {
             } else {
                 print("Post saved to Firestore successfully")
                 // Upload the image to Firebase Storage
-                uploadImageToFirebaseStorage(image: image ?? UIImage(), documentID: newPostDocument.documentID)
+                uploadImageToFirebaseStorage(image: image, documentID: newPostDocument.documentID)
             }
             // Also have to add the post id to the events Associated Posts field.
             let postID = newPostDocument.documentID
@@ -183,21 +178,19 @@ struct PostCreationView: View {
                     var associatedHighlights = document.data()?["Associated Highlights"] as? [String] ?? []
                     associatedHighlights.append(postID)
                     eventRef.updateData(["Associated Highlights": associatedHighlights])
-                }
-                else {
+                } else {
                     print("Event document not found!")
                 }
             }
         }
-                
-        
+
         // Set isSubmitTapped to true in the same frame
         // where we set it to true in the Button action
         DispatchQueue.main.async {
             isSubmitTapped = true
         }
     }
-    
+
     func compressImageToTargetSize(_ image: UIImage, targetSizeInKB: Int) -> Data? {
         let targetWidth: CGFloat = 1024 // Choose the desired width here
         let targetHeight = targetWidth * (image.size.height / image.size.width)
@@ -269,66 +262,17 @@ struct PostCreationView: View {
         }
         uploadTask.resume()
     }
-}
 
-struct ImagePickerPostCamera: UIViewControllerRepresentable {
-    @Environment(\.presentationMode) var presentationMode
-    @Binding var isImageSelected: Bool
-    @Binding var image: UIImage?
-    func makeUIViewController(context: Context) -> UIImagePickerController {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = context.coordinator
-        imagePicker.sourceType = .camera
-        return imagePicker
+    func checkPhotoLibraryPermission() {
+        let status = PHPhotoLibrary.authorizationStatus()
+        isPhotoLibraryAuthorized = (status == .authorized)
     }
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
-        // No update needed
-    }
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        let parent: ImagePickerPostCamera
-        init(_ parent: ImagePickerPostCamera) {
-            self.parent = parent
-        }
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-            if let image = info[.originalImage] as? UIImage {
-                parent.image = image
-                parent.isImageSelected = true
-            }
-            parent.presentationMode.wrappedValue.dismiss()
-        }
-    }
-}
 
-struct ImagePickerPostLibrary: UIViewControllerRepresentable {
-    @Environment(\.presentationMode) var presentationMode
-    @Binding var isImageSelected: Bool
-    @Binding var image: UIImage?
-    func makeUIViewController(context: Context) -> UIImagePickerController {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = context.coordinator
-        imagePicker.sourceType = .photoLibrary
-        return imagePicker
-    }
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
-        // No update needed
-    }
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        let parent: ImagePickerPostLibrary
-        init(_ parent: ImagePickerPostLibrary) {
-            self.parent = parent
-        }
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-            if let image = info[.originalImage] as? UIImage {
-                parent.image = image
-                parent.isImageSelected = true
+    func requestPhotoLibraryPermission() {
+        PHPhotoLibrary.requestAuthorization { status in
+            DispatchQueue.main.async {
+                isPhotoLibraryAuthorized = (status == .authorized)
             }
-            parent.presentationMode.wrappedValue.dismiss()
         }
     }
 }
