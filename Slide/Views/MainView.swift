@@ -24,7 +24,7 @@ struct MainView: View {
                 }
                 .tag(1)
                 
-            ListPage()
+            MapPage()
                 .tabItem {
                     Label("", systemImage: "map")
                 }

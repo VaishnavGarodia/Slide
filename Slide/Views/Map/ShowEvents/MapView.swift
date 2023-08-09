@@ -4,76 +4,88 @@
 //
 //  Created by Vaishnav Garodia on 7/26/23.
 //
-
 import CoreLocation
 import FirebaseFirestore
 import MapKit
 import SwiftUI
-
 struct MapView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         return MapView.Coordinator(parent1: self)
     }
-    
-    @State var map = MKMapView()
-    @State var manager = CLLocationManager()
-    @State var source: CLLocationCoordinate2D!
-    @State var destination: CLLocationCoordinate2D!
-    @State var distance = ""
-    @State var time = ""
-    
+
+    @Binding var map: MKMapView
+    @Binding var manager: CLLocationManager
+    @Binding var alert: Bool
+    @Binding var source: CLLocationCoordinate2D!
+    @Binding var destination: CLLocationCoordinate2D!
+    @Binding var distance: String
+    @Binding var time: String
+    @Binding var show: Bool
+    @Binding var events: [EventData]
+    @Binding var selectedEvent: EventData
+
     func makeUIView(context: Context) -> MKMapView {
         map.delegate = context.coordinator
         manager.delegate = context.coordinator
         map.showsUserLocation = true
-        // get events from firebase and show them
-        fetchEvents()
         return map
     }
-    
+
     func updateUIView(_ uiView: MKMapView, context: Context) {}
-    
-    func fetchEvents() {
-        let db = Firestore.firestore()
-        db.collection("Events")
-            .addSnapshotListener { querySnapshot, error in
-                guard let documents = querySnapshot?.documents else {
-                    print("Error fetching documents: \(error!)")
-                    return
-                }
-                for document in documents {
-                    print(document.data())
-                    let data = document.data()
-                    let eventName = data["eventName"]
-                    let location = data["location"] as? GeoPoint ?? GeoPoint(latitude: 0.0, longitude: 0.0)
-                    let annotation = MKPointAnnotation()
-                    annotation.coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
-                    map.addAnnotation(annotation)
-                    print("eventName", eventName ?? "?")
-                    print("lat", location.latitude)
-                    print("long", location.longitude)
-                }
-            }
-    }
-    
+
+
     class Coordinator: NSObject, MKMapViewDelegate, CLLocationManagerDelegate {
         var parent: MapView
-        
+
         init(parent1: MapView) {
             parent = parent1
         }
 
-//        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-//            if status == .denied {
-//                parent.alert.toggle()
-//            } else {
-//                parent.manager.startUpdatingLocation()
-//                if let location = parent.manager.location?.coordinate {
-//                    let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
-//                    let region = MKCoordinateRegion(center: location, span: span)
-//                    parent.map.setRegion(region, animated: true)
-//                }
-//            }
-//        }
+        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+            if status == .denied {
+                parent.alert.toggle()
+            } else {
+                parent.manager.startUpdatingLocation()
+                if let location = parent.manager.location?.coordinate {
+                    let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+                    let region = MKCoordinateRegion(center: location, span: span)
+                    parent.map.setRegion(region, animated: true)
+                }
+            }
+        }
+        func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+                // If the annotation isn't from a capital city, it must return nil so iOS uses a default view.
+                guard annotation is EventData else { return nil }
+
+                // Define a reuse identifier. This is a string that will be used to ensure we reuse annotation views as much as possible.
+                let identifier = "Event"
+
+                // Try to dequeue an annotation view from the map view's pool of unused views.
+                var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+
+                if annotationView == nil {
+                    // If it isn't able to find a reusable view, create a new one using
+                    // MKPinAnnotationView and sets its canShowCallout property to true. This
+                    // triggers the popup with the event name.
+                    annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                    annotationView?.canShowCallout = true
+
+                    // Create a new UIButton using the built-in .detailDisclosure type. This is a small blue "i" symbol with a circle around it.
+                    let btn = UIButton(type: .detailDisclosure)
+                    annotationView?.rightCalloutAccessoryView = btn
+                }
+                else {
+                    // If it can reuse a view, update that view to use a different annotation.
+                    annotationView?.annotation = annotation
+                }
+
+                return annotationView
+            }
+
+        func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+                guard let event = view.annotation as? EventData else { return }
+                parent.selectedEvent = event
+                print("A pin got pressed", event)
+            }
     }
 }

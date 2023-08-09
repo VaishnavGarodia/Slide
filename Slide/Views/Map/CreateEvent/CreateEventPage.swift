@@ -19,16 +19,15 @@ struct Event {
 
 struct CreateEventPage: View {
     
-    @Binding var creation: Bool
     @State private var map = MKMapView()
     @State var event = Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
     @State var destination: CLLocationCoordinate2D!
     @State var show = false
     @State private var createEventSearch: Bool = true
-    
+    @State var alert = false
     var body: some View {
         ZStack {
-            CreateEventView(map: $map, event: $event, show: $show)
+            CreateEventView(map: $map, event: $event, alert: $alert, show: $show)
                 .ignoresSafeArea()
 
             if self.destination != nil && self.show {
@@ -40,21 +39,6 @@ struct CreateEventPage: View {
                 VStack(alignment: .center) {
                     HStack {
                         ZStack(alignment: .topLeading) {
-                            HStack {
-                                Spacer()
-                                Button {
-                                    withAnimation {
-                                        self.creation.toggle()
-                                    }
-                                } label: {
-                                    Image(systemName: "map")
-                                        .padding(-7)
-                                        .filledBubble()
-                                        .frame(width: 60)
-                                        .padding(.trailing, 30)
-                                        .padding(.top, -15)
-                                }
-                            }
                             SearchView(map: $map, location: self.$destination, event: self.event, detail: self.$show, createEventSearch: self.createEventSearch, frame: 280)
                                 .padding(.top, -15)
                         }
@@ -143,6 +127,6 @@ struct CreateEventPage: View {
 
 struct CreateEventPage_Previews: PreviewProvider {
     static var previews: some View {
-        CreateEventPage(creation: .constant(false))
+        CreateEventPage()
     }
 }

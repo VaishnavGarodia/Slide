@@ -17,6 +17,7 @@ struct CreateEventView: UIViewRepresentable {
 
     @Binding var map: MKMapView
     @Binding var event: Event
+    @Binding var alert: Bool
     @Binding var show: Bool
     @State private var manager = CLLocationManager()
     @State private var destination: CLLocationCoordinate2D!
@@ -43,19 +44,19 @@ struct CreateEventView: UIViewRepresentable {
             self.parent = parent1
         }
         
-//        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-//            if status == .denied {
-//                self.parent.alert.toggle()
-//            }
-//            else {
-//                self.parent.manager.startUpdatingLocation()
-//                if let location = self.parent.manager.location?.coordinate {
-//                    let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
-//                    let region = MKCoordinateRegion(center: location, span: span)
-//                    self.parent.map.setRegion(region, animated: true)
-//                }
-//            }
-//        }
+        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+            if status == .denied {
+                self.parent.alert.toggle()
+            }
+            else {
+                self.parent.manager.startUpdatingLocation()
+                if let location = self.parent.manager.location?.coordinate {
+                    let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+                    let region = MKCoordinateRegion(center: location, span: span)
+                    self.parent.map.setRegion(region, animated: true)
+                }
+            }
+        }
         
         @objc func tap(ges: UITapGestureRecognizer) {
             // TOOD: Add a new box in the event creation view in this case asking for location name as that does not get updated correctly.
@@ -125,6 +126,6 @@ struct CreateEventView: UIViewRepresentable {
 
 struct CreateEventView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateEventView(map: .constant(MKMapView()), event: .constant(Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))), show: .constant(true))
+        CreateEventView(map: .constant(MKMapView()), event: .constant(Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))), alert: .constant(false), show: .constant(true))
     }
 }

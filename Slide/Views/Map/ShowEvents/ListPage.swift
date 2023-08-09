@@ -18,10 +18,10 @@ struct ListPage: View {
     var body: some View {
         ZStack {
             if creation {
-                CreateEventPage(creation: $creation)
+                CreateEventPage()
                     .transition(.opacity)
             } else {
-                MapPage(creation: $creation)
+                MapPage()
                     .transition(.opacity)
             }
 
