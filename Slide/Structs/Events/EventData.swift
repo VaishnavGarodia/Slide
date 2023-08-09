@@ -4,6 +4,7 @@ import ObjectiveC
 class EventData: NSObject, MKAnnotation {
   var name: String
   var title: String?
+  var subtitle: String?
   var eventDescription: String
   var host, address, start, end, hostUID, icon: String
   var coordinate: CLLocationCoordinate2D
@@ -11,6 +12,7 @@ class EventData: NSObject, MKAnnotation {
     self.name = name
     self.title = name
     self.eventDescription = description
+    self.subtitle = description
     self.host = host
     self.address = address
     self.start = start
