@@ -5,8 +5,15 @@
 import Kingfisher
 import SwiftUI
 import UIKit
+import FirebaseAuth
+import Firebase
+import FirebaseFirestore
+
 struct HighlightCard: View {
-    var highlight: HighlightInfo
+    let user = Auth.auth().currentUser
+    @State var highlight: HighlightInfo
+    @State private var currentUserLiked: Bool = false
+    
     var body: some View {
         ZStack {
             HighlightImage(imageURL: URL(string: highlight.imageName)!)
@@ -41,15 +48,59 @@ struct HighlightCard: View {
                             .padding()
                             .background(Circle()
                                 .foregroundColor(.black.opacity(0.5)))
-                        Image(systemName: "bookmark")
-                            .foregroundColor(.white)
-                            .imageScale(.medium)
-                            .padding()
-                            .background(Circle()
-                                .foregroundColor(.black.opacity(0.5)))
+                        Button(action: {
+                            LikePost()
+                            currentUserLiked.toggle()
+                        }) {
+                            Image(systemName: currentUserLiked ? "heart.fill" : "heart")
+                                .foregroundColor(currentUserLiked ? .red : .white)
+                                .imageScale(.medium)
+                                .padding()
+                                .background(Circle()
+                                    .foregroundColor(.black.opacity(0.5)))
+                        }
                     }
                     .padding(5)
                 }
+            }
+        }
+        .onAppear {
+            currentUserLiked = isCurUserLiking()
+        }
+    }
+    
+    func isCurUserLiking() -> Bool {
+        guard let currentUserID = user?.uid else {
+            return false
+        }
+        return highlight.likedUsers.contains(currentUserID)
+    }
+    
+    func LikePost() {
+        // 1. Add currentUserID to currentUserLiked and update likedUsers in highlight
+        guard let currentUserID = user?.uid else {
+            return
+        }
+        // 2. Update the corresponding post in the database
+        let postID = highlight.postID
+        let eventDocRef = db.collection("Posts").document(postID)
+        print("POST ID")
+        print(postID)
+        
+        eventDocRef.getDocument { document, _ in
+            if let document = document, document.exists {
+                var likedUsersList = document.data()?["Liked Users"] as? [String] ?? []
+                if likedUsersList.contains(currentUserID) {
+                    likedUsersList.removeAll { $0 == currentUserID }
+                }
+                else {
+                    likedUsersList.append(currentUserID)
+                }
+                eventDocRef.updateData(["Liked Users": likedUsersList])
+                highlight.likedUsers = likedUsersList
+            }
+            else {
+                print("User document not found!")
             }
         }
     }

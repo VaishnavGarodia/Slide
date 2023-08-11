@@ -111,6 +111,7 @@
 		E9C9024E2A7348620049FC81 /* EventDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C9024D2A7348620049FC81 /* EventDisplay.swift */; };
 		E9C902512A7348C40049FC81 /* EligibleEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C902502A7348C40049FC81 /* EligibleEvents.swift */; };
 		E9C902532A76413C0049FC81 /* getEventGalleryInfos.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C902522A76413C0049FC81 /* getEventGalleryInfos.swift */; };
+		E9C902592A7EDAA90049FC81 /* PhotoLibraryLimitedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C902582A7EDAA90049FC81 /* PhotoLibraryLimitedPicker.swift */; };
 		E9CD46F82A6BA65200E24317 /* AddFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CD46F72A6BA65200E24317 /* AddFriendsView.swift */; };
 		E9CD46FA2A6C5E5300E24317 /* PostCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CD46F92A6C5E5300E24317 /* PostCreationView.swift */; };
 /* End PBXBuildFile section */
@@ -205,6 +206,7 @@
 		E9C9024D2A7348620049FC81 /* EventDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDisplay.swift; sourceTree = "<group>"; };
 		E9C902502A7348C40049FC81 /* EligibleEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EligibleEvents.swift; sourceTree = "<group>"; };
 		E9C902522A76413C0049FC81 /* getEventGalleryInfos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getEventGalleryInfos.swift; sourceTree = "<group>"; };
+		E9C902582A7EDAA90049FC81 /* PhotoLibraryLimitedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryLimitedPicker.swift; sourceTree = "<group>"; };
 		E9CD46F72A6BA65200E24317 /* AddFriendsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFriendsView.swift; sourceTree = "<group>"; };
 		E9CD46F92A6C5E5300E24317 /* PostCreationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCreationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -372,6 +374,7 @@
 				79A27C852A69F390003DE383 /* Highlights */,
 				791C33792A61B6BE0020DEAC /* Authentication */,
 				79E4912C2A707FF6009348EF /* ImagePicker.swift */,
+				E9C902582A7EDAA90049FC81 /* PhotoLibraryLimitedPicker.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -729,6 +732,7 @@
 				796F0CB42A73FCB2006538B9 /* updateUsernameView.swift in Sources */,
 				7936FA022A76C38B0057DB8A /* UserData.swift in Sources */,
 				9B7E8D102A71F1E90053B875 /* CreateEventPage.swift in Sources */,
+				E9C902592A7EDAA90049FC81 /* PhotoLibraryLimitedPicker.swift in Sources */,
 				797B1AC32A5F407800DD6B89 /* ContactInfo.swift in Sources */,
 				79B1FF7E2A6B39F000012B38 /* addContactsToUser.swift in Sources */,
 				795C5BF629540B00007FDA83 /* SettingsView.swift in Sources */,
@@ -888,7 +892,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DVVP87F8GY;
+				DEVELOPMENT_TEAM = S875H4AZ6G;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Slide/Info.plist;
@@ -907,7 +911,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.slide.social;
+				PRODUCT_BUNDLE_IDENTIFIER = com.slide.social.bbss;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -925,7 +929,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = DVVP87F8GY;
+				DEVELOPMENT_TEAM = S875H4AZ6G;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Slide/Info.plist;
@@ -944,7 +948,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.slide.social;
+				PRODUCT_BUNDLE_IDENTIFIER = com.slide.social.bbss;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;

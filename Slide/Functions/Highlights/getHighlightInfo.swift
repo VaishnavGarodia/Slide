@@ -10,7 +10,6 @@ import Firebase
 import FirebaseFirestore
 
 func getHighlightInfo(highlightID: String, completion: @escaping (HighlightInfo?) -> Void) {
-    let db = Firestore.firestore()
     let postsCollectionRef = db.collection("Posts").document(highlightID)
     
     postsCollectionRef.getDocument { document, _ in
@@ -19,11 +18,16 @@ func getHighlightInfo(highlightID: String, completion: @escaping (HighlightInfo?
                let userDocumentID = document.data()?["User"] as? String,
                let imagePath = document.data()?["PostImage"] as? String {
                 
+                var likedUsersArray: [String] = []
+                if let tempLikedUsersArray = document.data()?["Liked Users"] as? [String] {
+                    likedUsersArray = tempLikedUsersArray
+                }
+                
                 let userCollectionRef = db.collection("Users").document(userDocumentID)
                 userCollectionRef.getDocument { document, _ in
                     if let document = document, document.exists {
                         if let username = document.data()?["Username"] as? String {
-                            let highlightInfo = HighlightInfo(imageName: imagePath, profileImageName: "ProfilePic2", username: username, highlightTitle: caption)
+                            let highlightInfo = HighlightInfo(postID: document.documentID, imageName: imagePath, profileImageName: "ProfilePic2", username: username, highlightTitle: caption, likedUsers: likedUsersArray)
                             completion(highlightInfo) // Call the completion handler with the result
                         } else {
                             completion(nil) // Call the completion handler with nil if username is not available

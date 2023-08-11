@@ -16,8 +16,10 @@ struct HighlightInfo: Identifiable, Equatable {
     }
 
     var id = UUID()
+    var postID: String
     var imageName: String
     var profileImageName: String
     var username: String
     var highlightTitle: String
+    var likedUsers: [String] // List of user document ids that liked the post
 }
