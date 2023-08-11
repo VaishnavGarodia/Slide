@@ -8,6 +8,7 @@ struct Highlights: View {
     @State private var galleries: [EventGalleryInfo] = []
     @State private var highlights: [HighlightInfo] = []
     @State private var isPresentingPostCreationView = false
+    let user = Auth.auth().currentUser
 
     var body: some View {
         ZStack {
@@ -70,47 +71,70 @@ struct Highlights: View {
             fetchGalleries()
         }
     }
-
+    
     func fetchHighlights() {
         let postsCollectionRef = db.collection("Posts")
 
-        postsCollectionRef.getDocuments { snapshot, error in
+        let twoDaysAgo = Calendar.current.date(byAdding: .hour, value: -48, to: Date())!
+
+        postsCollectionRef.whereField("PostTime", isGreaterThan: twoDaysAgo).getDocuments { snapshot, error in
             if let error = error {
                 print("Error fetching highlights: \(error.localizedDescription)")
                 return
             }
-
+            
             var newHighlights: [HighlightInfo] = []
-            let dispatchGroup = DispatchGroup() // Create a DispatchGroup
-
+            let dispatchGroup = DispatchGroup()
+            
             for document in snapshot?.documents ?? [] {
                 if let caption = document.data()["ImageCaption"] as? String,
                    let userDocumentID = document.data()["User"] as? String,
                    let imagePath = document.data()["PostImage"] as? String
                 {
-                    dispatchGroup.enter() // Enter the DispatchGroup before starting an asynchronous task
-
-                    // Fetch username from the "Users" database using the userDocumentID
-                    fetchUsername(for: userDocumentID) { username, photoURL in
-                        if let username = username, let photoURL = photoURL {
-                            let highlight = HighlightInfo(
-                                imageName: imagePath, profileImageName: photoURL, username: username, highlightTitle: caption
-                            )
-                            newHighlights.append(highlight)
-
-                            dispatchGroup.leave() // Leave the DispatchGroup when the task is complete
-                        }
+                    print("Found Something")
+                    
+                    guard let currentUserID = user?.uid else {
+                        return
                     }
+                    let userDocumentRef = db.collection("Users").document(currentUserID)
+
+                    // Step 1: Access the User document using the given document ID
+                    userDocumentRef.getDocument(completion: {d2, e2 in
+                        if let d2 = d2, d2.exists {
+                            let docID = document.documentID
+                            var friendsArray: [String] = []
+                            if let tempFriendsArray = d2.data()?["Friends"] as? [String] {
+                                friendsArray = tempFriendsArray
+                            }
+                            var likedUsersArray: [String] = []
+                            if let tempLikedUsersArray = d2.data()?["Liked Users"] as? [String] {
+                                likedUsersArray = tempLikedUsersArray
+                            }
+                            if friendsArray.contains(userDocumentID) {
+                                dispatchGroup.enter()
+
+                                fetchUsername(for: userDocumentID) { username, photoURL in
+                                    if let username = username, let photoURL = photoURL {
+                                        let highlight = HighlightInfo(
+                                            postID: docID, imageName: imagePath, profileImageName: photoURL, username: username, highlightTitle: caption, likedUsers: likedUsersArray
+                                        )
+                                        newHighlights.append(highlight)
+                                        dispatchGroup.leave()
+                                    }
+                                }
+
+                            }
+                        }
+                        dispatchGroup.notify(queue: .main) {
+                            self.highlights = newHighlights
+                        }
+                    })
                 }
             }
 
-            dispatchGroup.notify(queue: .main) {
-                // This block is called when all the tasks inside the DispatchGroup are completed
-                self.highlights = newHighlights
-            }
         }
     }
-
+    
     func fetchGalleries() {
         getEventGalleryInfos { eventGalleries, error in
             if let error = error {

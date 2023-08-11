@@ -10,7 +10,7 @@ struct PostCreationView: View {
     @State var isPhotoLibraryAuthorized = false
     @State private var showImagePickerCamera = false
     @State private var showImagePickerLibrary = false
-    @State private var image = UIImage()
+    @State private var image: UIImage?
     @State private var isSubmitTapped = false
     @State private var imageCaption = ""
     @Environment(\.presentationMode) var presentationMode
@@ -18,10 +18,54 @@ struct PostCreationView: View {
     @State private var selectedEvent: EventDisplay?
     @State private var eligibleEvents: [EventDisplay] = []
     @State private var hasSelected: Bool = false
+    @State private var hasSelectedImage: Bool = false
 
     var body: some View {
         VStack(spacing: 20) {
-            if image == UIImage() {
+            
+            Picker("Select an Event", selection: $selectedEvent) {
+                Text("Select an Event")
+                    .tag(nil as EventDisplay?) // Tag for the default value
+                ForEach(eligibleEvents, id: \.id) { event in
+                    Text(event.name).tag(event as EventDisplay?)
+                }
+            }
+            .pickerStyle(MenuPickerStyle())
+            .onChange(of: selectedEvent, perform: { newValue in
+                if let selectedEvent = newValue {
+                    // Handle the selected event
+                    print("Selected event: \(selectedEvent.name)")
+                    hasSelected = true // Update the hasSelected state
+                } else {
+                    hasSelected = false // Update the hasSelected state
+                }
+            })
+
+            Image(uiImage: image ?? UIImage())
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .cornerRadius(10)
+                .padding()
+            TextField("Image Caption", text: $imageCaption)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding(.horizontal, 20)
+            Button(action: {
+                isSubmitTapped = true
+                savePostToFirestore()
+            }) {
+                Text("Submit")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(10)
+            }
+            .padding(.horizontal, 20)
+            .disabled(!hasSelected) // Disable the submit button when "Select Event" is selected
+            .opacity(hasSelected ? 1.0 : 0.5) // Apply opacity to indicate disabled state
+            
+            if hasSelected {
                 VStack(spacing: 20) {
                     Text("Take Picture")
                         .font(.headline)
@@ -45,49 +89,8 @@ struct PostCreationView: View {
                         }
                 }
                 .padding(.horizontal, 20)
-            } else {
-                Picker("Select an Event", selection: $selectedEvent) {
-                    Text("Select an Event")
-                        .tag(nil as EventDisplay?) // Tag for the default value
-                    ForEach(eligibleEvents, id: \.id) { event in
-                        Text(event.name).tag(event as EventDisplay?)
-                    }
-                }
-                .pickerStyle(MenuPickerStyle())
-                .onChange(of: selectedEvent, perform: { newValue in
-                    if let selectedEvent = newValue {
-                        // Handle the selected event
-                        print("Selected event: \(selectedEvent.name)")
-                        hasSelected = true // Update the hasSelected state
-                    } else {
-                        hasSelected = false // Update the hasSelected state
-                    }
-                })
-
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .cornerRadius(10)
-                    .padding()
-                TextField("Image Caption", text: $imageCaption)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.horizontal, 20)
-                Button(action: {
-                    isSubmitTapped = true
-                    savePostToFirestore()
-                }) {
-                    Text("Submit")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
-                }
-                .padding(.horizontal, 20)
-                .disabled(!hasSelected) // Disable the submit button when "Select Event" is selected
-                .opacity(hasSelected ? 1.0 : 0.5) // Apply opacity to indicate disabled state
             }
+
         }
         .onChange(of: isSubmitTapped) { _ in
             // Dismiss the view when the image is selected
@@ -111,10 +114,11 @@ struct PostCreationView: View {
             }
         }
         .sheet(isPresented: $showImagePickerCamera) {
-            ImagePicker(sourceType: .camera, selectedImage: $image)
+            ImagePicker(sourceType: .camera, selectedImage: $image, wasSelected: hasSelectedImage)
         }
         .sheet(isPresented: $showImagePickerLibrary) {
-            ImagePicker(sourceType: .photoLibrary, selectedImage: $image)
+            PhotoLibraryLimitedPicker(isImageSelected: $hasSelectedImage, selectedImage: $image)
+//            ImagePicker(sourceType: .photoLibrary, selectedImage: $image)
                 .onAppear {
                     // Reset UITabBar appearance properties to default values
                     UITabBar.appearance().unselectedItemTintColor = nil
@@ -167,7 +171,7 @@ struct PostCreationView: View {
             } else {
                 print("Post saved to Firestore successfully")
                 // Upload the image to Firebase Storage
-                uploadImageToFirebaseStorage(image: image, documentID: newPostDocument.documentID)
+                uploadImageToFirebaseStorage(image: image ?? UIImage(), documentID: newPostDocument.documentID)
             }
             // Also have to add the post id to the events Associated Posts field.
             let postID = newPostDocument.documentID

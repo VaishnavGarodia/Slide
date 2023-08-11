@@ -26,6 +26,8 @@ struct MapPage: View {
     @State var lastOffset: CGFloat = 0
     @GestureState var gestureOffset: CGFloat = 0
     let createEventSearch: Bool = false
+    
+    @State private var isPresentingCreateEventPage = false
 
     var body: some View {
         ZStack {
@@ -38,14 +40,26 @@ struct MapPage: View {
                         ZStack(alignment: .topLeading) {
                             HStack {
                                 Spacer()
-                                NavigationLink(destination: CreateEventPage()) {
+                                Button(action: {
+                                    isPresentingCreateEventPage = true
+                                }) {
                                     Image(systemName: "plus")
+                                        .padding(-5)
+                                        .filledBubble()
+                                        .frame(width: 60)
+                                        .padding(.trailing)
+                                        .padding(.top, -15)
                                 }
-                                .padding(-5)
-                                .filledBubble()
-                                .frame(width: 60)
-                                .padding(.trailing)
-                                .padding(.top, -15)
+
+//                                Spacer()
+//                                NavigationLink(destination: CreateEventPage()) {
+//                                    Image(systemName: "plus")
+//                                }
+//                                .padding(-5)
+//                                .filledBubble()
+//                                .frame(width: 60)
+//                                .padding(.trailing)
+//                                .padding(.top, -15)
                             }
 
                             SearchView(map: self.$map, location: self.$destination, event: self.event, detail: self.$show, createEventSearch: self.createEventSearch, frame: 300)
@@ -122,6 +136,20 @@ struct MapPage: View {
         }
         .onAppear {
             fetchEvents()
+        }
+        .fullScreenCover(isPresented: $isPresentingCreateEventPage) {
+            ZStack(alignment: .topTrailing) {
+                CreateEventPage()
+                
+                Button(action: {
+                    isPresentingCreateEventPage = false
+                }) {
+                    Image(systemName: "xmark")
+                        .imageScale(.large)
+                        .foregroundColor(.white)
+                }
+                .padding()
+            }
         }
     }
 

@@ -49,13 +49,18 @@ struct ProfileHighlightsView: View {
 
             for document in snapshot?.documents ?? [] {
                 if let caption = document.data()["ImageCaption"] as? String,
-                   let imagePath = document.data()["PostImage"] as? String
-                {
+                   let imagePath = document.data()["PostImage"] as? String {
+                    
                     dispatchGroup.enter()
+                    var likedUsersArray: [String] = []
+                    if let tempLikedUsersArray = document.data()["Liked Users"] as? [String] {
+                        likedUsersArray = tempLikedUsersArray
+                    }
                     fetchUsername(for: userID) { username, photoURL in
                         if let username = username, let photoURL = photoURL {
                             let highlight = HighlightInfo(
-                                imageName: imagePath, profileImageName: photoURL, username: username, highlightTitle: caption)
+                                postID: document.documentID,
+                                imageName: imagePath, profileImageName: photoURL, username: username, highlightTitle: caption, likedUsers: likedUsersArray)
                             if !self.highlightHolder.highlights.contains(where: { $0 == highlight }) {
                                 newHighlights.append(highlight)
                             }
