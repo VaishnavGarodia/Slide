@@ -8,7 +8,8 @@
 import Foundation
 import FirebaseFirestore
 
-class HighlightHolder: ObservableObject {
+class ProfileInfo: ObservableObject {
     @Published var highlights: [HighlightInfo] = []
+    @Published var friendsCount: Int = 0
     @Published var lastSnapshot: DocumentSnapshot?
 }

@@ -17,7 +17,7 @@ struct UserSearchResults: View {
                         .foregroundColor(.white)
 
                     Spacer()
-                    if friend.added {
+                    if friend.added ?? false {
                         Button {} label: {
                             HStack {
                                 Text("Added")

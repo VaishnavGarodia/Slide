@@ -9,7 +9,7 @@ struct MapPage: View {
     @State var alert = false
     @State var source: CLLocationCoordinate2D!
     @State var destination: CLLocationCoordinate2D!
-    @State var event = Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
+    @State var event = Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
     @State var distance = ""
     @State var time = ""
     @State var show = false
@@ -19,7 +19,7 @@ struct MapPage: View {
     @State var data: Data = .init(count: 0)
     @State var events: [EventData] = []
     @State var searchText = ""
-    @State var selectedEvent: EventData = EventData(name: "", description: "", host: "", address: "", start: "", end: "", hostUID: "", icon: "", coordinate: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
+    @State var selectedEvent: EventData = EventData(name: "", description: "", host: "", address: "", start: "", end: "", hostUID: "", icon: "", coordinate: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
 
     // Gesture Properties...
     @State var offset: CGFloat = 0
@@ -159,33 +159,6 @@ struct MapPage: View {
         }
     }
 
-    // Blur Radius for BG...
-    func getBlurRadius() -> CGFloat {
-        let progress = -offset / (UIScreen.main.bounds.height - 100)
-        return progress * 30
-    }
-
-    struct BlurView: UIViewRepresentable {
-        var style: UIBlurEffect.Style
-
-        func makeUIView(context: Context) -> some UIVisualEffectView {
-            let view = UIVisualEffectView(effect: UIBlurEffect(style: style))
-            return view
-        }
-
-        func updateUIView(_ uiView: UIViewType, context: Context) {}
-    }
-
-    struct CustomCorner: Shape {
-        var corners: UIRectCorner
-        var radius: CGFloat
-
-        func path(in rect: CGRect) -> Path {
-            let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-            return Path(path.cgPath)
-        }
-    }
-
     func fetchEvents() {
         let db = Firestore.firestore()
         db.collection("Events")
@@ -208,7 +181,8 @@ struct MapPage: View {
                         end: data["End"] as? String ?? "",
                         hostUID: data["HostUID"] as? String ?? "",
                         icon: data["Icon"] as? String ?? "",
-                        coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude))
+                        coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
+                        bannerURL: data["Event Image"] as? String ?? "")
                     newEvents.append(event)
                 }
                 self.events = newEvents

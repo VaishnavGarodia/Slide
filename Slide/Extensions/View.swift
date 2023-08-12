@@ -78,7 +78,7 @@ struct BubbledTextField: ViewModifier {
             .padding()
             .overlay(
                 RoundedRectangle(cornerRadius: 15)
-                    .strokeBorder(isFocused ? LinearGradient(gradient: Gradient(colors: [.cyan, .blue]), startPoint: .leading, endPoint: .trailing) : LinearGradient(gradient: Gradient(colors: [color]), startPoint: .leading, endPoint: .trailing), lineWidth: 2)
+                    .strokeBorder(isFocused ? Color.accentColor : color)
             )
             .animation(.linear, value: isFocused)
             .focused($isFocused)
@@ -91,7 +91,7 @@ struct FilledBubble: ViewModifier {
             .frame(maxWidth: .infinity)
             .padding()
             .background(
-                LinearGradient(gradient: Gradient(colors: [.cyan, .blue]), startPoint: .leading, endPoint: .trailing)
+                Color.accentColor
             )
             .foregroundColor(.white)
             .fontWeight(.bold)
@@ -106,7 +106,7 @@ struct UnderlinedGradient: ViewModifier {
         ZStack(alignment: .bottom) {
             LinearGradient(gradient: Gradient(colors: [.cyan, .blue]), startPoint: .leading, endPoint: .trailing)
                 .frame(height: 4)
-                .overlay(Capsule())
+                .clipShape(Capsule())
             
             content
                 .foregroundColor(.primary)

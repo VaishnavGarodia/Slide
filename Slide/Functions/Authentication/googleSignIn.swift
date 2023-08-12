@@ -67,7 +67,7 @@ func googleSignIn(registered: Bool, completion: @escaping (String) -> Void) {
                         return
                     }
                     
-                    if let document = document {
+                    if document != nil {
                         // The username is already taken, handle this scenario (e.g., show an error message)
                         completion("")
                     } else {

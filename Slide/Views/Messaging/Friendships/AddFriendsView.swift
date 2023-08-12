@@ -19,19 +19,26 @@ struct AddFriendsView: View {
     @State private var friendList: [UserData] = []
     @State private var refreshPending = false
     @State private var refreshSearch = false
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Image(systemName: "magnifyingglass")
-                TextField("Search for users", text: $searchQuery)
-                    .onChange(of: searchQuery) { _ in
-                        searchUsers()
-                    }
+                Button { self.presentationMode.wrappedValue.dismiss() } label: {
+                    Image(systemName: "chevron.left")
+                }
+                .padding(.leading)
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                    TextField("Search for users", text: $searchQuery)
+                        .onChange(of: searchQuery) { _ in
+                            searchUsers()
+                        }
+                }
+                .checkMarkTextField()
+                .bubbleStyle(color: .primary)
+                .padding()
             }
-            .checkMarkTextField()
-            .bubbleStyle(color: .primary)
-            .padding()
 
             if searchQuery.isEmpty {
                 if !pendingFriendRequests.isEmpty {
@@ -62,6 +69,7 @@ struct AddFriendsView: View {
         .refreshable {
             fetchPendingFriendRequests()
         }
+        .navigationBarBackButtonHidden(true)
     }
 
     func fetchPendingFriendRequests() {

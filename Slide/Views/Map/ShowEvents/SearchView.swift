@@ -13,7 +13,7 @@ struct SearchView: View {
     @State var result: [SearchData] = []
     @Binding var map: MKMapView
     @Binding var location: CLLocationCoordinate2D!
-    @State var event: Event = Event(name: "", description: "", eventIcon: "", host: "", start: .now, end: .now, address: "", location: CLLocationCoordinate2D())
+    @State var event: Event = Event(name: "", description: "", eventIcon: "", host: "", start: .now, end: .now, address: "", location: CLLocationCoordinate2D(), bannerURL: "")
     @Binding var detail: Bool
     @State var txt = ""
     @State var createEventSearch: Bool = false

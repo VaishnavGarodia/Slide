@@ -22,7 +22,7 @@ struct PendingRequests: View {
                     Text(friend.username)
                         .foregroundColor(.primary)
                     Spacer()
-                    if friend.added {
+                    if friend.added ?? false {
                         Button {
                             
                         } label: {

@@ -13,6 +13,8 @@ struct HighlightCard: View {
     let user = Auth.auth().currentUser
     @State var highlight: HighlightInfo
     @State private var currentUserLiked: Bool = false
+    @Binding var selectedUser: UserData?
+    @Binding var profileView: Bool
     
     var body: some View {
         ZStack {
@@ -23,6 +25,10 @@ struct HighlightCard: View {
                 HStack {
                     HStack {
                         UserProfilePictures(photoURL: highlight.profileImageName, dimension: 35)
+                            .onTapGesture {
+                                selectedUser = UserData(userID: highlight.uid, username: highlight.username, photoURL: highlight.profileImageName)
+                                profileView.toggle()
+                            }
                         VStack(alignment: .leading) {
                             Text(highlight.username)
                                 .foregroundColor(.white)

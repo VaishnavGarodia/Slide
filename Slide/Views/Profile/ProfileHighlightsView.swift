@@ -8,11 +8,11 @@ import SwiftUI
 
 struct ProfileHighlightsView: View {
     let user = Auth.auth().currentUser
-    @ObservedObject var highlightHolder = HighlightHolder()
+    @ObservedObject var highlightHolder = ProfileInfo()
 
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 4) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 0) {
                 ForEach(highlightHolder.highlights) { highlight in
                     SmallHighlightCard(highlight: highlight)
                 }
@@ -56,10 +56,10 @@ struct ProfileHighlightsView: View {
                     if let tempLikedUsersArray = document.data()["Liked Users"] as? [String] {
                         likedUsersArray = tempLikedUsersArray
                     }
-                    fetchUsername(for: userID) { username, photoURL in
+                    fetchUsernameAndPhotoURL(for: userID) { username, photoURL in
                         if let username = username, let photoURL = photoURL {
                             let highlight = HighlightInfo(
-                                postID: document.documentID,
+                                uid: userID, postID: document.documentID,
                                 imageName: imagePath, profileImageName: photoURL, username: username, highlightTitle: caption, likedUsers: likedUsersArray)
                             if !self.highlightHolder.highlights.contains(where: { $0 == highlight }) {
                                 newHighlights.append(highlight)

@@ -10,61 +10,88 @@ import SwiftUI
 import UIKit
 
 struct SettingsView: View {
-    @State private var clicks = [false, false, false, false, false, false]
+    @State private var clicks = [false, false, false, false, false, false, false]
     @Binding var selectedColorScheme: String
     let user = Auth.auth().currentUser
     @State private var updatedUsername: String = ""
     
     var body: some View {
         List {
-            // Username
-            Button {
-                withAnimation {
-                    toggleClicks(count: 0)
-                }
-            } label: {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Username")
-                            .foregroundColor(.primary)
-                        Text(user?.displayName ?? "SimUser")
-                            .foregroundColor(.secondary)
+//            Group {
+//                Button {
+//                    withAnimation {
+//                        toggleClicks(count: 6)
+//                    }
+//                } label: {
+//                    HStack {
+//                        VStack(alignment: .leading) {
+//                            UserProfilePictures(photoURL: user?.photoURL?.absoluteString ?? "" , dimension: 80)
+//                            Text("Profile Picture")
+//                                .foregroundColor(.primary)
+//                        }
+//                        Spacer()
+//                        Image(systemName: "chevron.right")
+//                            .rotationEffect(.degrees(clicks[6] ? 90 : 0))
+//                    }
+//                }
+//
+//                if clicks[6] {
+//                    updateUsernameView(updatedUsername: $updatedUsername, clicked: $clicks[0])
+//                }
+//            }
+            
+            Group {
+                // Username
+                Button {
+                    withAnimation {
+                        toggleClicks(count: 0)
                     }
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .rotationEffect(.degrees(clicks[0] ? 90 : 0))
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Username")
+                                .foregroundColor(.primary)
+                            Text(user?.displayName ?? "SimUser")
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(.degrees(clicks[0] ? 90 : 0))
+                    }
                 }
-            }
-                
-            if clicks[0] {
-                updateUsernameView(updatedUsername: $updatedUsername, clicked: $clicks[0])
-            }
                     
-            // Email
-            Button {
-                withAnimation {
-                    toggleClicks(count: 1)
-                }
-            } label: {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Email")
-                            .foregroundColor(.primary)
-                        Text(user?.email ?? "SimUser@stanford.edu")
-                            .foregroundColor(.secondary)
-                    }
-                    Spacer()
-                    if !(user?.isEmailVerified ?? false) {
-                        Image(systemName: "exclamationmark.circle")
-                            .foregroundColor(.red)
-                    }
-                    Image(systemName: "chevron.right")
-                        .rotationEffect(.degrees(clicks[1] ? 90 : 0))
+                if clicks[0] {
+                    updateUsernameView(updatedUsername: $updatedUsername, clicked: $clicks[0])
                 }
             }
             
-            if clicks[1] {
+            Group {
+                // Email
+                Button {
+                    withAnimation {
+                        toggleClicks(count: 1)
+                    }
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Email")
+                                .foregroundColor(.primary)
+                            Text(user?.email ?? "SimUser@stanford.edu")
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        if !(user?.isEmailVerified ?? false) {
+                            Image(systemName: "exclamationmark.circle")
+                                .foregroundColor(.red)
+                        }
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(.degrees(clicks[1] ? 90 : 0))
+                    }
+                }
                 
+                if clicks[1] {
+                    
+                }
             }
                 
             // Phone Number

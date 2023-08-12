@@ -41,6 +41,6 @@ struct ListedEvent: View {
 
 struct ListedEvent_Previews: PreviewProvider {
     static var previews: some View {
-        ListedEvent(event: .constant(EventData(name: "Tom Holland's Party", description: "We vibin", host: "tomholland", address: "ur mum's house", start: "6:30", end: "9:30", hostUID: "madadasdwas", icon: "party.popper", coordinate: CLLocationCoordinate2D())))
+        ListedEvent(event: .constant(EventData(name: "Tom Holland's Party", description: "We vibin", host: "tomholland", address: "ur mum's house", start: "6:30", end: "9:30", hostUID: "madadasdwas", icon: "party.popper", coordinate: CLLocationCoordinate2D(), bannerURL: "")))
     }
 }

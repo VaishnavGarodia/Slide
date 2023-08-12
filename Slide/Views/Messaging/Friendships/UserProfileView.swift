@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct UserProfileView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Binding var user: UserData?
     @State private var chat = false
+    @State private var username = ""
 
     var body: some View {
         if chat {
@@ -17,6 +19,10 @@ struct UserProfileView: View {
         } else {
             VStack {
                 HStack {
+                    Button { self.presentationMode.wrappedValue.dismiss() } label: {
+                        Image(systemName: "chevron.left")
+                    }
+                    .padding(.leading)
                     Spacer()
                     Menu {
                         Button("Block") {}
@@ -31,7 +37,8 @@ struct UserProfileView: View {
                 }
 
                 UserProfilePictures(photoURL: user!.photoURL, dimension: 125)
-
+                Text(username)
+                    .fontWeight(.semibold)
                 Button {
                     chat = true
                 } label: {
@@ -42,6 +49,12 @@ struct UserProfileView: View {
                 .padding()
                 Spacer()
             }
+            .onAppear {
+                fetchUsernameAndPhotoURL(for: user!.userID) { name, _ in
+                    username = name ?? ""
+                }
+            }
+            .navigationBarBackButtonHidden(true)
         }
     }
 }
