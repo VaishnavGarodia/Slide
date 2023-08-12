@@ -20,7 +20,7 @@ struct Highlights: View {
                         EventGalleryCard(eventGalleryInfo: gallery, profileView: $profileView, selectedUser: $selectedUser)
                     }
                     ForEach(highlights) { highlight in
-                        HighlightCard(highlight: highlight, profileView: $profileView, selectedUser: $selectedUser)
+                        HighlightCard(highlight: highlight, selectedUser: $selectedUser, profileView: $profileView)
                     }
                 }
                 .padding()
@@ -118,10 +118,10 @@ struct Highlights: View {
                             if friendsArray.contains(userDocumentID) {
                                 dispatchGroup.enter()
 
-                                fetchUsername(for: userDocumentID) { username, photoURL in
+                                fetchUsernameAndPhotoURL(for: userDocumentID) { username, photoURL in
                                     if let username = username, let photoURL = photoURL {
                                         let highlight = HighlightInfo(
-                                            postID: docID, imageName: imagePath, profileImageName: photoURL, username: username, highlightTitle: caption, likedUsers: likedUsersArray
+                                            uid: currentUserID, postID: docID, imageName: imagePath, profileImageName: photoURL, username: username, highlightTitle: caption, likedUsers: likedUsersArray
                                         )
                                         newHighlights.append(highlight)
                                         dispatchGroup.leave()

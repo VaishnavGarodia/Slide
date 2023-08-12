@@ -16,7 +16,7 @@ import FirebaseStorage
 struct CreateEventPage: View {
     @State private var isPhotoLibraryAuthorized = false
     @State private var map = MKMapView()
-    @State var event = Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
+    @State var event = Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
     @State var destination: CLLocationCoordinate2D!
     @State var show = false
     @State private var createEventSearch: Bool = true
@@ -155,7 +155,7 @@ struct CreateEventPage: View {
                 print((err?.localizedDescription)!)
                 return
             } else {
-                uploadImageToFirebaseStorage(image: selectedImage ?? UIImage(), documentID: doc.documentID)
+                uploadBannerToFirebaseStorage(image: selectedImage ?? UIImage(), documentID: doc.documentID)
             }
 //            self.loading.toggle()
 //            self.book.toggle()
@@ -203,7 +203,7 @@ struct CreateEventPage: View {
         return imageData
     }
 
-    func uploadImageToFirebaseStorage(image: UIImage, documentID: String) {
+    func uploadBannerToFirebaseStorage(image: UIImage, documentID: String) {
         guard let imageData = compressImageToTargetSize(image, targetSizeInKB: 100) else {
             print("Failed to compress image.")
             return
@@ -218,7 +218,6 @@ struct CreateEventPage: View {
                         print("Error getting download URL: \(error.localizedDescription)")
                     } else if let downloadURL = url {
                         // Update the post document with the image download URL
-                        let db = Firestore.firestore()
                         let postDocumentRef = db.collection("Events").document(documentID)
                         postDocumentRef.updateData(["Event Image": downloadURL.absoluteString]) { error in
                             if let error = error {
@@ -233,7 +232,6 @@ struct CreateEventPage: View {
         }
         uploadTask.resume()
     }
-
     
     func checkPhotoLibraryPermission() {
         let status = PHPhotoLibrary.authorizationStatus()

@@ -10,4 +10,5 @@ struct Event {
     var start, end: Date
     var address: String
     var location: CLLocationCoordinate2D
+    var bannerURL: String
 }

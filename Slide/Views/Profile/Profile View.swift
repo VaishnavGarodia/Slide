@@ -8,7 +8,7 @@ import SwiftUI
 
 struct ProfileView: View {
     // functions used: fetchUserData (fetches friend count)
-    @StateObject private var highlightHolder = HighlightHolder()
+    @StateObject private var profileInfo = ProfileInfo()
     @State private var user = Auth.auth().currentUser
     @State private var tab = "Highlights"
     @State private var editProfilePic = false
@@ -18,16 +18,16 @@ struct ProfileView: View {
             ZStack {
                 HStack {
                     VStack(alignment: .center) {
-                        Text("\(highlightHolder.highlights.count)")
-                        Text(highlightHolder.highlights.count == 1 ? "Highlight" : "Highlights")
+                        Text("\(profileInfo.highlights.count)")
+                        Text(profileInfo.highlights.count == 1 ? "Highlight" : "Highlights")
                     }
                     .padding(.leading)
                     
                     Spacer()
                     
                     VStack {
-                        Text("\(highlightHolder.friendsCount)")
-                        Text(highlightHolder.friendsCount == 1 ? "Friend" : "Friends")
+                        Text("\(profileInfo.friendsCount)")
+                        Text(profileInfo.friendsCount == 1 ? "Friend" : "Friends")
                     }
                     .padding(.trailing)
                 }
@@ -44,7 +44,6 @@ struct ProfileView: View {
                     ProfilePicture()
                 }
             }
-            
             
             Text(user?.displayName ?? "SimUser")
                 .fontWeight(.semibold)
@@ -75,7 +74,7 @@ struct ProfileView: View {
                 .padding()
 
                 if tab == "Highlights" {
-                    ProfileHighlightsView(highlightHolder: highlightHolder)
+                    ProfileHighlightsView(highlightHolder: profileInfo)
                         .transition(.move(edge: .leading))
                 } else {
                     ProfileEventsView()
@@ -84,23 +83,7 @@ struct ProfileView: View {
                 Spacer()
             }
             .onAppear {
-                fetchUserData()
-            }
-        }
-    }
-    
-    private func fetchUserData() {
-        guard let uid = user?.uid else { return }
-            
-        // Fetch user data from Firestore using the uid
-        db.collection("Users").document(uid).getDocument { snapshot, error in
-            if let error = error {
-                print("Error fetching user data: \(error)")
-                return
-            }
-                
-            if let data = snapshot?.data(), let friendsCount = data["Friends"] as? [String] {
-                highlightHolder.friendsCount = friendsCount.count
+                fetchCurrentFriendsCount(highlightHolder: profileInfo)
             }
         }
     }

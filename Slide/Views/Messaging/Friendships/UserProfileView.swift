@@ -50,7 +50,7 @@ struct UserProfileView: View {
                 Spacer()
             }
             .onAppear {
-                fetchUsername(for: user!.userID) { name, _ in
+                fetchUsernameAndPhotoURL(for: user!.userID) { name, _ in
                     username = name ?? ""
                 }
             }

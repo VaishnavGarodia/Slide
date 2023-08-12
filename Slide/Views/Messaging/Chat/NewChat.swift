@@ -102,7 +102,7 @@ struct NewChat: View {
                 for friendId in friendIdList {
                     dispatchGroup.enter() // Enter the DispatchGroup before starting an asynchronous task
                     // Fetch username from the "Users" database using the userDocumentID
-                    fetchUsername(for: friendId) { username, photoURL in
+                    fetchUsernameAndPhotoURL(for: friendId) { username, photoURL in
                         if let username = username, let photoURL = photoURL {
                             if !self.friendList.contains(where: { $0.0 == username }) {
                                 friendList.append((username, photoURL))

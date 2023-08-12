@@ -12,7 +12,7 @@ struct ChatView: View {
     let chatUser: ChatUser?
     @State private var username = ""
     @State private var isImagePickerPresented = false
-    @State private var selectedImage = UIImage()
+    @State private var selectedImage: UIImage? = UIImage()
     @State private var profileView = false
     @State private var selectedUser: UserData? = nil
     init(chatUser: ChatUser?) {
@@ -96,7 +96,7 @@ struct ChatView: View {
                 }
             }
             .onAppear {
-                fetchUsername(for: chatUser?.uid ?? "") { name, _ in
+                fetchUsernameAndPhotoURL(for: chatUser?.uid ?? "") { name, _ in
                     username = name ?? ""
                 }
             }
@@ -115,7 +115,7 @@ struct ChatView: View {
                         // Display the selected image if available
                         Group {
                             if selectedImage != UIImage() {
-                                Image(uiImage: selectedImage)
+                                Image(uiImage: selectedImage!)
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 30, height: 30)
@@ -146,7 +146,7 @@ struct ChatView: View {
             .padding()
             .background(Color.darkGray)
             .fullScreenCover(isPresented: $isImagePickerPresented) {
-                ImagePicker(selectedImage: $selectedImage)
+                ImagePicker(selectedImage: $selectedImage, wasSelected: true)
             }
         }
     }

@@ -22,13 +22,13 @@ class PhotoLibraryPermission: NSObject, ObservableObject {
         return status
     }
 
-    func requestPhotoLibraryPermission() {
-        PHPhotoLibrary.requestAuthorization { status in
-            DispatchQueue.main.async {
-                self?.handlePhotoLibraryPermissionStatus(status ? .authorized : .denied)
-            }
-        }
-    }
+//    func requestPhotoLibraryPermission() {
+//        PHPhotoLibrary.requestAuthorization { status in
+//            DispatchQueue.main.async {
+//                self.handlePhotoLibraryPermissionStatus(status ? .authorized : .denied)
+//            }
+//        }
+//    }
     
     private func handlePhotoLibraryPermissionStatus(_ status: PHAuthorizationStatus) {
         switch status {
@@ -37,6 +37,8 @@ class PhotoLibraryPermission: NSObject, ObservableObject {
         case .notDetermined:
             isPhotoLibraryPermission = false
         case .denied, .restricted:
+            isPhotoLibraryPermission = false
+        case .limited:
             isPhotoLibraryPermission = false
         @unknown default:
             isPhotoLibraryPermission = false

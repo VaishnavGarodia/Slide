@@ -5,7 +5,7 @@
 import Foundation
 import FirebaseAuth
 
-func fetchUsername(for documentID: String, completion: @escaping (String?, String?) -> Void) {
+func fetchUsernameAndPhotoURL(for documentID: String, completion: @escaping (String?, String?) -> Void) {
     let userDocumentRef = db.collection("Users").document(documentID)
 
     userDocumentRef.getDocument { (document, error) in
