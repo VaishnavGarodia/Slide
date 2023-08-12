@@ -20,14 +20,14 @@ struct HighlightImage: View {
                     let aspectRatio = imageResult.image.size.width / imageResult.image.size.height
                     if aspectRatio > 1 {
                         // Landscape image
-                        self.height = 300
+                        self.height = UIScreen.main.bounds.width / 1.26
                     } else {
                         // Portrait or square image
-                        self.height = 600
+                        self.height = UIScreen.main.bounds.width / 0.63
                     }
                 }
                 .scaledToFill()
         }
-        .frame(width: 380, height: height)
+        .frame(width: UIScreen.main.bounds.width, height: height)
     }
 }

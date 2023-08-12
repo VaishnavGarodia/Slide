@@ -1,9 +1,6 @@
-//
 //  ImagePicker.swift
 //  Slide
-//
 //  Created by Ethan Harianto on 7/25/23.
-//
 
 import Foundation
 import UIKit
@@ -52,6 +49,5 @@ struct ImagePicker: UIViewControllerRepresentable {
 
             parent.presentationMode.wrappedValue.dismiss()
         }
-
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProgressIndicator: View {
     let numDone: Int
-    let totalSteps: Int = 5 // The total number of steps in your registration process
+    let totalSteps: Int = 6 // The total number of steps in your registration process
     @State private var isAnimating = false
 
     var body: some View {

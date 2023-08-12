@@ -8,39 +8,64 @@
 import Foundation
 import SwiftUI
 
+struct CustomSegmentedView: View {
+    var totalTabs: Int
+    @Binding var selectedTab: Int
+
+    var body: some View {
+        VStack {
+            Spacer()
+            HStack(spacing: 4) {
+                ForEach(0 ..< totalTabs, id: \.self) { index in
+                    Capsule()
+                        .foregroundColor(selectedTab == index ? .accentColor : .gray.opacity(0.5))
+                        .frame(width: selectedTab == index ? 24 : 6, height: 6)
+                }
+            }
+        }
+    }
+}
+
 struct EventGalleryCard: View {
     var eventGalleryInfo: EventGalleryInfo
     @State private var tempHighlights: [HighlightInfo] = [] // Temporary storage for fetched highlights
     @State private var selectedTab = 0 // Keep track of the selected tab index
     @StateObject private var highlightData = HighlightData() // Use @StateObject to manage data flow
+    @Binding var profileView: Bool
+    @Binding var selectedUser: UserData?
 
     var body: some View {
-        VStack(spacing: 16) {
-            Text(eventGalleryInfo.eventName)
-                .font(.title)
-                .fontWeight(.bold)
-
-            if tempHighlights.isEmpty {
-                ProgressView() // Show a loading indicator while fetching data
-            } else {
-                TabView(selection: $selectedTab) {
-                    ForEach(tempHighlights.indices, id: \.self) { index in
-                        HighlightCard(highlight: tempHighlights[index])
-                            .tag(index)
+        ZStack {
+            ScrollView {
+                VStack {
+                    Text(eventGalleryInfo.eventName)
+                        .fontWeight(.bold)
+                    TabView(selection: $selectedTab) {
+                        ForEach(tempHighlights.indices, id: \.self) { index in
+                            HighlightCard(highlight: tempHighlights[index], profileView: $profileView, selectedUser: $selectedUser)
+                                .tag(index)
+                        }
                     }
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never)) // Use PageTabViewStyle for the carousel effect
+                    .aspectRatio(0.63, contentMode: .fit)
+                    .onChange(of: tempHighlights) { newHighlights in
+                        highlightData.highlights = newHighlights // Update the @StateObject with the fetched highlights
+                    }
+                    .onAppear {
+                        // Fetch highlight info when the view appears
+                        fetchHighlights()
+                    }
+                    .frame(
+                        width: UIScreen.main.bounds.width,
+                        height: UIScreen.main.bounds.width / 0.63
+                    )
                 }
-                .tabViewStyle(PageTabViewStyle()) // Use PageTabViewStyle for the carousel effect
-                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always)) // Show page indicators
-                .aspectRatio(1.5, contentMode: .fit)
-                .padding(.horizontal, 16)
-                .onChange(of: tempHighlights) { newHighlights in
-                    highlightData.highlights = newHighlights // Update the @StateObject with the fetched highlights
-                }
+                
             }
-        }
-        .onAppear {
-            // Fetch highlight info when the view appears
-            fetchHighlights()
+            .edgesIgnoringSafeArea(.all)
+
+            CustomSegmentedView(totalTabs: tempHighlights.count, selectedTab: $selectedTab)
+                .padding(.bottom)
         }
     }
 
@@ -62,7 +87,6 @@ struct EventGalleryCard: View {
         }
     }
 }
-
 
 class HighlightData: ObservableObject {
     @Published var highlights: [HighlightInfo] = []

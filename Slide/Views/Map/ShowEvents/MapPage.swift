@@ -159,33 +159,6 @@ struct MapPage: View {
         }
     }
 
-    // Blur Radius for BG...
-    func getBlurRadius() -> CGFloat {
-        let progress = -offset / (UIScreen.main.bounds.height - 100)
-        return progress * 30
-    }
-
-    struct BlurView: UIViewRepresentable {
-        var style: UIBlurEffect.Style
-
-        func makeUIView(context: Context) -> some UIVisualEffectView {
-            let view = UIVisualEffectView(effect: UIBlurEffect(style: style))
-            return view
-        }
-
-        func updateUIView(_ uiView: UIViewType, context: Context) {}
-    }
-
-    struct CustomCorner: Shape {
-        var corners: UIRectCorner
-        var radius: CGFloat
-
-        func path(in rect: CGRect) -> Path {
-            let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-            return Path(path.cgPath)
-        }
-    }
-
     func fetchEvents() {
         let db = Firestore.firestore()
         db.collection("Events")

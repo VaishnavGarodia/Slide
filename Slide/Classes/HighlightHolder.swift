@@ -10,5 +10,6 @@ import FirebaseFirestore
 
 class HighlightHolder: ObservableObject {
     @Published var highlights: [HighlightInfo] = []
+    @Published var friendsCount: Int = 0
     @Published var lastSnapshot: DocumentSnapshot?
 }

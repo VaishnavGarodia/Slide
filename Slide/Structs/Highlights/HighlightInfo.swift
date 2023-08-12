@@ -15,6 +15,7 @@ struct HighlightInfo: Identifiable, Equatable {
         return lhs.imageName == rhs.imageName
     }
 
+    var uid: String
     var id = UUID()
     var postID: String
     var imageName: String

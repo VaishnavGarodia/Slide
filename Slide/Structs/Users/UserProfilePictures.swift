@@ -5,15 +5,14 @@
 //  Created by Ethan Harianto on 7/27/23.
 //
 
-import SwiftUI
 import Kingfisher
+import SwiftUI
 
 struct UserProfilePictures: View {
     let photoURL: String
     let dimension: CGFloat
     var body: some View {
         VStack {
-            
             if photoURL.isEmpty {
                 Image(systemName: "person.circle")
                     .resizable()

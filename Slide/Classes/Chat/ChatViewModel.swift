@@ -1,25 +1,10 @@
-// ChatView.swift
-// Slide
-//
-// Created by Nidhish Jain on 7/26/23.
-//
-import FirebaseAuth
-import FirebaseFirestore
-import MessageKit
+//  ChatViewModel.swift
+//  Slide
+//  Created by Ethan Harianto on 8/5/23.
+
+import Foundation
+import Firebase
 import SwiftUI
-
-struct ChatMessage: Identifiable {
-    var id: String { documentId }
-    let documentId: String
-    let sender, recipient, text: String
-
-    init(documentId: String, data: [String: Any]) {
-        self.documentId = documentId
-        self.sender = data["sender"] as? String ?? ""
-        self.recipient = data["recipient"] as? String ?? ""
-        self.text = data["text"] as? String ?? ""
-    }
-}
 
 class ChatViewModel: ObservableObject {
     let chatUser: ChatUser?
@@ -148,110 +133,3 @@ class ChatViewModel: ObservableObject {
     @Published var count = 0
 }
 
-struct ChatUser {
-    let uid, email, profileImageUrl: String
-}
-
-extension Color {
-    static let darkGray = Color(red: 0.17, green: 0.17, blue: 0.17)
-}
-
-struct ChatView: View {
-    let chatUser: ChatUser?
-    @State private var username = ""
-    init(chatUser: ChatUser?) {
-        self.chatUser = chatUser
-        self.vm = .init(chatUser: chatUser)
-    }
-    
-    static let emptyScrollToString = "Empty"
-    
-    @ObservedObject var vm: ChatViewModel
-    
-    var body: some View {
-        ZStack {
-            Text(vm.errorMessage)
-        }
-        .navigationTitle(username)
-        .navigationBarTitleDisplayMode(.inline)
-        
-        VStack {
-            ScrollView {
-                ScrollViewReader { scrollViewProxy in
-                    ForEach(vm.chatMessages) { message in
-                        VStack {
-                            if message.sender == Auth.auth().currentUser?.uid {
-                                HStack {
-                                    Spacer()
-                                    HStack {
-                                        Text(message.text)
-                                            .foregroundColor(.white)
-                                    }
-                                    .padding()
-                                    .background(Color.blue)
-                                    .cornerRadius(12)
-                                }
-                                .padding(.horizontal)
-                                .padding(.top, 8)
-                            } else {
-                                HStack {
-                                    HStack {
-                                        Text(message.text)
-                                            .foregroundColor(.white)
-                                    }
-                                    .padding()
-                                    .background(Color.darkGray)
-                                    .cornerRadius(12)
-                                    Spacer()
-                                }
-                                .padding(.horizontal)
-                                .padding(.top, 8)
-                            }
-                        }
-                    }
-                    HStack { Spacer() }
-                        .id(Self.emptyScrollToString)
-                        .onReceive(vm.$count) { _ in
-                            withAnimation(.easeOut(duration: 0.5)) {
-                                scrollViewProxy.scrollTo(Self.emptyScrollToString, anchor: .bottom)
-                            }
-                        }
-                }
-            }
-        }
-        .onAppear {
-            fetchUsername(for: chatUser?.uid ?? "") { name, _ in
-                username = name ?? ""
-            }
-        }
-        
-        HStack {
-            Image(systemName: "photo")
-            ZStack {
-                TextEditor(text: $vm.chatText)
-                    .opacity(vm.chatText.isEmpty ? 0.5 : 1)
-            }
-            .frame(height: 40)
-            
-            Button(action: {
-                vm.handleSend()
-            }) {
-                Text("Send")
-                    .foregroundColor(.white)
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 8)
-            .background(Color.blue)
-            .cornerRadius(8)
-            .disabled(vm.chatText.isEmpty)
-        }
-        .padding(.horizontal)
-        .padding(.vertical)
-    }
-}
-
-struct ChatView_Previews: PreviewProvider {
-    static var previews: some View {
-        ChatView(chatUser: .init(uid: "", email: "", profileImageUrl: ""))
-    }
-}

@@ -13,13 +13,6 @@ import PhotosUI
 import Firebase
 import FirebaseStorage
 
-struct Event {
-    var name, description, eventIcon, host: String
-    var start, end: Date
-    var address: String
-    var location: CLLocationCoordinate2D
-}
-
 struct CreateEventPage: View {
     @State private var isPhotoLibraryAuthorized = false
     @State private var map = MKMapView()
@@ -88,7 +81,7 @@ struct CreateEventPage: View {
                                 Picker("Event Icon", selection: self.$event.eventIcon) {
                                     Image(systemName: "figure.basketball").tag("figure.basketball")
                                     Image(systemName: "party.popper").tag("party.popper")
-                                    Image(systemName: "theatermasks").tag("theatersmasks")
+                                    Image(systemName: "theatermasks").tag("theatermasks")
                                 }
                                 .pickerStyle(.segmented)
                                 Button(action: {

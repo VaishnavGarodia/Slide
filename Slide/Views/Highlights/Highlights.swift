@@ -9,16 +9,18 @@ struct Highlights: View {
     @State private var highlights: [HighlightInfo] = []
     @State private var isPresentingPostCreationView = false
     let user = Auth.auth().currentUser
+    @State private var profileView = false
+    @State private var selectedUser: UserData? = nil
 
     var body: some View {
         ZStack {
             ScrollView {
                 VStack(spacing: 30) {
                     ForEach(galleries) { gallery in
-                        EventGalleryCard(eventGalleryInfo: gallery)
+                        EventGalleryCard(eventGalleryInfo: gallery, profileView: $profileView, selectedUser: $selectedUser)
                     }
                     ForEach(highlights) { highlight in
-                        HighlightCard(highlight: highlight)
+                        HighlightCard(highlight: highlight, profileView: $profileView, selectedUser: $selectedUser)
                     }
                 }
                 .padding()
@@ -55,6 +57,9 @@ struct Highlights: View {
                 PostCreationView()
             }
         }
+        .fullScreenCover(isPresented: $profileView) {
+            UserProfileView(user: $selectedUser)
+        }
         .gesture(
             DragGesture().onEnded { value in
                 if value.translation.width > 100 {
@@ -71,7 +76,7 @@ struct Highlights: View {
             fetchGalleries()
         }
     }
-    
+
     func fetchHighlights() {
         let postsCollectionRef = db.collection("Posts")
 

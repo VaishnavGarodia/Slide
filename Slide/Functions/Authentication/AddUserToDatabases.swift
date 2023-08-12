@@ -36,10 +36,10 @@ func addUserToDatabases(username: String, email: String, password: String, googl
                 "Username": username.lowercased(),
                 "ProfilePictureURL": profilePic ,
                 "Phone Number" : "",
-                "Incoming": [],
-                "Outgoing": [],
-                "Friends": [],
-                "Blocked": []
+                "Incoming": [String](),
+                "Outgoing": [String](),
+                "Friends": [String](),
+                "Blocked": [String]()
             ]
             usersRef.setData(userData) { error in
                 if let error = error {
