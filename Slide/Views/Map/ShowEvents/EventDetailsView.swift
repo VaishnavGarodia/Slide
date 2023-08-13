@@ -5,7 +5,7 @@
 import SwiftUI
 
 struct EventDetailsView: View {
-    var image: UIImage = UIImage()
+    var image: UIImage = .init()
     var bannerURL: String
     var icon: String
     var name: String
@@ -13,23 +13,17 @@ struct EventDetailsView: View {
     var host: String
     var start: String
     var end: String
-    
-    
+
     var body: some View {
         VStack {
-            
-
-            
             // Display event details here based on the 'event' parameter
             // For example:
             if image != UIImage() {
                 // TODO: Ethan please fix display here. This is what will display when we use preview since we haven't technically uploaded to firebase yet.
-                Text("This One")
                 Image(uiImage: image)
                     .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50) // Adjust the width and height as needed
-
+                    .scaledToFill()
+                    .frame(width: UIScreen.main.bounds.width / 2.5 , height: 4 * UIScreen.main.bounds.width / 7.5)
             }
             else if !bannerURL.isEmpty {
                 EventBanner(imageURL: URL(string: bannerURL)!)
@@ -41,7 +35,7 @@ struct EventDetailsView: View {
                 Text(name)
                     .font(.title)
             }
-            
+
             Text(description)
                 .font(.body)
             // ... (display other details as needed)

@@ -2,12 +2,12 @@
 // Slide
 // Created by Ethan Harianto on 7/20/23.
 
+import Firebase
+import FirebaseAuth
+import FirebaseFirestore
 import Kingfisher
 import SwiftUI
 import UIKit
-import FirebaseAuth
-import Firebase
-import FirebaseFirestore
 
 struct HighlightCard: View {
     let user = Auth.auth().currentUser
@@ -25,6 +25,7 @@ struct HighlightCard: View {
                 HStack {
                     HStack {
                         UserProfilePictures(photoURL: highlight.profileImageName, dimension: 35)
+                            .padding(.trailing, -5)
                             .onTapGesture {
                                 selectedUser = UserData(userID: highlight.uid, username: highlight.username, photoURL: highlight.profileImageName)
                                 profileView.toggle()
@@ -32,16 +33,22 @@ struct HighlightCard: View {
                         VStack(alignment: .leading) {
                             Text(highlight.username)
                                 .foregroundColor(.white)
-                            Text(highlight.highlightTitle)
-                                .font(.caption)
-                                .fontWeight(.thin)
-                                .foregroundColor(.white)
+                                .fontWeight(.semibold)
+                                .onTapGesture {
+                                    selectedUser = UserData(userID: highlight.uid, username: highlight.username, photoURL: highlight.profileImageName)
+                                    profileView.toggle()
+                                }
+                            if !highlight.highlightTitle.isEmpty {
+                                Text(highlight.highlightTitle)
+                                    .font(.caption)
+                                    .fontWeight(.thin)
+                                    .foregroundColor(.white)
+                            }
                         }
                     }
-                    .padding(.horizontal, 5)
-                    .background(RoundedRectangle(cornerRadius: 15)
-                        .foregroundColor(.black.opacity(0.5)))
-                    .padding(5)
+                    .padding(.horizontal)
+                    .background(BlurView(style: .systemMaterial).cornerRadius(15))
+                    .padding()
                     Spacer()
                 }
                 Spacer()
@@ -52,21 +59,20 @@ struct HighlightCard: View {
                             .foregroundColor(.white)
                             .imageScale(.medium)
                             .padding()
-                            .background(Circle()
-                                .foregroundColor(.black.opacity(0.5)))
+                            .background((BlurView(style: .systemMaterial).clipShape(Circle())))
                         Button(action: {
                             LikePost()
-                            currentUserLiked.toggle()
+                            withAnimation {
+                                currentUserLiked.toggle()
+                            }
                         }) {
                             Image(systemName: currentUserLiked ? "heart.fill" : "heart")
-                                .foregroundColor(currentUserLiked ? .red : .white)
-                                .imageScale(.medium)
+                                .foregroundColor(currentUserLiked ? .accentColor : .white)
                                 .padding()
-                                .background(Circle()
-                                    .foregroundColor(.black.opacity(0.5)))
+                                .background((BlurView(style: .systemMaterial).clipShape(Circle())))
                         }
                     }
-                    .padding(5)
+                    .padding()
                 }
             }
         }

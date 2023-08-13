@@ -13,9 +13,9 @@ struct Highlights: View {
     @State private var selectedUser: UserData? = nil
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             ScrollView {
-                VStack(spacing: 30) {
+                VStack(spacing: 50) {
                     ForEach(galleries) { gallery in
                         EventGalleryCard(eventGalleryInfo: gallery, profileView: $profileView, selectedUser: $selectedUser)
                     }
@@ -27,19 +27,16 @@ struct Highlights: View {
             }
             .scrollIndicators(.hidden)
 
-            VStack(alignment: .center) {
-                Spacer()
-                Button(action: {
-                    isPresentingPostCreationView = true
-                }) {
-                    Image(systemName: "plus.app")
-                        .foregroundColor(.white)
-                        .padding()
-                        .imageScale(.large)
-                }
-                .background(Circle().foregroundColor(.accentColor))
-                .padding()
+            Button(action: {
+                isPresentingPostCreationView = true
+            }) {
+                Image(systemName: "plus.app")
+                    .foregroundColor(.white)
+                    .padding()
+                    .imageScale(.large)
             }
+            .background(Circle().foregroundColor(.accentColor))
+            .padding()
         }
         .fullScreenCover(isPresented: $isPresentingPostCreationView) {
             VStack {
@@ -87,24 +84,24 @@ struct Highlights: View {
                 print("Error fetching highlights: \(error.localizedDescription)")
                 return
             }
-            
+
             var newHighlights: [HighlightInfo] = []
             let dispatchGroup = DispatchGroup()
-            
+
             for document in snapshot?.documents ?? [] {
                 if let caption = document.data()["ImageCaption"] as? String,
                    let userDocumentID = document.data()["User"] as? String,
                    let imagePath = document.data()["PostImage"] as? String
                 {
                     print("Found Something")
-                    
+
                     guard let currentUserID = user?.uid else {
                         return
                     }
                     let userDocumentRef = db.collection("Users").document(currentUserID)
 
                     // Step 1: Access the User document using the given document ID
-                    userDocumentRef.getDocument(completion: {d2, e2 in
+                    userDocumentRef.getDocument(completion: { d2, _ in
                         if let d2 = d2, d2.exists {
                             let docID = document.documentID
                             var friendsArray: [String] = []
@@ -127,7 +124,6 @@ struct Highlights: View {
                                         dispatchGroup.leave()
                                     }
                                 }
-
                             }
                         }
                         dispatchGroup.notify(queue: .main) {
@@ -136,10 +132,9 @@ struct Highlights: View {
                     })
                 }
             }
-
         }
     }
-    
+
     func fetchGalleries() {
         getEventGalleryInfos { eventGalleries, error in
             if let error = error {
