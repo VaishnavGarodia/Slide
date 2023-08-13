@@ -88,7 +88,15 @@ struct MapPage: View {
                                 .fill(.white)
                                 .frame(width: 60, height: 4)
                             if !selectedEvent.name.isEmpty {
-                                EventDetailsView(event: selectedEvent)
+                                EventDetailsView(
+                                    bannerURL: selectedEvent.bannerURL,
+                                    icon: selectedEvent.icon,
+                                    name: selectedEvent.name,
+                                    description: selectedEvent.eventDescription,
+                                    host: selectedEvent.host,
+                                    start: selectedEvent.start,
+                                    end: selectedEvent.start
+                                )
                             } else {
                                 ScrollView {
                                     ForEach($events, id: \.name) { event in

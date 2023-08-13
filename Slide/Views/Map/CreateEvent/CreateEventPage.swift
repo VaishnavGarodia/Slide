@@ -27,6 +27,14 @@ struct CreateEventPage: View {
     @State private var selectedImage: UIImage? = UIImage()
     @State private var wasSelected: Bool = false
     
+    @State private var isShowingPreview = false
+    
+    
+    var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return formatter
+    }
     
     var body: some View {
         ZStack {
@@ -87,7 +95,8 @@ struct CreateEventPage: View {
                                 Button(action: {
 //                                    self.loading.toggle()
                                     self.event.location = CLLocationCoordinate2D(latitude: self.destination.latitude, longitude: self.destination.longitude)
-                                    self.createEvent()
+                                    self.isShowingPreview = true
+//                                    self.createEvent()
                                 }) {
                                     Text("Create Event")
                                         .foregroundColor(.white)
@@ -142,6 +151,30 @@ struct CreateEventPage: View {
 //                        UITabBar.appearance().backgroundColor = .black
 //                    }
 //                }
+        }
+        .sheet(isPresented: $isShowingPreview) {
+            VStack{
+                EventDetailsView(
+                    image: selectedImage ?? UIImage(),
+                    bannerURL: event.bannerURL,
+                    icon: event.eventIcon,
+                    name: event.name,
+                    description: event.description,
+                    host: event.host,
+                    start: dateFormatter.string(from: event.start),
+                    end: dateFormatter.string(from: event.start)
+                )
+                Button(action: {
+                    self.createEvent()
+                }) {
+                    Text("Publish Event")
+                        .foregroundColor(.white)
+                        .padding(.vertical, 10)
+                        .frame(width: UIScreen.main.bounds.width / 2)
+                }
+                .filledBubble()
+                .padding()
+            }
         }
     }
 
