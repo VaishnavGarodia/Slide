@@ -13,7 +13,7 @@ struct SearchView: View {
     @State var result: [SearchData] = []
     @Binding var map: MKMapView
     @Binding var location: CLLocationCoordinate2D!
-    @State var event: Event = Event(name: "", description: "", eventIcon: "", host: "", start: .now, end: .now, address: "", location: CLLocationCoordinate2D(), bannerURL: "")
+    @Binding var event: Event
     @Binding var detail: Bool
     @State var txt = ""
     @State var createEventSearch: Bool = false
@@ -109,14 +109,6 @@ struct SearchView: View {
                 let pm = places! as [CLPlacemark]
                 if pm.count > 0 {
                     let pm = places![0]
-                    print("name", placeName)
-                    print(pm.country)
-                    print(pm.locality)
-                    print(pm.subLocality)
-                    print(pm.thoroughfare)
-                    print(pm.subThoroughfare)
-                    print(pm.postalCode)
-                    print(pm.subThoroughfare)
                     if placeName != nil {
                         addressString = addressString + (placeName ?? "") + ", "
                     }
@@ -152,7 +144,6 @@ struct SearchView: View {
             
         } else {
             let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
-            print("center at", self.location)
             let region = MKCoordinateRegion(center: self.location, span: span)
             self.map.setRegion(region, animated: true)
         }
@@ -238,6 +229,6 @@ struct SearchData: Identifiable, Equatable {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView(map: .constant(MKMapView()), location: .constant(CLLocationCoordinate2D()), detail: .constant(true), frame: 400)
+        SearchView(map: .constant(MKMapView()), location: .constant(CLLocationCoordinate2D()), event: .constant(Event(name: "", description: "", eventIcon: "", host: "", hostName: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")), detail: .constant(true), frame: 400)
     }
 }

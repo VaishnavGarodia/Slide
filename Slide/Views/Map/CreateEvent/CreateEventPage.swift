@@ -16,7 +16,7 @@ import SwiftUI
 struct CreateEventPage: View {
     @State private var isPhotoLibraryAuthorized = false
     @State private var map = MKMapView()
-    @State var event = Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
+    @State var event = Event(name: "", description: "", eventIcon: "", host: "", hostName: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
     @State var destination: CLLocationCoordinate2D!
     @State var show = false
     @State private var createEventSearch: Bool = true
@@ -34,7 +34,7 @@ struct CreateEventPage: View {
 
     var body: some View {
         ZStack {
-            CreateEventView(map: $map, event: $event, alert: $alert, show: $show)
+            CreateEventView(map: $map, event: $event, alert: $alert, show: $show, destination: $destination)
                 .ignoresSafeArea()
 
             if self.destination != nil && self.show {
@@ -46,7 +46,7 @@ struct CreateEventPage: View {
                 VStack(alignment: .center) {
                     HStack {
                         ZStack(alignment: .topLeading) {
-                            SearchView(map: $map, location: self.$destination, event: self.event, detail: self.$show, createEventSearch: self.createEventSearch, frame: 280)
+                            SearchView(map: $map, location: self.$destination, event: self.$event, detail: self.$show, createEventSearch: self.createEventSearch, frame: 280)
                                 .padding(.top, -15)
                         }
                     }
@@ -64,6 +64,9 @@ struct CreateEventPage: View {
                                 .onTapGesture {
                                     isShowingImagePicker.toggle()
                                 }
+                                TextField("Host Name", text: self.$event.hostName)
+                                    .bubbleStyle(color: .primary)
+                                    .padding(.top)
                                 TextField("Event Name", text: self.$event.name)
                                     .bubbleStyle(color: .primary)
                                     .padding(.top)
@@ -134,6 +137,7 @@ struct CreateEventPage: View {
                     name: event.name,
                     description: event.description,
                     host: event.host,
+                    hostName: event.hostName,
                     start: dateFormatter.string(from: event.start),
                     end: dateFormatter.string(from: event.start)
                 )

@@ -11,6 +11,7 @@ struct EventDetailsView: View {
     var name: String
     var description: String
     var host: String
+    var hostName: String
     var start: String
     var end: String
 
@@ -38,7 +39,7 @@ struct EventDetailsView: View {
             Text(description)
                 .font(.body)
             // ... (display other details as needed)
-            Text(host)
+            Text(hostName)
             HStack {
                 Text(start)
                 Text(end)
