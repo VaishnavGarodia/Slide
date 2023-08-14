@@ -5,13 +5,13 @@
 // Created by Vaishnav Garodia
 //
 import CoreLocation
+import Firebase
 import FirebaseAuth
 import FirebaseFirestore
-import MapKit
-import SwiftUI
-import PhotosUI
-import Firebase
 import FirebaseStorage
+import MapKit
+import PhotosUI
+import SwiftUI
 
 struct CreateEventPage: View {
     @State private var isPhotoLibraryAuthorized = false
@@ -21,21 +21,17 @@ struct CreateEventPage: View {
     @State var show = false
     @State private var createEventSearch: Bool = true
     @State var alert = false
-    
-    
     @State private var isShowingImagePicker = false
     @State private var selectedImage: UIImage? = UIImage()
     @State private var wasSelected: Bool = false
-    
     @State private var isShowingPreview = false
-    
-    
+
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return formatter
     }
-    
+
     var body: some View {
         ZStack {
             CreateEventView(map: $map, event: $event, alert: $alert, show: $show)
@@ -59,7 +55,7 @@ struct CreateEventPage: View {
                             VStack(spacing: 10) {
                                 HStack {
                                     Text("Event Banner")
-                                    if selectedImage == UIImage()  {
+                                    if selectedImage == UIImage() {
                                         Spacer()
                                     } else {
                                         Text("Image Has Been Selected")
@@ -93,10 +89,8 @@ struct CreateEventPage: View {
                                 }
                                 .pickerStyle(.segmented)
                                 Button(action: {
-//                                    self.loading.toggle()
                                     self.event.location = CLLocationCoordinate2D(latitude: self.destination.latitude, longitude: self.destination.longitude)
                                     self.isShowingPreview = true
-//                                    self.createEvent()
                                 }) {
                                     Text("Create Event")
                                         .foregroundColor(.white)
@@ -120,40 +114,19 @@ struct CreateEventPage: View {
                     }
                 }
                 Spacer()
-//                if self.loading {
-//                    Loader()
-//                }
-//                if self.book {
-//                    Booked(data: self.$data, doc: self.$doc, loading: self.$loading, book: self.$book)
-//                }
             }
         }
-//        .alert(isPresented: self.$alert) { () -> Alert in
-//            Alert(title: Text("Error"), message: Text("Please Enable Location In Settings !!!"), dismissButton: .destructive(Text("Ok")))
-//        }
         .sheet(isPresented: $isShowingImagePicker) {
             ImagePicker(sourceType: .photoLibrary, selectedImage: $selectedImage, wasSelected: wasSelected)
                 .onAppear {
-                    UITabBar.appearance().unselectedItemTintColor = nil
-                    UITabBar.appearance().isTranslucent = true
-                    UITabBar.appearance().backgroundColor = nil
-                    
                     checkPhotoLibraryPermission()
                     if !isPhotoLibraryAuthorized {
                         requestPhotoLibraryPermission()
                     }
                 }
-//                .onDisappear {
-//                    DispatchQueue.main.asyncAfter(deadline: .now() + 86400) {
-//                        isShowingImagePicker = false
-//                        UITabBar.appearance().unselectedItemTintColor = .white
-//                        UITabBar.appearance().isTranslucent = false
-//                        UITabBar.appearance().backgroundColor = .black
-//                    }
-//                }
         }
         .sheet(isPresented: $isShowingPreview) {
-            VStack{
+            VStack {
                 EventDetailsView(
                     image: selectedImage ?? UIImage(),
                     bannerURL: event.bannerURL,
@@ -180,21 +153,18 @@ struct CreateEventPage: View {
 
     func createEvent() {
         let doc = db.collection("Events").document()
-//        self.doc = doc.documentID
-        print("Creating event for location: ", self.event.location)
-                
-        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": self.event.name, "Description": self.event.description, "Icon": self.event.eventIcon, "Host": Auth.auth().currentUser!.displayName!, "Address": self.event.address, "Location": GeoPoint(latitude: self.event.location.latitude, longitude: self.event.location.longitude)]) { err in
+        print("Creating event for location: ", event.location)
+
+        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": event.eventIcon, "Host": Auth.auth().currentUser!.displayName!, "Address": event.address, "Location": GeoPoint(latitude: event.location.latitude, longitude: event.location.longitude)]) { err in
             if err != nil {
                 print((err?.localizedDescription)!)
                 return
             } else {
                 uploadBannerToFirebaseStorage(image: selectedImage ?? UIImage(), documentID: doc.documentID)
             }
-//            self.loading.toggle()
-//            self.book.toggle()
         }
     }
-    
+
     func compressImageToTargetSize(_ image: UIImage, targetSizeInKB: Int) -> Data? {
         let targetWidth: CGFloat = 1024 // Choose the desired width here
         let targetHeight = targetWidth * (image.size.height / image.size.width)
@@ -265,7 +235,7 @@ struct CreateEventPage: View {
         }
         uploadTask.resume()
     }
-    
+
     func checkPhotoLibraryPermission() {
         let status = PHPhotoLibrary.authorizationStatus()
         isPhotoLibraryAuthorized = (status == .authorized)

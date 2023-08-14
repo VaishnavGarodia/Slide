@@ -18,17 +18,16 @@ struct EventDetailsView: View {
         VStack {
             // Display event details here based on the 'event' parameter
             // For example:
-            if image != UIImage() {
-                // TODO: Ethan please fix display here. This is what will display when we use preview since we haven't technically uploaded to firebase yet.
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: UIScreen.main.bounds.width / 2.5 , height: 4 * UIScreen.main.bounds.width / 7.5)
-            }
-            else if !bannerURL.isEmpty {
+            if !bannerURL.isEmpty {
                 EventBanner(imageURL: URL(string: bannerURL)!)
                     .cornerRadius(15)
+            } else if image != UIImage() {
+                EventBanner(image: image)
+                    .frame(width: UIScreen.main.bounds.width / 2.5)
+                    .frame(maxHeight: 4 * UIScreen.main.bounds.width / 7.5)
+                    .cornerRadius(15)
             }
+                    
             HStack {
                 Image(systemName: icon)
                     .imageScale(.large)
