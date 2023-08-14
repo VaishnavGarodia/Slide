@@ -9,7 +9,7 @@ struct MapPage: View {
     @State var alert = false
     @State var source: CLLocationCoordinate2D!
     @State var destination: CLLocationCoordinate2D!
-    @State var event = Event(name: "", description: "", eventIcon: "", host: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
+    @State var event = Event(name: "", description: "", eventIcon: "", host: "", hostName: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
     @State var distance = ""
     @State var time = ""
     @State var show = false
@@ -19,7 +19,7 @@ struct MapPage: View {
     @State var data: Data = .init(count: 0)
     @State var events: [EventData] = []
     @State var searchText = ""
-    @State var selectedEvent: EventData = EventData(name: "", description: "", host: "", address: "", start: "", end: "", hostUID: "", icon: "", coordinate: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
+    @State var selectedEvent: EventData = EventData(name: "", description: "", host: "", hostName: "", address: "", start: "", end: "", hostUID: "", icon: "", coordinate: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
 
     // Gesture Properties...
     @State var offset: CGFloat = 0
@@ -62,7 +62,7 @@ struct MapPage: View {
 //                                .padding(.top, -15)
                             }
 
-                            SearchView(map: self.$map, location: self.$destination, event: self.event, detail: self.$show, createEventSearch: self.createEventSearch, frame: 300)
+                            SearchView(map: self.$map, location: self.$destination, event: self.$event, detail: self.$show, createEventSearch: self.createEventSearch, frame: 300)
                                 .padding(.top, -15)
                         }
                         Spacer()
@@ -94,6 +94,7 @@ struct MapPage: View {
                                     name: selectedEvent.name,
                                     description: selectedEvent.eventDescription,
                                     host: selectedEvent.host,
+                                    hostName: selectedEvent.hostName,
                                     start: selectedEvent.start,
                                     end: selectedEvent.start
                                 )
@@ -184,6 +185,7 @@ struct MapPage: View {
                         name: data["Name"] as? String ?? "",
                         description: data["Description"] as? String ?? "",
                         host: data["Host"] as? String ?? "",
+                        hostName: data["HostName"] as? String ?? "",
                         address: data["Address"] as? String ?? "",
                         start: data["Start"] as? String ?? "",
                         end: data["End"] as? String ?? "",
