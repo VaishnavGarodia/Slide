@@ -159,7 +159,7 @@ struct CreateEventPage: View {
         let doc = db.collection("Events").document()
         print("Creating event for location: ", event.location)
 
-        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": event.eventIcon, "Host": Auth.auth().currentUser!.displayName!, "Address": event.address, "Location": GeoPoint(latitude: event.location.latitude, longitude: event.location.longitude)]) { err in
+        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": event.eventIcon, "Host": Auth.auth().currentUser!.displayName!, "HostName": event.hostName, "Address": event.address, "Coordinate": GeoPoint(latitude: event.location.latitude, longitude: event.location.longitude), "Start": event.start, "End": event.end]) { err in
             if err != nil {
                 print((err?.localizedDescription)!)
                 return
