@@ -7,7 +7,7 @@ import FirebaseAuth
 import SwiftUI
 
 struct ProfileView: View {
-    // functions used: fetchUserData (fetches friend count)
+    // functions used: fetchCurrentFriendsCount
     @StateObject private var profileInfo = ProfileInfo()
     @State private var user = Auth.auth().currentUser
     @State private var tab = "Highlights"
