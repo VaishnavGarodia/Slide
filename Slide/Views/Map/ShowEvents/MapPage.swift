@@ -19,7 +19,7 @@ struct MapPage: View {
     @State var data: Data = .init(count: 0)
     @State var events: [EventData] = []
     @State var searchText = ""
-    @State var selectedEvent: EventData = EventData(name: "", description: "", host: "", hostName: "", address: "", start: "", end: "", hostUID: "", icon: "", coordinate: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
+    @State var selectedEvent: EventData = EventData(name: "", description: "", host: "", hostName: "", address: "", start: Timestamp(), end: Timestamp(), hostUID: "", icon: "", coordinate: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
 
     // Gesture Properties...
     @State var offset: CGFloat = 0
@@ -94,8 +94,8 @@ struct MapPage: View {
                                     description: selectedEvent.eventDescription,
                                     host: selectedEvent.host,
                                     hostName: selectedEvent.hostName,
-                                    start: selectedEvent.start,
-                                    end: selectedEvent.start
+                                    start: selectedEvent.start.dateValue(),
+                                    end: selectedEvent.end.dateValue()
                                 ).onAppear {
                                     let coordinateRegion = MKCoordinateRegion(
                                         center: selectedEvent.coordinate,
@@ -175,7 +175,9 @@ struct MapPage: View {
 
     func fetchEvents() {
         let db = Firestore.firestore()
-        db.collection("Events")
+        let currentDate = Date()
+        let fiveHoursLater = Calendar.current.date(byAdding: .hour, value: 5, to: currentDate)!
+        db.collection("Events").whereField("End", isGreaterThan: currentDate)
             .addSnapshotListener { querySnapshot, error in
                 guard let documents = querySnapshot?.documents else {
                     print("Error fetching documents: \(error!)")
@@ -183,7 +185,6 @@ struct MapPage: View {
                 }
                 var newEvents: [EventData] = []
                 for document in documents {
-                    print(document.data())
                     let data = document.data()
                     let coordinate = data["Coordinate"] as? GeoPoint ?? GeoPoint(latitude: 0.0, longitude: 0.0)
                     let event = EventData(
@@ -192,14 +193,15 @@ struct MapPage: View {
                         host: data["Host"] as? String ?? "",
                         hostName: data["HostName"] as? String ?? "",
                         address: data["Address"] as? String ?? "",
-                        start: data["Start"] as? String ?? "",
-                        end: data["End"] as? String ?? "",
+                        start: data["Start"] as? Timestamp ?? Timestamp(),
+                        end: data["End"] as? Timestamp ?? Timestamp(),
                         hostUID: data["HostUID"] as? String ?? "",
                         icon: data["Icon"] as? String ?? "",
                         coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
                         bannerURL: data["Event Image"] as? String ?? "")
                     newEvents.append(event)
-                }
+                    }
+                print(newEvents)
                 self.events = newEvents
                 map.addAnnotations(events)
             }

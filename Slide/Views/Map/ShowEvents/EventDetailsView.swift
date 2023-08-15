@@ -3,6 +3,7 @@
 //  Created by Vaishnav Garodia on 8/8/23.
 
 import SwiftUI
+import FirebaseFirestore
 
 struct EventDetailsView: View {
     var image: UIImage = .init()
@@ -12,8 +13,8 @@ struct EventDetailsView: View {
     var description: String
     var host: String
     var hostName: String
-    var start: String
-    var end: String
+    var start: Date
+    var end: Date
 
     var body: some View {
         VStack {
@@ -41,11 +42,18 @@ struct EventDetailsView: View {
             // ... (display other details as needed)
             Text(hostName)
             HStack {
-                Text(start)
-                Text(end)
+                Text(formatDate(date: start))
+                Text(formatDate(date: end))
             }
             Spacer()
         }
         .padding(16)
     }
+    
+    func formatDate(date: Date) -> String {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .short // You can choose a different style here
+            dateFormatter.timeStyle = .short // You can choose a different style here
+            return dateFormatter.string(from: date)
+        }
 }

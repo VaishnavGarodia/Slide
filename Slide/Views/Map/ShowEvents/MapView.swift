@@ -84,7 +84,6 @@ struct MapView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
                 guard let event = view.annotation as? EventData else { return }
                 parent.selectedEvent = event
-                print("A pin got pressed", event)
             }
     }
 }
