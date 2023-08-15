@@ -6,6 +6,7 @@ import FirebaseFirestore
 import SwiftUI
 
 struct EventDetailsView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var image: UIImage = .init()
     var event: Event
     @State private var isRSVPed = true
@@ -17,6 +18,13 @@ struct EventDetailsView: View {
             // Display event details here based on the 'event' parameter
             // For example:
             HStack {
+                Button { self.presentationMode.wrappedValue.dismiss() } label: {
+                    Image(systemName: "chevron.left")
+                }
+                .padding(.leading)
+                Spacer()
+            }
+            HStack {
                 Image(systemName: event.icon)
                     .imageScale(.large)
                 Text(event.name)
@@ -24,28 +32,31 @@ struct EventDetailsView: View {
                     .fontWeight(.bold)
             }
             .padding()
-            if !event.bannerURL.isEmpty || image != UIImage() {
-                Capsule()
-                    .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
-                    .foregroundColor(.primary)
-            }
 
-            if !event.bannerURL.isEmpty {
-                EventBanner(imageURL: URL(string: event.bannerURL)!)
-                    .cornerRadius(15)
-                    .padding()
-            } else if image != UIImage() {
-                EventBanner(image: image)
-                    .frame(width: UIScreen.main.bounds.width * 0.95)
-                    .frame(maxHeight: UIScreen.main.bounds.width * 0.95 * 3 / 4)
-                    .cornerRadius(15)
-                    .padding()
-            }
+            Group {
+                if !event.bannerURL.isEmpty || image != UIImage() {
+                    Capsule()
+                        .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
+                        .foregroundColor(.primary)
+                }
 
-            if !event.bannerURL.isEmpty || image != UIImage() {
-                Capsule()
-                    .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
-                    .foregroundColor(.primary)
+                if !event.bannerURL.isEmpty {
+                    EventBanner(imageURL: URL(string: event.bannerURL)!)
+                        .cornerRadius(15)
+                        .padding()
+                } else if image != UIImage() {
+                    EventBanner(image: image)
+                        .frame(width: UIScreen.main.bounds.width * 0.95)
+                        .frame(maxHeight: UIScreen.main.bounds.width * 0.95 * 3 / 4)
+                        .cornerRadius(15)
+                        .padding()
+                }
+
+                if !event.bannerURL.isEmpty || image != UIImage() {
+                    Capsule()
+                        .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
+                        .foregroundColor(.primary)
+                }
             }
 
             // ... (display other details as needed)

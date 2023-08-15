@@ -1,38 +1,31 @@
 import CoreLocation
+import FirebaseFirestore
 import MapKit
 import SwiftUI
-import FirebaseFirestore
 
 struct MapPage: View {
     @State var map = MKMapView()
     @State var manager = CLLocationManager()
     @State var alert = false
-    @State var source: CLLocationCoordinate2D!
     @State var destination: CLLocationCoordinate2D!
     @State var event = Event()
-    @State var distance = ""
-    @State var time = ""
     @State var show = false
-    @State var loading = false
-    @State var book = false
-    @State var doc = ""
     @State var data: Data = .init(count: 0)
     @State var events: [Event] = []
-    @State var searchText = ""
-    @State var selectedEvent: Event = Event()
+    @State var selectedEvent: Event = .init()
 
     // Gesture Properties...
     @State var offset: CGFloat = 0
     @State var lastOffset: CGFloat = 0
     @GestureState var gestureOffset: CGFloat = 0
     let createEventSearch: Bool = false
-    
+
     @State private var isPresentingCreateEventPage = false
 
     var body: some View {
         ZStack {
             ZStack {
-                MapView(map: self.$map, manager: self.$manager, alert: self.$alert, source: self.$source, destination: self.$destination, distance: self.$distance, time: self.$time, show: self.$show, events: self.$events, selectedEvent: self.$selectedEvent)
+                MapView(map: self.$map, manager: self.$manager, alert: self.$alert, destination: self.$destination, show: self.$show, events: self.$events, selectedEvent: self.$selectedEvent)
                     .ignoresSafeArea()
 
                 ZStack {
@@ -72,7 +65,6 @@ struct MapPage: View {
                             .clipShape(CustomCorner(corners: [.topLeft, .topRight], radius: 15))
 
                         VStack {
-
                             Capsule()
                                 .fill(.white)
                                 .frame(width: 60, height: 4)
@@ -102,32 +94,32 @@ struct MapPage: View {
                         } //: VSTACK
                         .padding(16)
                     } //: ZSTACK
-                        .offset(y: height - 30)
-                        .offset(y: -offset > 0 ? -offset <= (height - 30) ? offset : -(height - 30) : 0)
-                        .gesture(DragGesture().updating($gestureOffset, body: { value, out, _ in
-                            out = value.translation.height
-                            onChange()
-                        }).onEnded { _ in
-                            let maxHeight = height - 30
-                            withAnimation {
-                                // offset = 0
-                                
-                                // Logic Conditions For Moving States....
-                                // Up down or mid...
-                                if -offset > 30, -offset < maxHeight / 2 {
-                                    // Mid...
-                                    offset = -(maxHeight / 3)
-                                } else if -offset > maxHeight / 2 {
-                                    offset = -maxHeight
-                                } else {
-                                    offset = 0
-                                }
-                            }
+                    .offset(y: height - 30)
+                    .offset(y: -offset > 0 ? -offset <= (height - 30) ? offset : -(height - 30) : 0)
+                    .gesture(DragGesture().updating($gestureOffset, body: { value, out, _ in
+                        out = value.translation.height
+                        onChange()
+                    }).onEnded { _ in
+                        let maxHeight = height - 30
+                        withAnimation {
+                            // offset = 0
 
-                            // Storing Last Offset...
-                            // So that the gesture can contine from the last position....
-                            lastOffset = offset
-                        })
+                            // Logic Conditions For Moving States....
+                            // Up down or mid...
+                            if -offset > 30, -offset < maxHeight / 2 {
+                                // Mid...
+                                offset = -(maxHeight / 3)
+                            } else if -offset > maxHeight / 2 {
+                                offset = -maxHeight
+                            } else {
+                                offset = 0
+                            }
+                        }
+
+                        // Storing Last Offset...
+                        // So that the gesture can contine from the last position....
+                        lastOffset = offset
+                    })
                 )
             }
         }
@@ -137,7 +129,7 @@ struct MapPage: View {
         .fullScreenCover(isPresented: $isPresentingCreateEventPage) {
             ZStack(alignment: .topTrailing) {
                 CreateEventPage()
-                
+
                 Button(action: {
                     isPresentingCreateEventPage = false
                 }) {
@@ -181,9 +173,10 @@ struct MapPage: View {
                         hostUID: data["HostUID"] as? String ?? "",
                         icon: data["Icon"] as? String ?? "",
                         coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
-                        bannerURL: data["Event Image"] as? String ?? "")
+                        bannerURL: data["Event Image"] as? String ?? ""
+                    )
                     newEvents.append(event)
-                    }
+                }
                 print(newEvents)
                 self.events = newEvents
                 map.addAnnotations(events)

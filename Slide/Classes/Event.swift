@@ -1,5 +1,6 @@
 import FirebaseFirestore
 import MapKit
+import SwiftUI
 import ObjectiveC
 
 class Event: NSObject, MKAnnotation {

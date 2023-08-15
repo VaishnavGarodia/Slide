@@ -32,7 +32,7 @@ struct SearchView: View {
                         .frame(width: self.frame)
                         .padding(-25)
                         .bubbleStyle(color: .primary)
-                        .padding(.leading,10)
+                        .padding(.leading, 10)
                         
                     if !self.result.isEmpty && self.txt != "" {
                         List(self.result) { i in
