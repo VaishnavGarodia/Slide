@@ -83,13 +83,6 @@ struct CreateEventView: UIViewRepresentable {
                 let pm = places! as [CLPlacemark]
                 if pm.count > 0 {
                     let pm = places![0]
-                    print(pm.country)
-                    print(pm.locality)
-                    print(pm.subLocality)
-                    print(pm.thoroughfare)
-                    print(pm.subThoroughfare)
-                    print(pm.postalCode)
-                    print(pm.subThoroughfare)
                     if pm.subLocality != nil {
                         addressString = addressString + pm.subLocality! + ", "
                     }

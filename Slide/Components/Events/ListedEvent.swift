@@ -8,6 +8,7 @@ import CoreLocation
 struct ListedEvent: View {
     @State private var expanded = false
     @Binding var event: EventData
+    @Binding var selectedEvent: EventData
     var body: some View {
         HStack {
             Image(systemName: event.icon)
@@ -16,19 +17,10 @@ struct ListedEvent: View {
                 Text(event.name)
                     .fontWeight(.semibold)
                 Text(event.eventDescription)
-                if expanded {
-                    Text("Host: " + event.host)
-                    HStack {
-                        Text(event.start)
-                        Text(event.end)
-                    }
-                }
             }
             Spacer()
             Button {
-                withAnimation {
-                    expanded.toggle()
-                }
+                self.selectedEvent = event
             }
             label: {
                 Image(systemName: "chevron.right")
@@ -41,6 +33,6 @@ struct ListedEvent: View {
 
 struct ListedEvent_Previews: PreviewProvider {
     static var previews: some View {
-        ListedEvent(event: .constant(EventData(name: "Tom Holland's Party", description: "We vibin", host: "tomholland", hostName: "tomholland", address: "ur mum's house", start: "6:30", end: "9:30", hostUID: "madadasdwas", icon: "party.popper", coordinate: CLLocationCoordinate2D(), bannerURL: "")))
+        ListedEvent(event: .constant(EventData(name: "Tom Holland's Party", description: "We vibin", host: "tomholland", hostName: "tomholland", address: "ur mum's house", start: "6:30", end: "9:30", hostUID: "madadasdwas", icon: "party.popper", coordinate: CLLocationCoordinate2D(), bannerURL: "")), selectedEvent: .constant(EventData(name: "Tom Holland's Party", description: "We vibin", host: "tomholland", hostName: "tomholland", address: "ur mum's house", start: "6:30", end: "9:30", hostUID: "madadasdwas", icon: "party.popper", coordinate: CLLocationCoordinate2D(), bannerURL: "")))
     }
 }

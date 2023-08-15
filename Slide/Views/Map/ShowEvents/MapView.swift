@@ -23,7 +23,6 @@ struct MapView: UIViewRepresentable {
     @Binding var show: Bool
     @Binding var events: [EventData]
     @Binding var selectedEvent: EventData
-
     func makeUIView(context: Context) -> MKMapView {
         map.delegate = context.coordinator
         manager.delegate = context.coordinator
