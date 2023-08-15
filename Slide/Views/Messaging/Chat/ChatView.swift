@@ -15,6 +15,7 @@ struct ChatView: View {
     @State private var selectedImage: UIImage? = UIImage()
     @State private var profileView = false
     @State private var selectedUser: UserData? = nil
+
     init(chatUser: ChatUser?) {
         self.chatUser = chatUser
         self.vm = .init(chatUser: chatUser)

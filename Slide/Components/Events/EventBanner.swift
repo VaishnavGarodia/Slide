@@ -20,20 +20,19 @@ struct EventBanner: View {
                     let aspectRatio = imageResult.image.size.width / imageResult.image.size.height
                     if aspectRatio > 1 {
                         // Landscape image
-                        self.height = 4 * UIScreen.main.bounds.width / 7.5
+                        self.height = UIScreen.main.bounds.width * 0.95 * 3 / 4
                     } else {
                         // Portrait or square image
-                        self.height = 16 * UIScreen.main.bounds.width / 22.5
+                        self.height = UIScreen.main.bounds.width * 0.95 * 4 / 3
                     }
                 }
                 .scaledToFill()
-                .frame(width: UIScreen.main.bounds.width / 2.5, height: height)
+                .frame(width: UIScreen.main.bounds.width * 0.95, height: height)
         } else {
-            GeometryReader { geometry in
+            GeometryReader { _ in
                 Image(uiImage: image!)
                     .resizable()
                     .scaledToFill()
-                    
             }
         }
     }
