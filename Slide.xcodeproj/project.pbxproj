@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		79017B652954EE1600257EED /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 79017B642954EE1600257EED /* FirebaseFirestore */; };
 		790BD0372A4526CF0006213A /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = 790BD0362A4526CF0006213A /* iPhoneNumberField */; };
+		79167C822A8B181C00D6AE54 /* BackgroundComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79167C812A8B181C00D6AE54 /* BackgroundComponent.swift */; };
+		79167C842A8B184600D6AE54 /* DraggingComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79167C832A8B184600D6AE54 /* DraggingComponent.swift */; };
+		79167C872A8B1DA800D6AE54 /* BaseButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79167C862A8B1DA800D6AE54 /* BaseButtonStyle.swift */; };
 		791C336D2A6193600020DEAC /* AddUserToDatabases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C336C2A6193600020DEAC /* AddUserToDatabases.swift */; };
 		791C336F2A6197300020DEAC /* createFirebaseAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C336E2A6197300020DEAC /* createFirebaseAccount.swift */; };
 		791C33712A6197B80020DEAC /* getContacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C33702A6197B80020DEAC /* getContacts.swift */; };
@@ -127,6 +130,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		79167C812A8B181C00D6AE54 /* BackgroundComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundComponent.swift; sourceTree = "<group>"; };
+		79167C832A8B184600D6AE54 /* DraggingComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggingComponent.swift; sourceTree = "<group>"; };
+		79167C862A8B1DA800D6AE54 /* BaseButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseButtonStyle.swift; sourceTree = "<group>"; };
 		791C336C2A6193600020DEAC /* AddUserToDatabases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddUserToDatabases.swift; sourceTree = "<group>"; };
 		791C336E2A6197300020DEAC /* createFirebaseAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createFirebaseAccount.swift; sourceTree = "<group>"; };
 		791C33702A6197B80020DEAC /* getContacts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getContacts.swift; sourceTree = "<group>"; };
@@ -260,6 +266,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		79167C852A8B1B5000D6AE54 /* Basic UI */ = {
+			isa = PBXGroup;
+			children = (
+				797A58DB2A7A9B5800F333DC /* BlurView.swift */,
+				797A58D92A7A9B3600F333DC /* CustomCorner.swift */,
+				79167C812A8B181C00D6AE54 /* BackgroundComponent.swift */,
+				79167C832A8B184600D6AE54 /* DraggingComponent.swift */,
+				79167C862A8B1DA800D6AE54 /* BaseButtonStyle.swift */,
+			);
+			path = "Basic UI";
+			sourceTree = "<group>";
+		};
 		791C33762A61AF4A0020DEAC /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -292,9 +310,8 @@
 		792712A42A871ACF00E42BC3 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				797A58DB2A7A9B5800F333DC /* BlurView.swift */,
-				797A58D92A7A9B3600F333DC /* CustomCorner.swift */,
 				792712A92A871B6500E42BC3 /* Authentication */,
+				79167C852A8B1B5000D6AE54 /* Basic UI */,
 				792712A72A871B1100E42BC3 /* Events */,
 				792712A12A8559C500E42BC3 /* Friends */,
 				792712A82A871B3300E42BC3 /* Highlights */,
@@ -831,6 +848,7 @@
 				797A58ED2A7BE3DB00F333DC /* RecentMessageRow.swift in Sources */,
 				797A58FD2A7EB25000F333DC /* ChatMessage.swift in Sources */,
 				797A58E92A7B14E100F333DC /* UITabBar.swift in Sources */,
+				79167C822A8B181C00D6AE54 /* BackgroundComponent.swift in Sources */,
 				9B75D2C92A8405850025B620 /* EventDetailsView.swift in Sources */,
 				7957B2ED2A6AFA7700F94CB4 /* Camera Permission.swift in Sources */,
 				79D6430F2A78A20F00BB42E3 /* unfriend.swift in Sources */,
@@ -852,6 +870,7 @@
 				79DCC255295611D6000FCD6F /* MapPage.swift in Sources */,
 				79FC9E06294D605300EBD520 /* SlideApp.swift in Sources */,
 				796CD0182A718CA2008599EA /* ProfileInfo.swift in Sources */,
+				79167C842A8B184600D6AE54 /* DraggingComponent.swift in Sources */,
 				797A58F12A7E963000F333DC /* formatTimestamp.swift in Sources */,
 				7957B2E72A6A15EE00F94CB4 /* EmailAndPasswordChecks.swift in Sources */,
 				7948CA062A71F2D00074F901 /* HighlightImage.swift in Sources */,
@@ -868,6 +887,7 @@
 				7957B2EF2A6AFAAE00F94CB4 /* Location Permission.swift in Sources */,
 				79D6430D2A785C7A00BB42E3 /* UserProfileView.swift in Sources */,
 				9BE277F02A7218FE007AD2EC /* ChatView.swift in Sources */,
+				79167C872A8B1DA800D6AE54 /* BaseButtonStyle.swift in Sources */,
 				797B1ACD2A5F449400DD6B89 /* GlobalVariables.swift in Sources */,
 				791C336F2A6197300020DEAC /* createFirebaseAccount.swift in Sources */,
 				795C5BF02953FF00007FDA83 /* Highlights.swift in Sources */,
