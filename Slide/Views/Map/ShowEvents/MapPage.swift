@@ -75,7 +75,6 @@ struct MapPage: View {
             }
             // For Getting Height For Drag Gesture
             GeometryReader { proxy -> AnyView in
-                print("Recieved it back here", selectedEvent)
                 let height = proxy.frame(in: .global).height
                 return AnyView(
                     ZStack {
@@ -97,11 +96,17 @@ struct MapPage: View {
                                     hostName: selectedEvent.hostName,
                                     start: selectedEvent.start,
                                     end: selectedEvent.start
-                                )
+                                ).onAppear {
+                                    let coordinateRegion = MKCoordinateRegion(
+                                        center: selectedEvent.coordinate,
+                                        span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+                                    )
+                                    map.setRegion(coordinateRegion, animated: true)
+                                }
                             } else {
                                 ScrollView {
                                     ForEach($events, id: \.name) { event in
-                                        ListedEvent(event: event)
+                                        ListedEvent(event: event, selectedEvent: $selectedEvent)
                                     }
                                 }
                                 .padding(.top)
