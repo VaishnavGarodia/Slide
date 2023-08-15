@@ -8,16 +8,16 @@ import FirebaseFirestore
 
 struct ListedEvent: View {
     @State private var expanded = false
-    @Binding var event: EventData
-    @Binding var selectedEvent: EventData
+    @Binding var event: Event
+    @Binding var selectedEvent: Event
     var body: some View {
         HStack {
             Image(systemName: event.icon)
                 .imageScale(.large)
             VStack(alignment: .leading) {
-                Text(event.name)
+                Text(event.title!)
                     .fontWeight(.semibold)
-                Text(event.eventDescription)
+                Text(event.subtitle!)
             }
             Spacer()
             Button {
@@ -34,6 +34,6 @@ struct ListedEvent: View {
 
 struct ListedEvent_Previews: PreviewProvider {
     static var previews: some View {
-        ListedEvent(event: .constant(EventData(name: "Tom Holland's Party", description: "We vibin", host: "tomholland", hostName: "tomholland", address: "ur mum's house", start: Timestamp(), end: Timestamp(), hostUID: "madadasdwas", icon: "party.popper", coordinate: CLLocationCoordinate2D(), bannerURL: "")), selectedEvent: .constant(EventData(name: "Tom Holland's Party", description: "We vibin", host: "tomholland", hostName: "tomholland", address: "ur mum's house", start: Timestamp(), end: Timestamp(), hostUID: "madadasdwas", icon: "party.popper", coordinate: CLLocationCoordinate2D(), bannerURL: "")))
+        ListedEvent(event: .constant(Event()), selectedEvent: .constant(Event()))
     }
 }

@@ -9,7 +9,7 @@ struct MapPage: View {
     @State var alert = false
     @State var source: CLLocationCoordinate2D!
     @State var destination: CLLocationCoordinate2D!
-    @State var event = Event(name: "", description: "", eventIcon: "", host: "", hostName: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
+    @State var event = Event()
     @State var distance = ""
     @State var time = ""
     @State var show = false
@@ -17,9 +17,9 @@ struct MapPage: View {
     @State var book = false
     @State var doc = ""
     @State var data: Data = .init(count: 0)
-    @State var events: [EventData] = []
+    @State var events: [Event] = []
     @State var searchText = ""
-    @State var selectedEvent: EventData = EventData(name: "", description: "", host: "", hostName: "", address: "", start: Timestamp(), end: Timestamp(), hostUID: "", icon: "", coordinate: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
+    @State var selectedEvent: Event = Event()
 
     // Gesture Properties...
     @State var offset: CGFloat = 0
@@ -50,16 +50,6 @@ struct MapPage: View {
                                         .padding(.trailing)
                                         .padding(.top, -15)
                                 }
-
-//                                Spacer()
-//                                NavigationLink(destination: CreateEventPage()) {
-//                                    Image(systemName: "plus")
-//                                }
-//                                .padding(-5)
-//                                .filledBubble()
-//                                .frame(width: 60)
-//                                .padding(.trailing)
-//                                .padding(.top, -15)
                             }
 
                             SearchView(map: self.$map, location: self.$destination, event: self.$event, detail: self.$show, createEventSearch: self.createEventSearch, frame: 300)
@@ -88,14 +78,7 @@ struct MapPage: View {
                                 .frame(width: 60, height: 4)
                             if !selectedEvent.name.isEmpty {
                                 EventDetailsView(
-                                    bannerURL: selectedEvent.bannerURL,
-                                    icon: selectedEvent.icon,
-                                    name: selectedEvent.name,
-                                    description: selectedEvent.eventDescription,
-                                    host: selectedEvent.host,
-                                    hostName: selectedEvent.hostName,
-                                    start: selectedEvent.start.dateValue(),
-                                    end: selectedEvent.end.dateValue()
+                                    event: selectedEvent
                                 ).onAppear {
                                     let coordinateRegion = MKCoordinateRegion(
                                         center: selectedEvent.coordinate,
@@ -183,18 +166,18 @@ struct MapPage: View {
                     print("Error fetching documents: \(error!)")
                     return
                 }
-                var newEvents: [EventData] = []
+                var newEvents: [Event] = []
                 for document in documents {
                     let data = document.data()
                     let coordinate = data["Coordinate"] as? GeoPoint ?? GeoPoint(latitude: 0.0, longitude: 0.0)
-                    let event = EventData(
+                    let event = Event(
                         name: data["Name"] as? String ?? "",
                         description: data["Description"] as? String ?? "",
                         host: data["Host"] as? String ?? "",
                         hostName: data["HostName"] as? String ?? "",
                         address: data["Address"] as? String ?? "",
-                        start: data["Start"] as? Timestamp ?? Timestamp(),
-                        end: data["End"] as? Timestamp ?? Timestamp(),
+                        start: (data["Start"] as? Timestamp)?.dateValue() ?? Date(),
+                        end: (data["End"] as? Timestamp)?.dateValue() ?? Date(),
                         hostUID: data["HostUID"] as? String ?? "",
                         icon: data["Icon"] as? String ?? "",
                         coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),

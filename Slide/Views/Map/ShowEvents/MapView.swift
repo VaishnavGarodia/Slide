@@ -21,8 +21,8 @@ struct MapView: UIViewRepresentable {
     @Binding var distance: String
     @Binding var time: String
     @Binding var show: Bool
-    @Binding var events: [EventData]
-    @Binding var selectedEvent: EventData
+    @Binding var events: [Event]
+    @Binding var selectedEvent: Event
     func makeUIView(context: Context) -> MKMapView {
         map.delegate = context.coordinator
         manager.delegate = context.coordinator
@@ -54,7 +54,7 @@ struct MapView: UIViewRepresentable {
         }
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
                 // If the annotation isn't from a capital city, it must return nil so iOS uses a default view.
-                guard annotation is EventData else { return nil }
+                guard annotation is Event else { return nil }
 
                 // Define a reuse identifier. This is a string that will be used to ensure we reuse annotation views as much as possible.
                 let identifier = "Event"
@@ -82,7 +82,7 @@ struct MapView: UIViewRepresentable {
             }
 
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-                guard let event = view.annotation as? EventData else { return }
+                guard let event = view.annotation as? Event else { return }
                 parent.selectedEvent = event
             }
     }

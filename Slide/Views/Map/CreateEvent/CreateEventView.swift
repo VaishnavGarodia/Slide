@@ -119,6 +119,6 @@ struct CreateEventView: UIViewRepresentable {
 
 struct CreateEventView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateEventView(map: .constant(MKMapView()), event: .constant(Event(name: "", description: "", eventIcon: "", host: "", hostName: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")), alert: .constant(false), show: .constant(true), destination: .constant(CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)))
+        CreateEventView(map: .constant(MKMapView()), event: .constant(Event()), alert: .constant(false), show: .constant(true), destination: .constant(CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)))
     }
 }

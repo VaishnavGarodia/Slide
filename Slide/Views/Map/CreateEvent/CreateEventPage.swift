@@ -16,7 +16,7 @@ import SwiftUI
 struct CreateEventPage: View {
     @State private var isPhotoLibraryAuthorized = false
     @State private var map = MKMapView()
-    @State var event = Event(name: "", description: "", eventIcon: "", host: "", hostName: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")
+    @State var event = Event()
     @State var destination: CLLocationCoordinate2D!
     @State var show = false
     @State private var createEventSearch: Bool = true
@@ -70,7 +70,7 @@ struct CreateEventPage: View {
                                 TextField("Event Name", text: self.$event.name)
                                     .bubbleStyle(color: .primary)
                                     .padding(.top)
-                                TextField("Event Description", text: self.$event.description, axis: .vertical)
+                                TextField("Event Description", text: self.$event.eventDescription, axis: .vertical)
                                     .frame(height: 50, alignment: .topLeading)
                                     .bubbleStyle(color: .primary)
                                 TextField("Address", text: self.$event.address, axis: .vertical)
@@ -85,14 +85,14 @@ struct CreateEventPage: View {
                                     .onAppear {
                                         UIDatePicker.appearance().minuteInterval = 15
                                     }
-                                Picker("Event Icon", selection: self.$event.eventIcon) {
+                                Picker("Event Icon", selection: self.$event.icon) {
                                     Image(systemName: "figure.basketball").tag("figure.basketball")
                                     Image(systemName: "party.popper").tag("party.popper")
                                     Image(systemName: "theatermasks").tag("theatermasks")
                                 }
                                 .pickerStyle(.segmented)
                                 Button(action: {
-                                    self.event.location = CLLocationCoordinate2D(latitude: self.destination.latitude, longitude: self.destination.longitude)
+                                    self.event.coordinate = CLLocationCoordinate2D(latitude: self.destination.latitude, longitude: self.destination.longitude)
                                     self.isShowingPreview = true
                                 }) {
                                     Text("Create Event")
@@ -132,14 +132,7 @@ struct CreateEventPage: View {
             VStack {
                 EventDetailsView(
                     image: selectedImage ?? UIImage(),
-                    bannerURL: event.bannerURL,
-                    icon: event.eventIcon,
-                    name: event.name,
-                    description: event.description,
-                    host: event.host,
-                    hostName: event.hostName,
-                    start: event.start,
-                    end: event.end
+                    event: event
                 )
                 Button(action: {
                     self.createEvent()
@@ -157,9 +150,9 @@ struct CreateEventPage: View {
 
     func createEvent() {
         let doc = db.collection("Events").document()
-        print("Creating event for location: ", event.location)
+        print("Creating event for location: ", event.coordinate)
 
-        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": event.eventIcon, "Host": Auth.auth().currentUser!.displayName!, "HostName": event.hostName, "Address": event.address, "Coordinate": GeoPoint(latitude: event.location.latitude, longitude: event.location.longitude), "Start": event.start, "End": event.end]) { err in
+        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": event.icon, "Host": Auth.auth().currentUser!.displayName!, "HostName": event.hostName, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end]) { err in
             if err != nil {
                 print((err?.localizedDescription)!)
                 return
