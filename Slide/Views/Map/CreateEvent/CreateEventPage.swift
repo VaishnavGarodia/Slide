@@ -138,8 +138,8 @@ struct CreateEventPage: View {
                     description: event.description,
                     host: event.host,
                     hostName: event.hostName,
-                    start: dateFormatter.string(from: event.start),
-                    end: dateFormatter.string(from: event.start)
+                    start: event.start,
+                    end: event.end
                 )
                 Button(action: {
                     self.createEvent()

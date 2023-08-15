@@ -3,6 +3,7 @@
 //  Created by Vaishnav Garodia on 8/8/23.
 
 import SwiftUI
+import FirebaseFirestore
 
 struct EventDetailsView: View {
     var image: UIImage = .init()
@@ -12,8 +13,8 @@ struct EventDetailsView: View {
     var description: String
     var host: String
     var hostName: String
-    var start: String
-    var end: String
+    var start: Date
+    var end: Date
     @State private var isRSVPed = true
     @State private var isLoading = false
     @State private var showDescription = false
@@ -52,9 +53,9 @@ struct EventDetailsView: View {
             // ... (display other details as needed)
             Text(hostName)
             HStack {
-                Text(start)
+                Text(formatDate(date: start))  
                 Text("-")
-                Text(end)
+                Text(formatDate(date: end))
             }
             // Pass in address
             // Text(address)
@@ -86,6 +87,13 @@ struct EventDetailsView: View {
         }
         .padding(16)
     }
+    
+    func formatDate(date: Date) -> String {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .short // You can choose a different style here
+            dateFormatter.timeStyle = .short // You can choose a different style here
+            return dateFormatter.string(from: date)
+        }
 
     private func simulateRequest() {
         isLoading = true
@@ -96,8 +104,8 @@ struct EventDetailsView: View {
     }
 }
 
-struct EventDetailsView_Previews: PreviewProvider {
-    static var previews: some View {
-        EventDetailsView(bannerURL: "https://static01.nyt.com/images/2023/02/13/multimedia/08BEFORE-MIDNIGHT-fzql/08BEFORE-MIDNIGHT-fzql-articleLarge.jpg?quality=75&auto=webp&disable=upscale", icon: "party.popper", name: "Party", description: "Tom's Birthday Party", host: "tomholland", hostName: "Tom Holland", start: "6:30 PM", end: "9:30 PM")
-    }
-}
+// struct EventDetailsView_Previews: PreviewProvider {
+//     static var previews: some View {
+//         //EventDetailsView(bannerURL: "https://static01.nyt.com/images/2023/02/13/multimedia/08BEFORE-MIDNIGHT-fzql/08BEFORE-MIDNIGHT-fzql-articleLarge.jpg?quality=75&auto=webp&disable=upscale", icon: "party.popper", name: "Party", description: "Tom's Birthday Party", host: "tomholland", hostName: "Tom Holland", start: "6:30 PM", end: "9:30 PM")
+//     }
+// }
