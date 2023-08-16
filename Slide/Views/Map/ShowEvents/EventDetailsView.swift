@@ -9,12 +9,20 @@ struct EventDetailsView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var image: UIImage = .init()
     var event: Event
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var isRSVPed = true
     @State private var isLoading = false
     @State private var showDescription = false
 
     var body: some View {
         VStack {
+            HStack {
+                Button { self.presentationMode.wrappedValue.dismiss() } label: {
+                    Image(systemName: "chevron.left")
+                }
+                .padding(.leading)
+                Spacer()
+            }
             // Display event details here based on the 'event' parameter
             // For example:
             HStack {
@@ -51,7 +59,6 @@ struct EventDetailsView: View {
                         .cornerRadius(15)
                         .padding()
                 }
-
                 if !event.bannerURL.isEmpty || image != UIImage() {
                     Capsule()
                         .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
@@ -67,7 +74,11 @@ struct EventDetailsView: View {
                 Text(formatDate(date: event.end))
             }
             // Pass in address
-            Text(event.address)
+            HStack {
+                Image(systemName: "mappin")
+                Text(event.address)
+            }
+            
 
             Button {
                 withAnimation {

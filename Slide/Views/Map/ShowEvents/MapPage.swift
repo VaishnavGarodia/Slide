@@ -10,7 +10,6 @@ struct MapPage: View {
     @State var destination: CLLocationCoordinate2D!
     @State var event = Event()
     @State var show = false
-    @State var data: Data = .init(count: 0)
     @State var events: [Event] = []
     @State var selectedEvent: Event = .init()
 
@@ -18,8 +17,6 @@ struct MapPage: View {
     @State var offset: CGFloat = 0
     @State var lastOffset: CGFloat = 0
     @GestureState var gestureOffset: CGFloat = 0
-    let createEventSearch: Bool = false
-
     @State private var isPresentingCreateEventPage = false
 
     var body: some View {

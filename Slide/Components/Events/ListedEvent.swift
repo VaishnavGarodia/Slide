@@ -15,9 +15,9 @@ struct ListedEvent: View {
             Image(systemName: event.icon)
                 .imageScale(.large)
             VStack(alignment: .leading) {
-                Text(event.title!)
+                Text(event.name)
                     .fontWeight(.semibold)
-                Text(event.subtitle!)
+                Text(event.eventDescription)
             }
             Spacer()
             Button {
