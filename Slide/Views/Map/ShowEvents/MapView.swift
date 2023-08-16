@@ -16,13 +16,10 @@ struct MapView: UIViewRepresentable {
     @Binding var map: MKMapView
     @Binding var manager: CLLocationManager
     @Binding var alert: Bool
-    @Binding var source: CLLocationCoordinate2D!
     @Binding var destination: CLLocationCoordinate2D!
-    @Binding var distance: String
-    @Binding var time: String
     @Binding var show: Bool
-    @Binding var events: [EventData]
-    @Binding var selectedEvent: EventData
+    @Binding var events: [Event]
+    @Binding var selectedEvent: Event
     func makeUIView(context: Context) -> MKMapView {
         map.delegate = context.coordinator
         manager.delegate = context.coordinator
@@ -31,7 +28,6 @@ struct MapView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: MKMapView, context: Context) {}
-
 
     class Coordinator: NSObject, MKMapViewDelegate, CLLocationManagerDelegate {
         var parent: MapView
@@ -52,16 +48,15 @@ struct MapView: UIViewRepresentable {
                 }
             }
         }
+
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-                // If the annotation isn't from a capital city, it must return nil so iOS uses a default view.
-                guard annotation is EventData else { return nil }
+            // If the annotation isn't from a capital city, it must return nil so iOS uses a default view.
+            guard annotation is Event else { return nil }
 
-                // Define a reuse identifier. This is a string that will be used to ensure we reuse annotation views as much as possible.
-                let identifier = "Event"
-
-                // Try to dequeue an annotation view from the map view's pool of unused views.
-                var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
-
+            // Define a reuse identifier. This is a string that will be used to ensure we reuse annotation views as much as possible.
+            let identifier = "Event"
+            // Try to dequeue an annotation view from the map view's pool of unused views.
+            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
                 if annotationView == nil {
                     // If it isn't able to find a reusable view, create a new one using
                     // MKPinAnnotationView and sets its canShowCallout property to true. This
@@ -82,10 +77,11 @@ struct MapView: UIViewRepresentable {
             
             return annotationView
             }
+            
 
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-                guard let event = view.annotation as? EventData else { return }
-                parent.selectedEvent = event
-            }
+            guard let event = view.annotation as? Event else { return }
+            parent.selectedEvent = event
+        }
     }
 }

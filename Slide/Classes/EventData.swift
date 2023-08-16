@@ -3,7 +3,7 @@ import SwiftUI
 import ObjectiveC
 import FirebaseFirestore
 
-class EventData: NSObject, MKAnnotation {
+class Event: NSObject, MKAnnotation {
     var name: String
     var title: String?
     var subtitle: String?

@@ -13,18 +13,12 @@ struct BackgroundComponent: View {
     public var body: some View {
         ZStack(alignment: .leading)  {
             RoundedRectangle(cornerRadius: 16)
-                .fill(
-                    LinearGradient(
-                        colors: [Color.accentColor.opacity(0.8), Color.blue.opacity(0.8)],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
+                .strokeBorder(.primary)
 
             Text("Slide to RSVP")
                 .font(.footnote)
                 .bold()
-                .foregroundColor(.white)
+                .foregroundColor(.primary)
                 .frame(maxWidth: .infinity)
         }
         .onAppear {

@@ -32,7 +32,7 @@ struct SearchView: View {
                         .frame(width: self.frame)
                         .padding(-25)
                         .bubbleStyle(color: .primary)
-                        .padding(.leading,10)
+                        .padding(.leading, 10)
                         
                     if !self.result.isEmpty && self.txt != "" {
                         List(self.result) { i in
@@ -229,6 +229,6 @@ struct SearchData: Identifiable, Equatable {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView(map: .constant(MKMapView()), location: .constant(CLLocationCoordinate2D()), event: .constant(Event(name: "", description: "", eventIcon: "", host: "", hostName: "", start: Date.now, end: Date.now.addingTimeInterval(3600), address: "", location: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), bannerURL: "")), detail: .constant(true), frame: 400)
+        SearchView(map: .constant(MKMapView()), location: .constant(CLLocationCoordinate2D()), event: .constant(Event()), detail: .constant(true), frame: 400)
     }
 }

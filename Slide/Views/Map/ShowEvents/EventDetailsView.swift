@@ -2,63 +2,82 @@
 //  Slide
 //  Created by Vaishnav Garodia on 8/8/23.
 
-import SwiftUI
 import FirebaseFirestore
+import SwiftUI
 
 struct EventDetailsView: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var image: UIImage = .init()
-    var bannerURL: String
-    var icon: String
-    var name: String
-    var description: String
-    var host: String
-    var hostName: String
-    var start: Date
-    var end: Date
+    var event: Event
     @State private var isRSVPed = true
     @State private var isLoading = false
     @State private var showDescription = false
 
     var body: some View {
         VStack {
+            HStack {
+                Button { self.presentationMode.wrappedValue.dismiss() } label: {
+                    Image(systemName: "chevron.left")
+                }
+                .padding(.leading)
+                Spacer()
+            }
             // Display event details here based on the 'event' parameter
             // For example:
             HStack {
-                Image(systemName: icon)
+                Button { self.presentationMode.wrappedValue.dismiss() } label: {
+                    Image(systemName: "chevron.left")
+                }
+                .padding(.leading)
+                Spacer()
+            }
+            HStack {
+                Image(systemName: event.icon)
                     .imageScale(.large)
-                Text(name)
+                Text(event.name)
                     .font(.title)
                     .fontWeight(.bold)
             }
             .padding()
-            Capsule()
-                .frame(width: UIScreen.main.bounds.width * 0.85, height: 5)
-                .foregroundColor(.primary)
-            if !bannerURL.isEmpty {
-                EventBanner(imageURL: URL(string: bannerURL)!)
-                    .cornerRadius(15)
-                    .padding()
-            } else if image != UIImage() {
-                EventBanner(image: image)
-                    .frame(width: UIScreen.main.bounds.width * 0.95)
-                    .frame(maxHeight: UIScreen.main.bounds.width * 0.95 * 3 / 4)
-                    .cornerRadius(15)
-                    .padding()
-            }
 
-            Capsule()
-                .frame(width: UIScreen.main.bounds.width * 0.85, height: 5)
-                .foregroundColor(.primary)
+            Group {
+                if !event.bannerURL.isEmpty || image != UIImage() {
+                    Capsule()
+                        .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
+                        .foregroundColor(.primary)
+                }
+
+                if !event.bannerURL.isEmpty {
+                    EventBanner(imageURL: URL(string: event.bannerURL)!)
+                        .cornerRadius(15)
+                        .padding()
+                } else if image != UIImage() {
+                    EventBanner(image: image)
+                        .frame(width: UIScreen.main.bounds.width * 0.95)
+                        .frame(maxHeight: UIScreen.main.bounds.width * 0.95 * 3 / 4)
+                        .cornerRadius(15)
+                        .padding()
+                }
+                if !event.bannerURL.isEmpty || image != UIImage() {
+                    Capsule()
+                        .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
+                        .foregroundColor(.primary)
+                }
+            }
 
             // ... (display other details as needed)
-            Text(hostName)
+            Text(event.hostName)
             HStack {
-                Text(formatDate(date: start))  
+                Text(formatDate(date: event.start))
                 Text("-")
-                Text(formatDate(date: end))
+                Text(formatDate(date: event.end))
             }
             // Pass in address
-            // Text(address)
+            HStack {
+                Image(systemName: "mappin")
+                Text(event.address)
+            }
+            
 
             Button {
                 withAnimation {
@@ -69,7 +88,7 @@ struct EventDetailsView: View {
                 Text(showDescription ? "Hide Description" : "Show Description").font(.caption).foregroundColor(.gray)
             }
             if showDescription {
-                Text(description)
+                Text(event.eventDescription)
             }
 
             GeometryReader { geometry in
@@ -87,13 +106,13 @@ struct EventDetailsView: View {
         }
         .padding(16)
     }
-    
+
     func formatDate(date: Date) -> String {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateStyle = .short // You can choose a different style here
-            dateFormatter.timeStyle = .short // You can choose a different style here
-            return dateFormatter.string(from: date)
-        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .none // You can choose a different style here
+        dateFormatter.timeStyle = .short // You can choose a different style here
+        return dateFormatter.string(from: date)
+    }
 
     private func simulateRequest() {
         isLoading = true
@@ -104,8 +123,8 @@ struct EventDetailsView: View {
     }
 }
 
-// struct EventDetailsView_Previews: PreviewProvider {
-//     static var previews: some View {
-//         //EventDetailsView(bannerURL: "https://static01.nyt.com/images/2023/02/13/multimedia/08BEFORE-MIDNIGHT-fzql/08BEFORE-MIDNIGHT-fzql-articleLarge.jpg?quality=75&auto=webp&disable=upscale", icon: "party.popper", name: "Party", description: "Tom's Birthday Party", host: "tomholland", hostName: "Tom Holland", start: "6:30 PM", end: "9:30 PM")
-//     }
-// }
+struct EventDetailsView_Previews: PreviewProvider {
+    static var previews: some View {
+        EventDetailsView(event: Event())
+    }
+}
