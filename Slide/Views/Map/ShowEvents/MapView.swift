@@ -66,7 +66,7 @@ struct MapView: UIViewRepresentable {
                     // If it isn't able to find a reusable view, create a new one using
                     // MKPinAnnotationView and sets its canShowCallout property to true. This
                     // triggers the popup with the event name.
-                    annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                    annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
                     annotationView?.canShowCallout = true
 
                     // Create a new UIButton using the built-in .detailDisclosure type. This is a small blue "i" symbol with a circle around it.
@@ -77,8 +77,10 @@ struct MapView: UIViewRepresentable {
                     // If it can reuse a view, update that view to use a different annotation.
                     annotationView?.annotation = annotation
                 }
-
-                return annotationView
+            let eventData = annotation as! EventData
+            annotationView?.image = UIImage(systemName: eventData.icon)
+            
+            return annotationView
             }
 
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
