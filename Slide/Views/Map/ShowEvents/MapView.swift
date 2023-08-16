@@ -50,31 +50,40 @@ struct MapView: UIViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-            // If the annotation isn't from a capital city, it must return nil so iOS uses a default view.
-            guard annotation is Event else { return nil }
+                var annotationView = MKMarkerAnnotationView()
+                // If the annotation isn't from a capital city, it must return nil so iOS uses a default view.
+                guard annotation is Event else { return nil }
 
-            // Define a reuse identifier. This is a string that will be used to ensure we reuse annotation views as much as possible.
-            let identifier = "Event"
-            // Try to dequeue an annotation view from the map view's pool of unused views.
-            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
-                if annotationView == nil {
-                    // If it isn't able to find a reusable view, create a new one using
-                    // MKPinAnnotationView and sets its canShowCallout property to true. This
-                    // triggers the popup with the event name.
-                    annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                    annotationView?.canShowCallout = true
+                // Define a reuse identifier. This is a string that will be used to ensure we reuse annotation views as much as possible.
+                var identifier = ""
+//                switch annotation.hype{
+//                        case .high:
+//                            identifier = "Deep Dish"
+//                            color = .red
+//                        case .medium:
+//                            identifier = "Pot pie"
+//                            color = .black
+//                        case .low:
+//                            identifier = "Thin crust"
+//                            color = .blue
+//                        }
 
-                    // Create a new UIButton using the built-in .detailDisclosure type. This is a small blue "i" symbol with a circle around it.
-                    let btn = UIButton(type: .detailDisclosure)
-                    annotationView?.rightCalloutAccessoryView = btn
-                }
-                else {
-                    // If it can reuse a view, update that view to use a different annotation.
-                    annotationView?.annotation = annotation
-                }
-            let eventData = annotation as! EventData
-            annotationView?.image = UIImage(systemName: eventData.icon)
-            
+            if let dequedView = mapView.dequeueReusableAnnotationView(
+                        withIdentifier: identifier)
+                        as? MKMarkerAnnotationView {
+                        annotationView = dequedView
+                    } else{
+                        annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                        annotationView.canShowCallout = true
+
+                        // Create a new UIButton using the built-in .detailDisclosure type. This is a small blue "i" symbol with a circle around it.
+                        let btn = UIButton(type: .detailDisclosure)
+                        annotationView.rightCalloutAccessoryView = btn
+                    }
+            annotationView.markerTintColor = .blue
+            let eventData = annotation as! Event
+            annotationView.glyphImage = UIImage(systemName: eventData.icon)
+            annotationView.glyphTintColor = .yellow
             return annotationView
             }
             
