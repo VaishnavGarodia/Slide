@@ -42,7 +42,7 @@ struct MapPage: View {
                                 }
                             }
 
-                            SearchView(map: self.$map, location: self.$destination, event: self.$event, detail: self.$show, createEventSearch: self.createEventSearch, frame: 300)
+                            SearchView(map: self.$map, location: self.$destination, event: self.$event, detail: self.$show, frame: 300)
                                 .padding(.top, -15)
                         }
                         Spacer()

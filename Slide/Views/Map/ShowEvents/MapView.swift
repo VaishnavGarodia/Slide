@@ -72,19 +72,6 @@ struct MapView: UIViewRepresentable {
             } else {
                 // If it can reuse a view, update that view to use a different annotation.
                 annotationView?.annotation = annotation
-                    // Create a new UIButton using the built-in .detailDisclosure type. This is a small blue "i" symbol with a circle around it.
-                    let btn = UIButton(type: .detailDisclosure)
-                    annotationView?.rightCalloutAccessoryView = btn
-                }
-                else {
-                    // If it can reuse a view, update that view to use a different annotation.
-                    annotationView?.annotation = annotation
-                }
-            let eventData = annotation as! Event
-            annotationView?.image = UIImage(systemName: eventData.icon)
-            
-            return annotationView
-
             }
             let eventData = annotation as! Event
             annotationView?.image = UIImage(systemName: eventData.icon)

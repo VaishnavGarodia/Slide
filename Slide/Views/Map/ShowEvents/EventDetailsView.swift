@@ -9,7 +9,6 @@ struct EventDetailsView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var image: UIImage = .init()
     var event: Event
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var isRSVPed = true
     @State private var isLoading = false
     @State private var showDescription = false
