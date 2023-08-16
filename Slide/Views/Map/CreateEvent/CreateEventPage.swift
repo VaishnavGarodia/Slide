@@ -25,18 +25,18 @@ struct CreateEventPage: View {
     @State private var selectedImage: UIImage? = UIImage()
     @State private var wasSelected: Bool = false
     @State private var isShowingPreview = false
-
+    
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return formatter
     }
-
+    
     var body: some View {
         ZStack {
             CreateEventView(map: $map, event: $event, alert: $alert, show: $show, destination: $destination)
                 .ignoresSafeArea()
-
+            
             if self.destination != nil && self.show {
                 Rectangle()
                     .ignoresSafeArea()
@@ -147,12 +147,12 @@ struct CreateEventPage: View {
             }
         }
     }
-
+    
     func createEvent() {
         let doc = db.collection("Events").document()
         print("Creating event for location: ", event.coordinate)
-
-        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": event.icon, "Host": Auth.auth().currentUser!.displayName!, "HostName": event.hostName, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end]) { err in
+        
+        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": event.icon, "Host": Auth.auth().currentUser!.displayName!, "HostName": event.hostName, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype":"low"]) { err in
             if err != nil {
                 print((err?.localizedDescription)!)
                 return
@@ -160,95 +160,104 @@ struct CreateEventPage: View {
                 uploadBannerToFirebaseStorage(image: selectedImage ?? UIImage(), documentID: doc.documentID)
             }
         }
-    }
-
-    func compressImageToTargetSize(_ image: UIImage, targetSizeInKB: Int) -> Data? {
-        let targetWidth: CGFloat = 1024 // Choose the desired width here
-        let targetHeight = targetWidth * (image.size.height / image.size.width)
-        let size = CGSize(width: targetWidth, height: targetHeight)
-
-        UIGraphicsBeginImageContext(size)
-        image.draw(in: CGRect(origin: .zero, size: size))
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
-        // Check if the scaled image data is already below the target size
-        if let scaledImageData = scaledImage?.jpegData(compressionQuality: 1.0) {
-            let scaledSizeInKB = scaledImageData.count / 1024
-            if scaledSizeInKB <= targetSizeInKB {
-                return scaledImageData
-            }
-        }
-        var compressionQuality: CGFloat = 1.0
-        var imageData: Data?
-
-        // Binary search to find the optimal compression quality
-        var minQuality: CGFloat = 0.0
-        var maxQuality: CGFloat = 1.0
-        while minQuality <= maxQuality {
-            compressionQuality = (minQuality + maxQuality) / 2.0
-            if let compressedData = scaledImage?.jpegData(compressionQuality: compressionQuality) ?? image.jpegData(compressionQuality: compressionQuality) {
-                let currentSizeInKB = compressedData.count / 1024
-                if currentSizeInKB > targetSizeInKB {
-                    maxQuality = compressionQuality - 0.0001
-                } else {
-                    imageData = compressedData
-                    minQuality = compressionQuality + 0.0001
-                }
-            } else {
-                break
-            }
-        }
-
-        return imageData
-    }
-
-    func uploadBannerToFirebaseStorage(image: UIImage, documentID: String) {
-        guard let imageData = compressImageToTargetSize(image, targetSizeInKB: 100) else {
-            print("Failed to compress image.")
-            return
-        }
-        let storageRef = Storage.storage().reference().child("EventBanners/\(documentID).jpg")
-        let uploadTask = storageRef.putData(imageData, metadata: nil) { _, error in
+        
+        let userDoc = db.collection("Users").document(Auth.auth().currentUser!.uid)
+        userDoc.updateData(["Events": FieldValue.arrayUnion([doc.documentID])]) { error in
             if let error = error {
-                print("Error uploading image to Firebase Storage: \(error.localizedDescription)")
+                print("Error updating events array: \(error)")
             } else {
-                storageRef.downloadURL { url, error in
-                    if let error = error {
-                        print("Error getting download URL: \(error.localizedDescription)")
-                    } else if let downloadURL = url {
-                        // Update the post document with the image download URL
-                        let postDocumentRef = db.collection("Events").document(documentID)
-                        postDocumentRef.updateData(["Event Image": downloadURL.absoluteString]) { error in
-                            if let error = error {
-                                print("Error updating post document: \(error.localizedDescription)")
-                            } else {
-                                print("Post document updated successfully with image URL")
+                print("Events array updated successfully!")
+            }
+        }
+    }
+        
+        func compressImageToTargetSize(_ image: UIImage, targetSizeInKB: Int) -> Data? {
+            let targetWidth: CGFloat = 1024 // Choose the desired width here
+            let targetHeight = targetWidth * (image.size.height / image.size.width)
+            let size = CGSize(width: targetWidth, height: targetHeight)
+            
+            UIGraphicsBeginImageContext(size)
+            image.draw(in: CGRect(origin: .zero, size: size))
+            let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            // Check if the scaled image data is already below the target size
+            if let scaledImageData = scaledImage?.jpegData(compressionQuality: 1.0) {
+                let scaledSizeInKB = scaledImageData.count / 1024
+                if scaledSizeInKB <= targetSizeInKB {
+                    return scaledImageData
+                }
+            }
+            var compressionQuality: CGFloat = 1.0
+            var imageData: Data?
+            
+            // Binary search to find the optimal compression quality
+            var minQuality: CGFloat = 0.0
+            var maxQuality: CGFloat = 1.0
+            while minQuality <= maxQuality {
+                compressionQuality = (minQuality + maxQuality) / 2.0
+                if let compressedData = scaledImage?.jpegData(compressionQuality: compressionQuality) ?? image.jpegData(compressionQuality: compressionQuality) {
+                    let currentSizeInKB = compressedData.count / 1024
+                    if currentSizeInKB > targetSizeInKB {
+                        maxQuality = compressionQuality - 0.0001
+                    } else {
+                        imageData = compressedData
+                        minQuality = compressionQuality + 0.0001
+                    }
+                } else {
+                    break
+                }
+            }
+            
+            return imageData
+        }
+        
+        func uploadBannerToFirebaseStorage(image: UIImage, documentID: String) {
+            guard let imageData = compressImageToTargetSize(image, targetSizeInKB: 100) else {
+                print("Failed to compress image.")
+                return
+            }
+            let storageRef = Storage.storage().reference().child("EventBanners/\(documentID).jpg")
+            let uploadTask = storageRef.putData(imageData, metadata: nil) { _, error in
+                if let error = error {
+                    print("Error uploading image to Firebase Storage: \(error.localizedDescription)")
+                } else {
+                    storageRef.downloadURL { url, error in
+                        if let error = error {
+                            print("Error getting download URL: \(error.localizedDescription)")
+                        } else if let downloadURL = url {
+                            // Update the post document with the image download URL
+                            let postDocumentRef = db.collection("Events").document(documentID)
+                            postDocumentRef.updateData(["Event Image": downloadURL.absoluteString]) { error in
+                                if let error = error {
+                                    print("Error updating post document: \(error.localizedDescription)")
+                                } else {
+                                    print("Post document updated successfully with image URL")
+                                }
                             }
                         }
                     }
                 }
             }
+            uploadTask.resume()
         }
-        uploadTask.resume()
-    }
-
-    func checkPhotoLibraryPermission() {
-        let status = PHPhotoLibrary.authorizationStatus()
-        isPhotoLibraryAuthorized = (status == .authorized)
-    }
-
-    func requestPhotoLibraryPermission() {
-        PHPhotoLibrary.requestAuthorization { status in
-            DispatchQueue.main.async {
-                isPhotoLibraryAuthorized = (status == .authorized)
+        
+        func checkPhotoLibraryPermission() {
+            let status = PHPhotoLibrary.authorizationStatus()
+            isPhotoLibraryAuthorized = (status == .authorized)
+        }
+        
+        func requestPhotoLibraryPermission() {
+            PHPhotoLibrary.requestAuthorization { status in
+                DispatchQueue.main.async {
+                    isPhotoLibraryAuthorized = (status == .authorized)
+                }
             }
         }
     }
-}
-
-struct CreateEventPage_Previews: PreviewProvider {
-    static var previews: some View {
-        CreateEventPage()
+    
+    struct CreateEventPage_Previews: PreviewProvider {
+        static var previews: some View {
+            CreateEventPage()
+        }
     }
-}

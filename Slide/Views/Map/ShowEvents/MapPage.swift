@@ -170,7 +170,8 @@ struct MapPage: View {
                         hostUID: data["HostUID"] as? String ?? "",
                         icon: data["Icon"] as? String ?? "",
                         coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
-                        bannerURL: data["Event Image"] as? String ?? ""
+                        bannerURL: data["Event Image"] as? String ?? "",
+                        hype: data["Hype"] as? String ?? "low"
                     )
                     newEvents.append(event)
                 }

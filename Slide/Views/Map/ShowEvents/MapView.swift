@@ -8,6 +8,7 @@ import CoreLocation
 import FirebaseFirestore
 import MapKit
 import SwiftUI
+import UIKit
 struct MapView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         return MapView.Coordinator(parent1: self)
@@ -53,20 +54,24 @@ struct MapView: UIViewRepresentable {
                 var annotationView = MKMarkerAnnotationView()
                 // If the annotation isn't from a capital city, it must return nil so iOS uses a default view.
                 guard annotation is Event else { return nil }
-
+                let eventData = annotation as! Event
                 // Define a reuse identifier. This is a string that will be used to ensure we reuse annotation views as much as possible.
+                var color = UIColor.red
                 var identifier = ""
-//                switch annotation.hype{
-//                        case .high:
-//                            identifier = "Deep Dish"
-//                            color = .red
-//                        case .medium:
-//                            identifier = "Pot pie"
-//                            color = .black
-//                        case .low:
-//                            identifier = "Thin crust"
-//                            color = .blue
-//                        }
+                switch eventData.hype{
+                        case "high":
+                            identifier = "high"
+                            color = .red
+                        case "medium":
+                            identifier = "medium"
+                            color = .yellow
+                        case "low":
+                            identifier = "low"
+                            color = .blue
+                        default:
+                            identifier = "low"
+                            color = .blue
+                        }
 
             if let dequedView = mapView.dequeueReusableAnnotationView(
                         withIdentifier: identifier)
@@ -80,8 +85,7 @@ struct MapView: UIViewRepresentable {
                         let btn = UIButton(type: .detailDisclosure)
                         annotationView.rightCalloutAccessoryView = btn
                     }
-            annotationView.markerTintColor = .blue
-            let eventData = annotation as! Event
+            annotationView.markerTintColor = color
             annotationView.glyphImage = UIImage(systemName: eventData.icon)
             annotationView.glyphTintColor = .yellow
             return annotationView
