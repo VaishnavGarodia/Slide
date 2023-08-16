@@ -55,29 +55,29 @@ struct MapView: UIViewRepresentable {
 
             // Define a reuse identifier. This is a string that will be used to ensure we reuse annotation views as much as possible.
             let identifier = "Event"
-
             // Try to dequeue an annotation view from the map view's pool of unused views.
             var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+                if annotationView == nil {
+                    // If it isn't able to find a reusable view, create a new one using
+                    // MKPinAnnotationView and sets its canShowCallout property to true. This
+                    // triggers the popup with the event name.
+                    annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                    annotationView?.canShowCallout = true
 
-            if annotationView == nil {
-                // If it isn't able to find a reusable view, create a new one using
-                // MKPinAnnotationView and sets its canShowCallout property to true. This
-                // triggers the popup with the event name.
-                annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                annotationView?.canShowCallout = true
-
-                // Create a new UIButton using the built-in .detailDisclosure type. This is a small blue "i" symbol with a circle around it.
-                let btn = UIButton(type: .detailDisclosure)
-                annotationView?.rightCalloutAccessoryView = btn
-            } else {
-                // If it can reuse a view, update that view to use a different annotation.
-                annotationView?.annotation = annotation
-            }
-            let eventData = annotation as! Event
+                    // Create a new UIButton using the built-in .detailDisclosure type. This is a small blue "i" symbol with a circle around it.
+                    let btn = UIButton(type: .detailDisclosure)
+                    annotationView?.rightCalloutAccessoryView = btn
+                }
+                else {
+                    // If it can reuse a view, update that view to use a different annotation.
+                    annotationView?.annotation = annotation
+                }
+            let eventData = annotation as! EventData
             annotationView?.image = UIImage(systemName: eventData.icon)
-
+            
             return annotationView
-        }
+            }
+            
 
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
             guard let event = view.annotation as? Event else { return }
