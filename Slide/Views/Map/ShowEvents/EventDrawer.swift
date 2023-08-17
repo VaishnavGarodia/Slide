@@ -1,0 +1,112 @@
+//  EventDrawer.swift
+//  Slide
+//  Created by Ethan Harianto on 8/16/23.
+
+import MapKit
+import SwiftUI
+
+struct EventDrawer: View {
+    @Binding var events: [Event]
+    @Binding var selectedEvent: Event
+    @Binding var map: MKMapView
+    @Binding var eventView: Bool
+    // Gesture Properties...
+    @State var offset: CGFloat = 0
+    @State var lastOffset: CGFloat = 0
+    @State var storedOffset: CGFloat = 0
+    @GestureState var gestureOffset: CGFloat = 0
+
+    var body: some View {
+        GeometryReader { proxy -> AnyView in
+            let height = proxy.frame(in: .global).height
+            return AnyView(
+                ZStack {
+                    BlurView(style: .systemThinMaterial)
+                        .clipShape(CustomCorner(corners: [.topLeft, .topRight], radius: 15))
+
+                    if eventView {
+                        VStack {
+                            EventDetailsView(
+                                event: selectedEvent,
+                                eventView: $eventView,
+                                fromMap: true
+                            )
+                            .offset(x: -5)
+                            .onAppear {
+                                withAnimation {
+                                    storedOffset = offset
+                                    offset = -(height - 30)
+                                }
+                                let coordinateRegion = MKCoordinateRegion(
+                                    center: selectedEvent.coordinate,
+                                    span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+                                )
+                                map.setRegion(coordinateRegion, animated: true)
+                            }
+                            .onDisappear {
+                                withAnimation {
+                                    offset = storedOffset
+                                }
+                            }
+                            Spacer()
+                        }
+
+                    } else {
+                        VStack {
+                            Capsule()
+                                .fill(.white)
+                                .frame(width: 60, height: 4)
+
+                            ScrollView {
+                                ForEach($events, id: \.name) { event in
+                                    ListedEvent(event: event, selectedEvent: $selectedEvent, eventView: $eventView)
+                                }
+                                .padding(.top)
+                            }
+
+                            Divider()
+                                .background(.white)
+
+                            Spacer()
+                        }
+                        .padding(16)
+                    }
+                } //: ZSTACK
+                .offset(y: height - 30)
+                .offset(y: -offset > 0 ? -offset <= (height - 30) ? offset : -(height - 30) : 0)
+                .gesture(DragGesture().updating($gestureOffset, body: { value, out, _ in
+                    out = value.translation.height
+                    onChange()
+                }).onEnded { _ in
+                    let maxHeight = height - 30
+                    withAnimation {
+                        // Logic Conditions For Moving States....
+                        // Up down or mid...
+                        if -offset > 30, -offset < maxHeight / 2 {
+                            // Mid...
+                            if !eventView {
+                                offset = -(maxHeight / 3)
+                            } else {
+                                offset = 0
+                            }
+                        } else if -offset > maxHeight / 2 {
+                            offset = (events.count >= 7 || eventView) ? -maxHeight : -CGFloat(events.count * 85)
+                        } else {
+                            offset = 0
+                        }
+                    }
+
+                    // Storing Last Offset...
+                    // So that the gesture can contine from the last position....
+                    lastOffset = offset
+                })
+            )
+        }
+    }
+
+    func onChange() {
+        DispatchQueue.main.async {
+            self.offset = gestureOffset + lastOffset
+        }
+    }
+}

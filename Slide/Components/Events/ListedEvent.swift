@@ -2,14 +2,22 @@
 //  Slide
 //  Created by Ethan Harianto on 8/1/23.
 
-import SwiftUI
 import CoreLocation
 import FirebaseFirestore
+import SwiftUI
 
 struct ListedEvent: View {
-    @State private var expanded = false
     @Binding var event: Event
     @Binding var selectedEvent: Event
+    @Binding var eventView: Bool
+    
+    func formatDate(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .none // You can choose a different style here
+        dateFormatter.timeStyle = .short // You can choose a different style here
+        return dateFormatter.string(from: date)
+    }
+    
     var body: some View {
         HStack {
             Image(systemName: event.icon)
@@ -17,23 +25,28 @@ struct ListedEvent: View {
             VStack(alignment: .leading) {
                 Text(event.name)
                     .fontWeight(.semibold)
-                Text(event.eventDescription)
+                if !event.eventDescription.isEmpty {
+                    Text(event.eventDescription)
+                }
+                Text(formatDate(date: event.start) + " - " + formatDate(date: event.end))
             }
             Spacer()
             Button {
-                self.selectedEvent = event
+                withAnimation {
+                    selectedEvent = event
+                    eventView.toggle()
+                }
             }
             label: {
                 Image(systemName: "chevron.right")
-                    .rotationEffect(.degrees(expanded ? 90 : 0))
+            }
+        }
+        .onTapGesture {
+            withAnimation {
+                selectedEvent = event
+                eventView.toggle()
             }
         }
         .bubbleStyle(color: .primary)
-    }
-}
-
-struct ListedEvent_Previews: PreviewProvider {
-    static var previews: some View {
-        ListedEvent(event: .constant(Event()), selectedEvent: .constant(Event()))
     }
 }
