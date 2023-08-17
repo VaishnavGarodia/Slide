@@ -6,15 +6,54 @@
 //
 
 import SwiftUI
+import SwiftUI
+import Firebase
+import FirebaseAuth
+import FirebaseFirestore
+import Combine
 
 struct ProfileEventsView: View {
+    @State private var eventIDs: [String] = []  // Holds the event IDs
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                ForEach(eventIDs, id: \.self) { eventID in
+                    MiniEventView(eventID: eventID)
+                }
+            }
+            .padding()
+        }
+        .onAppear {
+            loadEventIDs()
+        }
+    }
+    
+    // Load the event IDs from the user's document
+    private func loadEventIDs() {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
+        let group = DispatchGroup() // Create a DispatchGroup
+
+        let userDocumentRef = Firestore.firestore().collection("Users").document(currentUserID)
+        
+        group.enter() // Notify the group that a task has started
+        
+        userDocumentRef.getDocument { document, error in
+            if let document = document, document.exists {
+                if let eventIDsArray = document.data()?["Events"] as? [String] {
+                    eventIDs = eventIDsArray
+                    group.leave()
+                }
+            }
+        }
+        
+        // This block will be executed when all tasks in the group are done
+        group.notify(queue: .main) {
+            return
+        }
     }
 }
 
-struct ProfileEventsView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileEventsView()
-    }
-}
