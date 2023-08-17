@@ -3,7 +3,7 @@
 //  Created by Ethan Harianto on 12/21/22.
 
 import SwiftUI
-import UIKit
+import AnimatedTabBar
 
 struct MainView: View {
     @State private var selectedColorScheme: String = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "dark"
@@ -17,25 +17,25 @@ struct MainView: View {
                     Label("", systemImage: "light.ribbon")
                 }
                 .tag(0)
-                
+
             MessagesTab()
                 .tabItem {
                     Label("", systemImage: "person.2")
                 }
                 .tag(1)
-                
+
             MapPage()
                 .tabItem {
                     Label("", systemImage: "map")
                 }
                 .tag(2)
-                
+
             ProfileView()
                 .tabItem {
                     Label("", systemImage: "person.circle")
                 }
                 .tag(3)
-                
+
             SettingsView(selectedColorScheme: $selectedColorScheme)
                 .tabItem {
                     Label("", systemImage: "gear")

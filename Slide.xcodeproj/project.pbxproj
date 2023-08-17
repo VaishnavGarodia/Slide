@@ -88,6 +88,8 @@
 		79B1FF7C2A6B35AF00012B38 /* ContactsPermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B1FF7B2A6B35AF00012B38 /* ContactsPermissionsView.swift */; };
 		79B1FF7E2A6B39F000012B38 /* addContactsToUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B1FF7D2A6B39F000012B38 /* addContactsToUser.swift */; };
 		79B822702A647262003133BC /* LocationPermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B8226F2A647262003133BC /* LocationPermissionsView.swift */; };
+		79C899842A8D8A3F004A9D1B /* EventDrawer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C899832A8D8A3F004A9D1B /* EventDrawer.swift */; };
+		79C899862A8DB4D2004A9D1B /* HorizontalPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C899852A8DB4D2004A9D1B /* HorizontalPicker.swift */; };
 		79D6430B2A78160600BB42E3 /* FriendsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D6430A2A78160600BB42E3 /* FriendsList.swift */; };
 		79D6430D2A785C7A00BB42E3 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D6430C2A785C7A00BB42E3 /* UserProfileView.swift */; };
 		79D6430F2A78A20F00BB42E3 /* unfriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D6430E2A78A20F00BB42E3 /* unfriend.swift */; };
@@ -205,6 +207,8 @@
 		79B1FF7B2A6B35AF00012B38 /* ContactsPermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsPermissionsView.swift; sourceTree = "<group>"; };
 		79B1FF7D2A6B39F000012B38 /* addContactsToUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addContactsToUser.swift; sourceTree = "<group>"; };
 		79B8226F2A647262003133BC /* LocationPermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPermissionsView.swift; sourceTree = "<group>"; };
+		79C899832A8D8A3F004A9D1B /* EventDrawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDrawer.swift; sourceTree = "<group>"; };
+		79C899852A8DB4D2004A9D1B /* HorizontalPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalPicker.swift; sourceTree = "<group>"; };
 		79D6430A2A78160600BB42E3 /* FriendsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsList.swift; sourceTree = "<group>"; };
 		79D6430C2A785C7A00BB42E3 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		79D6430E2A78A20F00BB42E3 /* unfriend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = unfriend.swift; sourceTree = "<group>"; };
@@ -272,6 +276,7 @@
 				79167C812A8B181C00D6AE54 /* BackgroundComponent.swift */,
 				79167C832A8B184600D6AE54 /* DraggingComponent.swift */,
 				79167C862A8B1DA800D6AE54 /* BaseButtonStyle.swift */,
+				79C899852A8DB4D2004A9D1B /* HorizontalPicker.swift */,
 			);
 			path = "Basic UI";
 			sourceTree = "<group>";
@@ -595,6 +600,13 @@
 			path = Authentication;
 			sourceTree = "<group>";
 		};
+		79C8998A2A8DBA58004A9D1B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		79DC7CF92A7F366900503C4D /* Chat */ = {
 			isa = PBXGroup;
 			children = (
@@ -619,6 +631,7 @@
 			children = (
 				79FC9E04294D605300EBD520 /* Slide */,
 				79FC9E03294D605300EBD520 /* Products */,
+				79C8998A2A8DBA58004A9D1B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -655,6 +668,7 @@
 				9B8081F52A71D13D001153E5 /* MapView.swift */,
 				9B8081F32A71D0FD001153E5 /* SearchView.swift */,
 				79DCC254295611D6000FCD6F /* MapPage.swift */,
+				79C899832A8D8A3F004A9D1B /* EventDrawer.swift */,
 				9B75D2C82A8405850025B620 /* EventDetailsView.swift */,
 			);
 			path = ShowEvents;
@@ -765,6 +779,8 @@
 				790BD0352A4526CF0006213A /* XCRemoteSwiftPackageReference "iPhoneNumberField" */,
 				792E490A2A5EDF0F00D73D7C /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				797A58DE2A7AA44500F333DC /* XCRemoteSwiftPackageReference "GoogleMapsTileOverlay" */,
+				79C899872A8DB936004A9D1B /* XCRemoteSwiftPackageReference "AnimatedTabBar" */,
+				79C8999D2A8DBED8004A9D1B /* XCRemoteSwiftPackageReference "FloatingTabBar" */,
 			);
 			productRefGroup = 79FC9E03294D605300EBD520 /* Products */;
 			projectDirPath = "";
@@ -815,6 +831,7 @@
 				795C5BFA295418D7007FDA83 /* MainView.swift in Sources */,
 				7936F9FC2A76C2A70057DB8A /* fetchUserDetails.swift in Sources */,
 				795C5BEE2953FEEB007FDA83 /* Event.swift in Sources */,
+				79C899842A8D8A3F004A9D1B /* EventDrawer.swift in Sources */,
 				79FC9E08294D605300EBD520 /* ContentView.swift in Sources */,
 				7965E08F2A702C10003F46C4 /* signOut.swift in Sources */,
 				79E4912D2A707FF6009348EF /* ImagePicker.swift in Sources */,
@@ -863,6 +880,7 @@
 				797B1AC32A5F407800DD6B89 /* ContactInfo.swift in Sources */,
 				79B1FF7E2A6B39F000012B38 /* addContactsToUser.swift in Sources */,
 				795C5BF629540B00007FDA83 /* SettingsView.swift in Sources */,
+				79C899862A8DB4D2004A9D1B /* HorizontalPicker.swift in Sources */,
 				79DCC255295611D6000FCD6F /* MapPage.swift in Sources */,
 				79FC9E06294D605300EBD520 /* SlideApp.swift in Sources */,
 				796CD0182A718CA2008599EA /* ProfileInfo.swift in Sources */,
@@ -1147,6 +1165,22 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.5.0;
+			};
+		};
+		79C899872A8DB936004A9D1B /* XCRemoteSwiftPackageReference "AnimatedTabBar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/AnimatedTabBar";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.1;
+			};
+		};
+		79C8999D2A8DBED8004A9D1B /* XCRemoteSwiftPackageReference "FloatingTabBar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/claudiaeng/FloatingTabBar";
+			requirement = {
+				branch = master;
+				kind = branch;
 			};
 		};
 		79FC9E32294D67EA00EBD520 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {

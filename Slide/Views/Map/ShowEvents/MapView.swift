@@ -20,6 +20,7 @@ struct MapView: UIViewRepresentable {
     @Binding var destination: CLLocationCoordinate2D!
     @Binding var show: Bool
     @Binding var events: [Event]
+    @Binding var eventView: Bool
     @Binding var selectedEvent: Event
     func makeUIView(context: Context) -> MKMapView {
         map.delegate = context.coordinator
@@ -95,6 +96,7 @@ struct MapView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
             guard let event = view.annotation as? Event else { return }
             parent.selectedEvent = event
+            parent.eventView = true
         }
     }
 }
