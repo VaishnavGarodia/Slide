@@ -31,7 +31,7 @@ struct Register: View {
                                 .checkMarkTextField()
                                 .textInputAutocapitalization(.never)
                                 .autocorrectionDisabled()
-                                .bubbleStyle(color: Color("OppositeColor"))
+                                .bubbleStyle(color: .primary)
                                 .onChange(of: username) { _ in
                                     errorMessage = (username.contains(" ") ? "Your username can't include spaces." : "")
                                 }
@@ -41,7 +41,7 @@ struct Register: View {
                             TextField("Enter a valid .edu address", text: $email)
                                 .keyboardType(.emailAddress)
                                 .checkMarkTextField()
-                                .bubbleStyle(color: Color("OppositeColor"))
+                                .bubbleStyle(color: .primary)
                                 .onChange(of: email) { _ in
                                     errorMessage = (email.contains(".edu") ? isEmailValid(email) : "")
                                 }
@@ -50,7 +50,7 @@ struct Register: View {
                         Section("Password") {
                             PasswordField(password: $password, text: "Choose a password")
                                 .checkMarkTextField()
-                                .bubbleStyle(color: Color("OppositeColor"))
+                                .bubbleStyle(color: .primary)
                                 .onChange(of: password, perform: { newText in
                                     errorMessage = isPasswordValid(newText)
                                 })

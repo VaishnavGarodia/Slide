@@ -13,7 +13,6 @@ struct AccountCreationBottom: View {
     let buttonText: String
     @Binding var logIn: Bool
     var body: some View {
-        
         HStack {
             Text(text)
                 .foregroundColor(.gray)
@@ -22,10 +21,10 @@ struct AccountCreationBottom: View {
                     logIn.toggle()
                 }
             }
-            .foregroundColor(Color("OppositeColor"))
+            .foregroundColor(.primary)
             .fontWeight(.bold)
         }
-        
+
         GoogleButton(registered: false)
     }
 }

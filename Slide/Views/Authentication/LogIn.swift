@@ -30,7 +30,7 @@ struct LogIn: View {
                             .checkMarkTextField()
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
-                            .bubbleStyle(color: Color("OppositeColor"))
+                            .bubbleStyle(color: .primary)
                             .onChange(of: email) { _ in
                                 isGoogleUser(email: email) { isGoogleUser, error in
                                     if let error = error {
@@ -47,7 +47,7 @@ struct LogIn: View {
                     Section("Password") {
                         PasswordField(password: $password, text: "Enter your password")
                             .checkMarkTextField()
-                            .bubbleStyle(color: Color("OppositeColor"))
+                            .bubbleStyle(color: .primary)
                     }
                 }
                                     

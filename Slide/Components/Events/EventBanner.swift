@@ -37,3 +37,24 @@ struct EventBanner: View {
         }
     }
 }
+
+struct SmallEventBanner: View {
+    var imageURL: URL? = nil
+    var image: UIImage? = nil
+    var body: some View {
+        if imageURL != nil {
+            KFImage(imageURL)
+                .resizable()
+                .fade(duration: 0.25)
+                .cacheMemoryOnly()
+                .scaledToFill()
+                .frame(width: UIScreen.main.bounds.width / 2.25 , height: UIScreen.main.bounds.width / 2.25)
+        } else {
+            GeometryReader { _ in
+                Image(uiImage: image!)
+                    .resizable()
+                    .scaledToFill()
+            }
+        }
+    }
+}

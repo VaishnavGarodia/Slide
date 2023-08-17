@@ -12,7 +12,7 @@ struct ProfileHighlightsView: View {
 
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 0) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
                 ForEach(highlightHolder.highlights) { highlight in
                     SmallHighlightCard(highlight: highlight)
                 }

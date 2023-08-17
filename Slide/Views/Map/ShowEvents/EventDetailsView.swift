@@ -2,6 +2,7 @@
 //  Slide
 //  Created by Vaishnav Garodia on 8/8/23.
 
+import FirebaseAuth
 import FirebaseFirestore
 import SwiftUI
 
@@ -9,6 +10,7 @@ struct EventDetailsView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var image: UIImage = .init()
     var event: Event
+    var preview = false
     @Binding var eventView: Bool
     @State var fromMap: Bool = false
     @State private var isRSVPed = true
@@ -108,25 +110,28 @@ struct EventDetailsView: View {
                 Text(event.eventDescription)
             }
 
-            GeometryReader { geometry in
-                ZStack(alignment: .leading) {
-                    BackgroundComponent()
-                    DraggingComponent(isRSVPed: $isRSVPed, isLoading: isLoading, maxWidth: geometry.size.width)
+            if event.hostUID != Auth.auth().currentUser!.uid && !preview {
+                GeometryReader { geometry in
+                    ZStack(alignment: .leading) {
+                        BackgroundComponent()
+                        DraggingComponent(isRSVPed: $isRSVPed, isLoading: isLoading, maxWidth: geometry.size.width)
+                    }
+                }
+                .frame(height: 50)
+                .padding()
+                .onChange(of: isRSVPed) { isRSVPed in
+                    guard !isRSVPed else { return }
+                    simulateRequest()
                 }
             }
-            .frame(height: 50)
-            .padding()
-            .onChange(of: isRSVPed) { isRSVPed in
-                guard !isRSVPed else { return }
-                simulateRequest()
-            }
         }
-        .padding(16)
+        .padding()
+        .navigationBarBackButtonHidden(true)
     }
 
     func formatDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .none // You can choose a different style here
+        dateFormatter.dateStyle = .short // You can choose a different style here
         dateFormatter.timeStyle = .short // You can choose a different style here
         return dateFormatter.string(from: date)
     }

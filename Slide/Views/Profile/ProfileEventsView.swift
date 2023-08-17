@@ -1,9 +1,6 @@
-//
 //  ProfileEventsView.swift
 //  Slide
-//
 //  Created by Ethan Harianto on 7/26/23.
-//
 
 import SwiftUI
 import SwiftUI
@@ -22,7 +19,7 @@ struct ProfileEventsView: View {
                     MiniEventView(eventID: eventID)
                 }
             }
-            .padding()
+            .padding(.horizontal)
         }
         .onAppear {
             loadEventIDs()

@@ -82,15 +82,15 @@ struct EventDrawer: View {
                     withAnimation {
                         // Logic Conditions For Moving States....
                         // Up down or mid...
-                        if -offset > 30, -offset < maxHeight / 2 {
+                        if -offset > 30, -offset < maxHeight / 3, offset < lastOffset {
                             // Mid...
                             if !eventView {
-                                offset = -(maxHeight / 3)
+                                offset = (-(maxHeight / 3) > -CGFloat(events.count * 105) + 20 || -(maxHeight / 3) < -CGFloat(events.count * 105) - 20) ? -CGFloat(events.count * 105) : -(maxHeight / 3)
                             } else {
                                 offset = 0
                             }
-                        } else if -offset > maxHeight / 2 {
-                            offset = (events.count >= 7 || eventView) ? -maxHeight : -CGFloat(events.count * 85)
+                        } else if -offset > maxHeight / 3 {
+                            offset = (events.count >= 7 || eventView) ? -maxHeight : -CGFloat(events.count * 105)
                         } else {
                             offset = 0
                         }

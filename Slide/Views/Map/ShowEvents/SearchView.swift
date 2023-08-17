@@ -190,9 +190,7 @@ class Coordinator: NSObject, UISearchBarDelegate, MKLocalSearchCompleterDelegate
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("creating search for" + searchText)
         self.parent.txt = searchText
-        print("self.parent.txt", self.parent.txt)
         self.searchCompleter.region = self.parent.map.region
         self.searchCompleter.queryFragment = searchText
     }
@@ -207,9 +205,9 @@ class Coordinator: NSObject, UISearchBarDelegate, MKLocalSearchCompleterDelegate
             self.parent.result.removeAll()
             for i in 0 ..< self.searchResults.count {
                 let temp = SearchData(id: i, name: self.searchResults[i].title, address: self.searchResults[i].subtitle, result: self.searchResults[i])
-                print(temp)
-                
-                self.parent.result.append(temp)
+                if temp.address != "Search Nearby" {
+                    self.parent.result.append(temp)
+                }
             }
         }
     }

@@ -139,13 +139,15 @@ struct CreateEventPage: View {
                             }
                             .padding(.horizontal)
                         
-                        HorizontalPicker($icon, items: icons) { icon in
+                        SwiftUIWheelPicker($icon, items: icons) { icon in
                             GeometryReader { reader in
                                 Image(systemName: icon)
                                     .frame(width: reader.size.width, height: reader.size.height, alignment: .center)
                             }
                         }
                         .scrollAlpha(0.3)
+                        .frame(height: 30)
+
                             
                         Button(action: {
                             self.event.coordinate = CLLocationCoordinate2D(latitude: self.destination.latitude, longitude: self.destination.longitude)
@@ -171,11 +173,12 @@ struct CreateEventPage: View {
                     }
                 }
         }
-        .sheet(isPresented: $isShowingPreview) {
+        .fullScreenCover(isPresented: $isShowingPreview) {
             VStack {
                 EventDetailsView(
                     image: selectedImage ?? UIImage(),
                     event: event,
+                    preview: true,
                     eventView: .constant(false)
                 )
                 Button(action: {
@@ -196,7 +199,7 @@ struct CreateEventPage: View {
         let doc = db.collection("Events").document()
         print("Creating event for location: ", event.coordinate)
         
-        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": icons[icon], "Host": Auth.auth().currentUser!.displayName!, "HostName": event.hostName, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low"]) { err in
+        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": icons[icon], "Host": Auth.auth().currentUser!.displayName!, "HostName": event.hostName, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low", "Associated Highlights": [String]()]) { err in
             if err != nil {
                 print((err?.localizedDescription)!)
                 return

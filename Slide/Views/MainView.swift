@@ -3,11 +3,10 @@
 //  Created by Ethan Harianto on 12/21/22.
 
 import SwiftUI
-import AnimatedTabBar
 
 struct MainView: View {
     @State private var selectedColorScheme: String = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "dark"
-    
+
     /* The selection variable here defines which tab on the tab view the app initially starts on (the map) */
     @State private var selection = 2
     var body: some View {
@@ -35,12 +34,15 @@ struct MainView: View {
                     Label("", systemImage: "person.circle")
                 }
                 .tag(3)
-
-            SettingsView(selectedColorScheme: $selectedColorScheme)
-                .tabItem {
-                    Label("", systemImage: "gear")
-                }
-                .tag(4)
+            NavigationView {
+                SettingsView(selectedColorScheme: $selectedColorScheme)
+                    .navigationTitle("Settings")
+            }
+            .tabItem {
+                Label("", systemImage: "gear")
+            }
+            .tag(4)
+            .navigationViewStyle(.stack)
         }
         .onAppear {
             UITabBar.customizeAppearance()

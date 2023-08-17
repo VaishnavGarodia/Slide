@@ -17,8 +17,14 @@ struct EventGalleryCard: View {
         ZStack {
             ScrollView {
                 VStack {
-                    Text(eventGalleryInfo.eventName)
-                        .fontWeight(.bold)
+                    HStack {
+                        Image(systemName: eventGalleryInfo.icon)
+                        Text(eventGalleryInfo.eventName)
+                            .fontWeight(.bold)
+                    }
+                    .padding(-5)
+                    .bubbleStyle(color: .white)
+
                     TabView(selection: $selectedTab) {
                         ForEach(tempHighlights.indices, id: \.self) { index in
                             HighlightCard(highlight: tempHighlights[index], selectedUser: $selectedUser, profileView: $profileView)

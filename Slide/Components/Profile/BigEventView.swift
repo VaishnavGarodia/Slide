@@ -9,8 +9,6 @@ struct BigEventView: View {
     @State private var posts: [HighlightInfo] = [] // Holds the list of associated posts
     @State private var highlight: HighlightInfo? // Holds the selected highlight
     @State private var userData: UserData?
-    // TODO: I need this for the weird call to HighlightCard below, someone help resolve please
-    @State private var profileView: Bool = false
     
     var body: some View {
         ScrollView {
@@ -33,9 +31,8 @@ struct BigEventView: View {
         }
         .sheet(item: $highlight) { highlight in
             // Present the highlight card using the sheet modifier
-            HighlightCard(highlight: highlight, selectedUser: $userData, profileView: $profileView)
+            HighlightCard(highlight: highlight, selectedUser: $userData, profileView: .constant(false))
         }
-
     }
     
     private func loadAssociatedPosts() {

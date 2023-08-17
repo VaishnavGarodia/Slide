@@ -15,7 +15,7 @@ struct HighlightCard: View {
     @State private var currentUserLiked: Bool = false
     @Binding var selectedUser: UserData?
     @Binding var profileView: Bool
-    
+
     var body: some View {
         ZStack {
             HighlightImage(imageURL: URL(string: highlight.imageName)!)
@@ -54,23 +54,20 @@ struct HighlightCard: View {
                 Spacer()
                 HStack {
                     Spacer()
-                    VStack {
-                        Image(systemName: "bubble.left")
-                            .foregroundColor(.white)
-                            .imageScale(.medium)
-                            .padding()
-                            .background((BlurView(style: .systemMaterial).clipShape(Circle())))
-                        Button(action: {
-                            LikePost()
-                            withAnimation {
-                                currentUserLiked.toggle()
-                            }
-                        }) {
-                            Image(systemName: currentUserLiked ? "heart.fill" : "heart")
-                                .foregroundColor(currentUserLiked ? .accentColor : .white)
-                                .padding()
-                                .background((BlurView(style: .systemMaterial).clipShape(Circle())))
+                    Button(action: {
+                        LikePost()
+                        withAnimation {
+                            currentUserLiked.toggle()
                         }
+                    }) {
+                        VStack {
+                            Image(systemName: currentUserLiked ? "heart.fill" : "heart")
+                            Text("\(highlight.likedUsers.count)")
+                                .font(.caption)
+                        }
+                        .foregroundColor(currentUserLiked ? .accentColor : .white)
+                        .padding()
+                        .background(BlurView(style: .systemMaterial).clipShape(Circle()))
                     }
                     .padding()
                 }
@@ -80,14 +77,14 @@ struct HighlightCard: View {
             currentUserLiked = isCurUserLiking()
         }
     }
-    
+
     func isCurUserLiking() -> Bool {
         guard let currentUserID = user?.uid else {
             return false
         }
         return highlight.likedUsers.contains(currentUserID)
     }
-    
+
     func LikePost() {
         // 1. Add currentUserID to currentUserLiked and update likedUsers in highlight
         guard let currentUserID = user?.uid else {
@@ -95,11 +92,11 @@ struct HighlightCard: View {
         }
         // 2. Update the corresponding post in the database
         let postID = highlight.postID
-        let eventDocRef = db.collection("Posts").document(postID)
+        let postRef = db.collection("Posts").document(postID)
         print("POST ID")
         print(postID)
-        
-        eventDocRef.getDocument { document, _ in
+
+        postRef.getDocument { document, _ in
             if let document = document, document.exists {
                 var likedUsersList = document.data()?["Liked Users"] as? [String] ?? []
                 if likedUsersList.contains(currentUserID) {
@@ -108,11 +105,10 @@ struct HighlightCard: View {
                 else {
                     likedUsersList.append(currentUserID)
                 }
-                eventDocRef.updateData(["Liked Users": likedUsersList])
+                postRef.updateData(["Liked Users": likedUsersList])
                 highlight.likedUsers = likedUsersList
-            }
-            else {
-                print("User document not found!")
+            } else {
+                print("Event document not found!")
             }
         }
     }
@@ -126,17 +122,13 @@ struct SmallHighlightCard: View {
                 .resizable()
                 .fade(duration: 0.25)
                 .scaledToFill()
-                .frame(width: 180, height: 180)
+                .frame(width: UIScreen.main.bounds.width / 2.25, height: UIScreen.main.bounds.width / 2.25)
                 .clipped()
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-            VStack(alignment: .leading) {
-                Spacer()
-                Text(highlight.highlightTitle)
-                    .padding(2) // Add some padding to increase the frame size
-                    .background(Color.black.opacity(0.6))
-                    .cornerRadius(10) // Add corner radius to make it rounded
-            }
+            Text(highlight.highlightTitle)
+                .padding(2)
+                .background(Color.black.opacity(0.6))
+                .cornerRadius(10)
         }
-        .padding()
     }
 }

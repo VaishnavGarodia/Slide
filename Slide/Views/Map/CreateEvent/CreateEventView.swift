@@ -107,7 +107,9 @@ struct CreateEventView: UIViewRepresentable {
                 
                 self.parent.event.address = addressString
                 point.title = places?.first?.name ?? ""
-                self.parent.show = true
+                withAnimation {
+                    self.parent.show = true
+                }
             }
                 
             self.parent.map.setRegion(region, animated: true)
