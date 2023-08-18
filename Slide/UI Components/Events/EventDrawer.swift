@@ -11,7 +11,7 @@ struct EventDrawer: View {
     @Binding var map: MKMapView
     @Binding var eventView: Bool
     // Gesture Properties...
-    @State var offset: CGFloat = 0
+    @State var offset: CGFloat = 10
     @State var lastOffset: CGFloat = 0
     @State var storedOffset: CGFloat = 0
     @GestureState var gestureOffset: CGFloat = 0
@@ -23,13 +23,13 @@ struct EventDrawer: View {
                 ZStack {
                     BlurView(style: .systemThinMaterial)
                         .clipShape(CustomCorner(corners: [.topLeft, .topRight], radius: 15))
+                        .edgesIgnoringSafeArea(.bottom)
 
                     if eventView {
                         VStack {
-                            EventDetailsView(
+                            EventDetailsView (
                                 event: selectedEvent,
-                                eventView: $eventView,
-                                fromMap: true
+                                eventView: $eventView
                             )
                             .offset(x: -5)
                             .onAppear {
@@ -56,12 +56,13 @@ struct EventDrawer: View {
                             Capsule()
                                 .fill(.white)
                                 .frame(width: 60, height: 4)
+                                .padding(.bottom)
 
                             ScrollView {
                                 ForEach($events, id: \.name) { event in
                                     ListedEvent(event: event, selectedEvent: $selectedEvent, eventView: $eventView)
                                 }
-                                .padding(.top)
+                                .padding(.bottom)
                             }
 
                             Divider()
@@ -69,11 +70,11 @@ struct EventDrawer: View {
 
                             Spacer()
                         }
-                        .padding(16)
+                        .padding()
                     }
                 } //: ZSTACK
                 .offset(y: height - 30)
-                .offset(y: -offset > 0 ? -offset <= (height - 30) ? offset : -(height - 30) : 0)
+                .offset(y: -offset > 10 ? -offset <= (height - 30) ? offset : -(height - 30) : 0)
                 .gesture(DragGesture().updating($gestureOffset, body: { value, out, _ in
                     out = value.translation.height
                     onChange()
@@ -85,14 +86,14 @@ struct EventDrawer: View {
                         if -offset > 30, -offset < maxHeight / 3, offset < lastOffset {
                             // Mid...
                             if !eventView {
-                                offset = (-(maxHeight / 3) > -CGFloat(events.count * 105) + 20 || -(maxHeight / 3) < -CGFloat(events.count * 105) - 20) ? -CGFloat(events.count * 105) : -(maxHeight / 3)
+                                offset = (-(maxHeight / 3) > -CGFloat(events.count * 110) + 20 || -(maxHeight / 3) < -CGFloat(events.count * 110) - 20) ? -CGFloat(events.count * 110) : -(maxHeight / 3)
                             } else {
-                                offset = 0
+                                offset = 10
                             }
                         } else if -offset > maxHeight / 3 {
-                            offset = (events.count >= 7 || eventView) ? -maxHeight : -CGFloat(events.count * 105)
+                            offset = (events.count >= 7 || eventView) ? -maxHeight : -CGFloat(events.count * 110)
                         } else {
-                            offset = 0
+                            offset = 10
                         }
                     }
 

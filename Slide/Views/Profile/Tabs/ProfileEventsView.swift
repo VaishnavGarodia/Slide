@@ -34,7 +34,7 @@ struct ProfileEventsView: View {
         
         let group = DispatchGroup() // Create a DispatchGroup
 
-        let userDocumentRef = Firestore.firestore().collection("Users").document(currentUserID)
+        let userDocumentRef = db.collection("Users").document(currentUserID)
         
         group.enter() // Notify the group that a task has started
         

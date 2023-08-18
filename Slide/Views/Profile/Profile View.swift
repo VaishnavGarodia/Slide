@@ -12,6 +12,7 @@ struct ProfileView: View {
     @State private var user = Auth.auth().currentUser
     @State private var tab = "Highlights"
     @State private var editProfilePic = false
+    @State private var eventView = false
     
     var body: some View {
         FancyScrollView(title: "",
@@ -19,8 +20,8 @@ struct ProfileView: View {
                         scrollUpHeaderBehavior: .parallax,
                         scrollDownHeaderBehavior: .sticky,
                         header: { VStack {
-            Spacer()
-                .frame(height: 20)
+                            Spacer()
+                                .frame(height: 20)
                             ZStack {
                                 HStack {
                                     VStack(alignment: .center) {

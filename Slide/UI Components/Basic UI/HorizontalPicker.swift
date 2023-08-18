@@ -7,7 +7,7 @@ public enum WidthOption {
     case Ratio(CGFloat)
 }
 //SwiftUICustomSlider
-public struct SwiftUIWheelPicker<Content: View, Item>: View {
+public struct HorizontalPicker<Content: View, Item>: View {
     
     private var items: Binding<[Item]>
     let contentBuilder: (Item) -> Content
@@ -228,7 +228,7 @@ struct SwiftUIWheelPickerView_Previews: PreviewProvider {
     @ViewBuilder static func preview() -> some View {
         GeometryReader { geometry in
             VStack(alignment: .center, spacing: 0) {
-                SwiftUIWheelPicker(Binding.constant(5), items: Binding.constant([0, 1, 2, 3, 4, 5, 6, 7, 8 ,9, 10])) { value in
+                HorizontalPicker(Binding.constant(5), items: Binding.constant([0, 1, 2, 3, 4, 5, 6, 7, 8 ,9, 10])) { value in
                     GeometryReader { reader in
                         Text("\(value)")
                             .frame(width: reader.size.width, height: reader.size.height, alignment: .center)
@@ -237,7 +237,7 @@ struct SwiftUIWheelPickerView_Previews: PreviewProvider {
                 }
                 .frame(width: geometry.size.width, height: 40, alignment: .center)
                 
-                SwiftUIWheelPicker(Binding.constant(5), items: Binding.constant([0, 1, 2, 3, 4, 5, 6, 7, 8 ,9, 10])) { value in
+                HorizontalPicker(Binding.constant(5), items: Binding.constant([0, 1, 2, 3, 4, 5, 6, 7, 8 ,9, 10])) { value in
                     GeometryReader { reader in
                         Text("\(value)")
                             .frame(width: reader.size.width, height: reader.size.height, alignment: .center)
@@ -250,7 +250,7 @@ struct SwiftUIWheelPickerView_Previews: PreviewProvider {
                 .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.black, lineWidth: 2.0))
                 .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
                 
-                SwiftUIWheelPicker(Binding.constant(5), items: Binding.constant([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) { value in
+                HorizontalPicker(Binding.constant(5), items: Binding.constant([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])) { value in
                     GeometryReader { reader in
                         Text("\(value)")
                             .frame(width: reader.size.width, height: reader.size.height, alignment: .center)
@@ -262,7 +262,7 @@ struct SwiftUIWheelPickerView_Previews: PreviewProvider {
                 .border(Color.black, width: 1)
                 .padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
                 
-                SwiftUIWheelPicker(Binding.constant(5), items: Binding.constant([0, 1, 2, 3, 4, 5, 6, 7, 8 ,9, 10])) { value in
+                HorizontalPicker(Binding.constant(5), items: Binding.constant([0, 1, 2, 3, 4, 5, 6, 7, 8 ,9, 10])) { value in
                     GeometryReader { reader in
                         Text("\(value)")
                             .frame(width: reader.size.width, height: reader.size.height, alignment: .center)

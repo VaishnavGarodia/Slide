@@ -1,3 +1,7 @@
+// MapPage.swift
+// Slide
+// Created by Vaishnav Garodia
+
 import CoreLocation
 import FirebaseFirestore
 import MapKit
@@ -60,7 +64,6 @@ struct MapPage: View {
     }
 
     func fetchEvents() {
-        let db = Firestore.firestore()
         let currentDate = Date()
         let fiveHoursLater = Calendar.current.date(byAdding: .hour, value: 5, to: currentDate)!
         db.collection("Events").whereField("End", isGreaterThan: currentDate)
@@ -77,7 +80,6 @@ struct MapPage: View {
                         name: data["Name"] as? String ?? "",
                         description: data["Description"] as? String ?? "",
                         host: data["Host"] as? String ?? "",
-                        hostName: data["HostName"] as? String ?? "",
                         address: data["Address"] as? String ?? "",
                         start: (data["Start"] as? Timestamp)?.dateValue() ?? Date(),
                         end: (data["End"] as? Timestamp)?.dateValue() ?? Date(),
@@ -85,7 +87,8 @@ struct MapPage: View {
                         icon: data["Icon"] as? String ?? "",
                         coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
                         bannerURL: data["Event Image"] as? String ?? "",
-                        hype: data["Hype"] as? String ?? "low"
+                        hype: data["Hype"] as? String ?? "low",
+                        id: document.documentID
                     )
                     newEvents.append(event)
                 }

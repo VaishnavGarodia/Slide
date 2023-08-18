@@ -9,15 +9,25 @@ import SwiftUI
 struct ProfileHighlightsView: View {
     let user = Auth.auth().currentUser
     @ObservedObject var highlightHolder = ProfileInfo()
-
+    @State private var post: HighlightInfo? = nil
+    @State private var selectedUser: UserData? = nil
     var body: some View {
         ScrollView {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
                 ForEach(highlightHolder.highlights) { highlight in
                     SmallHighlightCard(highlight: highlight)
+                        .onTapGesture {
+                            withAnimation {
+                                post = highlight
+                            }
+                        }
                 }
             }
             .padding(.horizontal)
+        }
+        .sheet(item: $post) { highlight in
+            HighlightCard(highlight: highlight, selectedUser: $selectedUser, profileView: .constant(false))
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width / 0.63)
         }
         .refreshable {
             fetchHighlights(for: user!.uid)

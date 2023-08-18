@@ -1,9 +1,7 @@
-//
-// MapPage.swift
+// CreateEventPage.swift
 // Slide
-//
 // Created by Vaishnav Garodia
-//
+
 import CoreLocation
 import FirebaseAuth
 import FirebaseFirestore
@@ -16,11 +14,11 @@ struct CreateEventPage: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var isPhotoLibraryAuthorized = false
     @State private var map = MKMapView()
-    @State var event = Event()
-    @State var destination: CLLocationCoordinate2D!
-    @State var show = false
+    @State private var event = Event()
+    @State private var destination: CLLocationCoordinate2D!
+    @State private var show = false
     @State private var createEventSearch: Bool = true
-    @State var alert = false
+    @State private var alert = false
     @State private var isShowingImagePicker = false
     @State private var selectedImage: UIImage? = UIImage()
     @State private var wasSelected: Bool = false
@@ -89,7 +87,7 @@ struct CreateEventPage: View {
                                 }
                             }
                         }
-                        .padding()
+                        .padding(.horizontal)
                         
                         Section {
                             TextField("What's your event called?", text: self.$event.name)
@@ -139,7 +137,7 @@ struct CreateEventPage: View {
                             }
                             .padding(.horizontal)
                         
-                        SwiftUIWheelPicker($icon, items: icons) { icon in
+                        HorizontalPicker($icon, items: icons) { icon in
                             GeometryReader { reader in
                                 Image(systemName: icon)
                                     .frame(width: reader.size.width, height: reader.size.height, alignment: .center)
@@ -148,18 +146,14 @@ struct CreateEventPage: View {
                         .scrollAlpha(0.3)
                         .frame(height: 30)
 
-                            
                         Button(action: {
                             self.event.coordinate = CLLocationCoordinate2D(latitude: self.destination.latitude, longitude: self.destination.longitude)
                             self.isShowingPreview = true
                         }) {
                             Text("Create Event")
                                 .foregroundColor(.white)
-                                .padding(.vertical, 10)
-                                .frame(width: UIScreen.main.bounds.width / 2)
+                                .filledBubble()
                         }
-                        .filledBubble()
-                        .padding()
                     }
                 }
             }
@@ -175,7 +169,7 @@ struct CreateEventPage: View {
         }
         .fullScreenCover(isPresented: $isShowingPreview) {
             VStack {
-                EventDetailsView(
+                EventDetails(
                     image: selectedImage ?? UIImage(),
                     event: event,
                     preview: true,
@@ -199,7 +193,7 @@ struct CreateEventPage: View {
         let doc = db.collection("Events").document()
         print("Creating event for location: ", event.coordinate)
         
-        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": icons[icon], "Host": Auth.auth().currentUser!.displayName!, "HostName": event.hostName, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low", "Associated Highlights": [String]()]) { err in
+        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": icons[icon], "Host": Auth.auth().currentUser!.displayName!, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low", "Associated Highlights": [String]()]) { err in
             if err != nil {
                 print((err?.localizedDescription)!)
                 return

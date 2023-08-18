@@ -9,10 +9,16 @@ import SwiftUI
 
 struct MiniEventView: View {
     var eventID: String
-    @State private var event: Event = Event()
+    @State private var event: Event = .init()
+    @State private var eventView = false
+    @State private var selectedTab = 0
 
     var body: some View {
-        NavigationLink(destination: EventDetailsView(event: event, eventView: .constant(false))) {
+        Button {
+            withAnimation {
+                eventView.toggle()
+            }
+        } label: {
             ZStack(alignment: .bottomLeading) {
                 if event.bannerURL.isEmpty {
                     ZStack {
@@ -33,7 +39,6 @@ struct MiniEventView: View {
                     .cornerRadius(10)
                     .foregroundColor(.white)
             }
-            
         }
         .frame(width: UIScreen.main.bounds.width / 2.25, height: UIScreen.main.bounds.width / 2.25)
         .background(Color.blue)
@@ -42,6 +47,9 @@ struct MiniEventView: View {
             fetchEventDetails(for: eventID) { temp in
                 event = temp!
             }
+        }
+        .sheet(isPresented: $eventView) {
+            EventDetailsView(event: event, eventView: $eventView)
         }
     }
 
@@ -56,7 +64,6 @@ struct MiniEventView: View {
                     name: data?["Name"] as? String ?? "",
                     description: data?["Description"] as? String ?? "",
                     host: data?["Host"] as? String ?? "",
-                    hostName: data?["HostName"] as? String ?? "",
                     address: data?["Address"] as? String ?? "",
                     start: (data?["Start"] as? Timestamp)?.dateValue() ?? Date(),
                     end: (data?["End"] as? Timestamp)?.dateValue() ?? Date(),
@@ -64,7 +71,8 @@ struct MiniEventView: View {
                     icon: data?["Icon"] as? String ?? "",
                     coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
                     bannerURL: data?["Event Image"] as? String ?? "",
-                    hype: data?["Hype"] as? String ?? "low"
+                    hype: data?["Hype"] as? String ?? "low",
+                    id: document.documentID
                 )
                 completion(event)
             } else {

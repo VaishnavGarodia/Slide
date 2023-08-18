@@ -1,4 +1,4 @@
-//  EventDetailsView.swift
+//  EventDetails.swift
 //  Slide
 //  Created by Vaishnav Garodia on 8/8/23.
 
@@ -6,7 +6,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import SwiftUI
 
-struct EventDetailsView: View {
+struct EventDetails: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var image: UIImage = .init()
     var event: Event
@@ -86,7 +86,7 @@ struct EventDetailsView: View {
             }
 
             // ... (display other details as needed)
-            Text(event.hostName)
+            Text(event.host)
             HStack {
                 Text(formatDate(date: event.start))
                 Text("-")

@@ -7,7 +7,7 @@ import SwiftUI
 struct Highlights: View {
     @State private var galleries: [EventGalleryInfo] = []
     @State private var highlights: [HighlightInfo] = []
-    @State private var isPresentingPostCreationView = false
+    @Binding var isPresentingPostCreationView: Bool
     let user = Auth.auth().currentUser
     @State private var profileView = false
     @State private var selectedUser: UserData? = nil
@@ -27,16 +27,7 @@ struct Highlights: View {
             }
             .scrollIndicators(.hidden)
 
-            Button(action: {
-                isPresentingPostCreationView = true
-            }) {
-                Image(systemName: "plus.app")
-                    .foregroundColor(.white)
-                    .padding()
-                    .imageScale(.large)
-            }
-            .background(Circle().foregroundColor(.accentColor))
-            .padding()
+            
         }
         .fullScreenCover(isPresented: $isPresentingPostCreationView) {
             VStack {
@@ -152,6 +143,6 @@ struct Highlights: View {
 
 struct Highlights_Previews: PreviewProvider {
     static var previews: some View {
-        Highlights()
+        Highlights(isPresentingPostCreationView: .constant(false))
     }
 }
