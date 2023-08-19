@@ -5,6 +5,8 @@
 import FirebaseAuth
 import FirebaseFirestore
 import SwiftUI
+import Foundation
+
 
 struct EventDetails: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -138,9 +140,82 @@ struct EventDetails: View {
 
     private func simulateRequest() {
         isLoading = true
+        let userID = Auth.auth().currentUser!.uid
+        let eventID = event.id
+        let eventDoc = db.collection("Events").document(eventID)
+        let userDoc = db.collection("Users").document(userID)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            isLoading = false
+        let group = DispatchGroup()
+
+        group.enter()
+
+        // Update user's SLIDES array
+        userDoc.getDocument { (userDocument, error) in
+            if let error = error {
+                print("Error getting user document: \(error)")
+                return
+            }
+            
+            var slidesArray: [String] = []
+
+            if let userData = userDocument?.data(),
+               let existingSlides = userData["SLIDES"] as? [String] {
+                slidesArray = existingSlides
+            }
+
+            if slidesArray.contains(eventID) {
+                slidesArray.removeAll { $0 == eventID }
+            } else {
+                slidesArray.append(eventID)
+            }
+
+            userDoc.setData(["SLIDES": slidesArray], merge: true) { (error) in
+                if let error = error {
+                    print("Error updating user document: \(error)")
+                }
+            }
+            group.leave()
         }
+        
+        group.enter()
+        // Update event's SLIDES array
+        eventDoc.getDocument { (eventDocument, error) in
+            if let error = error {
+                print("Error getting event document: \(error)")
+                return
+            }
+            
+            var slidesArray: [String] = []
+
+            if let eventData = eventDocument?.data(),
+               let existingSlides = eventData["SLIDES"] as? [String] {
+                slidesArray = existingSlides
+            }
+
+            if slidesArray.contains(userID) {
+                slidesArray.removeAll { $0 == userID }
+            } else {
+                slidesArray.append(userID)
+            }
+                
+            
+            userDoc.setData(["SLIDES": slidesArray], merge: true) { (error) in
+                if let error = error {
+                    print("Error updating user document: \(error)")
+                }
+            }
+            eventDoc.setData(["SLIDES": slidesArray], merge: true) { (error) in
+                if let error = error {
+                    print("Error updating user document: \(error)")
+                }
+            }            
+            group.leave()
+        }
+        
+        group.notify(queue: .main) {
+            isLoading = false
+            return
+        }
+
     }
 }
