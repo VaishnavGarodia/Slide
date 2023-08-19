@@ -32,7 +32,7 @@ struct HighlightCard: View {
                             }
                         VStack(alignment: .leading) {
                             Text(highlight.username)
-                                .foregroundColor(.white)
+                                .foregroundColor(.primary)
                                 .fontWeight(.semibold)
                                 .onTapGesture {
                                     selectedUser = UserData(userID: highlight.uid, username: highlight.username, photoURL: highlight.profileImageName)
@@ -42,7 +42,7 @@ struct HighlightCard: View {
                                 Text(highlight.highlightTitle)
                                     .font(.caption)
                                     .fontWeight(.thin)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.primary)
                             }
                         }
                     }
@@ -127,6 +127,7 @@ struct SmallHighlightCard: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             Text(highlight.highlightTitle)
                 .padding(2)
+                .foregroundColor(.white)
                 .background(Color.black.opacity(0.6))
                 .cornerRadius(10)
         }

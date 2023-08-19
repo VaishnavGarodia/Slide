@@ -14,13 +14,14 @@ struct ProfileEventsView: View {
 
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                 ForEach(eventIDs, id: \.self) { eventID in
-                    MiniEventView(eventID: eventID)
+                    SmallEventGalleryCard(eventID: eventID)
                 }
             }
             .padding(.horizontal)
         }
+        .scrollIndicators(.never)
         .onAppear {
             loadEventIDs()
         }

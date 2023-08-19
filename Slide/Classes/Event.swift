@@ -40,7 +40,7 @@ class Event: NSObject, MKAnnotation {
         self.hostUID = ""
         self.icon = ""
         self.coordinate = CLLocationCoordinate2D()
-        self.bannerURL = "https://static01.nyt.com/images/2023/02/13/multimedia/08BEFORE-MIDNIGHT-fzql/08BEFORE-MIDNIGHT-fzql-articleLarge.jpg?quality=75&auto=webp&disable=upscale"
+        self.bannerURL = ""
         self.hype = "low"
         self.id = ""
     }

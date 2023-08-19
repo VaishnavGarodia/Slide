@@ -1,9 +1,6 @@
-//
 //  EventGalleryInfo.swift
 //  Slide
-//
 //  Created by Thomas on 7/27/23.
-//
 
 import Foundation
 

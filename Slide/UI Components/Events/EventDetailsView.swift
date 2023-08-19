@@ -15,7 +15,7 @@ struct EventDetailsView: View {
                 EventDetails(event: event, eventView: $eventView, fromMap: true)
                 Spacer()
             }
-            BigEventView(eventID: event.id)
+            EventGallery(eventID: event.id)
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
     }

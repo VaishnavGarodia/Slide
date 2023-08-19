@@ -23,7 +23,7 @@ struct EventBanner: View {
                         self.height = UIScreen.main.bounds.width * 0.95 * 3 / 4
                     } else {
                         // Portrait or square image
-                        self.height = UIScreen.main.bounds.width * 0.95 * 4 / 3
+                        self.height = UIScreen.main.bounds.width * 0.95 * 6 / 5
                     }
                 }
                 .scaledToFill()

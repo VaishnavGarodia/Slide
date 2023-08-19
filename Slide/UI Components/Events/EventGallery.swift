@@ -3,42 +3,36 @@ import Firebase
 import FirebaseFirestoreSwift
 import SwiftUI
 
-struct BigEventView: View {
+struct EventGallery: View {
     var eventID: String
     @State private var posts: [HighlightInfo] = [] // Holds the list of associated posts
     @State private var highlight: HighlightInfo? // Holds the selected highlight
     @State private var userData: UserData?
     
     var body: some View {
-        VStack {
-            Capsule()
-                .fill(.white.opacity(0.6))
-                .frame(width: 60, height: 4)
-                .padding()
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
-                    ForEach(posts) { post in
-                        Button(action: {
-                            highlight = post // Set the selected highlight
-                        }) {
-                            HighlightImageMini(imageURL: URL(string: post.imageName)!)
-                                .clipped()
-                                .clipShape(RoundedRectangle(cornerRadius: 15))
-                        }
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                ForEach(posts) { post in
+                    Button(action: {
+                        highlight = post // Set the selected highlight
+                    }) {
+                        HighlightImageMini(imageURL: URL(string: post.imageName)!)
+                            .clipped()
+                            .clipShape(RoundedRectangle(cornerRadius: 15))
                     }
                 }
-                .padding()
             }
-            .scrollIndicators(.hidden)
-            .onAppear {
-                loadAssociatedPosts()
-                print(posts)
-            }
-            .sheet(item: $highlight) { highlight in
-                // Present the highlight card using the sheet modifier
-                HighlightCard(highlight: highlight, selectedUser: $userData, profileView: .constant(false))
-                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width / 0.63)
-            }
+            .padding()
+        }
+        .scrollIndicators(.hidden)
+        .onAppear {
+            loadAssociatedPosts()
+            print(posts)
+        }
+        .sheet(item: $highlight) { highlight in
+            // Present the highlight card using the sheet modifier
+            HighlightCard(highlight: highlight, selectedUser: $userData, profileView: .constant(false))
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width / 0.63)
         }
     }
     

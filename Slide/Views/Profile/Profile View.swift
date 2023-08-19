@@ -40,13 +40,10 @@ struct ProfileView: View {
                                 }
                 
                                 ZStack {
-                                    Color.accentColor
-                                        .clipShape(Circle())
-                                        .frame(width: 115, height: 115)
-                    
-                                    Color.black
-                                        .clipShape(Circle())
-                                        .frame(width: 110, height: 110)
+                                    Circle()
+                                        .stroke(lineWidth: 2.5)
+                                        .fill(Color.accentColor)
+                                        .frame(width: 115)
                     
                                     ProfilePicture()
                                 }
@@ -83,6 +80,7 @@ struct ProfileView: View {
                     }
                 }
                 .padding()
+                
                 if tab == "Highlights" {
                     ProfileHighlightsView(highlightHolder: profileInfo)
                         .transition(.move(edge: .leading))
@@ -90,7 +88,6 @@ struct ProfileView: View {
                     ProfileEventsView()
                         .transition(.move(edge: .trailing))
                 }
-                Spacer()
             }
         }
         

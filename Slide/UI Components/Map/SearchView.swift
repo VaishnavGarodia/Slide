@@ -205,7 +205,7 @@ class Coordinator: NSObject, UISearchBarDelegate, MKLocalSearchCompleterDelegate
             self.parent.result.removeAll()
             for i in 0 ..< self.searchResults.count {
                 let temp = SearchData(id: i, name: self.searchResults[i].title, address: self.searchResults[i].subtitle, result: self.searchResults[i])
-                if temp.address != "Search Nearby" {
+                if temp.address != "Search Nearby" && temp.address != "" {
                     self.parent.result.append(temp)
                 }
             }

@@ -86,6 +86,7 @@ struct MapView: UIViewRepresentable {
                         let btn = UIButton(type: .detailDisclosure)
                         annotationView.rightCalloutAccessoryView = btn
                     }
+            annotationView.animatesWhenAdded = true
             annotationView.markerTintColor = color
             annotationView.glyphImage = UIImage(systemName: eventData.icon)
             annotationView.glyphTintColor = .yellow

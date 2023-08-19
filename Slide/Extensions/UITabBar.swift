@@ -13,12 +13,3 @@ extension UITabBar {
         UITabBar.appearance().shadowImage = UIImage()
     }
 }
-
-//extension UITabBarController {
-//    open override func viewWillLayoutSubviews() {
-//       super.viewWillLayoutSubviews()
-//       self.tabBar.layer.masksToBounds = true
-//       self.tabBar.layer.cornerRadius = 15 // whatever you want
-//       self.tabBar.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner] // only the top right and left corners
-//    }
-//}

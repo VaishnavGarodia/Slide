@@ -31,7 +31,6 @@ struct EventDrawer: View {
                                 event: selectedEvent,
                                 eventView: $eventView
                             )
-                            .offset(x: -5)
                             .onAppear {
                                 withAnimation {
                                     storedOffset = offset
@@ -54,7 +53,7 @@ struct EventDrawer: View {
                     } else {
                         VStack {
                             Capsule()
-                                .fill(.white)
+                                .fill(.primary)
                                 .frame(width: 60, height: 4)
                                 .padding(.bottom)
 

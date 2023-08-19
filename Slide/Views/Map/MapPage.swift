@@ -12,7 +12,6 @@ struct MapPage: View {
     @State var manager = CLLocationManager()
     @State var alert = false
     @State var destination: CLLocationCoordinate2D!
-    @State var event = Event()
     @State var show = false
     @State var eventView = false
     @State var events: [Event] = []
@@ -21,33 +20,26 @@ struct MapPage: View {
 
     var body: some View {
         ZStack {
-            ZStack {
-                MapView(map: self.$map, manager: self.$manager, alert: self.$alert, destination: self.$destination, show: self.$show, events: self.$events, eventView: $eventView, selectedEvent: self.$selectedEvent)
-                    .ignoresSafeArea()
+            MapView(map: $map, manager: $manager, alert: $alert, destination: $destination, show: $show, events: $events, eventView: $eventView, selectedEvent: $selectedEvent)
+                .ignoresSafeArea()
 
-                ZStack {
-                    VStack {
-                        ZStack(alignment: .topLeading) {
-                            HStack {
-                                Spacer()
-                                Button(action: {
-                                    isPresentingCreateEventPage = true
-                                }) {
-                                    Image(systemName: "plus")
-                                        .padding(-5)
-                                        .filledBubble()
-                                        .frame(width: 60)
-                                        .padding(.trailing)
-                                        .padding(.top, -15)
-                                }
-                            }
-
-                            SearchView(map: self.$map, location: self.$destination, event: self.$event, detail: self.$show, frame: 300)
-                                .padding(.top, -15)
-                        }
-                        Spacer()
+            ZStack(alignment: .topLeading) {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        isPresentingCreateEventPage = true
+                    }) {
+                        Image(systemName: "plus")
+                            .padding(-5)
+                            .filledBubble()
+                            .frame(width: 60)
+                            .padding(.trailing)
+                            .padding(.top, -15)
                     }
                 }
+
+                SearchView(map: $map, location: $destination, event: $selectedEvent, detail: $show, frame: 300)
+                    .padding(.top, -15)
             }
             .alert(isPresented: self.$alert) { () -> Alert in
                 Alert(title: Text("Error"), message: Text("Please Enable Location In Settings !!!"), dismissButton: .destructive(Text("Ok")))
@@ -86,7 +78,7 @@ struct MapPage: View {
                         hostUID: data["HostUID"] as? String ?? "",
                         icon: data["Icon"] as? String ?? "",
                         coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
-                        bannerURL: data["Event Image"] as? String ?? "",
+                        bannerURL: data["BannerURL"] as? String ?? "",
                         hype: data["Hype"] as? String ?? "low",
                         id: document.documentID
                     )

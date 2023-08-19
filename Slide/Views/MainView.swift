@@ -48,46 +48,18 @@ struct MainView: View {
                                 selection = 0
                             }
                     }
+                
                 Image(systemName: "person.2")
-                    .imageScale(selection == 1 ? .large : .medium)
-                    .padding(7.5)
-                    .background(selection == 1 ? Color.accentColor.clipShape(Circle()) : Color.clear.clipShape(Circle()))
-                    .padding()
-                    .onTapGesture {
-                        withAnimation {
-                            selection = 1
-                        }
-                    }
+                    .tabBarItem(index: 1, selection: $selection)
+
                 Image(systemName: "map")
-                    .imageScale(selection == 2 ? .large : .medium)
-                    .padding(7.5)
-                    .background(selection == 2 ? Color.accentColor.clipShape(Circle()) : Color.clear.clipShape(Circle()))
-                    .padding()
-                    .onTapGesture {
-                        withAnimation {
-                            selection = 2
-                        }
-                    }
+                    .tabBarItem(index: 2, selection: $selection)
+
                 Image(systemName: "person.circle")
-                    .imageScale(selection == 3 ? .large : .medium)
-                    .padding(7.5)
-                    .background(selection == 3 ? Color.accentColor.clipShape(Circle()) : Color.clear.clipShape(Circle()))
-                    .padding()
-                    .onTapGesture {
-                        withAnimation {
-                            selection = 3
-                        }
-                    }
+                    .tabBarItem(index: 3, selection: $selection)
+
                 Image(systemName: "gear")
-                    .imageScale(selection == 4 ? .large : .medium)
-                    .padding(7.5)
-                    .background(selection == 4 ? Color.accentColor.clipShape(Circle()) : Color.clear.clipShape(Circle()))
-                    .padding()
-                    .onTapGesture {
-                        withAnimation {
-                            selection = 4
-                        }
-                    }
+                    .tabBarItem(index: 4, selection: $selection)
             }
             .frame(width: UIScreen.main.bounds.width, height: 55)
             .background(selectedColorScheme == "dark" ? Color.black : Color.white)

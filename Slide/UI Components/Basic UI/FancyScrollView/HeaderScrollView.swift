@@ -34,7 +34,7 @@ struct HeaderScrollView: View {
                         let geometry = self.geometry(from: geometry, safeArea: globalGeometry.safeAreaInsets)
                         return AnyView(
                             ZStack {
-                                BlurView(style: .dark)
+                                BlurView(style: .systemMaterial)
                                     .opacity(1 - sqrt(geometry.largeTitleWeight))
                                     .offset(y: geometry.blurOffset)
 
@@ -66,6 +66,7 @@ struct HeaderScrollView: View {
                         .padding(.bottom, -self.headerHeight)
                 }
             }
+            .scrollIndicators(.never)
             .edgesIgnoringSafeArea(.top)
         }
         .navigationBarTitle(Text(""), displayMode: .inline)

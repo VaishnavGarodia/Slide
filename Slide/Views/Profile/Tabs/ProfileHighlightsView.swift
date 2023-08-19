@@ -13,7 +13,7 @@ struct ProfileHighlightsView: View {
     @State private var selectedUser: UserData? = nil
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                 ForEach(highlightHolder.highlights) { highlight in
                     SmallHighlightCard(highlight: highlight)
                         .onTapGesture {
@@ -25,6 +25,7 @@ struct ProfileHighlightsView: View {
             }
             .padding(.horizontal)
         }
+        .scrollIndicators(.never)
         .sheet(item: $post) { highlight in
             HighlightCard(highlight: highlight, selectedUser: $selectedUser, profileView: .constant(false))
                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width / 0.63)
