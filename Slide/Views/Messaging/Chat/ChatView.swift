@@ -11,8 +11,6 @@ struct ChatView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     let chatUser: ChatUser?
     @State private var username = ""
-    @State private var isImagePickerPresented = false
-    @State private var selectedImage: UIImage? = UIImage()
     @State private var profileView = false
     @State private var selectedUser: UserData? = nil
 
@@ -112,26 +110,6 @@ struct ChatView: View {
                             vm.handleSend()
                         }
                     }
-                    .overlay(
-                        // Display the selected image if available
-                        Group {
-                            if selectedImage != UIImage() {
-                                Image(uiImage: selectedImage!)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 30, height: 30)
-                                    .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color.white, lineWidth: 1))
-                                    .offset(x: -20)
-                            }
-                        }
-                    )
-                Image(systemName: "photo")
-                    .padding(5)
-                    .foregroundColor(.white)
-                    .onTapGesture {
-                        isImagePickerPresented.toggle()
-                    }
                 Button(action: {
                     if !vm.chatText.isEmpty {
                         vm.handleSend()
@@ -146,9 +124,6 @@ struct ChatView: View {
             }
             .padding()
             .background(Color.darkGray)
-            .fullScreenCover(isPresented: $isImagePickerPresented) {
-                ImagePicker(selectedImage: $selectedImage, wasSelected: true)
-            }
         }
     }
 }

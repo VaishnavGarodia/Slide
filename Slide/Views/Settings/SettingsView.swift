@@ -17,29 +17,6 @@ struct SettingsView: View {
     
     var body: some View {
         List {
-//            Group {
-//                Button {
-//                    withAnimation {
-//                        toggleClicks(count: 6)
-//                    }
-//                } label: {
-//                    HStack {
-//                        VStack(alignment: .leading) {
-//                            UserProfilePictures(photoURL: user?.photoURL?.absoluteString ?? "" , dimension: 80)
-//                            Text("Profile Picture")
-//                                .foregroundColor(.primary)
-//                        }
-//                        Spacer()
-//                        Image(systemName: "chevron.right")
-//                            .rotationEffect(.degrees(clicks[6] ? 90 : 0))
-//                    }
-//                }
-//
-//                if clicks[6] {
-//                    updateUsernameView(updatedUsername: $updatedUsername, clicked: $clicks[0])
-//                }
-//            }
-            
             Group {
                 // Username
                 Button {
@@ -59,12 +36,12 @@ struct SettingsView: View {
                             .rotationEffect(.degrees(clicks[0] ? 90 : 0))
                     }
                 }
-                    
+                            
                 if clicks[0] {
                     updateUsernameView(updatedUsername: $updatedUsername, clicked: $clicks[0])
                 }
             }
-            
+                    
             Group {
                 // Email
                 Button {
@@ -88,36 +65,34 @@ struct SettingsView: View {
                             .rotationEffect(.degrees(clicks[1] ? 90 : 0))
                     }
                 }
-                
-                if clicks[1] {
-                    
+                        
+                if clicks[1] {}
+            }
+                        
+            // Phone Number
+            Button {
+                withAnimation {
+                    toggleClicks(count: 2)
+                }
+            } label: {
+                HStack {
+                    VStack {
+                        Text("Phone Number")
+                            .foregroundColor(.primary)
+                        if !(user?.phoneNumber ?? "").isEmpty {
+                            Text(user?.phoneNumber ?? "")
+                        }
+                    }
+                    Spacer()
+                    if (user?.phoneNumber ?? "").isEmpty {
+                        Image(systemName: "exclamationmark.circle")
+                            .foregroundColor(.red)
+                    }
+                    Image(systemName: "chevron.right")
+                        .rotationEffect(.degrees(clicks[2] ? 90 : 0))
                 }
             }
-                
-            // Phone Number
-//            Button {
-//                withAnimation {
-//                    toggleClicks(count: 2)
-//                }
-//            } label: {
-//                HStack {
-//                    VStack {
-//                        Text("Phone Number")
-//                            .foregroundColor(.primary)
-//                        if !(user?.phoneNumber ?? "").isEmpty {
-//                            Text(user?.phoneNumber ?? "")
-//                        }
-//                    }
-//                    Spacer()
-//                    if (user?.phoneNumber ?? "").isEmpty {
-//                        Image(systemName: "exclamationmark.circle")
-//                            .foregroundColor(.red)
-//                    }
-//                    Image(systemName: "chevron.right")
-//                        .rotationEffect(.degrees(clicks[2] ? 90 : 0))
-//                }
-//            }
-                
+                        
             // Password
             Button {
                 withAnimation {
@@ -132,11 +107,9 @@ struct SettingsView: View {
                         .rotationEffect(.degrees(clicks[3] ? 90 : 0))
                 }
             }
-            
-            if clicks[3] {
-                
-            }
-                
+                    
+            if clicks[3] {}
+                        
             // App Appearance
             Button {
                 withAnimation {
@@ -151,12 +124,11 @@ struct SettingsView: View {
                         .rotationEffect(.degrees(clicks[4] ? 90 : 0))
                 }
             }
-                
-            
+                        
             if clicks[4] {
                 AppAppearanceView(selectedColorScheme: $selectedColorScheme)
             }
-            
+                    
             // Sign Out
             Button {
                 withAnimation {
@@ -171,11 +143,12 @@ struct SettingsView: View {
                         .rotationEffect(.degrees(clicks[5] ? 90 : 0))
                 }
             }
-                
+                        
             if clicks[5] {
                 SignOutView()
             }
         }
+        
         .onChange(of: selectedColorScheme) { value in
             UserDefaults.standard.set(value, forKey: "colorSchemePreference")
         }

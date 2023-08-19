@@ -24,8 +24,8 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
     var tempLess: [EventDisplay] = []
     var tempGreater: [EventDisplay] = []
     group.enter()
-    eventsCollection.whereField("eventEnd", isNotEqualTo: NSNull())
-        .whereField("eventEnd", isGreaterThanOrEqualTo: currentDate)
+    eventsCollection.whereField("End", isNotEqualTo: NSNull())
+        .whereField("End", isGreaterThanOrEqualTo: currentDate)
         .getDocuments { (snapshot, error) in
             if let error = error {
                 completion(nil, error)
@@ -35,7 +35,7 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
                 let idDocument = document.documentID
 
                 guard let data = document.data() as? [String: Any],
-                      let name = data["eventName"] as? String else {
+                      let name = data["Name"] as? String else {
                     continue
                 }
                 let eventDisplay = EventDisplay(id: idDocument, name: name)
@@ -44,7 +44,7 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
             group.leave()
     }
     group.enter()
-    eventsCollection.whereField("eventStart", isLessThanOrEqualTo: currentDate)
+    eventsCollection.whereField("Start", isLessThanOrEqualTo: currentDate)
         .getDocuments { (snapshot, error) in
             if let error = error {
                 completion(nil, error)
@@ -54,7 +54,7 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
             for document in snapshot!.documents {
                 let idDocument = document.documentID
                 guard let data = document.data() as? [String: Any],
-                      let name = data["eventName"] as? String else {
+                      let name = data["Name"] as? String else {
                     continue
                 }
                 let eventDisplay = EventDisplay(id: idDocument, name: name)
@@ -67,7 +67,7 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
     var tempEnded: [EventDisplay] = []
     var tempEnded1hrAgo: [EventDisplay] = []
     group.enter()
-    eventsCollection.whereField("eventEnd", isLessThanOrEqualTo: currentDate)
+    eventsCollection.whereField("End", isLessThanOrEqualTo: currentDate)
         .getDocuments { (snapshot, error) in
             if let error = error {
                 completion(nil, error)
@@ -78,7 +78,7 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
                 let idDocument = document.documentID
                 
                 guard let data = document.data() as? [String: Any],
-                      let name = data["eventName"] as? String else {
+                      let name = data["Name"] as? String else {
                     continue
                 }
                 let eventDisplay = EventDisplay(id: idDocument, name: name)
@@ -87,7 +87,7 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
             group.leave()
     }
     group.enter()
-    eventsCollection.whereField("eventEnd", isGreaterThanOrEqualTo: oneHourAgo)
+    eventsCollection.whereField("End", isGreaterThanOrEqualTo: oneHourAgo)
         .getDocuments { (snapshot, error) in
             if let error = error {
                 completion(nil, error)
@@ -98,7 +98,7 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
                 let idDocument = document.documentID
                 
                 guard let data = document.data() as? [String: Any],
-                      let name = data["eventName"] as? String else {
+                      let name = data["Name"] as? String else {
                     continue
                 }
                 let eventDisplay = EventDisplay(id: idDocument, name: name)
@@ -112,7 +112,7 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
     var tempHasStarted: [EventDisplay] = []
     var tempStarted5Hrs: [EventDisplay] = []
     group.enter()
-    eventsCollection.whereField("eventEnd", isEqualTo: NSNull())
+    eventsCollection.whereField("End", isEqualTo: NSNull())
         .getDocuments { (snapshot, error) in
             if let error = error {
                 completion(nil, error)
@@ -123,7 +123,7 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
                 let idDocument = document.documentID
                 
                 guard let data = document.data() as? [String: Any],
-                      let name = data["eventName"] as? String else {
+                      let name = data["Name"] as? String else {
                     continue
                 }
                 let eventDisplay = EventDisplay(id: idDocument, name: name)
@@ -132,7 +132,7 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
             group.leave()
     }
     group.enter()
-    eventsCollection.whereField("eventStart", isLessThanOrEqualTo: currentDate)
+    eventsCollection.whereField("Start", isLessThanOrEqualTo: currentDate)
         .getDocuments { (snapshot, error) in
             if let error = error {
                 completion(nil, error)
@@ -142,7 +142,7 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
             for document in snapshot!.documents {
                 let idDocument = document.documentID
                 guard let data = document.data() as? [String: Any],
-                      let name = data["eventName"] as? String else {
+                      let name = data["Name"] as? String else {
                     continue
                 }
                 let eventDisplay = EventDisplay(id: idDocument, name: name)
@@ -151,7 +151,7 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
             group.leave()
     }
     group.enter()
-    eventsCollection.whereField("eventStart", isGreaterThanOrEqualTo: fiveHoursLater)
+    eventsCollection.whereField("Start", isGreaterThanOrEqualTo: fiveHoursLater)
         .getDocuments { (snapshot, error) in
             if let error = error {
                 completion(nil, error)
@@ -162,7 +162,7 @@ func getEligibleEvents(completion: @escaping ([EventDisplay]?, Error?) -> Void) 
                 let idDocument = document.documentID
                 
                 guard let data = document.data() as? [String: Any],
-                      let name = data["eventName"] as? String else {
+                      let name = data["Name"] as? String else {
                     continue
                 }
                 let eventDisplay = EventDisplay(id: idDocument, name: name)

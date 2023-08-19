@@ -12,47 +12,53 @@ struct ProfileView: View {
     @State private var user = Auth.auth().currentUser
     @State private var tab = "Highlights"
     @State private var editProfilePic = false
+    @State private var eventView = false
     
     var body: some View {
-        VStack(alignment: .center) {
-            ZStack {
-                HStack {
-                    VStack(alignment: .center) {
-                        Text("\(profileInfo.highlights.count)")
-                        Text(profileInfo.highlights.count == 1 ? "Highlight" : "Highlights")
-                    }
-                    .padding(.leading)
+        FancyScrollView(title: "",
+                        headerHeight: 225,
+                        scrollUpHeaderBehavior: .parallax,
+                        scrollDownHeaderBehavior: .sticky,
+                        header: { VStack {
+                            Spacer()
+                                .frame(height: 20)
+                            ZStack {
+                                HStack {
+                                    VStack(alignment: .center) {
+                                        Text("\(profileInfo.highlights.count)")
+                                        Text(profileInfo.highlights.count == 1 ? "Highlight" : "Highlights")
+                                    }
+                                    .padding(.leading)
                     
-                    Spacer()
+                                    Spacer()
                     
-                    VStack {
-                        Text("\(profileInfo.friendsCount)")
-                        Text(profileInfo.friendsCount == 1 ? "Friend" : "Friends")
-                    }
-                    .padding(.trailing)
-                }
+                                    VStack {
+                                        Text("\(profileInfo.friendsCount)")
+                                        Text(profileInfo.friendsCount == 1 ? "Friend" : "Friends")
+                                    }
+                                    .padding(.trailing)
+                                }
                 
-                ZStack {
-                    Color.accentColor
-                        .clipShape(Circle())
-                        .frame(width: 115, height: 115)
+                                ZStack {
+                                    Circle()
+                                        .stroke(lineWidth: 2.5)
+                                        .fill(Color.accentColor)
+                                        .frame(width: 115)
                     
-                    Color.black
-                        .clipShape(Circle())
-                        .frame(width: 110, height: 110)
-                    
-                    ProfilePicture()
-                }
-            }
+                                    ProfilePicture()
+                                }
+                            }
             
-            Text(user?.displayName ?? "SimUser")
-                .fontWeight(.semibold)
-                .foregroundColor(.primary)
-
+                            Text(user?.displayName ?? "SimUser")
+                                .fontWeight(.semibold)
+                                .foregroundColor(.primary)
+                        } }) {
             VStack(alignment: .center) {
                 HStack {
                     Button {
-                        tab = "Highlights"
+                        withAnimation {
+                            tab = "Highlights"
+                        }
                     } label: {
                         if tab == "Highlights" {
                             Text("Highlights").underlineGradient()
@@ -62,7 +68,9 @@ struct ProfileView: View {
                     }
 
                     Button {
-                        tab = "Events"
+                        withAnimation {
+                            tab = "Events"
+                        }
                     } label: {
                         if tab == "Events" {
                             Text("Events").underlineGradient()
@@ -72,7 +80,7 @@ struct ProfileView: View {
                     }
                 }
                 .padding()
-
+                
                 if tab == "Highlights" {
                     ProfileHighlightsView(highlightHolder: profileInfo)
                         .transition(.move(edge: .leading))
@@ -80,11 +88,11 @@ struct ProfileView: View {
                     ProfileEventsView()
                         .transition(.move(edge: .trailing))
                 }
-                Spacer()
             }
-            .onAppear {
-                fetchCurrentFriendsCount(highlightHolder: profileInfo)
-            }
+        }
+        
+        .onAppear {
+            fetchCurrentFriendsCount(highlightHolder: profileInfo)
         }
     }
 }

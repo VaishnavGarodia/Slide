@@ -11,7 +11,6 @@ import Firebase
 import FirebaseFirestore
 
 func getEventGalleryInfos(completion: @escaping ([EventGalleryInfo]?, Error?) -> Void) {
-    let db = Firestore.firestore()
     let eventsCollection = db.collection("Events")
     var eventGalleries: [EventGalleryInfo] = []
     let group = DispatchGroup()
@@ -27,11 +26,12 @@ func getEventGalleryInfos(completion: @escaping ([EventGalleryInfo]?, Error?) ->
                 let eventID = document.documentID
 
                 guard let data = document.data() as? [String: Any],
-                      let name = data["eventName"] as? String,
+                      let name = data["Name"] as? String,
+                      let icon = data["Icon"] as? String,
                       let eventHighlights = data["Associated Highlights"] as? [String] else {
                     continue
                 }
-                let eventGallery = EventGalleryInfo(eventName: name, eventID: eventID, postIds: eventHighlights)
+                let eventGallery = EventGalleryInfo(icon: icon, eventName: name, eventID: eventID, postIds: eventHighlights)
                 eventGalleries.append(eventGallery)
             }
             group.leave()

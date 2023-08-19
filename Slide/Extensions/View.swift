@@ -13,18 +13,25 @@ extension View {
     func bubbleStyle(color: Color) -> some View {
         modifier(BubbledTextField(color: color))
     }
+
     func filledBubble() -> some View {
         modifier(FilledBubble())
     }
+    
+    func tabBarItem(index: Int, selection: Binding<Int>) -> some View {
+        modifier(TabBarItem(selection: selection, index: index))
+    }
+
     func emptyBubble() -> some View {
         modifier(EmptyBubble())
     }
+
     func checkMarkTextField() -> some View {
-        self.modifier(CheckMarkTextField())
+        modifier(CheckMarkTextField())
     }
-    
+
     func underlineGradient() -> some View {
-        self.modifier(UnderlinedGradient())
+        modifier(UnderlinedGradient())
     }
 
     func getRootViewController() -> UIViewController {
@@ -38,30 +45,30 @@ extension View {
 
         return root
     }
-    
+
     public func asUIImage() -> UIImage {
         let controller = UIHostingController(rootView: self)
-        
- // Set the background to be transparent incase the image is a PNG, WebP or (Static) GIF
+
+        // Set the background to be transparent incase the image is a PNG, WebP or (Static) GIF
         controller.view.backgroundColor = .clear
-        
+
         controller.view.frame = CGRect(x: 0, y: CGFloat(Int.max), width: 1, height: 1)
         UIApplication.shared.windows.first!.rootViewController?.view.addSubview(controller.view)
-        
+
         let size = controller.sizeThatFits(in: UIScreen.main.bounds.size)
         controller.view.bounds = CGRect(origin: .zero, size: size)
         controller.view.sizeToFit()
-        
-// here is the call to the function that converts UIView to UIImage: `.asUIImage()`
+
+        // here is the call to the function that converts UIView to UIImage: `.asUIImage()`
         let image = controller.view.asUIImage()
         controller.view.removeFromSuperview()
         return image
     }
 }
 
-extension UIView {
-// This is the function to convert UIView to UIImage
-    public func asUIImage() -> UIImage {
+public extension UIView {
+    // This is the function to convert UIView to UIImage
+    func asUIImage() -> UIImage {
         let renderer = UIGraphicsImageRenderer(bounds: bounds)
         return renderer.image { rendererContext in
             layer.render(in: rendererContext.cgContext)
@@ -101,13 +108,12 @@ struct FilledBubble: ViewModifier {
 }
 
 struct UnderlinedGradient: ViewModifier {
-    
     func body(content: Content) -> some View {
         ZStack(alignment: .bottom) {
             LinearGradient(gradient: Gradient(colors: [.cyan, .blue]), startPoint: .leading, endPoint: .trailing)
                 .frame(height: 4)
                 .clipShape(Capsule())
-            
+
             content
                 .foregroundColor(.primary)
                 .fontWeight(.bold)
@@ -119,6 +125,22 @@ struct UnderlinedGradient: ViewModifier {
     }
 }
 
+struct TabBarItem: ViewModifier {
+    @Binding var selection: Int
+    let index: Int
+    func body(content: Content) -> some View {
+        content
+            .imageScale(selection == index ? .large : .medium)
+            .padding(7.5)
+            .background(selection == index ? Color.accentColor.clipShape(Circle()) : Color.clear.clipShape(Circle()))
+            .padding()
+            .onTapGesture {
+                withAnimation {
+                    selection = index
+                }
+            }
+    }
+}
 
 struct EmptyBubble: ViewModifier {
     func body(content: Content) -> some View {
@@ -156,6 +178,5 @@ struct CheckMarkTextField: ViewModifier {
                 .animation(.easeIn, value: isFocused)
             }
         }
-        
     }
 }

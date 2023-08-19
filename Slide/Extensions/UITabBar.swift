@@ -7,8 +7,9 @@ import UIKit
 extension UITabBar {
     static func customizeAppearance() {
         /* When called, this code changes the tab bar so that unselected items are white and the bar is opaque. */
-        UITabBar.appearance().unselectedItemTintColor = UIColor.white
-        UITabBar.appearance().isTranslucent = false
-        UITabBar.appearance().backgroundColor = .black
+        UITabBar.appearance().isTranslucent = true
+        UITabBar.appearance().barTintColor = UIColor.clear
+        UITabBar.appearance().backgroundImage = UIImage()
+        UITabBar.appearance().shadowImage = UIImage()
     }
 }

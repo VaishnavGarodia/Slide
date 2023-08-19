@@ -11,7 +11,6 @@ struct PostCreationView: View {
     @State private var showImagePickerCamera = false
     @State private var showImagePickerLibrary = false
     @State private var image: UIImage?
-    @State private var isSubmitTapped = false
     @State private var imageCaption = ""
     @Environment(\.presentationMode) var presentationMode
     @State private var isSubmitEnabled = false
@@ -22,7 +21,6 @@ struct PostCreationView: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            
             Picker("Select an Event", selection: $selectedEvent) {
                 Text("Select an Event")
                     .tag(nil as EventDisplay?) // Tag for the default value
@@ -50,52 +48,30 @@ struct PostCreationView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal, 20)
             Button(action: {
-                isSubmitTapped = true
                 savePostToFirestore()
+                presentationMode.wrappedValue.dismiss()
             }) {
                 Text("Submit")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(10)
+                    .filledBubble()
             }
-            .padding(.horizontal, 20)
+            .padding(.horizontal)
             .disabled(!hasSelected) // Disable the submit button when "Select Event" is selected
             .opacity(hasSelected ? 1.0 : 0.5) // Apply opacity to indicate disabled state
-            
+
             if hasSelected {
                 VStack(spacing: 20) {
                     Text("Take Picture")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
+                        .filledBubble()
                         .onTapGesture {
                             showImagePickerCamera = true
                         }
                     Text("Choose from Library")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
+                        .filledBubble()
                         .onTapGesture {
                             showImagePickerLibrary = true
                         }
                 }
-                .padding(.horizontal, 20)
-            }
-
-        }
-        .onChange(of: isSubmitTapped) { _ in
-            // Dismiss the view when the image is selected
-            if isSubmitTapped {
-                presentationMode.wrappedValue.dismiss()
+                .padding(.horizontal)
             }
         }
         .onAppear {
@@ -118,18 +94,6 @@ struct PostCreationView: View {
         }
         .sheet(isPresented: $showImagePickerLibrary) {
             PhotoLibraryLimitedPicker(isImageSelected: $hasSelectedImage, selectedImage: $image)
-//            ImagePicker(sourceType: .photoLibrary, selectedImage: $image)
-                .onAppear {
-                    // Reset UITabBar appearance properties to default values
-                    UITabBar.appearance().unselectedItemTintColor = nil
-                    UITabBar.appearance().isTranslucent = true
-                    UITabBar.appearance().backgroundColor = nil
-                }
-                .onDisappear {
-                    UITabBar.appearance().unselectedItemTintColor = .white
-                    UITabBar.appearance().isTranslucent = false
-                    UITabBar.appearance().backgroundColor = .black
-                }
         }
     }
 
@@ -187,15 +151,7 @@ struct PostCreationView: View {
                 }
             }
         }
-
-        // Set isSubmitTapped to true in the same frame
-        // where we set it to true in the Button action
-        DispatchQueue.main.async {
-            isSubmitTapped = true
-        }
     }
-
-    
 
     func uploadImageToFirebaseStorage(image: UIImage, documentID: String) {
         guard let imageData = compressImageToTargetSize(image, targetSizeInKB: 100) else {
