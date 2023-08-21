@@ -134,6 +134,8 @@
 		E9C902532A76413C0049FC81 /* getEventGalleryInfos.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C902522A76413C0049FC81 /* getEventGalleryInfos.swift */; };
 		E9C902592A7EDAA90049FC81 /* PhotoLibraryLimitedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C902582A7EDAA90049FC81 /* PhotoLibraryLimitedPicker.swift */; };
 		E9C9025E2A8CADA80049FC81 /* EventGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C9025D2A8CADA80049FC81 /* EventGallery.swift */; };
+		E9C902622A9170D60049FC81 /* ExtractFriendSlides.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C902612A9170D50049FC81 /* ExtractFriendSlides.swift */; };
+		E9C902642A93494C0049FC81 /* SlidesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C902632A93494C0049FC81 /* SlidesView.swift */; };
 		E9CD46F82A6BA65200E24317 /* AddFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CD46F72A6BA65200E24317 /* AddFriendsView.swift */; };
 		E9CD46FA2A6C5E5300E24317 /* PostCreationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CD46F92A6C5E5300E24317 /* PostCreationView.swift */; };
 /* End PBXBuildFile section */
@@ -252,6 +254,8 @@
 		E9C902522A76413C0049FC81 /* getEventGalleryInfos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getEventGalleryInfos.swift; sourceTree = "<group>"; };
 		E9C902582A7EDAA90049FC81 /* PhotoLibraryLimitedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryLimitedPicker.swift; sourceTree = "<group>"; };
 		E9C9025D2A8CADA80049FC81 /* EventGallery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventGallery.swift; sourceTree = "<group>"; };
+		E9C902612A9170D50049FC81 /* ExtractFriendSlides.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtractFriendSlides.swift; sourceTree = "<group>"; };
+		E9C902632A93494C0049FC81 /* SlidesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlidesView.swift; sourceTree = "<group>"; };
 		E9CD46F72A6BA65200E24317 /* AddFriendsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFriendsView.swift; sourceTree = "<group>"; };
 		E9CD46F92A6C5E5300E24317 /* PostCreationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCreationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -370,6 +374,7 @@
 				79D643122A78BB8D00BB42E3 /* ListedEvent.swift */,
 				E9C9025D2A8CADA80049FC81 /* EventGallery.swift */,
 				79A538512A8FD22100CAA51E /* EventDetailsView.swift */,
+				E9C902632A93494C0049FC81 /* SlidesView.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -761,6 +766,7 @@
 			children = (
 				E9C902502A7348C40049FC81 /* EligibleEvents.swift */,
 				E9C902522A76413C0049FC81 /* getEventGalleryInfos.swift */,
+				E9C902612A9170D50049FC81 /* ExtractFriendSlides.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -869,6 +875,7 @@
 				799F4EC52A6CC1B500F14074 /* NotificationPermissionsView.swift in Sources */,
 				79D6430B2A78160600BB42E3 /* FriendsList.swift in Sources */,
 				7936FA042A76C4930057DB8A /* sendFriendRequest.swift in Sources */,
+				E9C902622A9170D60049FC81 /* ExtractFriendSlides.swift in Sources */,
 				79D643132A78BB8E00BB42E3 /* ListedEvent.swift in Sources */,
 				797FE3C92A5E2A1100F6A69C /* Register.swift in Sources */,
 				7957B2F12A6B013200F94CB4 /* CameraPermissionsView.swift in Sources */,
@@ -950,6 +957,7 @@
 				79A538442A8E887D00CAA51E /* HeaderScrollViewTitle.swift in Sources */,
 				796CD0142A7189C4008599EA /* ProfileHighlightsView.swift in Sources */,
 				791C337D2A6339410020DEAC /* LogInFunction.swift in Sources */,
+				E9C902642A93494C0049FC81 /* SlidesView.swift in Sources */,
 				7936FA062A7737AD0057DB8A /* PendingRequests.swift in Sources */,
 				E9C902512A7348C40049FC81 /* EligibleEvents.swift in Sources */,
 				79B1FF7C2A6B35AF00012B38 /* ContactsPermissionsView.swift in Sources */,

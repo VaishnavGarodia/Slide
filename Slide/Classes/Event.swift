@@ -10,8 +10,9 @@ class Event: NSObject, MKAnnotation {
     var start, end: Date
     var coordinate: CLLocationCoordinate2D
     var hype: String
+    var slides: [String]
     
-    init(name: String, description: String, host: String, address: String, start: Date, end: Date, hostUID: String, icon: String, coordinate: CLLocationCoordinate2D, bannerURL: String, hype: String, id: String) {
+    init(name: String, description: String, host: String, address: String, start: Date, end: Date, hostUID: String, icon: String, coordinate: CLLocationCoordinate2D, bannerURL: String, hype: String, id: String, slides: [String]) {
         self.name = name
         self.title = name
         self.eventDescription = description
@@ -26,6 +27,7 @@ class Event: NSObject, MKAnnotation {
         self.bannerURL = bannerURL
         self.hype = hype //Types are low, medium, high for now.
         self.id = id
+        self.slides = slides
     }
 
     override init() {
@@ -43,6 +45,7 @@ class Event: NSObject, MKAnnotation {
         self.bannerURL = ""
         self.hype = "low"
         self.id = ""
+        self.slides = []
     }
 }
 

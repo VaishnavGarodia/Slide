@@ -80,8 +80,11 @@ struct MapPage: View {
                         coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
                         bannerURL: data["BannerURL"] as? String ?? "",
                         hype: data["Hype"] as? String ?? "low",
-                        id: document.documentID
+                        id: document.documentID,
+                        slides: data["SLIDES"] as? [String] ?? []
                     )
+                    print("SLIde EventS")
+                    print(event.slides)
                     newEvents.append(event)
                 }
                 print(newEvents)
