@@ -6,8 +6,9 @@ import SwiftUI
 
 struct EventDetailsView: View {
     @State private var selectedTab = 0
-    let event: Event
+    @Binding var event: Event
     @Binding var eventView: Bool
+    var gallery: Bool = true
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -15,7 +16,9 @@ struct EventDetailsView: View {
                 EventDetails(event: event, eventView: $eventView, fromMap: true)
                 Spacer()
             }
-            EventGallery(eventID: event.id)
+            if gallery && !event.highlights.isEmpty {
+                EventGallery(eventID: event.id)
+            }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
     }

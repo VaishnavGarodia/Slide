@@ -38,25 +38,25 @@ struct CreateEventPage: View {
             CreateEventView(map: $map, event: $event, alert: $alert, show: $show, destination: $destination)
                 .ignoresSafeArea()
             
-            if self.destination != nil && self.show {
+            if destination != nil && show {
                 Rectangle()
                     .ignoresSafeArea()
                     .foregroundColor(.black.opacity(0.65))
             }
             VStack(alignment: .center) {
-                if !self.show {
+                if !show {
                     ZStack(alignment: .topTrailing) {
-                        SearchView(map: $map, location: self.$destination, event: self.$event, detail: self.$show, createEventSearch: self.createEventSearch, frame: 280)
+                        SearchView(map: $map, location: $destination, event: $event, detail: $show, createEventSearch: createEventSearch, frame: 280)
                             .padding(.top, -15)
                         Button {
-                            self.presentationMode.wrappedValue.dismiss()
+                            presentationMode.wrappedValue.dismiss()
                         } label: {
                             Image(systemName: "xmark")
                                 .padding()
                         }
                     }
                 }
-                if self.destination != nil && self.show {
+                if destination != nil && show {
                     VStack(alignment: .center) {
                         if !errorMessage.isEmpty {
                             Text(errorMessage)
@@ -66,10 +66,10 @@ struct CreateEventPage: View {
                         VStack(alignment: .leading) {
                             Button(action: {
                                 withAnimation {
-                                    self.map.removeOverlays(self.map.overlays)
-                                    self.map.removeAnnotations(self.map.annotations)
-                                    self.destination = nil
-                                    self.show.toggle()
+                                    map.removeOverlays(map.overlays)
+                                    map.removeAnnotations(map.annotations)
+                                    destination = nil
+                                    show.toggle()
                                 }
                             }) {
                                 Text("Cancel")
@@ -106,7 +106,7 @@ struct CreateEventPage: View {
                             }
                             
                             Section {
-                                TextField("What's happening at your event? (Optional)", text: self.$event.eventDescription, axis: .vertical)
+                                TextField("What's happening at your event? (Optional)", text: $event.eventDescription, axis: .vertical)
                                     .lineLimit(2, reservesSpace: true)
                                     .checkMarkTextField()
                                     .bubbleStyle(color: .primary)
@@ -117,7 +117,7 @@ struct CreateEventPage: View {
                             }
                             
                             Section {
-                                TextField("Where's your event at?", text: self.$event.address, axis: .vertical)
+                                TextField("Where's your event at?", text: $event.address, axis: .vertical)
                                     .lineLimit(2, reservesSpace: true)
                                     .checkMarkTextField()
                                     .bubbleStyle(color: .primary)
@@ -126,22 +126,24 @@ struct CreateEventPage: View {
                                 Text("Address")
                                     .padding(.horizontal)
                             }
-                            DatePicker("Start Time", selection: self.$event.start, in: Date()...)
+                            DatePicker("Start Time", selection: $event.start, in: .now...)
                                 .onAppear {
                                     UIDatePicker.appearance().minuteInterval = 15
                                 }
                                 .datePickerStyle(.compact)
                                 .padding(.horizontal)
                             
-                            DatePicker("End Time", selection: self.$event.end, in: self.event.start...)
+                            DatePicker("End Time", selection: $event.end, in: event.start...)
                                 .onAppear {
                                     UIDatePicker.appearance().minuteInterval = 15
                                 }
                                 .padding(.horizontal)
                             
-                            HorizontalPicker($icon, items: icons) { icon in
+                            HorizontalPicker($icon, items: icons) { iconImage in
                                 GeometryReader { reader in
-                                    Image(systemName: icon)
+                                    Image(systemName: iconImage)
+                                        .imageScale(.large)
+                                        .foregroundColor(iconImage == icons[icon] ? .accentColor : .white)
                                         .frame(width: reader.size.width, height: reader.size.height, alignment: .center)
                                 }
                             }

@@ -2,17 +2,16 @@
 //  Slide
 //  Created by Ethan Harianto on 8/14/23.
 
-import SwiftUI
 import CoreHaptics
+import SwiftUI
 
 struct DraggingComponent: View {
-
     @Binding var isRSVPed: Bool
     let isLoading: Bool
     let maxWidth: CGFloat
 
     @State private var width = CGFloat(50)
-    private  let minWidth = CGFloat(50)
+    private let minWidth = CGFloat(50)
 
     public init(isRSVPed: Binding<Bool>, isLoading: Bool, maxWidth: CGFloat) {
         _isRSVPed = isRSVPed
@@ -26,28 +25,32 @@ struct DraggingComponent: View {
             .opacity(width / maxWidth)
             .frame(width: width)
             .overlay(
-                Button(action: { }) {
+                Button(action: {}) {
                     ZStack {
-                        image(name: "arrowshape.right", isShown: isRSVPed)
+                        image(name: "arrowshape.right", isShown: !isRSVPed)
                         progressView(isShown: isLoading)
-                        image(name: "arrowshape.right.fill", isShown: !isRSVPed && !isLoading)
+                        image(name: "arrowshape.right.fill", isShown: isRSVPed && !isLoading)
                     }
-                    .animation(.easeIn(duration: 0.35).delay(0.55), value: !isRSVPed && !isLoading)
+                    .animation(.easeIn(duration: 0.35).delay(0.55), value: isRSVPed && !isLoading)
                 }
                 .buttonStyle(BaseButtonStyle())
                 .disabled(!isRSVPed || isLoading),
                 alignment: .trailing
             )
-
+            .onAppear {
+                if isRSVPed {
+                    width = maxWidth
+                }
+            }
             .simultaneousGesture(
                 DragGesture()
                     .onChanged { value in
                         guard isRSVPed else { return }
-                    if value.translation.width > 0 {
-                        width = min(max(value.translation.width + minWidth, minWidth), maxWidth)
+                        if value.translation.width > 0 {
+                            width = min(max(value.translation.width + minWidth, minWidth), maxWidth)
+                        }
                     }
-                    }
-                    .onEnded { value in
+                    .onEnded { _ in
                         guard isRSVPed else { return }
                         if width < maxWidth {
                             width = minWidth
@@ -61,7 +64,6 @@ struct DraggingComponent: View {
                     }
             )
             .animation(.spring(response: 0.5, dampingFraction: 1, blendDuration: 0), value: width)
-
     }
 
     private func image(name: String, isShown: Bool) -> some View {
@@ -82,5 +84,4 @@ struct DraggingComponent: View {
             .opacity(isShown ? 1 : 0)
             .scaleEffect(isShown ? 1 : 0.01)
     }
-
 }

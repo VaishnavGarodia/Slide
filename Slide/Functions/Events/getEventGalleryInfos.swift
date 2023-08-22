@@ -1,5 +1,5 @@
 //
-//  getEventsWithPosts.swift
+//  getEventGalleries.swift
 //  Slide
 //
 //  Created by Thomas on 7/29/23.
@@ -9,10 +9,11 @@ import Foundation
 import Foundation
 import Firebase
 import FirebaseFirestore
+import CoreLocation
 
-func getEventGalleryInfos(completion: @escaping ([EventGalleryInfo]?, Error?) -> Void) {
+func getEventGalleries(completion: @escaping ([Event]?, Error?) -> Void) {
     let eventsCollection = db.collection("Events")
-    var eventGalleries: [EventGalleryInfo] = []
+    var eventGalleries: [Event] = []
     let group = DispatchGroup()
 
     group.enter()
@@ -23,16 +24,25 @@ func getEventGalleryInfos(completion: @escaping ([EventGalleryInfo]?, Error?) ->
                 return
             }
             for document in snapshot!.documents {
-                let eventID = document.documentID
-
-                guard let data = document.data() as? [String: Any],
-                      let name = data["Name"] as? String,
-                      let icon = data["Icon"] as? String,
-                      let eventHighlights = data["Associated Highlights"] as? [String] else {
-                    continue
-                }
-                let eventGallery = EventGalleryInfo(icon: icon, eventName: name, eventID: eventID, postIds: eventHighlights)
-                eventGalleries.append(eventGallery)
+                let data = document.data()
+                let coordinate = data["Coordinate"] as? GeoPoint ?? GeoPoint(latitude: 0.0, longitude: 0.0)
+                let event = Event(
+                    name: data["Name"] as? String ?? "",
+                    description: data["Description"] as? String ?? "",
+                    host: data["Host"] as? String ?? "",
+                    address: data["Address"] as? String ?? "",
+                    start: (data["Start"] as? Timestamp)?.dateValue() ?? Date(),
+                    end: (data["End"] as? Timestamp)?.dateValue() ?? Date(),
+                    hostUID: data["HostUID"] as? String ?? "",
+                    icon: data["Icon"] as? String ?? "",
+                    coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
+                    bannerURL: data["BannerURL"] as? String ?? "",
+                    hype: data["Hype"] as? String ?? "low",
+                    id: document.documentID,
+                    slides: data["SLIDES"] as? [String] ?? [],
+                    highlights: data["Associated Highlights"] as? [String] ?? []
+                )
+                eventGalleries.append(event)
             }
             group.leave()
     }

@@ -17,8 +17,8 @@ struct SettingsView: View {
     
     var body: some View {
         List {
+            // Username
             Group {
-                // Username
                 Button {
                     withAnimation {
                         toggleClicks(count: 0)
@@ -41,9 +41,9 @@ struct SettingsView: View {
                     updateUsernameView(updatedUsername: $updatedUsername, clicked: $clicks[0])
                 }
             }
-                    
+
+            // Email
             Group {
-                // Email
                 Button {
                     withAnimation {
                         toggleClicks(count: 1)
@@ -68,84 +68,94 @@ struct SettingsView: View {
                         
                 if clicks[1] {}
             }
-                        
-            // Phone Number
-            Button {
-                withAnimation {
-                    toggleClicks(count: 2)
-                }
-            } label: {
-                HStack {
-                    VStack {
-                        Text("Phone Number")
-                            .foregroundColor(.primary)
-                        if !(user?.phoneNumber ?? "").isEmpty {
-                            Text(user?.phoneNumber ?? "")
+            
+            // Phone #
+            Group {
+                Button {
+                    withAnimation {
+                        toggleClicks(count: 2)
+                    }
+                } label: {
+                    HStack {
+                        VStack {
+                            Text("Phone Number")
+                                .foregroundColor(.primary)
+                            if !(user?.phoneNumber ?? "").isEmpty {
+                                Text(user?.phoneNumber ?? "")
+                            }
                         }
+                        Spacer()
+                        if (user?.phoneNumber ?? "").isEmpty {
+                            Image(systemName: "exclamationmark.circle")
+                                .foregroundColor(.red)
+                        }
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(.degrees(clicks[2] ? 90 : 0))
                     }
-                    Spacer()
-                    if (user?.phoneNumber ?? "").isEmpty {
-                        Image(systemName: "exclamationmark.circle")
-                            .foregroundColor(.red)
-                    }
-                    Image(systemName: "chevron.right")
-                        .rotationEffect(.degrees(clicks[2] ? 90 : 0))
                 }
             }
-                        
+            
             // Password
-            Button {
-                withAnimation {
-                    toggleClicks(count: 3)
+            Group {
+                Button {
+                    withAnimation {
+                        toggleClicks(count: 3)
+                    }
+                } label: {
+                    HStack {
+                        Text("Password")
+                            .foregroundColor(.primary)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(.degrees(clicks[3] ? 90 : 0))
+                    }
                 }
-            } label: {
-                HStack {
-                    Text("Password")
-                        .foregroundColor(.primary)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .rotationEffect(.degrees(clicks[3] ? 90 : 0))
+                        
+                if clicks[3] {
+                    PasswordView()
                 }
             }
-                    
-            if clicks[3] {}
-                        
+            
             // App Appearance
-            Button {
-                withAnimation {
-                    toggleClicks(count: 4)
+            Group {
+                Button {
+                    withAnimation {
+                        toggleClicks(count: 4)
+                    }
+                } label: {
+                    HStack {
+                        Text("App Appearance")
+                            .foregroundColor(.primary)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(.degrees(clicks[4] ? 90 : 0))
+                    }
                 }
-            } label: {
-                HStack {
-                    Text("App Appearance")
-                        .foregroundColor(.primary)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .rotationEffect(.degrees(clicks[4] ? 90 : 0))
+                            
+                if clicks[4] {
+                    AppAppearanceView(selectedColorScheme: $selectedColorScheme)
                 }
             }
-                        
-            if clicks[4] {
-                AppAppearanceView(selectedColorScheme: $selectedColorScheme)
-            }
-                    
+            
             // Sign Out
-            Button {
-                withAnimation {
-                    toggleClicks(count: 5)
+            Group {
+                Button {
+                    withAnimation {
+                        toggleClicks(count: 5)
+                    }
+                } label: {
+                    HStack {
+                        Text("Sign Out")
+                            .foregroundColor(.primary)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(.degrees(clicks[5] ? 90 : 0))
+                    }
                 }
-            } label: {
-                HStack {
-                    Text("Sign Out")
-                        .foregroundColor(.primary)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .rotationEffect(.degrees(clicks[5] ? 90 : 0))
+                            
+                if clicks[5] {
+                    SignOutView()
                 }
-            }
-                        
-            if clicks[5] {
-                SignOutView()
             }
         }
         

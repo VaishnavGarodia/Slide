@@ -8,24 +8,32 @@ import Foundation
 import SwiftUI
 
 struct EventGalleryCard: View {
-    var eventGalleryInfo: EventGalleryInfo
+    var event: Event
     @State private var tempHighlights: [HighlightInfo] = [] // Temporary storage for fetched highlights
     @State private var selectedTab = 0 // Keep track of the selected tab index
     @StateObject private var highlightData = HighlightData() // Use @StateObject to manage data flow
     @Binding var profileView: Bool
     @Binding var selectedUser: UserData?
+    @Binding var eventView: Bool
+    @Binding var selectedEvent: Event?
 
     var body: some View {
         ZStack {
             ScrollView {
                 VStack {
-                    HStack {
-                        Image(systemName: eventGalleryInfo.icon)
-                        Text(eventGalleryInfo.eventName)
-                            .fontWeight(.bold)
+                    Button {
+                        selectedEvent = event
+                        eventView.toggle()
+                    } label: {
+                        HStack {
+                            Image(systemName: event.icon)
+                            Text(event.name)
+                                .fontWeight(.bold)
+                        }
+                        .padding(-5)
+                        .bubbleStyle(color: .primary)
                     }
-                    .padding(-5)
-                    .bubbleStyle(color: .primary)
+                    .foregroundColor(.primary)
 
                     TabView(selection: $selectedTab) {
                         ForEach(tempHighlights.indices, id: \.self) { index in
@@ -58,11 +66,13 @@ struct EventGalleryCard: View {
     private func fetchHighlights() {
         let dispatchGroup = DispatchGroup()
 
-        for postId in eventGalleryInfo.postIds {
+        for postId in event.highlights {
             dispatchGroup.enter()
             getHighlightInfo(highlightID: postId) { highlightInfo in
                 if let highlightInfo = highlightInfo {
-                    tempHighlights.append(highlightInfo)
+                    if !tempHighlights.contains(highlightInfo) {
+                        tempHighlights.append(highlightInfo)
+                    }
                 }
                 dispatchGroup.leave()
             }
@@ -116,7 +126,7 @@ struct SmallEventGalleryCard: View {
             }
         }
         .sheet(isPresented: $eventView) {
-            EventDetailsView(event: event, eventView: $eventView)
+            EventDetailsView(event: $event, eventView: $eventView)
         }
     }
 
@@ -140,7 +150,8 @@ struct SmallEventGalleryCard: View {
                     bannerURL: data?["BannerURL"] as? String ?? "",
                     hype: data?["Hype"] as? String ?? "low",
                     id: document.documentID,
-                    slides: data?["SLIDES"] as? [String] ?? []
+                    slides: data?["SLIDES"] as? [String] ?? [],
+                    highlights: data?["Associated Highlights"] as? [String] ?? []
                 )
                 print("EVENT SLIDES")
                 print(event.slides)
