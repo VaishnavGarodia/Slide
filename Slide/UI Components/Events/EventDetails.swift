@@ -18,7 +18,12 @@ struct EventDetails: View {
     @State private var isRSVPed = true
     @State private var isLoading = false
     @State private var showDescription = false
-
+    
+    @State private var showAttendeesSheet = false
+    @State var friendSlides: [String] = []
+    @State var nonFriendSlides: [String] = []
+    
+    
     var body: some View {
         VStack(alignment: .center) {
             // Display event details here based on the 'event' parameter
@@ -126,9 +131,32 @@ struct EventDetails: View {
                     simulateRequest()
                 }
             }
+            
+//            HStack {
+//                Text("Friends Attending")
+//                Text(String(friendSlides.count))
+//            }
+//            HStack {
+//                Text("Non-Friends Attending")
+//                Text(String(nonFriendSlides.count))
+//            }
+            Button(action: {
+                showAttendeesSheet.toggle()
+            }) {
+                Text("Show Attendees") // You can customize the label view as needed
+            }
         }
         .padding()
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            extractFriendSlides(event: event) { friendSlidesTemp, nonFriendSlidesTemp in
+                self.friendSlides = friendSlidesTemp
+                self.nonFriendSlides = nonFriendSlidesTemp
+            }
+        }
+        .sheet(isPresented: $showAttendeesSheet) {
+            SlidesView(nonFriendsList: nonFriendSlides, friendsList: friendSlides)
+        }
     }
 
     func formatDate(date: Date) -> String {

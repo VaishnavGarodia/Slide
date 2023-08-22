@@ -139,8 +139,11 @@ struct SmallEventGalleryCard: View {
                     coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
                     bannerURL: data?["BannerURL"] as? String ?? "",
                     hype: data?["Hype"] as? String ?? "low",
-                    id: document.documentID
+                    id: document.documentID,
+                    slides: data?["SLIDES"] as? [String] ?? []
                 )
+                print("EVENT SLIDES")
+                print(event.slides)
                 completion(event)
             } else {
                 print("Error fetching event document: \(error?.localizedDescription ?? "Unknown error")")
