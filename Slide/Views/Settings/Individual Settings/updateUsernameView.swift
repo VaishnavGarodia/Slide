@@ -15,7 +15,7 @@ struct updateUsernameView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Your username is how people find you on Slide. ")
+            Text("Your username is how people find you on Slide.")
                 .foregroundColor(.secondary)
             TextField(user?.displayName ?? "SimUser", text: $updatedUsername)
                 .checkMarkTextField()

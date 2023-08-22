@@ -16,15 +16,8 @@ struct EventBanner: View {
                 .resizable()
                 .fade(duration: 0.25)
                 .cacheMemoryOnly()
-                .onSuccess { imageResult in
-                    let aspectRatio = imageResult.image.size.width / imageResult.image.size.height
-                    if aspectRatio > 1 {
-                        // Landscape image
-                        self.height = UIScreen.main.bounds.width * 0.95 * 3 / 4
-                    } else {
-                        // Portrait or square image
-                        self.height = UIScreen.main.bounds.width * 0.95 * 6 / 5
-                    }
+                .onSuccess { _ in
+                    self.height = UIScreen.main.bounds.width * 0.95 * 3 / 4
                 }
                 .scaledToFill()
                 .frame(width: UIScreen.main.bounds.width * 0.95, height: height)
@@ -48,7 +41,7 @@ struct SmallEventBanner: View {
                 .fade(duration: 0.25)
                 .cacheMemoryOnly()
                 .scaledToFill()
-                .frame(width: UIScreen.main.bounds.width / 2.25 , height: UIScreen.main.bounds.width / 2.25)
+                .frame(width: UIScreen.main.bounds.width / 2.25, height: UIScreen.main.bounds.width / 2.25)
         } else {
             GeometryReader { _ in
                 Image(uiImage: image!)

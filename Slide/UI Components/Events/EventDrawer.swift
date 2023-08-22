@@ -28,7 +28,7 @@ struct EventDrawer: View {
                     if eventView {
                         VStack {
                             EventDetailsView (
-                                event: selectedEvent,
+                                event: $selectedEvent,
                                 eventView: $eventView
                             )
                             .onAppear {

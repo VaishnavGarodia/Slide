@@ -4,9 +4,8 @@
 
 import FirebaseAuth
 import FirebaseFirestore
-import SwiftUI
 import Foundation
-
+import SwiftUI
 
 struct EventDetails: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -15,7 +14,7 @@ struct EventDetails: View {
     var preview = false
     @Binding var eventView: Bool
     @State var fromMap: Bool = false
-    @State private var isRSVPed = true
+    @State private var isRSVPed = false
     @State private var isLoading = false
     @State private var showDescription = false
     
@@ -146,6 +145,9 @@ struct EventDetails: View {
                 Text("Show Attendees") // You can customize the label view as needed
             }
         }
+        .onAppear {
+            isRSVPed = event.slides.contains(Auth.auth().currentUser?.uid ?? "")
+        }
         .padding()
         .navigationBarBackButtonHidden(true)
         .onAppear {
@@ -173,21 +175,18 @@ struct EventDetails: View {
         let eventDoc = db.collection("Events").document(eventID)
         let userDoc = db.collection("Users").document(userID)
 
-        let group = DispatchGroup()
-
-        group.enter()
-
         // Update user's SLIDES array
-        userDoc.getDocument { (userDocument, error) in
+        userDoc.getDocument { userDocument, error in
             if let error = error {
                 print("Error getting user document: \(error)")
                 return
             }
-            
+
             var slidesArray: [String] = []
 
             if let userData = userDocument?.data(),
-               let existingSlides = userData["SLIDES"] as? [String] {
+               let existingSlides = userData["SLIDES"] as? [String]
+            {
                 slidesArray = existingSlides
             }
 
@@ -197,26 +196,25 @@ struct EventDetails: View {
                 slidesArray.append(eventID)
             }
 
-            userDoc.setData(["SLIDES": slidesArray], merge: true) { (error) in
+            userDoc.setData(["SLIDES": slidesArray], merge: true) { error in
                 if let error = error {
                     print("Error updating user document: \(error)")
                 }
             }
-            group.leave()
         }
-        
-        group.enter()
+
         // Update event's SLIDES array
-        eventDoc.getDocument { (eventDocument, error) in
+        eventDoc.getDocument { eventDocument, error in
             if let error = error {
                 print("Error getting event document: \(error)")
                 return
             }
-            
+
             var slidesArray: [String] = []
 
             if let eventData = eventDocument?.data(),
-               let existingSlides = eventData["SLIDES"] as? [String] {
+               let existingSlides = eventData["SLIDES"] as? [String]
+            {
                 slidesArray = existingSlides
             }
 
@@ -225,25 +223,19 @@ struct EventDetails: View {
             } else {
                 slidesArray.append(userID)
             }
-                
-            
-            userDoc.setData(["SLIDES": slidesArray], merge: true) { (error) in
+
+            userDoc.setData(["SLIDES": slidesArray], merge: true) { error in
                 if let error = error {
                     print("Error updating user document: \(error)")
                 }
             }
-            eventDoc.setData(["SLIDES": slidesArray], merge: true) { (error) in
+            eventDoc.setData(["SLIDES": slidesArray], merge: true) { error in
                 if let error = error {
                     print("Error updating user document: \(error)")
                 }
-            }            
-            group.leave()
-        }
-        
-        group.notify(queue: .main) {
-            isLoading = false
-            return
+            }
         }
 
+        isLoading = false
     }
 }

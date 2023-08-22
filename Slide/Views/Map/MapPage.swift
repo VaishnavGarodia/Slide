@@ -81,7 +81,8 @@ struct MapPage: View {
                         bannerURL: data["BannerURL"] as? String ?? "",
                         hype: data["Hype"] as? String ?? "low",
                         id: document.documentID,
-                        slides: data["SLIDES"] as? [String] ?? []
+                        slides: data["SLIDES"] as? [String] ?? [],
+                        highlights: data["Associated Highlights"] as? [String] ?? []
                     )
                     print("SLIde EventS")
                     print(event.slides)
