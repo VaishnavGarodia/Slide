@@ -52,47 +52,47 @@ struct MapView: UIViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-                var annotationView = MKMarkerAnnotationView()
-                // If the annotation isn't from a capital city, it must return nil so iOS uses a default view.
-                guard annotation is Event else { return nil }
-                let eventData = annotation as! Event
-                // Define a reuse identifier. This is a string that will be used to ensure we reuse annotation views as much as possible.
-                var color = UIColor.red
-                var identifier = ""
-                switch eventData.hype{
-                        case "high":
-                            identifier = "high"
-                            color = .red
-                        case "medium":
-                            identifier = "medium"
-                            color = .yellow
-                        case "low":
-                            identifier = "low"
-                            color = .blue
-                        default:
-                            identifier = "low"
-                            color = .blue
-                        }
+            var annotationView = MKMarkerAnnotationView()
+            // If the annotation isn't from a capital city, it must return nil so iOS uses a default view.
+            guard annotation is Event else { return nil }
+            let eventData = annotation as! Event
+            // Define a reuse identifier. This is a string that will be used to ensure we reuse annotation views as much as possible.
+            var color = UIColor.red
+            var identifier = ""
+            switch eventData.hype {
+                case "high":
+                    identifier = "high"
+                    color = .red
+                case "medium":
+                    identifier = "medium"
+                    color = .yellow
+                case "low":
+                    identifier = "low"
+                    color = .blue
+                default:
+                    identifier = "low"
+                    color = .blue
+            }
 
             if let dequedView = mapView.dequeueReusableAnnotationView(
-                        withIdentifier: identifier)
-                        as? MKMarkerAnnotationView {
-                        annotationView = dequedView
-                    } else{
-                        annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                        annotationView.canShowCallout = true
+                withIdentifier: identifier)
+                as? MKMarkerAnnotationView
+            {
+                annotationView = dequedView
+            } else {
+                annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                annotationView.canShowCallout = true
 
-                        // Create a new UIButton using the built-in .detailDisclosure type. This is a small blue "i" symbol with a circle around it.
-                        let btn = UIButton(type: .detailDisclosure)
-                        annotationView.rightCalloutAccessoryView = btn
-                    }
+                // Create a new UIButton using the built-in .detailDisclosure type. This is a small blue "i" symbol with a circle around it.
+                let btn = UIButton(type: .detailDisclosure)
+                annotationView.rightCalloutAccessoryView = btn
+            }
             annotationView.animatesWhenAdded = true
             annotationView.markerTintColor = color
             annotationView.glyphImage = UIImage(systemName: eventData.icon)
             annotationView.glyphTintColor = .yellow
             return annotationView
-            }
-            
+        }
 
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
             guard let event = view.annotation as? Event else { return }

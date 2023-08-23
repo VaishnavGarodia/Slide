@@ -10,42 +10,55 @@ struct ListedEvent: View {
     @Binding var event: Event
     @Binding var selectedEvent: Event
     @Binding var eventView: Bool
+    @State private var press = false
 
     func formatDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM d h:mm a"
-//        dateFormatter.dateStyle = .medium // You can choose a different style here
-//        dateFormatter.timeStyle = .short // You can choose a different style here
+        dateFormatter.dateFormat = "MMMM d, h:mm a"
         return dateFormatter.string(from: date)
     }
 
     var body: some View {
         HStack {
-            Image(systemName: event.icon)
-                .imageScale(.large)
-            VStack(alignment: .leading) {
-                HStack {
-                    Text(event.name)
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Button {
-                        withAnimation {
-                            selectedEvent = event
-                            eventView.toggle()
-                        }
-                    }
-                    label: {
-                        Image(systemName: "chevron.right")
-                    }
+            if event.bannerURL.isEmpty {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .frame(width: UIScreen.main.bounds.width / 7.5, height: UIScreen.main.bounds.width / 7.5)
+                    Image(systemName: event.icon)
+                        .imageScale(.small)
                 }
+            } else {
+                MiniEventBanner(imageURL: URL(string: event.bannerURL))
+                    .cornerRadius(10)
+            }
+
+            VStack(alignment: .leading) {
+                Text(event.name)
+                    .fontWeight(.semibold)
 
                 if !event.eventDescription.isEmpty {
                     Text(event.eventDescription)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
 
-                Text(formatDate(date: event.start) + " - " + formatDate(date: event.end))
+                HStack {
+                    Image(systemName: "clock")
+                    Text(formatDate(date: event.start))
+                        .font(.callout)
+                }
             }
             Spacer()
+            Button {
+                withAnimation {
+                    selectedEvent = event
+                    eventView.toggle()
+                }
+            }
+            label: {
+                Image(systemName: "chevron.right")
+            }
         }
         .onTapGesture {
             withAnimation {

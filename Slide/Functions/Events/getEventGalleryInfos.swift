@@ -17,7 +17,7 @@ func getEventGalleries(completion: @escaping ([Event]?, Error?) -> Void) {
     let group = DispatchGroup()
 
     group.enter()
-    eventsCollection.whereField("Associated Highlights", isNotEqualTo: NSNull())
+    eventsCollection.whereField("Associated Highlights", isNotEqualTo: [String]())
         .getDocuments { (snapshot, error) in
             if let error = error {
                 completion(nil, error)

@@ -17,12 +17,11 @@ struct EventDetails: View {
     @State private var isRSVPed = false
     @State private var isLoading = false
     @State private var showDescription = false
-    
+
     @State private var showAttendeesSheet = false
     @State var friendSlides: [String] = []
     @State var nonFriendSlides: [String] = []
-    
-    
+
     var body: some View {
         VStack(alignment: .center) {
             // Display event details here based on the 'event' parameter
@@ -93,11 +92,9 @@ struct EventDetails: View {
 
             // ... (display other details as needed)
             Text(event.host)
-            HStack {
-                Text(formatDate(date: event.start))
-                Text("-")
-                Text(formatDate(date: event.end))
-            }
+                .fontWeight(.semibold)
+            Text(formatDate(date: event.start) + " - " + formatDate(date: event.end))
+                .font(.callout)
             HStack {
                 Image(systemName: "mappin")
                 Text(event.address)
@@ -114,6 +111,7 @@ struct EventDetails: View {
             }
             if showDescription {
                 Text(event.eventDescription)
+                    .font(.caption)
             }
 
             if event.hostUID != Auth.auth().currentUser!.uid && !preview {
@@ -130,7 +128,7 @@ struct EventDetails: View {
                     simulateRequest()
                 }
             }
-            
+
 //            HStack {
 //                Text("Friends Attending")
 //                Text(String(friendSlides.count))
@@ -163,8 +161,7 @@ struct EventDetails: View {
 
     func formatDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short // You can choose a different style here
-        dateFormatter.timeStyle = .short // You can choose a different style here
+        dateFormatter.dateFormat = "M/d h:mm a"
         return dateFormatter.string(from: date)
     }
 

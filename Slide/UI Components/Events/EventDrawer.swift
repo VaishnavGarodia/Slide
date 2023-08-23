@@ -22,12 +22,12 @@ struct EventDrawer: View {
             return AnyView(
                 ZStack {
                     BlurView(style: .systemThinMaterial)
-                        .clipShape(CustomCorner(corners: [.topLeft, .topRight], radius: 15))
+                        .clipShape(CustomCorner(corners: [.topLeft, .topRight], radius: 20))
                         .edgesIgnoringSafeArea(.bottom)
 
                     if eventView {
                         VStack {
-                            EventDetailsView (
+                            EventDetailsView(
                                 event: $selectedEvent,
                                 eventView: $eventView
                             )
@@ -55,7 +55,7 @@ struct EventDrawer: View {
                             Capsule()
                                 .fill(.primary)
                                 .frame(width: 60, height: 4)
-                                .padding(.bottom)
+                                .padding(.top, -5)
 
                             ScrollView {
                                 ForEach($events, id: \.name) { event in
@@ -85,12 +85,16 @@ struct EventDrawer: View {
                         if -offset > 30, -offset < maxHeight / 3, offset < lastOffset {
                             // Mid...
                             if !eventView {
-                                offset = (-(maxHeight / 3) > -CGFloat(events.count * 110) + 20 || -(maxHeight / 3) < -CGFloat(events.count * 110) - 20) ? -CGFloat(events.count * 110) : -(maxHeight / 3)
+                                offset = (-(maxHeight / 3) > -CGFloat(events.count * 100) + 20 || -(maxHeight / 3) < -CGFloat(events.count * 100) - 20) ? -CGFloat(events.count * 100) : -(maxHeight / 3)
                             } else {
                                 offset = 10
                             }
                         } else if -offset > maxHeight / 3 {
-                            offset = (events.count >= 7 || eventView) ? -maxHeight : -CGFloat(events.count * 110)
+                            if !eventView {
+                                offset = (events.count >= 7 || eventView) ? -maxHeight : -CGFloat(events.count * 100)
+                            } else {
+                                offset = -maxHeight
+                            }
                         } else {
                             offset = 10
                         }
