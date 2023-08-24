@@ -20,7 +20,7 @@ struct PostCreationView: View {
     @State private var hasSelectedImage: Bool = false
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack {
             Picker("Select an Event", selection: $selectedEvent) {
                 Text("Select an Event")
                     .tag(nil as EventDisplay?) // Tag for the default value
@@ -38,15 +38,36 @@ struct PostCreationView: View {
                     hasSelected = false // Update the hasSelected state
                 }
             })
-
+            
             Image(uiImage: image ?? UIImage())
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .cornerRadius(10)
                 .padding()
-            TextField("Image Caption", text: $imageCaption)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal, 20)
+            
+            TextField("Highlight Caption", text: $imageCaption)
+                .checkMarkTextField()
+                .bubbleStyle(color: .primary)
+                .disabled(!hasSelected)
+                .opacity(hasSelected ? 1.0 : 0.5)
+                .padding(.horizontal)
+
+            if hasSelected {
+                HStack {
+                    Image(systemName: "camera")
+                        .filledBubble()
+                        .onTapGesture {
+                            showImagePickerCamera = true
+                        }
+                    Image(systemName: "photo")
+                        .filledBubble()
+                        .onTapGesture {
+                            showImagePickerLibrary = true
+                        }
+                }
+                .padding(.horizontal)
+            }
+            
             Button(action: {
                 savePostToFirestore()
                 presentationMode.wrappedValue.dismiss()
@@ -55,24 +76,8 @@ struct PostCreationView: View {
                     .filledBubble()
             }
             .padding(.horizontal)
-            .disabled(!hasSelected) // Disable the submit button when "Select Event" is selected
+            .disabled(!hasSelected && (image == nil || image == UIImage())) // Disable the submit button when "Select Event" is selected
             .opacity(hasSelected ? 1.0 : 0.5) // Apply opacity to indicate disabled state
-
-            if hasSelected {
-                VStack(spacing: 20) {
-                    Text("Take Picture")
-                        .filledBubble()
-                        .onTapGesture {
-                            showImagePickerCamera = true
-                        }
-                    Text("Choose from Library")
-                        .filledBubble()
-                        .onTapGesture {
-                            showImagePickerLibrary = true
-                        }
-                }
-                .padding(.horizontal)
-            }
         }
         .onAppear {
             checkPhotoLibraryPermission()
