@@ -37,10 +37,11 @@ func getEventGalleries(completion: @escaping ([Event]?, Error?) -> Void) {
                     icon: data["Icon"] as? String ?? "",
                     coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
                     bannerURL: data["BannerURL"] as? String ?? "",
-                    hype: data["Hype"] as? String ?? "low",
+                    hype: data["Hype"] as? String ?? "",
                     id: document.documentID,
                     slides: data["SLIDES"] as? [String] ?? [],
-                    highlights: data["Associated Highlights"] as? [String] ?? []
+                    highlights: data["Associated Highlights"] as? [String] ?? [],
+                    hypestEventScore: 0
                 )
                 eventGalleries.append(event)
             }
