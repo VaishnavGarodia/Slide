@@ -13,7 +13,7 @@ struct EventDetailsView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             VStack {
-                EventDetails(event: event, eventView: $eventView, fromMap: true)
+                EventDetails(event: event, fromMap: true, eventView: $eventView)
                 Spacer()
             }
             if gallery && !event.highlights.isEmpty {

@@ -3,6 +3,7 @@
 //  Created by Ethan Harianto on 8/1/23.
 
 import CoreLocation
+import FirebaseAuth
 import FirebaseFirestore
 import SwiftUI
 

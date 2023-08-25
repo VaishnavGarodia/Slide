@@ -7,13 +7,13 @@ import UIKit
 
 // TODO: Extract this into a new file please
 struct PostCreationView: View {
+    @State private var appearances = 0
+    @Binding var source: UIImagePickerController.SourceType
     @State var isPhotoLibraryAuthorized = false
-    @State private var showImagePickerCamera = false
-    @State private var showImagePickerLibrary = false
     @State private var image: UIImage?
+    @State private var showImagePicker = false
     @State private var imageCaption = ""
     @Environment(\.presentationMode) var presentationMode
-    @State private var isSubmitEnabled = false
     @State private var selectedEvent: EventDisplay?
     @State private var eligibleEvents: [EventDisplay] = []
     @State private var hasSelected: Bool = false
@@ -38,13 +38,13 @@ struct PostCreationView: View {
                     hasSelected = false // Update the hasSelected state
                 }
             })
-            
+
             Image(uiImage: image ?? UIImage())
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .cornerRadius(10)
                 .padding()
-            
+
             TextField("Highlight Caption", text: $imageCaption)
                 .checkMarkTextField()
                 .bubbleStyle(color: .primary)
@@ -52,22 +52,15 @@ struct PostCreationView: View {
                 .opacity(hasSelected ? 1.0 : 0.5)
                 .padding(.horizontal)
 
-            if hasSelected {
-                HStack {
-                    Image(systemName: "camera")
-                        .filledBubble()
-                        .onTapGesture {
-                            showImagePickerCamera = true
-                        }
-                    Image(systemName: "photo")
-                        .filledBubble()
-                        .onTapGesture {
-                            showImagePickerLibrary = true
-                        }
-                }
-                .padding(.horizontal)
+            Button {
+                appearances += 1
+                showImagePicker.toggle()
+            } label: {
+                Text("Change Picture")
+                    .filledBubble()
+                    .padding(.horizontal)
             }
-            
+
             Button(action: {
                 savePostToFirestore()
                 presentationMode.wrappedValue.dismiss()
@@ -84,6 +77,7 @@ struct PostCreationView: View {
             if !isPhotoLibraryAuthorized {
                 requestPhotoLibraryPermission()
             }
+            showImagePicker.toggle()
             // Fetch eligible events when the view appears
             getEligibleEvents { events, error in
                 if let events = events {
@@ -94,11 +88,22 @@ struct PostCreationView: View {
                 }
             }
         }
-        .sheet(isPresented: $showImagePickerCamera) {
-            ImagePicker(sourceType: .camera, selectedImage: $image, wasSelected: hasSelectedImage)
-        }
-        .sheet(isPresented: $showImagePickerLibrary) {
-            PhotoLibraryLimitedPicker(isImageSelected: $hasSelectedImage, selectedImage: $image)
+        .sheet(isPresented: $showImagePicker) {
+            if source == .camera {
+                ImagePicker(sourceType: .camera, selectedImage: $image, wasSelected: hasSelectedImage)
+                    .onDisappear {
+                        if hasSelectedImage == false && appearances == 0 {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+            } else {
+                PhotoLibraryLimitedPicker(isImageSelected: $hasSelectedImage, selectedImage: $image)
+                    .onDisappear {
+                        if hasSelectedImage == false && appearances == 0 {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    }
+            }
         }
     }
 

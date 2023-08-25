@@ -2,9 +2,9 @@
 //  Slide
 //  Created by Ethan Harianto on 7/30/23.
 
-import Foundation
-import FirebaseFirestore
 import FirebaseAuth
+import FirebaseFirestore
+import Foundation
 
 func searchUsersByUsername(username: String, completion: @escaping ([UserData], [UserData]) -> Void) {
     let user = Auth.auth().currentUser

@@ -13,7 +13,7 @@ struct MapPage: View {
     @State var alert = false
     @State var destination: CLLocationCoordinate2D!
     @State var show = false
-    @State var eventView = false
+    @State private var eventView = false
     @State var events: [Event] = []
     @State var selectedEvent: Event = .init()
     @State private var isPresentingCreateEventPage = false
@@ -38,7 +38,7 @@ struct MapPage: View {
                     }
                 }
                 
-                SearchView(map: $map, location: $destination, event: $selectedEvent, detail: $show, frame: 300)
+                SearchView(map: $map, location: $destination, event: $selectedEvent, detail: $show, eventView: $eventView, searchForEvents: true, frame: 300)
                     .padding(.top, -15)
             }
             .alert(isPresented: self.$alert) { () -> Alert in
@@ -59,7 +59,7 @@ struct MapPage: View {
         let db = Firestore.firestore()
         let currentDate = Date()
         let fiveHoursLater = Calendar.current.date(byAdding: .hour, value: 5, to: currentDate)!
-        var hypestEventScore: Int = 0
+        var hypestEventScore = 0
         let scoreDocRef = db.collection("HypestEventScore").document("hypestEventScore")
         db.collection("Events").whereField("End", isGreaterThan: currentDate)
             .addSnapshotListener { querySnapshot, error in
@@ -67,7 +67,7 @@ struct MapPage: View {
                     print("Error fetching documents: \(error!)")
                     return
                 }
-                scoreDocRef.getDocument{(scoreDocument, scoreError) in
+                scoreDocRef.getDocument { scoreDocument, _ in
                     if let scoreDocument = scoreDocument, scoreDocument.exists {
                         if let scoreData = scoreDocument.data() {
                             print("Document data: \(scoreData)")
@@ -85,7 +85,6 @@ struct MapPage: View {
                             let event = Event(
                                 name: data["Name"] as? String ?? "",
                                 description: data["Description"] as? String ?? "",
-                                host: data["Host"] as? String ?? "",
                                 address: data["Address"] as? String ?? "",
                                 start: (data["Start"] as? Timestamp)?.dateValue() ?? Date(),
                                 end: (data["End"] as? Timestamp)?.dateValue() ?? Date(),
@@ -98,7 +97,6 @@ struct MapPage: View {
                                 slides: data["SLIDES"] as? [String] ?? [],
                                 highlights: data["Associated Highlights"] as? [String] ?? [],
                                 hypestEventScore: hypestEventScore
-                                
                             )
                             print("SLIde EventS")
                             print(event.slides)
@@ -114,7 +112,6 @@ struct MapPage: View {
                         }
                     }
                 }
-                
             }
     }
 }

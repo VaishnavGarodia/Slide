@@ -11,11 +11,12 @@ struct MainView: View {
     /* The selection variable here defines which tab on the tab view the app initially starts on (the map) */
     @State private var selection = 2
     @State private var isPresentingPostCreationView = false
+    @State private var source: UIImagePickerController.SourceType = .camera
 
     var body: some View {
         ZStack(alignment: .bottom) {
             TabView(selection: $selection) {
-                Highlights(isPresentingPostCreationView: $isPresentingPostCreationView)
+                Highlights(source: $source, isPresentingPostCreationView: $isPresentingPostCreationView)
                     .tag(0)
 
                 MessagesTab()
@@ -36,20 +37,37 @@ struct MainView: View {
             }
 
             HStack {
-                Image(systemName: selection == 0 ? "plus.app" : "light.ribbon")
-                    .imageScale(selection == 0 ? .large : .medium)
-                    .padding(7.5)
-                    .background(selection == 0 ? Color.accentColor.clipShape(Circle()) : Color.clear.clipShape(Circle()))
-                    .padding()
-                    .onTapGesture {
-                        selection == 0 ?
+                if selection == 0 {
+                    Menu {
+                        Button {
                             withAnimation {
+                                source = .camera
                                 isPresentingPostCreationView = true
-                            } : withAnimation {
-                                selection = 0
                             }
+                        } label: {
+                            Label("Post with Camera", systemImage: "camera")
+                        }
+                        Button {
+                            withAnimation {
+                                source = .photoLibrary
+                                isPresentingPostCreationView = true
+                            }
+                        } label: {
+                            Label("Post from Library", systemImage: "photo")
+                        }
+                    } label: {
+                        Image(systemName: "plus.app")
+                            .foregroundColor(.primary)
+                            .imageScale(.large)
+                            .padding(7.5)
+                            .background(Color.accentColor.clipShape(Circle()))
+                            .padding()
                     }
-                
+                } else {
+                    Image(systemName: "light.ribbon")
+                        .tabBarItem(index: 0, selection: $selection)
+                }
+
                 Image(systemName: "person.2")
                     .tabBarItem(index: 1, selection: $selection)
 
