@@ -58,60 +58,39 @@ struct MapPage: View {
     func fetchEvents() {
         let db = Firestore.firestore()
         let currentDate = Date()
-        let fiveHoursLater = Calendar.current.date(byAdding: .hour, value: 5, to: currentDate)!
-        var hypestEventScore = 0
-        let scoreDocRef = db.collection("HypestEventScore").document("hypestEventScore")
+//        let fiveHoursLater = Calendar.current.date(byAdding: .hour, value: 5, to: currentDate)!
         db.collection("Events").whereField("End", isGreaterThan: currentDate)
             .addSnapshotListener { querySnapshot, error in
                 guard let documents = querySnapshot?.documents else {
                     print("Error fetching documents: \(error!)")
                     return
                 }
-                scoreDocRef.getDocument { scoreDocument, _ in
-                    if let scoreDocument = scoreDocument, scoreDocument.exists {
-                        if let scoreData = scoreDocument.data() {
-                            print("Document data: \(scoreData)")
-                            if let score = scoreData["score"] as? Int {
-                                print("Hypest event score: \(score)")
-                                hypestEventScore = score
-                            } else {
-                                print("Score not found in document.")
-                            }
-                        }
-                        var newEvents: [Event] = []
-                        for document in documents {
-                            let data = document.data()
-                            let coordinate = data["Coordinate"] as? GeoPoint ?? GeoPoint(latitude: 0.0, longitude: 0.0)
-                            let event = Event(
-                                name: data["Name"] as? String ?? "",
-                                description: data["Description"] as? String ?? "",
-                                address: data["Address"] as? String ?? "",
-                                start: (data["Start"] as? Timestamp)?.dateValue() ?? Date(),
-                                end: (data["End"] as? Timestamp)?.dateValue() ?? Date(),
-                                hostUID: data["HostUID"] as? String ?? "",
-                                icon: data["Icon"] as? String ?? "",
-                                coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
-                                bannerURL: data["BannerURL"] as? String ?? "",
-                                hype: data["Hype"] as? String ?? "",
-                                id: document.documentID,
-                                slides: data["SLIDES"] as? [String] ?? [],
-                                highlights: data["Associated Highlights"] as? [String] ?? [],
-                                hypestEventScore: hypestEventScore
-                            )
-                            print("SLIde EventS")
-                            print(event.slides)
-                            newEvents.append(event)
-                        }
-                        print(newEvents)
-                        self.events = newEvents
-                        map.addAnnotations(events)
-                    } else {
-                        print("Score Document does not exist")
-                        if let error = error {
-                            print("Error fetching document: \(error)")
-                        }
-                    }
+                var newEvents: [Event] = []
+                for document in documents {
+                    let data = document.data()
+                    let coordinate = data["Coordinate"] as? GeoPoint ?? GeoPoint(latitude: 0.0, longitude: 0.0)
+                    let event = Event(
+                        name: data["Name"] as? String ?? "",
+                        description: data["Description"] as? String ?? "",
+                        address: data["Address"] as? String ?? "",
+                        start: (data["Start"] as? Timestamp)?.dateValue() ?? Date(),
+                        end: (data["End"] as? Timestamp)?.dateValue() ?? Date(),
+                        hostUID: data["HostUID"] as? String ?? "",
+                        icon: data["Icon"] as? String ?? "",
+                        coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
+                        bannerURL: data["BannerURL"] as? String ?? "",
+                        hype: data["Hype"] as? String ?? "",
+                        id: document.documentID,
+                        slides: data["SLIDES"] as? [String] ?? [],
+                        highlights: data["Associated Highlights"] as? [String] ?? []
+                    )
+                    print("SLIde EventS")
+                    print(event.slides)
+                    newEvents.append(event)
                 }
+                print(newEvents)
+                self.events = newEvents
+                map.addAnnotations(events)
             }
     }
 }

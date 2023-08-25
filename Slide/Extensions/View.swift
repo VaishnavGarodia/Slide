@@ -1,9 +1,6 @@
-//
 //  View.swift
 //  Slide
-//
 //  Created by Ethan Harianto on 7/14/23.
-//
 
 import Foundation
 import SwiftUI

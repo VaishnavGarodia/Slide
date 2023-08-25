@@ -3,7 +3,6 @@
 //  Created by Ethan Harianto on 12/21/22.
 
 import SwiftUI
-//import AnimatedTabBar
 
 struct MainView: View {
     @State private var selectedColorScheme: String = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "dark"

@@ -142,45 +142,30 @@ struct SmallEventGalleryCard: View {
 
     func fetchEventDetails(for eventID: String, completion: @escaping (Event?) -> Void) {
         let eventRef = db.collection("Events").document(eventID)
-        var hypestEventScore = 0
 
-        db.collection("HypestEventScore").document("hypestEventScore").getDocument { scoreDocument, _ in
-            if let scoreDocument = scoreDocument, scoreDocument.exists {
-                if let scoreData = scoreDocument.data() {
-                    print("Document data: \(scoreData)")
-                    if let score = scoreData["score"] as? Int {
-                        print("Hypest event score: \(score)")
-                        hypestEventScore = score
-                    } else {
-                        print("Score not found in document.")
-                    }
-                }
-            }
-            eventRef.getDocument { document, error in
-                if let document = document, document.exists {
-                    let data = document.data()
-                    let coordinate = data?["Coordinate"] as? GeoPoint ?? GeoPoint(latitude: 0.0, longitude: 0.0)
-                    let event = Event(
-                        name: data?["Name"] as? String ?? "",
-                        description: data?["Description"] as? String ?? "",
-                        address: data?["Address"] as? String ?? "",
-                        start: (data?["Start"] as? Timestamp)?.dateValue() ?? Date(),
-                        end: (data?["End"] as? Timestamp)?.dateValue() ?? Date(),
-                        hostUID: data?["HostUID"] as? String ?? "",
-                        icon: data?["Icon"] as? String ?? "",
-                        coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
-                        bannerURL: data?["BannerURL"] as? String ?? "",
-                        hype: data?["Hype"] as? String ?? "",
-                        id: document.documentID,
-                        slides: data?["SLIDES"] as? [String] ?? [],
-                        highlights: data?["Associated Highlights"] as? [String] ?? [],
-                        hypestEventScore: hypestEventScore
-                    )
-                    completion(event)
-                } else {
-                    print("Error fetching event document: \(error?.localizedDescription ?? "Unknown error")")
-                    completion(nil)
-                }
+        eventRef.getDocument { document, error in
+            if let document = document, document.exists {
+                let data = document.data()
+                let coordinate = data?["Coordinate"] as? GeoPoint ?? GeoPoint(latitude: 0.0, longitude: 0.0)
+                let event = Event(
+                    name: data?["Name"] as? String ?? "",
+                    description: data?["Description"] as? String ?? "",
+                    address: data?["Address"] as? String ?? "",
+                    start: (data?["Start"] as? Timestamp)?.dateValue() ?? Date(),
+                    end: (data?["End"] as? Timestamp)?.dateValue() ?? Date(),
+                    hostUID: data?["HostUID"] as? String ?? "",
+                    icon: data?["Icon"] as? String ?? "",
+                    coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
+                    bannerURL: data?["BannerURL"] as? String ?? "",
+                    hype: data?["Hype"] as? String ?? "",
+                    id: document.documentID,
+                    slides: data?["SLIDES"] as? [String] ?? [],
+                    highlights: data?["Associated Highlights"] as? [String] ?? []
+                )
+                completion(event)
+            } else {
+                print("Error fetching event document: \(error?.localizedDescription ?? "Unknown error")")
+                completion(nil)
             }
         }
     }

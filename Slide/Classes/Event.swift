@@ -1,7 +1,7 @@
 import FirebaseFirestore
 import MapKit
-import SwiftUI
 import ObjectiveC
+import SwiftUI
 
 class Event: NSObject, MKAnnotation {
     var title: String?
@@ -10,8 +10,8 @@ class Event: NSObject, MKAnnotation {
     var start, end: Date
     var coordinate: CLLocationCoordinate2D
     var slides, highlights: [String]
-    
-    init(name: String, description: String, address: String, start: Date, end: Date, hostUID: String, icon: String, coordinate: CLLocationCoordinate2D, bannerURL: String, hype: String, id: String, slides: [String], highlights: [String], hypestEventScore: Int) {
+
+    init(name: String, description: String, address: String, start: Date, end: Date, hostUID: String, icon: String, coordinate: CLLocationCoordinate2D, bannerURL: String, hype: String, id: String, slides: [String], highlights: [String]) {
         self.name = name
         self.title = name
         self.eventDescription = description
@@ -23,34 +23,13 @@ class Event: NSObject, MKAnnotation {
         self.icon = icon
         self.coordinate = coordinate
         self.bannerURL = bannerURL
-        self.hype = hype //Types are low, medium, high for now.
+        self.hype = hype // Types are low, medium, high for now.
         self.id = id
         self.slides = slides
         self.highlights = highlights
-        let hypeAmount: Int = slides.count + 2*highlights.count
-        if (hypeAmount>hypestEventScore){
-            // Reference to the document
-            let docRef = db.collection("HypestEventScore").document("hypestEventScore")
-
-            // Update the document with the new score
-            docRef.updateData(["score": hypeAmount]) { error in
-                if let error = error {
-                    print("Error updating document: \(error)")
-                } else {
-                    print("Document successfully updated with new score.")
-                }
-            }
-        }
-        if (self.hype==""){
-            let hypeScore: Float = Float((hypeAmount/hypestEventScore) * 100)
-            if (hypeScore>0 && hypeScore<30){
-                self.hype = "low"
-            } else if (hypeScore>30 && hypeScore<70) {
-                self.hype = "medium"
-            } else if (hypeScore>70){
-                self.hype = "high"
-            }
-        }
+        self.hype = hype
+        super.init()
+        setHype()
     }
 
     override init() {
@@ -70,5 +49,49 @@ class Event: NSObject, MKAnnotation {
         self.slides = []
         self.highlights = []
     }
-}
 
+    func setHype() {
+        var hypestEventScore = 0
+        let hypeAmount: Int = slides.count + 2 * highlights.count
+        let group = DispatchGroup()
+        // Reference to the document
+        group.enter()
+        let docRef = db.collection("HypestEventScore").document("hypestEventScore")
+        docRef.getDocument { scoreDocument, _ in
+            if let scoreDocument = scoreDocument, scoreDocument.exists {
+                if let scoreData = scoreDocument.data() {
+                    print("Document data: \(scoreData)")
+                    if let score = scoreData["score"] as? Int {
+                        print("Hypest event score: \(score)")
+                        hypestEventScore = score
+                    } else {
+                        print("Score not found in document.")
+                    }
+                }
+                // Update the document with the new score
+            }
+            group.leave()
+        }
+        group.notify(queue: .main) {
+            if hypeAmount>hypestEventScore {
+                docRef.updateData(["score": hypeAmount]) { error in
+                    if let error = error {
+                        print("Error updating document: \(error)")
+                    } else {
+                        print("Document successfully updated with new score.")
+                    }
+                }
+            }
+            if self.hype == "" {
+                let hypeScore = Float((hypeAmount / hypestEventScore) * 100)
+                if hypeScore>0 && hypeScore<30 {
+                    self.hype = "low"
+                } else if hypeScore>30 && hypeScore<70 {
+                    self.hype = "medium"
+                } else if hypeScore>70 {
+                    self.hype = "high"
+                }
+            }
+        }
+    }
+}
