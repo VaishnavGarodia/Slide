@@ -22,72 +22,87 @@ struct EventDetails: View {
     @State var friendSlides: [String] = []
     @State var nonFriendSlides: [String] = []
 
+    @State private var isUsersEvent = false
+    @State private var hasntStartedYet = false
+    @State private var showEventEditSheet = false
+
     var body: some View {
         VStack(alignment: .center) {
             // Display event details here based on the 'event' parameter
             // For example:
-            HStack {
-                if !fromMap {
-                    Button {
-                        self.presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .padding(.leading)
-                    }
-
-                } else {
-                    Button {
-                        withAnimation {
-                            eventView.toggle()
-                        }
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .padding(.leading)
-                    }
+            if isUsersEvent && hasntStartedYet {
+                // Then display the edit button
+                Button(action: {
+                    showEventEditSheet.toggle()
+                }) {
+                    Text("EDIT EVENT")
                 }
-                Spacer()
-                if !event.bannerURL.isEmpty && image != UIImage() {
-                    Image(systemName: event.icon)
-                        .imageScale(.large)
-                }
-
-                Text(event.name)
-                    .font(.title)
-                    .fontWeight(.bold)
-                Spacer()
             }
-            .padding()
 
             Group {
-                Capsule()
-                    .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
-                    .foregroundColor(.primary)
+                HStack {
+                    if !fromMap {
+                        Button {
+                            self.presentationMode.wrappedValue.dismiss()
+                        } label: {
+                            Image(systemName: "chevron.left")
+                                .padding(.leading)
+                        }
 
-                if !event.bannerURL.isEmpty {
-                    EventBanner(imageURL: URL(string: event.bannerURL)!)
-                        .cornerRadius(15)
-                        .padding()
-                } else if image != UIImage() {
-                    EventBanner(image: image)
-                        .frame(width: UIScreen.main.bounds.width * 0.95)
-                        .frame(maxHeight: UIScreen.main.bounds.width * 0.95 * 3 / 4)
-                        .cornerRadius(15)
-                        .padding()
-                } else {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
-                            .frame(width: UIScreen.main.bounds.width * 0.95, height: UIScreen.main.bounds.width * 0.95 * 3 / 4)
-                        Image(systemName: event.icon)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: UIScreen.main.bounds.width * 0.15, height: UIScreen.main.bounds.width * 0.15)
+                    } else {
+                        Button {
+                            withAnimation {
+                                eventView.toggle()
+                            }
+                        } label: {
+                            Image(systemName: "chevron.left")
+                                .padding(.leading)
+                        }
                     }
-                }
+                    Spacer()
+                    if !event.bannerURL.isEmpty && image != UIImage() {
+                        Image(systemName: event.icon)
+                            .imageScale(.large)
+                    }
 
-                Capsule()
-                    .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
-                    .foregroundColor(.primary)
+                    Text(event.name)
+                        .font(.title)
+                        .fontWeight(.bold)
+                    Spacer()
+                }
+                .padding()
+
+                Group {
+                    Capsule()
+                        .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
+                        .foregroundColor(.primary)
+
+                    if !event.bannerURL.isEmpty {
+                        EventBanner(imageURL: URL(string: event.bannerURL)!)
+                            .cornerRadius(15)
+                            .padding()
+                    } else if image != UIImage() {
+                        EventBanner(image: image)
+                            .frame(width: UIScreen.main.bounds.width * 0.95)
+                            .frame(maxHeight: UIScreen.main.bounds.width * 0.95 * 3 / 4)
+                            .cornerRadius(15)
+                            .padding()
+                    } else {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                .frame(width: UIScreen.main.bounds.width * 0.95, height: UIScreen.main.bounds.width * 0.95 * 3 / 4)
+                            Image(systemName: event.icon)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: UIScreen.main.bounds.width * 0.15, height: UIScreen.main.bounds.width * 0.15)
+                        }
+                    }
+
+                    Capsule()
+                        .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
+                        .foregroundColor(.primary)
+                }
             }
 
             // ... (display other details as needed)
@@ -105,10 +120,10 @@ struct EventDetails: View {
                 withAnimation {
                     showDescription.toggle()
                 }
-            }
-            label: {
+            } label: {
                 Text(showDescription ? "Hide Description" : "Show Description").font(.caption).foregroundColor(.gray)
             }
+
             if showDescription {
                 Text(event.eventDescription)
                     .font(.caption)
@@ -121,42 +136,71 @@ struct EventDetails: View {
                         DraggingComponent(isRSVPed: $isRSVPed, isLoading: isLoading, maxWidth: geometry.size.width)
                     }
                 }
-                .frame(height: 50)
-                .padding()
-                .onChange(of: isRSVPed) { isRSVPed in
-                    guard !isRSVPed else { return }
-                    simulateRequest()
+                if showDescription {
+                    Text(event.eventDescription)
+                }
+
+                if event.hostUID != Auth.auth().currentUser!.uid && !preview {
+                    GeometryReader { geometry in
+                        ZStack(alignment: .leading) {
+                            BackgroundComponent()
+                            DraggingComponent(isRSVPed: $isRSVPed, isLoading: isLoading, maxWidth: geometry.size.width)
+                        }
+                    }
+                    .frame(height: 50)
+                    .padding()
+                    .onChange(of: isRSVPed) { isRSVPed in
+                        guard !isRSVPed else { return }
+                        simulateRequest()
+                    }
                 }
             }
 
-//            HStack {
-//                Text("Friends Attending")
-//                Text(String(friendSlides.count))
-//            }
-//            HStack {
-//                Text("Non-Friends Attending")
-//                Text(String(nonFriendSlides.count))
-//            }
-            Button(action: {
-                showAttendeesSheet.toggle()
-            }) {
-                Text("Show Attendees") // You can customize the label view as needed
+            Text("Attendees")
+            ScrollView(.horizontal) {
+                HStack(spacing: 16) { // Adjust spacing as needed
+                    ForEach(friendSlides, id: \.self) { friendID in
+                        UserSlidedProfileBox(uid: friendID, friend: true)
+                    }
+                    ForEach(nonFriendSlides, id: \.self) { nonFriendID in
+                        UserSlidedProfileBox(uid: nonFriendID, friend: false)
+                    }
+                }
+                .padding(.horizontal) // Add some padding to the HStack
             }
+
+            // Start the new stuff (First section is gonna be fellow slides)
         }
         .onAppear {
             isRSVPed = event.slides.contains(Auth.auth().currentUser?.uid ?? "")
-        }
-        .padding()
-        .navigationBarBackButtonHidden(true)
-        .onAppear {
             extractFriendSlides(event: event) { friendSlidesTemp, nonFriendSlidesTemp in
                 self.friendSlides = friendSlidesTemp
                 self.nonFriendSlides = nonFriendSlidesTemp
+                didUserCreateEvent()
+                didEventStartYet()
             }
         }
+        .padding()
+        .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $showAttendeesSheet) {
             SlidesView(nonFriendsList: nonFriendSlides, friendsList: friendSlides)
         }
+        .sheet(isPresented: $showEventEditSheet) {
+            EventEditView(event: event, destination: event.coordinate)
+        }
+    }
+
+    func didUserCreateEvent() {
+        let userID = Auth.auth().currentUser!.uid
+        print("Two")
+        print(userID)
+        print(event.hostUID)
+        isUsersEvent = (event.hostUID == userID)
+    }
+
+    func didEventStartYet() {
+        let currentDate = Date()
+        hasntStartedYet = event.start > currentDate
     }
 
     func formatDate(date: Date) -> String {
