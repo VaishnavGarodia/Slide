@@ -9,46 +9,41 @@ struct UserSearchResults: View {
     @State private var showingConfirmationDialog = false
 
     var body: some View {
-        Section {
-            List(searchResults, id: \.userID) { friend in
-                HStack {
-                    UserProfilePictures(photoURL: friend.photoURL, dimension: 40)
-                    Text(friend.username)
-                        .foregroundColor(.white)
+        ForEach(searchResults, id: \.userID) { friend in
+            HStack {
+                UserProfilePictures(photoURL: friend.photoURL, dimension: 40)
+                Text(friend.username)
+                    .foregroundColor(.white)
 
-                    Spacer()
-                    if friend.added ?? false {
-                        Button {} label: {
-                            HStack {
-                                Text("Added")
-                            }
-                            .padding(5)
-                            .foregroundColor(.gray)
-                            .background(RoundedRectangle(cornerRadius: 10).foregroundColor(.primary))
+                Spacer()
+                if friend.added ?? false {
+                    Button {} label: {
+                        HStack {
+                            Text("Added")
                         }
-                    }
-                    else {
-                        Button {
-                            sendFriendRequest(selectedUser: friend)
-                            if let index = searchResults.firstIndex(where: { $0.userID == friend.userID }) {
-                                var updatedFriend = friend
-                                updatedFriend.added = true
-                                searchResults[index] = updatedFriend
-                            }
-                        } label: {
-                            Text("Add")
-                                .foregroundColor(.primary)
-                                .padding(5)
-                                .padding(.horizontal)
-                                .background(RoundedRectangle(cornerRadius: 10).foregroundColor(.accentColor))
-                        }
+                        .padding(5)
+                        .foregroundColor(.gray)
+                        .background(RoundedRectangle(cornerRadius: 10).foregroundColor(.primary))
                     }
                 }
-                .buttonStyle(BorderlessButtonStyle())
+                else {
+                    Button {
+                        sendFriendRequest(selectedUser: friend)
+                        if let index = searchResults.firstIndex(where: { $0.userID == friend.userID }) {
+                            var updatedFriend = friend
+                            updatedFriend.added = true
+                            searchResults[index] = updatedFriend
+                        }
+                    } label: {
+                        Text("Add")
+                            .foregroundColor(.primary)
+                            .padding(5)
+                            .padding(.horizontal)
+                            .background(RoundedRectangle(cornerRadius: 10).foregroundColor(.accentColor))
+                    }
+                }
             }
-        } header: {
-            Text("Search Results")
-                .padding(5)
+            .buttonStyle(BorderlessButtonStyle())
         }
     }
 }

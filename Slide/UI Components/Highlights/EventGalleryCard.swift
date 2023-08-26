@@ -26,22 +26,13 @@ struct EventGalleryCard: View {
                         eventView.toggle()
                     } label: {
                         HStack {
-                            if event.bannerURL.isEmpty {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
-                                        .frame(width: UIScreen.main.bounds.width / 7.5, height: UIScreen.main.bounds.width / 7.5)
-                                    Image(systemName: event.icon)
-                                        .imageScale(.small)
-                                }
-                            } else {
-                                MiniEventBanner(imageURL: URL(string: event.bannerURL))
-                                    .frame(width: UIScreen.main.bounds.width / 10, height: UIScreen.main.bounds.width / 10)
-                                    .cornerRadius(10)
-                            }
+                            MiniEventBanner(imageURL: URL(string: event.bannerURL), divider: 10, icon: event.icon)
+
                             Text(event.name)
                                 .fontWeight(.bold)
                         }
+                        .padding(-10)
+                        .bubbleStyle(color: .primary)
                     }
                     .foregroundColor(.primary)
 

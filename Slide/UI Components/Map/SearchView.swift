@@ -18,7 +18,7 @@ struct SearchView: View {
     @Binding var eventView: Bool
     var searchForEvents: Bool = false
     @State var txt = ""
-    @State var createEventSearch: Bool = false
+    @State var createEventSearch: Bool = true
     @State var events: [Event] = []
  
     var frame: CGFloat
@@ -38,11 +38,13 @@ struct SearchView: View {
                         .padding(.leading, 10)
                         .onChange(of: self.txt) { _ in
                             if self.searchForEvents {
+                                self.events.removeAll()
                                 searchEvents(eventName: self.txt) { search in
                                     self.events = search
                                 }
                             }
                         }
+                        .shadow(radius: 10)
                     
                     if !self.result.isEmpty && self.txt != "" {
                         List {
@@ -56,20 +58,10 @@ struct SearchView: View {
                                                     .font(.caption)
                                             }
                                             Spacer()
-                                            ZStack {
-                                                if event.bannerURL.isEmpty {
-                                                    RoundedRectangle(cornerRadius: 10)
-                                                        .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
-                                                    
-                                                    Image(systemName: event.icon)
-                                                        .imageScale(.small)
-                                                } else {
-                                                    MiniEventBanner(imageURL: URL(string: event.bannerURL))
-                                                        .cornerRadius(10)
-                                                }
-                                            }
-                                            .frame(width: UIScreen.main.bounds.width / 7.5, height: UIScreen.main.bounds.width / 7.5)
+                                            MiniEventBanner(imageURL: URL(string: event.bannerURL), divider: 10, icon: event.icon)
                                         }
+                                        .listRowBackground(Color.clear)
+                                        .foregroundColor(.white)
                                         .onTapGesture {
                                             withAnimation {
                                                 self.dismissKeyboard()
@@ -79,8 +71,6 @@ struct SearchView: View {
                                                 self.eventView.toggle()
                                             }
                                         }
-                                        .listRowBackground(Color.clear)
-                                        .foregroundColor(.white)
                                     }
                                 } header: {
                                     Text("Events")
@@ -176,22 +166,14 @@ struct SearchView: View {
                         addressString = addressString + pm.subLocality! + ", "
                     }
                     if pm.subThoroughfare != nil {
-                        addressString = addressString + pm.subThoroughfare! + " "
+                        addressString = addressString + pm.subThoroughfare! + ", "
                     }
                     if pm.thoroughfare != nil {
                         addressString = addressString + pm.thoroughfare! + ", "
                     }
                     if pm.locality != nil {
-                        addressString = addressString + pm.locality! + ", "
+                        addressString = addressString + pm.locality!
                     }
-                    if pm.country != nil {
-                        addressString = addressString + pm.country! + ", "
-                    }
-                    if pm.postalCode != nil {
-                        addressString = addressString + pm.postalCode! + " "
-                    }
-
-                    print(addressString)
                 }
                 
                 self.event.address = addressString

@@ -33,17 +33,18 @@ struct CreateEventPage: View {
         ZStack {
             CreateEventView(map: $map, event: $event, alert: $alert, show: $show, destination: $destination, searchForAddress: $searchForAddress)
                 .ignoresSafeArea()
-            ZStack(alignment: .topTrailing) {
-                SearchView(map: $map, location: $destination, event: $event, detail: $show, eventView: .constant(false), createEventSearch: createEventSearch, frame: 280)
-                    .padding(.top, -15)
-                Button {
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .padding()
+            if searchForAddress {
+                ZStack(alignment: .topTrailing) {
+                    SearchView(map: $map, location: $destination, event: $event, detail: $show, eventView: .constant(false), createEventSearch: createEventSearch, frame: 280)
+                        .padding(.top, -15)
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .padding()
+                    }
                 }
-            }
-            if !searchForAddress {
+            } else {
                 Rectangle()
                     .foregroundColor(.black.opacity(0.7))
                     .ignoresSafeArea()
@@ -205,7 +206,6 @@ struct CreateEventPage: View {
     
     func createEvent() {
         let doc = db.collection("Events").document()
-        print("Creating event for location: ", event.coordinate)
         
         doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": event.icon, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low", "Associated Highlights": [String](), "SLIDES": [String]()]) { err in
             if err != nil {
@@ -266,7 +266,7 @@ struct CreateEventPage: View {
             
         return imageData
     }
-        
+    
     func uploadBannerToFirebaseStorage(image: UIImage, documentID: String) {
         guard let imageData = compressImageToTargetSize(image, targetSizeInKB: 100) else {
             print("Failed to compress image.")

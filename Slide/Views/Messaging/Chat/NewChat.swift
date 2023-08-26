@@ -17,10 +17,10 @@ struct NewChat: View {
     @State private var chatUser: ChatUser? = nil
 
     var body: some View {
-        if !profileView  && !chatView {
+        if !profileView && !chatView {
             VStack {
                 HStack {
-                    Button { self.presentationMode.wrappedValue.dismiss() } label: {
+                    Button { presentationMode.wrappedValue.dismiss() } label: {
                         Image(systemName: "chevron.left")
                     }
                     .padding(.leading)
@@ -28,6 +28,7 @@ struct NewChat: View {
                         Image(systemName: "magnifyingglass")
                         TextField("New Message", text: $searchMessages)
                     }
+                    .checkMarkTextField()
                     .bubbleStyle(color: .primary)
                     .padding()
                 }
@@ -37,35 +38,34 @@ struct NewChat: View {
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                         ForEach(Array(friendList.enumerated()), id: \.element.0) { index, element in
                             let (friendId, photoURL) = element
-                            VStack {
-                                UserProfilePictures(photoURL: photoURL, dimension: 50)
-                                Text(friendId)
-                                    .foregroundColor(.primary)
-                                Button {
-                                    withAnimation {
-                                        chatUser = ChatUser(uid: idList[index], email: "", profileImageUrl: photoURL)
-                                        chatView.toggle()
+                            if friendId.starts(with: searchMessages.lowercased()) || searchMessages.isEmpty {
+                                VStack {
+                                    UserProfilePictures(photoURL: photoURL, dimension: 50)
+                                    Text(friendId)
+                                        .foregroundColor(.primary)
+                                    Button {
+                                        withAnimation {
+                                            chatUser = ChatUser(uid: idList[index], email: "", profileImageUrl: photoURL)
+                                            chatView.toggle()
+                                        }
+                                    } label: {
+                                        Text("Chat")
+                                            .padding(-2.5)
+                                            .filledBubble()
                                     }
-                                    
-                                } label: {
-                                    Text("Chat")
-                                        .padding(-2.5)
-                                        .filledBubble()
-                                }
 
-                                .padding(.top, -12.5)
-                            }
-
-                            .frame(width: 125, height: 125)
-                            .padding()
-                            .bubbleStyle(color: .primary)
-                            .background(RoundedRectangle(cornerRadius: 15).foregroundColor(Color.darkGray))
-                            .onTapGesture {
-                                withAnimation {
-                                    selectedUser = UserData(userID: idList[index], username: friendId, photoURL: photoURL, added: true)
-                                    profileView.toggle()
+                                    .padding(.top, -12.5)
                                 }
-                                
+                                .frame(width: 125, height: 125)
+                                .padding()
+                                .bubbleStyle(color: .primary)
+                                .background(RoundedRectangle(cornerRadius: 15).foregroundColor(Color.darkGray))
+                                .onTapGesture {
+                                    withAnimation {
+                                        selectedUser = UserData(userID: idList[index], username: friendId, photoURL: photoURL, added: true)
+                                        profileView.toggle()
+                                    }
+                                }
                             }
                         }
                     }
@@ -85,10 +85,9 @@ struct NewChat: View {
             } else {
                 ChatView(chatUser: chatUser)
             }
-            
         }
     }
-    
+
     func fetchFriendList() {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             return

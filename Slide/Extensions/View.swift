@@ -101,6 +101,7 @@ struct FilledBubble: ViewModifier {
             .fontWeight(.bold)
             .cornerRadius(15)
             .padding(.top)
+            .shadow(radius: 15)
     }
 }
 

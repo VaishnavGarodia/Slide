@@ -29,7 +29,7 @@ class Event: NSObject, MKAnnotation {
         self.highlights = highlights
         self.hype = hype
         super.init()
-        setHype()
+        self.checkHype()
     }
 
     override init() {
@@ -50,47 +50,27 @@ class Event: NSObject, MKAnnotation {
         self.highlights = []
     }
 
-    func setHype() {
-        var hypestEventScore = 0
-        let hypeAmount: Int = slides.count + 2 * highlights.count
-        let group = DispatchGroup()
-        // Reference to the document
-        group.enter()
+    func checkHype() {
+        let hypeAmount: Int = self.slides.count + 2 * self.highlights.count
         let docRef = db.collection("HypestEventScore").document("hypestEventScore")
-        docRef.getDocument { scoreDocument, _ in
-            if let scoreDocument = scoreDocument, scoreDocument.exists {
-                if let scoreData = scoreDocument.data() {
-                    print("Document data: \(scoreData)")
-                    if let score = scoreData["score"] as? Int {
-                        print("Hypest event score: \(score)")
-                        hypestEventScore = score
-                    } else {
-                        print("Score not found in document.")
-                    }
+        if hypeAmount>hypestEventScore {
+            hypestEventScore = hypeAmount
+            docRef.updateData(["score": hypeAmount]) { error in
+                if let error = error {
+                    print("Error updating document: \(error)")
+                } else {
+                    print("Document successfully updated with new score.")
                 }
-                // Update the document with the new score
             }
-            group.leave()
         }
-        group.notify(queue: .main) {
-            if hypeAmount>hypestEventScore {
-                docRef.updateData(["score": hypeAmount]) { error in
-                    if let error = error {
-                        print("Error updating document: \(error)")
-                    } else {
-                        print("Document successfully updated with new score.")
-                    }
-                }
-            }
-            if self.hype == "" {
-                let hypeScore = Float((hypeAmount / hypestEventScore) * 100)
-                if hypeScore>0 && hypeScore<30 {
-                    self.hype = "low"
-                } else if hypeScore>30 && hypeScore<70 {
-                    self.hype = "medium"
-                } else if hypeScore>70 {
-                    self.hype = "high"
-                }
+        if self.hype == "" {
+            let hypeScore = Float((hypeAmount / hypestEventScore) * 100)
+            if hypeScore>0 && hypeScore<30 {
+                self.hype = "low"
+            } else if hypeScore>30 && hypeScore<70 {
+                self.hype = "medium"
+            } else if hypeScore>70 {
+                self.hype = "high"
             }
         }
     }

@@ -83,9 +83,6 @@ struct MainView: View {
             .background(selectedColorScheme == "dark" ? Color.black : Color.white)
             .ignoresSafeArea()
         }
-        .onAppear {
-            UITabBar.customizeAppearance()
-        }
     }
 }
 

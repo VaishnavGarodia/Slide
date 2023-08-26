@@ -48,6 +48,7 @@ struct EventDrawer: View {
                             .onDisappear {
                                 withAnimation {
                                     offset = storedOffset
+                                    lastOffset = offset
                                 }
                             }
                             Spacer()

@@ -11,27 +11,22 @@ struct FriendsList: View {
     @State private var selectedUser: UserData? = nil
 
     var body: some View {
-        Section {
-            List(friendsList, id: \.userID) { friend in
-                HStack {
-                    UserProfilePictures(photoURL: friend.photoURL, dimension: 40)
-                    Text(friend.username)
-                        .foregroundColor(.white)
+        ForEach(friendsList, id: \.userID) { friend in
+            HStack {
+                UserProfilePictures(photoURL: friend.photoURL, dimension: 40)
+                Text(friend.username)
+                    .foregroundColor(.white)
 
-                    Spacer()
-                }
-                .onTapGesture {
-                    selectedUser = friend
-                    isPresented.toggle()
-                }
+                Spacer()
             }
-        } header: {
-            Text("Friends")
-                .padding(5)
+            .onTapGesture {
+                selectedUser = friend
+                isPresented.toggle()
+            }
         }
         .sheet(isPresented: $isPresented) {
-                UserProfileView(user: $selectedUser)
-            }
+            UserProfileView(user: $selectedUser)
+        }
     }
 }
 
@@ -40,4 +35,3 @@ struct FriendsList_Previews: PreviewProvider {
         FriendsList(friendsList: .constant([UserData(userID: "mwahah", username: "baesuzy", photoURL: "https://m.media-amazon.com/images/M/MV5BZWQ5YTFhZDAtMTg3Yi00NzIzLWIyY2EtNDQ2YWNjOWJkZWQxXkEyXkFqcGdeQXVyMjQ2OTU4Mjg@._V1_.jpg", added: false), UserData(userID: "mwahahah", username: "tomholland", photoURL: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", added: false)]))
     }
 }
-

@@ -19,7 +19,7 @@ struct MapPage: View {
     @State private var isPresentingCreateEventPage = false
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottomTrailing) {
             MapView(map: $map, manager: $manager, alert: $alert, destination: $destination, show: $show, events: $events, eventView: $eventView, selectedEvent: $selectedEvent)
                 .ignoresSafeArea()
             
@@ -45,18 +45,56 @@ struct MapPage: View {
                 Alert(title: Text("Error"), message: Text("Please Enable Location In Settings !!!"), dismissButton: .destructive(Text("Ok")))
             }
             
+            Button {
+                withAnimation {
+                    zoomToUserLocation()
+                }
+            } label: {
+                Image(systemName: "location")
+                    .filledBubble()
+                    .frame(width: 50, height: 50)
+                    .padding()
+                    .padding(.bottom)
+                    .padding(.bottom)
+            }
+            
             EventDrawer(events: $events, selectedEvent: $selectedEvent, map: $map, eventView: $eventView)
         }
         .onAppear {
-            fetchEvents()
+            checkHype()
         }
         .fullScreenCover(isPresented: $isPresentingCreateEventPage) {
             CreateEventPage()
         }
     }
     
+    func checkHype() {
+        let group = DispatchGroup()
+        let docRef = db.collection("HypestEventScore").document("hypestEventScore")
+        if hypestEventScore == 0 {
+            group.enter()
+            docRef.getDocument { scoreDocument, _ in
+                if let scoreDocument = scoreDocument, scoreDocument.exists {
+                    if let scoreData = scoreDocument.data() {
+                        print("Document data: \(scoreData)")
+                        if let score = scoreData["score"] as? Int {
+                            print("Hypest event score: \(score)")
+                            hypestEventScore = score
+                        } else {
+                            print("Score not found in document.")
+                        }
+                    }
+                    // Update the document with the new score
+                }
+                group.leave()
+            }
+            group.notify(queue: .main) {
+                fetchEvents()
+            }
+        }
+    }
+    
     func fetchEvents() {
-        let db = Firestore.firestore()
         let currentDate = Date()
 //        let fiveHoursLater = Calendar.current.date(byAdding: .hour, value: 5, to: currentDate)!
         db.collection("Events").whereField("End", isGreaterThan: currentDate)
@@ -84,14 +122,18 @@ struct MapPage: View {
                         slides: data["SLIDES"] as? [String] ?? [],
                         highlights: data["Associated Highlights"] as? [String] ?? []
                     )
-                    print("SLIde EventS")
-                    print(event.slides)
                     newEvents.append(event)
                 }
-                print(newEvents)
-                self.events = newEvents
+                events = newEvents
                 map.addAnnotations(events)
             }
+    }
+
+    func zoomToUserLocation() {
+        if let userLocation = map.userLocation.location {
+            let region = MKCoordinateRegion(center: userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
+            map.setRegion(region, animated: true)
+        }
     }
 }
 

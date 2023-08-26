@@ -2,8 +2,8 @@
 //  Slide
 //  Created by Ethan Harianto on 8/5/23.
 
-import Foundation
 import Firebase
+import Foundation
 import SwiftUI
 
 class ChatViewModel: ObservableObject {
@@ -11,12 +11,12 @@ class ChatViewModel: ObservableObject {
     @Published var chatText = ""
     @Published var errorMessage = ""
     @Published var chatMessages = [ChatMessage]()
-    
+
     init(chatUser: ChatUser?) {
         self.chatUser = chatUser
         fetchMessages()
     }
-    
+
     private func fetchMessages() {
         guard let sender = Auth.auth().currentUser?.uid else {
             return
@@ -43,7 +43,7 @@ class ChatViewModel: ObservableObject {
                 }
             }
     }
-    
+
     func handleSend() {
         guard let sender = Auth.auth().currentUser?.uid else {
             return
@@ -74,24 +74,24 @@ class ChatViewModel: ObservableObject {
             }
         }
     }
-    
-    private func persistRecentMessage(){
+
+    private func persistRecentMessage() {
         guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
-        guard let toId = self.chatUser?.uid else { return }
+        guard let toId = chatUser?.uid else { return }
         let document = db.collection("recent_messages")
             .document(uid)
             .collection("messages")
             .document(toId)
         let data = [
             "timestamp": Timestamp(),
-            "text": self.chatText,
+            "text": chatText,
             "fromId": uid,
             "toId": toId,
             "profileImageUrl": chatUser?.profileImageUrl ?? "",
             "email": chatUser?.email ?? ""
-        ] as [String : Any]
+        ] as [String: Any]
         document.setData(data) { error in
             if let error = error {
                 self.errorMessage = "Failed to save recent message: \(error)"
@@ -99,7 +99,7 @@ class ChatViewModel: ObservableObject {
             }
         }
     }
-    
+
     private func persistRecentMessageForRecipient() {
         guard let sender = Auth.auth().currentUser?.uid else {
             return
@@ -115,7 +115,7 @@ class ChatViewModel: ObservableObject {
 
         let data = [
             "timestamp": Timestamp(),
-            "text": self.chatText,
+            "text": chatText,
             "fromId": sender,
             "toId": recipient,
             "profileImageUrl": chatUser?.profileImageUrl ?? "",
@@ -129,7 +129,6 @@ class ChatViewModel: ObservableObject {
             }
         }
     }
-    
+
     @Published var count = 0
 }
-

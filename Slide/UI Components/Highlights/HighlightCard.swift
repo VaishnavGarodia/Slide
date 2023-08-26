@@ -53,6 +53,7 @@ struct HighlightCard: View {
                     .padding(.horizontal)
                     .background(BlurView(style: .systemMaterial).cornerRadius(15))
                     .padding()
+                    .shadow(radius: 10)
                     Spacer()
                 }
                 Spacer()
@@ -74,6 +75,7 @@ struct HighlightCard: View {
                         .background(BlurView(style: .systemMaterial).clipShape(Circle()))
                     }
                     .padding()
+                    .shadow(radius: 10)
                 }
             }
         }

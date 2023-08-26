@@ -95,16 +95,8 @@ struct CreateEventView: UIViewRepresentable {
                         addressString = addressString + pm.thoroughfare! + ", "
                     }
                     if pm.locality != nil {
-                        addressString = addressString + pm.locality! + ", "
+                        addressString = addressString + pm.locality!
                     }
-                    if pm.country != nil {
-                        addressString = addressString + pm.country! + ", "
-                    }
-                    if pm.postalCode != nil {
-                        addressString = addressString + pm.postalCode! + " "
-                    }
-
-                    print(addressString)
                 }
                 
                 self.parent.event.address = addressString
