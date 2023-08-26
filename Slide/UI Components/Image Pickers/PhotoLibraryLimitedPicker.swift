@@ -1,5 +1,5 @@
-import SwiftUI
 import Photos
+import SwiftUI
 
 struct PhotoLibraryLimitedPicker: View {
     @Environment(\.presentationMode) var presentationMode
@@ -40,9 +40,8 @@ struct PhotoLibraryLimitedPicker: View {
                 images = fetchedImages
             }
         }
-
     }
-    
+
     func fetchImagesFromLast48Hours(completion: @escaping ([UIImage]) -> Void) {
         var imagesToPick: [UIImage] = []
 
@@ -51,7 +50,7 @@ struct PhotoLibraryLimitedPicker: View {
         let allPhotos = PHAsset.fetchAssets(with: .image, options: fetchOptions)
         let currentDate = Date()
         let twoDaysAgo = Calendar.current.date(byAdding: .hour, value: -48, to: currentDate)!
-        
+
         let group = DispatchGroup() // Create a dispatch group
 
         allPhotos.enumerateObjects { asset, _, _ in
@@ -67,11 +66,10 @@ struct PhotoLibraryLimitedPicker: View {
                 }
             }
         }
-        
+
         group.notify(queue: .main) { // Notify when all requests are done
             print(imagesToPick.count)
             completion(imagesToPick) // Call the completion handler with the fetched images
         }
     }
-
 }

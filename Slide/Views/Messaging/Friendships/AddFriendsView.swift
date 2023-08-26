@@ -42,20 +42,35 @@ struct AddFriendsView: View {
 
             if searchQuery.isEmpty {
                 if !pendingFriendRequests.isEmpty {
-                    PendingRequests(pendingFriendRequests: $pendingFriendRequests, refreshPending: $refreshPending)
+                    List {
+                        Section {
+                            PendingRequests(pendingFriendRequests: $pendingFriendRequests, refreshPending: $refreshPending)
+                        } header: {
+                            Text("Pending Requests")
+                                .font(.caption)
+                        }
+                    }
                 } else {
                     Spacer()
                 }
             } else {
-                if !searchResults.isEmpty {
-                    UserSearchResults(searchResults: $searchResults)
-                } else if friendList.isEmpty {
-                    Spacer()
-                }
-                if !friendList.isEmpty {
-                    FriendsList(friendsList: $friendList)
-                } else {
-                    Spacer()
+                List {
+                    if !searchResults.isEmpty {
+                        Section {
+                            UserSearchResults(searchResults: $searchResults)
+                        } header: {
+                            Text("Users")
+                                .font(.caption)
+                        }
+                    }
+                    if !friendList.isEmpty {
+                        Section {
+                            FriendsList(friendsList: $friendList)
+                        } header: {
+                            Text("Friends")
+                                .font(.caption)
+                        }
+                    }
                 }
             }
         }

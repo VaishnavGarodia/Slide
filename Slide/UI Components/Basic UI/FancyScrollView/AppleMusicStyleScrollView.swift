@@ -11,10 +11,6 @@ struct AppleMusicStyleScrollView: View {
             ScrollView {
                 ZStack {
                     GeometryReader { geometry -> Text in
-                        let offset = geometry.frame(in: .global).minY
-//                        DispatchQueue.main.async {
-//                            self.offset = offset
-//                        }
                         Text("")
                     }
                     
@@ -28,7 +24,6 @@ struct AppleMusicStyleScrollView: View {
                            height: geometry.safeAreaInsets.top)
                     .position(x: geometry.size.width / 2, y: geometry.safeAreaInsets.top / 2)
                     .edgesIgnoringSafeArea(.top)
-                    .animation(.spring())
             }
         }
         .hideNavigationBarWithoutLosingSwipeBack(true)

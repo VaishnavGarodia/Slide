@@ -9,5 +9,5 @@ struct UserData: Codable {
     let userID: String
     let username: String
     let photoURL: String
-    var added: Bool?
+    var added: Bool? = false
 }

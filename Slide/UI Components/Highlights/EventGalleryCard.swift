@@ -26,22 +26,13 @@ struct EventGalleryCard: View {
                         eventView.toggle()
                     } label: {
                         HStack {
-                            if event.bannerURL.isEmpty {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
-                                        .frame(width: UIScreen.main.bounds.width / 7.5, height: UIScreen.main.bounds.width / 7.5)
-                                    Image(systemName: event.icon)
-                                        .imageScale(.small)
-                                }
-                            } else {
-                                MiniEventBanner(imageURL: URL(string: event.bannerURL))
-                                    .frame(width: UIScreen.main.bounds.width / 10, height: UIScreen.main.bounds.width / 10)
-                                    .cornerRadius(10)
-                            }
+                            MiniEventBanner(imageURL: URL(string: event.bannerURL), divider: 10, icon: event.icon)
+
                             Text(event.name)
                                 .fontWeight(.bold)
                         }
+                        .padding(-10)
+                        .bubbleStyle(color: .primary)
                     }
                     .foregroundColor(.primary)
 
@@ -150,7 +141,6 @@ struct SmallEventGalleryCard: View {
                 let event = Event(
                     name: data?["Name"] as? String ?? "",
                     description: data?["Description"] as? String ?? "",
-                    host: data?["Host"] as? String ?? "",
                     address: data?["Address"] as? String ?? "",
                     start: (data?["Start"] as? Timestamp)?.dateValue() ?? Date(),
                     end: (data?["End"] as? Timestamp)?.dateValue() ?? Date(),
@@ -161,11 +151,8 @@ struct SmallEventGalleryCard: View {
                     hype: data?["Hype"] as? String ?? "",
                     id: document.documentID,
                     slides: data?["SLIDES"] as? [String] ?? [],
-                    highlights: data?["Associated Highlights"] as? [String] ?? [],
-                    hypestEventScore: 0
+                    highlights: data?["Associated Highlights"] as? [String] ?? []
                 )
-                print("EVENT SLIDES")
-                print(event.slides)
                 completion(event)
             } else {
                 print("Error fetching event document: \(error?.localizedDescription ?? "Unknown error")")

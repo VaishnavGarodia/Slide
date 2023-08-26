@@ -20,19 +20,20 @@ struct CreateEventView: UIViewRepresentable {
     @Binding var alert: Bool
     @Binding var show: Bool
     @Binding var destination: CLLocationCoordinate2D!
+    @Binding var searchForAddress: Bool
     @State private var manager = CLLocationManager()
 
     func makeUIView(context: Context) -> MKMapView {
-        self.map.delegate = context.coordinator
-        self.manager.delegate = context.coordinator
-        if let location = self.manager.location?.coordinate {
+        map.delegate = context.coordinator
+        manager.delegate = context.coordinator
+        if let location = manager.location?.coordinate {
             let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
             let region = MKCoordinateRegion(center: location, span: span)
-            self.map.setRegion(region, animated: true)
+            map.setRegion(region, animated: true)
         }
         let gesture = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.tap(ges:)))
-        self.map.addGestureRecognizer(gesture)
-        return self.map
+        map.addGestureRecognizer(gesture)
+        return map
     }
     
     func updateUIView(_ uiView: MKMapView, context: Context) {}
@@ -49,19 +50,19 @@ struct CreateEventView: UIViewRepresentable {
                 self.parent.alert.toggle()
             }
             else {
-                self.parent.manager.startUpdatingLocation()
-                if let location = self.parent.manager.location?.coordinate {
+                parent.manager.startUpdatingLocation()
+                if let location = parent.manager.location?.coordinate {
                     let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
                     let region = MKCoordinateRegion(center: location, span: span)
-                    self.parent.map.setRegion(region, animated: true)
+                    parent.map.setRegion(region, animated: true)
                 }
             }
         }
         
         @objc func tap(ges: UITapGestureRecognizer) {
             // TOOD: Add a new box in the event creation view in this case asking for location name as that does not get updated correctly.
-            let location = ges.location(in: self.parent.map)
-            let mplocation = self.parent.map.convert(location, toCoordinateFrom: self.parent.map)
+            let location = ges.location(in: parent.map)
+            let mplocation = parent.map.convert(location, toCoordinateFrom: parent.map)
             
             var addressString = ""
             let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
@@ -70,7 +71,8 @@ struct CreateEventView: UIViewRepresentable {
             point.subtitle = "Event location"
             point.coordinate = mplocation
             
-            self.parent.destination = mplocation
+            parent.destination = mplocation
+           
             
             let decoder = CLGeocoder()
             decoder.reverseGeocodeLocation(CLLocation(latitude: mplocation.latitude, longitude: mplocation.longitude)) { places, err in
@@ -93,22 +95,15 @@ struct CreateEventView: UIViewRepresentable {
                         addressString = addressString + pm.thoroughfare! + ", "
                     }
                     if pm.locality != nil {
-                        addressString = addressString + pm.locality! + ", "
+                        addressString = addressString + pm.locality!
                     }
-                    if pm.country != nil {
-                        addressString = addressString + pm.country! + ", "
-                    }
-                    if pm.postalCode != nil {
-                        addressString = addressString + pm.postalCode! + " "
-                    }
-
-                    print(addressString)
                 }
                 
                 self.parent.event.address = addressString
                 point.title = places?.first?.name ?? ""
                 withAnimation {
                     self.parent.show = true
+                    self.parent.searchForAddress.toggle()
                 }
             }
                 
@@ -121,6 +116,6 @@ struct CreateEventView: UIViewRepresentable {
 
 struct CreateEventView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateEventView(map: .constant(MKMapView()), event: .constant(Event()), alert: .constant(false), show: .constant(true), destination: .constant(CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)))
+        CreateEventView(map: .constant(MKMapView()), event: .constant(Event()), alert: .constant(false), show: .constant(true), destination: .constant(CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)), searchForAddress: .constant(false))
     }
 }

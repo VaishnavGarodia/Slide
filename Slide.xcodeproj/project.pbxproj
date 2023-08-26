@@ -103,6 +103,8 @@
 		79D643112A78AE4E00BB42E3 /* UISearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D643102A78AE4E00BB42E3 /* UISearchBar.swift */; };
 		79D643132A78BB8E00BB42E3 /* ListedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D643122A78BB8D00BB42E3 /* ListedEvent.swift */; };
 		79DCC255295611D6000FCD6F /* MapPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DCC254295611D6000FCD6F /* MapPage.swift */; };
+		79E47C3E2A983FF20076EC89 /* searchMessagesByUsername.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E47C3D2A983FF20076EC89 /* searchMessagesByUsername.swift */; };
+		79E47C402A98F2350076EC89 /* searchEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E47C3F2A98F2350076EC89 /* searchEvents.swift */; };
 		79E4912D2A707FF6009348EF /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E4912C2A707FF6009348EF /* ImagePicker.swift */; };
 		79F4A0B32A92935C00D5336C /* PasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F4A0B22A92935C00D5336C /* PasswordView.swift */; };
 		79FC9E06294D605300EBD520 /* SlideApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC9E05294D605300EBD520 /* SlideApp.swift */; };
@@ -235,6 +237,8 @@
 		79D643102A78AE4E00BB42E3 /* UISearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISearchBar.swift; sourceTree = "<group>"; };
 		79D643122A78BB8D00BB42E3 /* ListedEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListedEvent.swift; sourceTree = "<group>"; };
 		79DCC254295611D6000FCD6F /* MapPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPage.swift; sourceTree = "<group>"; };
+		79E47C3D2A983FF20076EC89 /* searchMessagesByUsername.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searchMessagesByUsername.swift; sourceTree = "<group>"; };
+		79E47C3F2A98F2350076EC89 /* searchEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = searchEvents.swift; sourceTree = "<group>"; };
 		79E4912C2A707FF6009348EF /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		79F4A0B22A92935C00D5336C /* PasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordView.swift; sourceTree = "<group>"; };
 		79FC9E02294D605300EBD520 /* Slide.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slide.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -308,10 +312,10 @@
 		791C33762A61AF4A0020DEAC /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				791C33772A61AF590020DEAC /* View.swift */,
+				797A58F62A7EB1A600F333DC /* Color.swift */,
 				797A58E82A7B14E100F333DC /* UITabBar.swift */,
 				79D643102A78AE4E00BB42E3 /* UISearchBar.swift */,
-				797A58F62A7EB1A600F333DC /* Color.swift */,
+				791C33772A61AF590020DEAC /* View.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -409,6 +413,7 @@
 			isa = PBXGroup;
 			children = (
 				7936F9F82A76C23D0057DB8A /* searchUsersByUsername.swift */,
+				79E47C3D2A983FF20076EC89 /* searchMessagesByUsername.swift */,
 				7936F9FB2A76C2A70057DB8A /* fetchUserDetails.swift */,
 				7936F9FD2A76C2E60057DB8A /* confirmFriendship.swift */,
 				7936F9FF2A76C3020057DB8A /* rejectFriendship.swift */,
@@ -536,12 +541,11 @@
 		797B1AC42A5F42C400DD6B89 /* Functions */ = {
 			isa = PBXGroup;
 			children = (
-				E9C9024F2A7348950049FC81 /* Events */,
-				E9C902492A7258680049FC81 /* Highlights */,
-				7936F9FA2A76C2400057DB8A /* Friends */,
-				7965E08D2A702C02003F46C4 /* Settings */,
 				79A27C8A2A69F453003DE383 /* Authentication */,
-				797B1AC72A5F435100DD6B89 /* Contacts */,
+				E9C9024F2A7348950049FC81 /* Events */,
+				7936F9FA2A76C2400057DB8A /* Friends */,
+				E9C902492A7258680049FC81 /* Highlights */,
+				7965E08D2A702C02003F46C4 /* Settings */,
 				796CD0192A71E0A5008599EA /* fetchUsernameAndPhotoURL.swift */,
 				797A58F02A7E963000F333DC /* formatTimestamp.swift */,
 				792712AA2A871EC300E42BC3 /* fetchCurrentFriendsCount.swift */,
@@ -564,9 +568,9 @@
 			children = (
 				79DC7CF92A7F366900503C4D /* Chat */,
 				7957B2EB2A6AFA4E00F94CB4 /* Permissions */,
-				7935E7C42997111F00CC893F /* UserListener.swift */,
 				795C5BED2953FEEB007FDA83 /* Event.swift */,
 				796CD0172A718CA2008599EA /* ProfileInfo.swift */,
+				7935E7C42997111F00CC893F /* UserListener.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -593,6 +597,7 @@
 		79A27C8A2A69F453003DE383 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
+				797B1AC72A5F435100DD6B89 /* Contacts */,
 				791C336C2A6193600020DEAC /* AddUserToDatabases.swift */,
 				791C336E2A6197300020DEAC /* createFirebaseAccount.swift */,
 				791C33722A619E150020DEAC /* googleSignIn.swift */,
@@ -773,6 +778,7 @@
 				E9C902502A7348C40049FC81 /* EligibleEvents.swift */,
 				E9C902522A76413C0049FC81 /* getEventGalleryInfos.swift */,
 				E9C902612A9170D50049FC81 /* ExtractFriendSlides.swift */,
+				79E47C3F2A98F2350076EC89 /* searchEvents.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -971,11 +977,13 @@
 				79B1FF7C2A6B35AF00012B38 /* ContactsPermissionsView.swift in Sources */,
 				795C5BF829540B10007FDA83 /* Profile View.swift in Sources */,
 				79A5383C2A8E883600CAA51E /* BackButton.swift in Sources */,
+				79E47C3E2A983FF20076EC89 /* searchMessagesByUsername.swift in Sources */,
 				E9CD46F82A6BA65200E24317 /* AddFriendsView.swift in Sources */,
 				79B822702A647262003133BC /* LocationPermissionsView.swift in Sources */,
 				79D643112A78AE4E00BB42E3 /* UISearchBar.swift in Sources */,
 				79B1FF7A2A6B337A00012B38 /* Contacts Permission.swift in Sources */,
 				7957B2EF2A6AFAAE00F94CB4 /* Location Permission.swift in Sources */,
+				79E47C402A98F2350076EC89 /* searchEvents.swift in Sources */,
 				79D6430D2A785C7A00BB42E3 /* UserProfileView.swift in Sources */,
 				9BE277F02A7218FE007AD2EC /* ChatView.swift in Sources */,
 				79167C872A8B1DA800D6AE54 /* BaseButtonStyle.swift in Sources */,

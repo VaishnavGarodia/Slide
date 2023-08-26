@@ -15,9 +15,12 @@ struct SearchView: View {
     @Binding var location: CLLocationCoordinate2D!
     @Binding var event: Event
     @Binding var detail: Bool
+    @Binding var eventView: Bool
+    var searchForEvents: Bool = false
     @State var txt = ""
-    @State var createEventSearch: Bool = false
-    
+    @State var createEventSearch: Bool = true
+    @State var events: [Event] = []
+ 
     var frame: CGFloat
     var body: some View {
         ZStack {
@@ -33,29 +36,76 @@ struct SearchView: View {
                         .padding(-25)
                         .bubbleStyle(color: .primary)
                         .padding(.leading, 10)
-                        
-                    if !self.result.isEmpty && self.txt != "" {
-                        List(self.result) { i in
-                            VStack(alignment: .leading) {
-                                Text(i.name)
-                                    .foregroundColor(.white)
-                                
-                                Text(i.address)
-                                    .font(.caption)
-                                    .foregroundColor(.white)
+                        .onChange(of: self.txt) { _ in
+                            if self.searchForEvents {
+                                self.events.removeAll()
+                                searchEvents(eventName: self.txt) { search in
+                                    self.events = search
+                                }
                             }
-                            .listRowBackground(Color.clear)
-                            .onTapGesture {
-                                self.dismissKeyboard()
-                                self.searchLocation(query: i.result)
-                                // Clear the search results when list item is tapped
-                                self.result.removeAll()
+                        }
+                        .shadow(radius: 10)
+                    
+                    if !self.result.isEmpty && self.txt != "" {
+                        List {
+                            if !self.events.isEmpty {
+                                Section {
+                                    ForEach(self.events, id: \.id) { event in
+                                        HStack {
+                                            VStack(alignment: .leading) {
+                                                Text(event.name)
+                                                Text(event.eventDescription)
+                                                    .font(.caption)
+                                            }
+                                            Spacer()
+                                            MiniEventBanner(imageURL: URL(string: event.bannerURL), divider: 10, icon: event.icon)
+                                        }
+                                        .listRowBackground(Color.clear)
+                                        .foregroundColor(.white)
+                                        .onTapGesture {
+                                            withAnimation {
+                                                self.dismissKeyboard()
+                                                self.event = event
+                                                self.result.removeAll()
+                                                self.txt = ""
+                                                self.eventView.toggle()
+                                            }
+                                        }
+                                    }
+                                } header: {
+                                    Text("Events")
+                                        .font(.caption)
+                                }
+                            }
+                           
+                            Section {
+                                ForEach(self.result) { i in
+                                    VStack(alignment: .leading) {
+                                        Text(i.name)
+                                            .foregroundColor(.white)
+                                                        
+                                        Text(i.address)
+                                            .font(.caption)
+                                            .foregroundColor(.white)
+                                    }
+                                    .onTapGesture {
+                                        self.dismissKeyboard()
+                                        self.searchLocation(query: i.result)
+                                        // Clear the search results when list item is tapped
+                                        self.result.removeAll()
+                                    }
+                                    .listRowBackground(Color.clear)
+                                }
+                            } header: {
+                                Text("Locations")
+                                    .font(.caption)
                             }
                         }
                         .scrollContentBackground(.hidden)
                     }
                 }
             }
+            
             .padding()
         }
     }
@@ -116,22 +166,14 @@ struct SearchView: View {
                         addressString = addressString + pm.subLocality! + ", "
                     }
                     if pm.subThoroughfare != nil {
-                        addressString = addressString + pm.subThoroughfare! + " "
+                        addressString = addressString + pm.subThoroughfare! + ", "
                     }
                     if pm.thoroughfare != nil {
                         addressString = addressString + pm.thoroughfare! + ", "
                     }
                     if pm.locality != nil {
-                        addressString = addressString + pm.locality! + ", "
+                        addressString = addressString + pm.locality!
                     }
-                    if pm.country != nil {
-                        addressString = addressString + pm.country! + ", "
-                    }
-                    if pm.postalCode != nil {
-                        addressString = addressString + pm.postalCode! + " "
-                    }
-
-                    print(addressString)
                 }
                 
                 self.event.address = addressString
@@ -227,6 +269,6 @@ struct SearchData: Identifiable, Equatable {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView(map: .constant(MKMapView()), location: .constant(CLLocationCoordinate2D()), event: .constant(Event()), detail: .constant(true), frame: 400)
+        SearchView(map: .constant(MKMapView()), location: .constant(CLLocationCoordinate2D()), event: .constant(Event()), detail: .constant(true), eventView: .constant(false), frame: 400)
     }
 }

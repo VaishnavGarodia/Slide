@@ -11,6 +11,7 @@ struct MessagesTab: View {
     @State private var username = ""
     @State private var selectedUser: UserData? = nil
     @State private var profileView = false
+    @State private var search: [String] = []
 
     @ObservedObject private var vm = MainMessagesViewModel()
 
@@ -23,7 +24,12 @@ struct MessagesTab: View {
                 }
                 .checkMarkTextField()
                 .bubbleStyle(color: .primary)
-                .padding(5)
+                .onChange(of: searchMessages) { _ in
+                    searchMessagesByUsername(username: searchMessages.lowercased()) { users in
+                        search = users
+                    }
+                }
+
                 Spacer()
                 NavigationLink(destination: AddFriendsView()) {
                     Image(systemName: "person.badge.plus")
@@ -38,21 +44,19 @@ struct MessagesTab: View {
                         .foregroundColor(.primary)
                 }
             }
-            .padding(.bottom, -10)
-            .padding(.top, -10)
 
             List {
                 ForEach(vm.recentMessages.keys.sorted(), id: \.self) { chatUserId in
                     if let messages = vm.recentMessages[chatUserId] {
                         if let recentMessage = messages.last {
-                            RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser)
-                                .swipeActions(edge: .trailing) {
-                                    Button {
-                                        onHide(message: recentMessage)
-                                    } label: {
-                                        Label("", systemImage: "trash")
-                                    }
+                            if !search.isEmpty {
+                                if search.contains(chatUserId) {
+                                    RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser)
                                 }
+                            } else {
+                                RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser, vm: vm)
+                                    
+                            }
                         }
                     }
                 }
@@ -63,10 +67,6 @@ struct MessagesTab: View {
         .fullScreenCover(isPresented: $profileView) {
             UserProfileView(user: $selectedUser)
         }
-    }
-
-    func onHide(message: RecentMessage) {
-        vm.hideMessage(message)
     }
 }
 

@@ -1,9 +1,6 @@
-//
 //  View.swift
 //  Slide
-//
 //  Created by Ethan Harianto on 7/14/23.
-//
 
 import Foundation
 import SwiftUI
@@ -104,6 +101,7 @@ struct FilledBubble: ViewModifier {
             .fontWeight(.bold)
             .cornerRadius(15)
             .padding(.top)
+            .shadow(radius: 15)
     }
 }
 

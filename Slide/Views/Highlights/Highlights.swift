@@ -5,6 +5,7 @@ import SwiftUI
 /* Tom Holland test data: [HighlightInfo(imageName: "https://m.media-amazon.com/images/M/MV5BNzZiNTEyNTItYjNhMS00YjI2LWIwMWQtZmYwYTRlNjMyZTJjXkEyXkFqcGdeQXVyMTExNzQzMDE0._V1_FMjpg_UX1000_.jpg", profileImageName: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", username: "User 1", highlightTitle: "Highlight 1"), HighlightInfo(imageName: "https://www.advocate.com/media-library/tom-holland.jpg?id=34342705&width=980&quality=85", profileImageName: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", username: "User 1", highlightTitle: "Highlight 1")] */
 
 struct Highlights: View {
+    @Binding var source: UIImagePickerController.SourceType
     @State private var galleries: [Event] = []
     @State private var highlights: [HighlightInfo] = []
     @Binding var isPresentingPostCreationView: Bool
@@ -42,7 +43,7 @@ struct Highlights: View {
                     }
                     .padding()
                 }
-                PostCreationView()
+                PostCreationView(source: $source)
             }
         }
         .fullScreenCover(isPresented: $profileView) {
@@ -146,6 +147,6 @@ struct Highlights: View {
 
 struct Highlights_Previews: PreviewProvider {
     static var previews: some View {
-        Highlights(isPresentingPostCreationView: .constant(false))
+        Highlights(source: .constant(.camera), isPresentingPostCreationView: .constant(false))
     }
 }

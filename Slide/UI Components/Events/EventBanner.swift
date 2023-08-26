@@ -55,20 +55,31 @@ struct SmallEventBanner: View {
 struct MiniEventBanner: View {
     var imageURL: URL? = nil
     var image: UIImage? = nil
+    var divider: CGFloat = 7.5
+    var icon: String = ""
     var body: some View {
-        if imageURL != nil {
-            KFImage(imageURL)
-                .resizable()
-                .fade(duration: 0.25)
-                .cacheMemoryOnly()
-                .scaledToFill()
-                .frame(width: UIScreen.main.bounds.width / 7.5, height: UIScreen.main.bounds.width / 7.5)
-        } else {
-            GeometryReader { _ in
-                Image(uiImage: image!)
+        ZStack {
+            if imageURL == nil && image == nil {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
+
+                Image(systemName: icon)
+                    .imageScale(.small)
+            } else if imageURL != nil {
+                KFImage(imageURL)
                     .resizable()
+                    .fade(duration: 0.25)
+                    .cacheMemoryOnly()
                     .scaledToFill()
+            } else {
+                GeometryReader { _ in
+                    Image(uiImage: image!)
+                        .resizable()
+                        .scaledToFill()
+                }
             }
         }
+        .frame(width: UIScreen.main.bounds.width / divider, height: UIScreen.main.bounds.width / divider)
+        .cornerRadius(10)
     }
 }

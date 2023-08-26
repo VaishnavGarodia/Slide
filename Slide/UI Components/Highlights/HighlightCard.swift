@@ -27,16 +27,20 @@ struct HighlightCard: View {
                         UserProfilePictures(photoURL: highlight.profileImageName, dimension: 35)
                             .padding(.trailing, -5)
                             .onTapGesture {
-                                selectedUser = UserData(userID: highlight.uid, username: highlight.username, photoURL: highlight.profileImageName)
-                                profileView.toggle()
+                                if highlight.uid != user!.uid {
+                                    selectedUser = UserData(userID: highlight.uid, username: highlight.username, photoURL: highlight.profileImageName)
+                                    profileView.toggle()
+                                }
                             }
                         VStack(alignment: .leading) {
                             Text(highlight.username)
                                 .foregroundColor(.primary)
                                 .fontWeight(.semibold)
                                 .onTapGesture {
-                                    selectedUser = UserData(userID: highlight.uid, username: highlight.username, photoURL: highlight.profileImageName)
-                                    profileView.toggle()
+                                    if highlight.uid != user!.uid {
+                                        selectedUser = UserData(userID: highlight.uid, username: highlight.username, photoURL: highlight.profileImageName)
+                                        profileView.toggle()
+                                    }
                                 }
                             if !highlight.highlightTitle.isEmpty {
                                 Text(highlight.highlightTitle)
@@ -49,6 +53,7 @@ struct HighlightCard: View {
                     .padding(.horizontal)
                     .background(BlurView(style: .systemMaterial).cornerRadius(15))
                     .padding()
+                    .shadow(radius: 10)
                     Spacer()
                 }
                 Spacer()
@@ -70,6 +75,7 @@ struct HighlightCard: View {
                         .background(BlurView(style: .systemMaterial).clipShape(Circle()))
                     }
                     .padding()
+                    .shadow(radius: 10)
                 }
             }
         }
@@ -101,8 +107,7 @@ struct HighlightCard: View {
                 var likedUsersList = document.data()?["Liked Users"] as? [String] ?? []
                 if likedUsersList.contains(currentUserID) {
                     likedUsersList.removeAll { $0 == currentUserID }
-                }
-                else {
+                } else {
                     likedUsersList.append(currentUserID)
                 }
                 postRef.updateData(["Liked Users": likedUsersList])

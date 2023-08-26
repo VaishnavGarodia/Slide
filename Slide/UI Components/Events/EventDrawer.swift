@@ -2,6 +2,7 @@
 //  Slide
 //  Created by Ethan Harianto on 8/16/23.
 
+import FirebaseAuth
 import MapKit
 import SwiftUI
 
@@ -12,13 +13,14 @@ struct EventDrawer: View {
     @Binding var eventView: Bool
     // Gesture Properties...
     @State var offset: CGFloat = 10
-    @State var lastOffset: CGFloat = 0
+    @State var lastOffset: CGFloat = 10
     @State var storedOffset: CGFloat = 0
     @GestureState var gestureOffset: CGFloat = 0
 
     var body: some View {
         GeometryReader { proxy -> AnyView in
             let height = proxy.frame(in: .global).height
+            let maxHeight = height - 30
             return AnyView(
                 ZStack {
                     BlurView(style: .systemThinMaterial)
@@ -33,8 +35,9 @@ struct EventDrawer: View {
                             )
                             .onAppear {
                                 withAnimation {
+                                    lastOffset = -maxHeight
                                     storedOffset = offset
-                                    offset = -(height - 30)
+                                    offset = -maxHeight
                                 }
                                 let coordinateRegion = MKCoordinateRegion(
                                     center: selectedEvent.coordinate,
@@ -45,11 +48,11 @@ struct EventDrawer: View {
                             .onDisappear {
                                 withAnimation {
                                     offset = storedOffset
+                                    lastOffset = offset
                                 }
                             }
                             Spacer()
                         }
-
                     } else {
                         VStack {
                             Capsule()
@@ -60,8 +63,8 @@ struct EventDrawer: View {
                             ScrollView {
                                 ForEach($events, id: \.name) { event in
                                     ListedEvent(event: event, selectedEvent: $selectedEvent, eventView: $eventView)
+                                        .padding(.bottom)
                                 }
-                                .padding(.bottom)
                             }
 
                             Divider()
@@ -73,35 +76,29 @@ struct EventDrawer: View {
                     }
                 } //: ZSTACK
                 .offset(y: height - 30)
-                .offset(y: -offset > 10 ? -offset <= (height - 30) ? offset : -(height - 30) : 0)
+                .offset(y: -offset > 10 ? -offset <= maxHeight ? offset : -maxHeight : 0)
                 .gesture(DragGesture().updating($gestureOffset, body: { value, out, _ in
                     out = value.translation.height
                     onChange()
-                }).onEnded { _ in
-                    let maxHeight = height - 30
+                })
+                .onEnded { _ in
                     withAnimation {
                         // Logic Conditions For Moving States....
                         // Up down or mid...
-                        if -offset > 30, -offset < maxHeight / 3, offset < lastOffset {
+                        if (eventView && -offset > 30 && -offset < maxHeight / 3) || (eventView && -offset > maxHeight / 3) {
+                            offset = -maxHeight
+                        } else if -offset > 30, -offset < maxHeight / 3, offset < lastOffset {
                             // Mid...
-                            if !eventView {
-                                offset = (-(maxHeight / 3) > -CGFloat(events.count * 100) + 20 || -(maxHeight / 3) < -CGFloat(events.count * 100) - 20) ? -CGFloat(events.count * 100) : -(maxHeight / 3)
-                            } else {
-                                offset = 10
-                            }
+                            offset = (-(maxHeight / 3) > -CGFloat(events.count * 110) + 20 || -(maxHeight / 3) < -CGFloat(events.count * 110) - 20) ? -CGFloat(events.count * 110) : -(maxHeight / 3)
                         } else if -offset > maxHeight / 3 {
-                            if !eventView {
-                                offset = (events.count >= 7 || eventView) ? -maxHeight : -CGFloat(events.count * 100)
-                            } else {
-                                offset = -maxHeight
-                            }
+                            offset = (events.count >= 7 || eventView) ? -maxHeight : -CGFloat(events.count * 110)
                         } else {
                             offset = 10
                         }
                     }
 
                     // Storing Last Offset...
-                    // So that the gesture can contine from the last position....
+                    // So that the gesture can continue from the last position....
                     lastOffset = offset
                 })
             )

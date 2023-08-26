@@ -15,49 +15,42 @@ struct PendingRequests: View {
     let user = Auth.auth().currentUser
 
     var body: some View {
-        Section {
-            List(pendingFriendRequests, id: \.userID) { friend in
-                HStack {
-                    UserProfilePictures(photoURL: friend.photoURL, dimension: 45)
-                    Text(friend.username)
-                        .foregroundColor(.primary)
-                    Spacer()
-                    if friend.added ?? false {
-                        Button {
-                            
-                        } label: {
-                            Image(systemName: "person.2")
-                                .padding(5)
-                                .foregroundColor(.gray)
-                                .background(.primary)
-                                .cornerRadius(10)
-                        }
-                    } else {
-                        Button {
-                            confirmFriendship(u1: user?.uid ?? "SimUser", u2: friend.userID)
-                            refreshPending.toggle()
-                        } label: {
-                            Text("Add Back")
-                                .foregroundColor(.primary)
-                                .padding(5)
-                                .padding(.horizontal, 5)
-                                .background(RoundedRectangle(cornerRadius: 10).foregroundColor(.accentColor))
-                        }
+        ForEach(pendingFriendRequests, id: \.userID) { friend in
+            HStack {
+                UserProfilePictures(photoURL: friend.photoURL, dimension: 45)
+                Text(friend.username)
+                    .foregroundColor(.primary)
+                Spacer()
+                if friend.added ?? false {
+                    Button {} label: {
+                        Image(systemName: "person.2")
+                            .padding(5)
+                            .foregroundColor(.gray)
+                            .background(.primary)
+                            .cornerRadius(10)
                     }
+                } else {
                     Button {
-                        rejectFriendship(u1: user?.uid ?? "SimUser", u2: friend.userID)
+                        confirmFriendship(u1: user?.uid ?? "SimUser", u2: friend.userID)
                         refreshPending.toggle()
                     } label: {
-                        Image(systemName: "xmark")
-                            .imageScale(.small)
-                            .foregroundColor(.gray)
+                        Text("Add Back")
+                            .foregroundColor(.primary)
+                            .padding(5)
+                            .padding(.horizontal, 5)
+                            .background(RoundedRectangle(cornerRadius: 10).foregroundColor(.accentColor))
                     }
                 }
-                .buttonStyle(.borderless)
+                Button {
+                    rejectFriendship(u1: user?.uid ?? "SimUser", u2: friend.userID)
+                    refreshPending.toggle()
+                } label: {
+                    Image(systemName: "xmark")
+                        .imageScale(.small)
+                        .foregroundColor(.gray)
+                }
             }
-        } header: {
-            Text("New Friend Requests")
-                .padding(5)
+            .buttonStyle(.borderless)
         }
     }
 }

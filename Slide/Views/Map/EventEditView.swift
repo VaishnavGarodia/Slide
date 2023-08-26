@@ -30,15 +30,9 @@ struct EventEditView: View {
     @State private var errorMessage = ""
     let icons = ["party.popper", "balloon.2", "birthday.cake", "book", "dice", "basketball", "soccerball", "football", "figure.climbing", "theatermasks", "beach.umbrella", "gamecontroller"]
     
-    var dateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return formatter
-    }
-    
     var body: some View {
         ZStack {
-            CreateEventView(map: $map, event: $event, alert: $alert, show: $show, destination: $destination)
+            CreateEventView(map: $map, event: $event, alert: $alert, show: $show, destination: $destination, searchForAddress: .constant(false))
                 .ignoresSafeArea()
             
             if destination != nil && show {
@@ -49,7 +43,7 @@ struct EventEditView: View {
             VStack(alignment: .center) {
                 if !show {
                     ZStack(alignment: .topTrailing) {
-                        SearchView(map: $map, location: $destination, event: $event, detail: $show, createEventSearch: createEventSearch, frame: 280)
+                        SearchView(map: $map, location: $destination, event: $event, detail: $show, eventView: .constant(false), createEventSearch: createEventSearch, frame: 280)
                             .padding(.top, -15)
                         Button {
                             presentationMode.wrappedValue.dismiss()
@@ -157,7 +151,6 @@ struct EventEditView: View {
                                 if event.name.isEmpty {
                                     errorMessage = "Oops, you left the event name empty!"
                                 } else {
-                                    event.host = (Auth.auth().currentUser?.displayName)!
                                     event.coordinate = CLLocationCoordinate2D(latitude: destination.latitude, longitude: destination.longitude)
                                     event.icon = icons[icon]
                                     isShowingPreview = true

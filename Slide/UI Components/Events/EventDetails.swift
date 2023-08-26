@@ -12,34 +12,26 @@ struct EventDetails: View {
     var image: UIImage = .init()
     var event: Event
     var preview = false
+    var fromMap = true
     @Binding var eventView: Bool
-    @State var fromMap: Bool = false
+    @State private var profileView = false
+    @State private var selectedUser: UserData? = nil
     @State private var isRSVPed = false
     @State private var isLoading = false
+    @State private var username = ""
+    @State private var photoURL = ""
     @State private var showDescription = false
-
     @State private var showAttendeesSheet = false
-    @State var friendSlides: [String] = []
-    @State var nonFriendSlides: [String] = []
-
-    @State private var isUsersEvent = false
-    @State private var hasntStartedYet = false
+    @State private var friendSlides: [String] = []
+    @State private var nonFriendSlides: [String] = []
     @State private var showEventEditSheet = false
 
     var body: some View {
-        VStack(alignment: .center) {
-            // Display event details here based on the 'event' parameter
-            // For example:
-            if isUsersEvent && hasntStartedYet {
-                // Then display the edit button
-                Button(action: {
-                    showEventEditSheet.toggle()
-                }) {
-                    Text("EDIT EVENT")
-                }
-            }
+        ScrollView {
+            VStack(alignment: .center) {
+                // Display event details here based on the 'event' parameter
+                // For example:
 
-            Group {
                 HStack {
                     if !fromMap {
                         Button {
@@ -69,6 +61,16 @@ struct EventDetails: View {
                         .font(.title)
                         .fontWeight(.bold)
                     Spacer()
+                    if event.hostUID == Auth.auth().currentUser!.uid && event.start > Date() {
+                        // Then display the edit button
+                        Button(action: {
+                            showEventEditSheet.toggle()
+                        }) {
+                            Image(systemName: "pencil")
+                                .imageScale(.large)
+                                .padding(.trailing)
+                        }
+                    }
                 }
                 .padding()
 
@@ -76,19 +78,18 @@ struct EventDetails: View {
                     Capsule()
                         .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
                         .foregroundColor(.primary)
-
-                    if !event.bannerURL.isEmpty {
-                        EventBanner(imageURL: URL(string: event.bannerURL)!)
-                            .cornerRadius(15)
-                            .padding()
-                    } else if image != UIImage() {
-                        EventBanner(image: image)
-                            .frame(width: UIScreen.main.bounds.width * 0.95)
-                            .frame(maxHeight: UIScreen.main.bounds.width * 0.95 * 3 / 4)
-                            .cornerRadius(15)
-                            .padding()
-                    } else {
-                        ZStack {
+                    ZStack {
+                        if !event.bannerURL.isEmpty {
+                            EventBanner(imageURL: URL(string: event.bannerURL)!)
+                                .cornerRadius(15)
+                                .padding()
+                        } else if image != UIImage() {
+                            EventBanner(image: image)
+                                .frame(width: UIScreen.main.bounds.width * 0.95)
+                                .frame(maxHeight: UIScreen.main.bounds.width * 0.95 * 3 / 4)
+                                .cornerRadius(15)
+                                .padding()
+                        } else {
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
                                 .frame(width: UIScreen.main.bounds.width * 0.95, height: UIScreen.main.bounds.width * 0.95 * 3 / 4)
@@ -98,46 +99,44 @@ struct EventDetails: View {
                                 .frame(width: UIScreen.main.bounds.width * 0.15, height: UIScreen.main.bounds.width * 0.15)
                         }
                     }
+                    .shadow(radius: 15)
 
                     Capsule()
                         .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
                         .foregroundColor(.primary)
                 }
-            }
 
-            // ... (display other details as needed)
-            Text(event.host)
-                .fontWeight(.semibold)
-            Text(formatDate(date: event.start) + " - " + formatDate(date: event.end))
-                .font(.callout)
-            HStack {
-                Image(systemName: "mappin")
-                Text(event.address)
-                    .multilineTextAlignment(.center)
-            }
-
-            Button {
-                withAnimation {
-                    showDescription.toggle()
+                HStack {
+                    UserProfilePictures(photoURL: photoURL, dimension: 25)
+                        .padding(.trailing, -5)
+                    Text(username)
+                        .fontWeight(.semibold)
                 }
-            } label: {
-                Text(showDescription ? "Hide Description" : "Show Description").font(.caption).foregroundColor(.gray)
-            }
+                .onTapGesture {
+                    selectedUser = UserData(userID: event.hostUID, username: username, photoURL: photoURL)
+                    profileView.toggle()
+                }
 
-            if showDescription {
-                Text(event.eventDescription)
-                    .font(.caption)
-            }
+                Text(formatDate(date: event.start) + " - " + formatDate(date: event.end))
+                    .font(.callout)
 
-            if event.hostUID != Auth.auth().currentUser!.uid && !preview {
-                GeometryReader { geometry in
-                    ZStack(alignment: .leading) {
-                        BackgroundComponent()
-                        DraggingComponent(isRSVPed: $isRSVPed, isLoading: isLoading, maxWidth: geometry.size.width)
+                HStack {
+                    Image(systemName: "mappin")
+                    Text(event.address)
+                        .multilineTextAlignment(.center)
+                }
+
+                Button {
+                    withAnimation {
+                        showDescription.toggle()
                     }
+                } label: {
+                    Text(showDescription ? "Hide Description" : "Show Description").font(.caption).foregroundColor(.gray)
                 }
+
                 if showDescription {
                     Text(event.eventDescription)
+                        .font(.caption)
                 }
 
                 if event.hostUID != Auth.auth().currentUser!.uid && !preview {
@@ -148,39 +147,45 @@ struct EventDetails: View {
                         }
                     }
                     .frame(height: 50)
-                    .padding()
+                    .padding(.horizontal)
                     .onChange(of: isRSVPed) { isRSVPed in
                         guard !isRSVPed else { return }
                         simulateRequest()
                     }
-                }
-            }
-
-            Text("Attendees")
-            ScrollView(.horizontal) {
-                HStack(spacing: 16) { // Adjust spacing as needed
-                    ForEach(friendSlides, id: \.self) { friendID in
-                        UserSlidedProfileBox(uid: friendID, friend: true)
-                    }
-                    ForEach(nonFriendSlides, id: \.self) { nonFriendID in
-                        UserSlidedProfileBox(uid: nonFriendID, friend: false)
+                    if showDescription {
+                        Text(event.eventDescription)
                     }
                 }
-                .padding(.horizontal) // Add some padding to the HStack
+                Group {
+                    Text("Attendees")
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 16) { // Adjust spacing as needed
+                            ForEach(friendSlides, id: \.self) { friendID in
+                                UserSlidedProfileBox(uid: friendID, friend: true)
+                            }
+                            ForEach(nonFriendSlides, id: \.self) { nonFriendID in
+                                UserSlidedProfileBox(uid: nonFriendID, friend: false)
+                            }
+                        }
+                        .padding(.horizontal) // Add some padding to the HStack
+                        // Start the new stuff (First section is gonna be fellow slides)
+                    }
+                }
             }
-
-            // Start the new stuff (First section is gonna be fellow slides)
         }
+        .padding()
+        .scrollIndicators(.never)
         .onAppear {
             isRSVPed = event.slides.contains(Auth.auth().currentUser?.uid ?? "")
             extractFriendSlides(event: event) { friendSlidesTemp, nonFriendSlidesTemp in
                 self.friendSlides = friendSlidesTemp
                 self.nonFriendSlides = nonFriendSlidesTemp
-                didUserCreateEvent()
-                didEventStartYet()
+            }
+            fetchUsernameAndPhotoURL(for: event.hostUID) { temp, temp2 in
+                username = temp!
+                photoURL = temp2!
             }
         }
-        .padding()
         .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $showAttendeesSheet) {
             SlidesView(nonFriendsList: nonFriendSlides, friendsList: friendSlides)
@@ -188,20 +193,11 @@ struct EventDetails: View {
         .sheet(isPresented: $showEventEditSheet) {
             EventEditView(event: event, destination: event.coordinate)
         }
+        .fullScreenCover(isPresented: $profileView) {
+            UserProfileView(user: $selectedUser)
+        }
     }
-
-    func didUserCreateEvent() {
-        let userID = Auth.auth().currentUser!.uid
-        print("Two")
-        print(userID)
-        print(event.hostUID)
-        isUsersEvent = (event.hostUID == userID)
-    }
-
-    func didEventStartYet() {
-        let currentDate = Date()
-        hasntStartedYet = event.start > currentDate
-    }
+                         
 
     func formatDate(date: Date) -> String {
         let dateFormatter = DateFormatter()

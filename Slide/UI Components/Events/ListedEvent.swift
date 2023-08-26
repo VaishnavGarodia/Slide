@@ -3,6 +3,7 @@
 //  Created by Ethan Harianto on 8/1/23.
 
 import CoreLocation
+import FirebaseAuth
 import FirebaseFirestore
 import SwiftUI
 
@@ -20,18 +21,7 @@ struct ListedEvent: View {
 
     var body: some View {
         HStack {
-            if event.bannerURL.isEmpty {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
-                        .frame(width: UIScreen.main.bounds.width / 7.5, height: UIScreen.main.bounds.width / 7.5)
-                    Image(systemName: event.icon)
-                        .imageScale(.small)
-                }
-            } else {
-                MiniEventBanner(imageURL: URL(string: event.bannerURL))
-                    .cornerRadius(10)
-            }
+            MiniEventBanner(imageURL: URL(string: event.bannerURL), icon: event.icon)
 
             VStack(alignment: .leading) {
                 Text(event.name)

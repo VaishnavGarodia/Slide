@@ -25,149 +25,152 @@ struct CreateEventPage: View {
     @State private var isShowingPreview = false
     @State private var icon = 0
     @State private var errorMessage = ""
-    let icons = ["party.popper", "balloon.2", "birthday.cake", "book", "dice", "basketball", "soccerball", "football", "figure.climbing", "theatermasks", "beach.umbrella", "gamecontroller"]
+    @State private var searchForAddress = false
     
-    var dateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return formatter
-    }
+    let icons = ["party.popper", "balloon.2", "birthday.cake", "book", "dice", "basketball", "soccerball", "football", "figure.climbing", "theatermasks", "beach.umbrella", "gamecontroller"]
     
     var body: some View {
         ZStack {
-            CreateEventView(map: $map, event: $event, alert: $alert, show: $show, destination: $destination)
+            CreateEventView(map: $map, event: $event, alert: $alert, show: $show, destination: $destination, searchForAddress: $searchForAddress)
                 .ignoresSafeArea()
-            
-            if destination != nil && show {
+            if searchForAddress {
+                ZStack(alignment: .topTrailing) {
+                    SearchView(map: $map, location: $destination, event: $event, detail: $show, eventView: .constant(false), createEventSearch: createEventSearch, frame: 280)
+                        .padding(.top, -15)
+                    Button {
+                        presentationMode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .padding()
+                    }
+                }
+            } else {
                 Rectangle()
+                    .foregroundColor(.black.opacity(0.7))
                     .ignoresSafeArea()
-                    .foregroundColor(.black.opacity(0.65))
-            }
-            VStack(alignment: .center) {
-                if !show {
-                    ZStack(alignment: .topTrailing) {
-                        SearchView(map: $map, location: $destination, event: $event, detail: $show, createEventSearch: createEventSearch, frame: 280)
-                            .padding(.top, -15)
-                        Button {
-                            presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            Image(systemName: "xmark")
+                VStack(alignment: .center) {
+                    if !errorMessage.isEmpty {
+                        Text(errorMessage)
+                            .foregroundColor(.red)
+                            .padding(.horizontal)
+                    }
+                    VStack(alignment: .leading) {
+                        Button(action: {
+                            withAnimation {
+                                map.removeOverlays(map.overlays)
+                                map.removeAnnotations(map.annotations)
+                                destination = nil
+                                show.toggle()
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        }) {
+                            Text("Cancel")
                                 .padding()
                         }
-                    }
-                }
-                if destination != nil && show {
-                    VStack(alignment: .center) {
-                        if !errorMessage.isEmpty {
-                            Text(errorMessage)
-                                .foregroundColor(.red)
+                        HStack {
+                            Text("Banner")
+                            Spacer()
+                            Button {
+                                isShowingImagePicker.toggle()
+                            } label: {
+                                if selectedImage == UIImage() {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                        .frame(width: 50, height: 50)
+                                } else {
+                                    Image(uiImage: selectedImage!)
+                                        .resizable()
+                                        .frame(width: 50, height: 50)
+                                        .cornerRadius(10)
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                                
+                        Section {
+                            TextField("What's your event called?", text: $event.name)
+                                .checkMarkTextField()
+                                .bubbleStyle(color: .primary)
+                                .padding(.horizontal)
+                        } header: {
+                            Text("Name")
                                 .padding(.horizontal)
                         }
-                        VStack(alignment: .leading) {
-                            Button(action: {
-                                withAnimation {
-                                    map.removeOverlays(map.overlays)
-                                    map.removeAnnotations(map.annotations)
-                                    destination = nil
-                                    show.toggle()
-                                }
-                            }) {
-                                Text("Cancel")
-                                    .padding()
-                            }
+                                
+                        Section {
+                            TextField("What's happening at your event? (Optional)", text: $event.eventDescription, axis: .vertical)
+                                .lineLimit(2, reservesSpace: true)
+                                .checkMarkTextField()
+                                .bubbleStyle(color: .primary)
+                                .padding(.horizontal)
+                        } header: {
+                            Text("Description")
+                                .padding(.horizontal)
+                        }
+                                
+                        Section {
+                            TextField("Where's your event at?", text: $event.address, axis: .vertical)
+                                .lineLimit(2, reservesSpace: true)
+                                .checkMarkTextField()
+                                .bubbleStyle(color: .primary)
+                                .padding(.horizontal)
+                        } header: {
                             HStack {
-                                Text("Banner")
-                                Spacer()
-                                Button {
-                                    isShowingImagePicker.toggle()
-                                } label: {
-                                    if selectedImage == UIImage() {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
-                                            .frame(width: 50, height: 50)
-                                    } else {
-                                        Image(uiImage: selectedImage!)
-                                            .resizable()
-                                            .frame(width: 50, height: 50)
-                                            .cornerRadius(10)
-                                    }
-                                }
-                            }
-                            .padding(.horizontal)
-                            
-                            Section {
-                                TextField("What's your event called?", text: $event.name)
-                                    .checkMarkTextField()
-                                    .bubbleStyle(color: .primary)
-                                    .padding(.horizontal)
-                            } header: {
-                                Text("Name")
-                                    .padding(.horizontal)
-                            }
-                            
-                            Section {
-                                TextField("What's happening at your event? (Optional)", text: $event.eventDescription, axis: .vertical)
-                                    .lineLimit(2, reservesSpace: true)
-                                    .checkMarkTextField()
-                                    .bubbleStyle(color: .primary)
-                                    .padding(.horizontal)
-                            } header: {
-                                Text("Description")
-                                    .padding(.horizontal)
-                            }
-                            
-                            Section {
-                                TextField("Where's your event at?", text: $event.address, axis: .vertical)
-                                    .lineLimit(2, reservesSpace: true)
-                                    .checkMarkTextField()
-                                    .bubbleStyle(color: .primary)
-                                    .padding(.horizontal)
-                            } header: {
                                 Text("Address")
                                     .padding(.horizontal)
-                            }
-                            DatePicker("Start Time", selection: $event.start, in: .now...)
-                                .onAppear {
-                                    UIDatePicker.appearance().minuteInterval = 15
-                                }
-                                .datePickerStyle(.compact)
-                                .padding(.horizontal)
-                            
-                            DatePicker("End Time", selection: $event.end, in: event.start...)
-                                .onAppear {
-                                    UIDatePicker.appearance().minuteInterval = 15
+                                Spacer()
+                                Button {
+                                    withAnimation {
+                                        searchForAddress.toggle()
+                                    }
+                                } label: {
+                                    Text("Choose location")
                                 }
                                 .padding(.horizontal)
-                            
-                            HorizontalPicker($icon, items: icons) { iconImage in
-                                GeometryReader { reader in
-                                    Image(systemName: iconImage)
-                                        .imageScale(.large)
-                                        .foregroundColor(iconImage == icons[icon] ? .accentColor : .white)
-                                        .frame(width: reader.size.width, height: reader.size.height, alignment: .center)
-                                }
                             }
-                            .scrollAlpha(0.3)
-                            .frame(height: 30)
-                            
-                            Button(action: {
-                                if event.name.isEmpty {
-                                    errorMessage = "Oops, you left the event name empty!"
-                                } else {
-                                    event.host = (Auth.auth().currentUser?.displayName)!
-                                    event.coordinate = CLLocationCoordinate2D(latitude: destination.latitude, longitude: destination.longitude)
-                                    event.icon = icons[icon]
-                                    isShowingPreview = true
-                                }
+                        }
+                        DatePicker("Start Time", selection: $event.start, in: .now...)
+                            .onAppear {
+                                UIDatePicker.appearance().minuteInterval = 15
+                            }
+                            .datePickerStyle(.compact)
+                            .padding(.horizontal)
                                 
-                            }) {
-                                Text("Preview Event")
-                                    .foregroundColor(.white)
-                                    .filledBubble()
+                        DatePicker("End Time", selection: $event.end, in: event.start...)
+                            .onAppear {
+                                UIDatePicker.appearance().minuteInterval = 15
                             }
+                            .padding(.horizontal)
+                                
+                        HorizontalPicker($icon, items: icons) { iconImage in
+                            GeometryReader { reader in
+                                Image(systemName: iconImage)
+                                    .imageScale(.large)
+                                    .foregroundColor(iconImage == icons[icon] ? .accentColor : .white)
+                                    .frame(width: reader.size.width, height: reader.size.height, alignment: .center)
+                            }
+                        }
+                        .scrollAlpha(0.3)
+                        .frame(height: 30)
+                                
+                        Button(action: {
+                            if event.name.isEmpty {
+                                errorMessage = "Oops, you left the event name empty!"
+                            } else {
+                                event.coordinate = CLLocationCoordinate2D(latitude: destination.latitude, longitude: destination.longitude)
+                                event.icon = icons[icon]
+                                isShowingPreview = true
+                            }
+                                    
+                        }) {
+                            Text("Preview Event")
+                                .foregroundColor(.white)
+                                .filledBubble()
+                                .padding(.horizontal)
                         }
                     }
                 }
+                .transition(.opacity)
             }
         }
         .sheet(isPresented: $isShowingImagePicker) {
@@ -203,9 +206,8 @@ struct CreateEventPage: View {
     
     func createEvent() {
         let doc = db.collection("Events").document()
-        print("Creating event for location: ", event.coordinate)
         
-        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": event.icon, "Host": Auth.auth().currentUser!.displayName!, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low", "Associated Highlights": [String](), "SLIDES": [String]()]) { err in
+        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": event.icon, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low", "Associated Highlights": [String](), "SLIDES": [String]()]) { err in
             if err != nil {
                 print((err?.localizedDescription)!)
                 return
@@ -264,7 +266,7 @@ struct CreateEventPage: View {
             
         return imageData
     }
-        
+    
     func uploadBannerToFirebaseStorage(image: UIImage, documentID: String) {
         guard let imageData = compressImageToTargetSize(image, targetSizeInKB: 100) else {
             print("Failed to compress image.")
