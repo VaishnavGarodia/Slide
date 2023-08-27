@@ -46,17 +46,21 @@ struct MessagesTab: View {
             }
 
             List {
-                ForEach(vm.recentMessages.keys.sorted(), id: \.self) { chatUserId in
-                    if let messages = vm.recentMessages[chatUserId] {
-                        if let recentMessage = messages.last {
-                            if !search.isEmpty {
-                                if search.contains(chatUserId) {
-                                    RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser)
-                                }
-                            } else {
-                                RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser, vm: vm)
-                                    
-                            }
+                ForEach(vm.recentMessages.keys.sorted(by: { (chatUserId1, chatUserId2) -> Bool in
+                    if let messages1 = vm.recentMessages[chatUserId1],
+                       let messages2 = vm.recentMessages[chatUserId2],
+                       let recentMessage1 = messages1.last,
+                       let recentMessage2 = messages2.last {
+                        return recentMessage1.timestamp.dateValue() > recentMessage2.timestamp.dateValue()
+                    }
+                    return false
+                }), id: \.self) { chatUserId in
+                    if let messages = vm.recentMessages[chatUserId],
+                       let recentMessage = messages.last {
+                        if !search.isEmpty && search.contains(chatUserId) {
+                            RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser)
+                        } else {
+                            RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser, vm: vm)
                         }
                     }
                 }
