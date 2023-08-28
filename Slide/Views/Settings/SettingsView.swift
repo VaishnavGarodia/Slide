@@ -58,17 +58,28 @@ struct SettingsView: View {
                         }
                         Spacer()
                         if !(user?.isEmailVerified ?? false) {
-                            Image(systemName: "exclamationmark.circle")
-                                .foregroundColor(.red)
+                            Button(action: {
+                                // Add logic to resend email verification
+                                Auth.auth().currentUser?.sendEmailVerification { error in
+                                    if let error = error {
+                                        print("Error sending verification email: \(error)")
+                                    } else {
+                                        print("Verification email sent.")
+                                    }
+                                }
+                            }) {
+                                Text("Resend")
+                                    .foregroundColor(.red)
+                            }
                         }
                         Image(systemName: "chevron.right")
                             .rotationEffect(.degrees(clicks[1] ? 90 : 0))
                     }
                 }
-                        
+                
                 if clicks[1] {}
             }
-            
+
             // Phone #
             Group {
                 Button {
