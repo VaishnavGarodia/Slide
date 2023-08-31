@@ -9,7 +9,9 @@ import FirebaseAuth
 import FirebaseFirestore
 import Foundation
 
-func addUserToDatabases(username: String, email: String, password: String, google: Bool, profilePic: String) -> String {
+// Don't save the password man...
+//func addUserToDatabases(username: String, email: String, password: String, google: Bool, profilePic: String) -> String {
+func addUserToDatabases(username: String, email: String, google: Bool, profilePic: String) -> String {
     guard let user = Auth.auth().currentUser else {
         return "User is not signed in."
     }
@@ -32,7 +34,8 @@ func addUserToDatabases(username: String, email: String, password: String, googl
         } else {
             let userData: [String: Any] = [
                 "Email": email,
-                "Password": password,
+//                For the love of god why would we save the password...
+//                "Password": password,
                 "Username": username.lowercased(),
                 "ProfilePictureURL": profilePic ,
                 "Phone Number" : "",
