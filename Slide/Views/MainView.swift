@@ -67,8 +67,6 @@ struct MainView: View {
                             } label: {
                                 Label("Post with Camera", systemImage: "camera")
                             }
-                        
-
                             Button {
                                 withAnimation {
                                     source = .photoLibrary
