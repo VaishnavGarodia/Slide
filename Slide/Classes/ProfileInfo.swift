@@ -13,3 +13,9 @@ class ProfileInfo: ObservableObject {
     @Published var friendsCount: Int = 0
     @Published var lastSnapshot: DocumentSnapshot?
 }
+
+class HighlightObject: ObservableObject {
+    @Published var highlights: [HighlightInfo] = []
+    @Published var lastSnapshot: DocumentSnapshot?
+    @Published var galleries: [Event] = []
+}

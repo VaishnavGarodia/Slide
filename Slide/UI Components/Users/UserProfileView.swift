@@ -15,7 +15,7 @@ struct UserProfileView: View {
 
     var body: some View {
         if chat {
-            ChatView(chatUser: ChatUser(uid: user!.userID, email: "", profileImageUrl: user!.photoURL))
+            ChatView(chatUser: ChatUser(uid: user!.userID, profileImageUrl: user!.photoURL))
         } else {
             VStack {
                 HStack {

@@ -38,7 +38,7 @@ struct MapPage: View {
                     }
                 }
                 
-                SearchView(map: $map, location: $destination, event: $selectedEvent, detail: $show, eventView: $eventView, searchForEvents: true, frame: 300)
+                SearchView(map: $map, location: $destination, event: $selectedEvent, detail: $show, eventView: $eventView, placeholder: .constant("Search for Events"), searchForEvents: true, frame: 300)
                     .padding(.top, -15)
             }
             .alert(isPresented: self.$alert) { () -> Alert in
@@ -131,7 +131,7 @@ struct MapPage: View {
 
     func zoomToUserLocation() {
         if let userLocation = map.userLocation.location {
-            let region = MKCoordinateRegion(center: userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
+            let region = MKCoordinateRegion(center: userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015))
             map.setRegion(region, animated: true)
         }
     }

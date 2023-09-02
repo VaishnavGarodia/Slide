@@ -13,7 +13,7 @@ struct MessagesTab: View {
     @State private var profileView = false
     @State private var search: [String] = []
 
-    @ObservedObject private var vm = MainMessagesViewModel()
+    @ObservedObject var vm: MainMessagesViewModel
 
     var body: some View {
         VStack {
@@ -44,22 +44,27 @@ struct MessagesTab: View {
                         .foregroundColor(.primary)
                 }
             }
+            .padding()
+            .padding(.bottom, -10)
+            .padding(.top, -10)
 
             List {
-                ForEach(vm.recentMessages.keys.sorted(by: { (chatUserId1, chatUserId2) -> Bool in
+                ForEach(vm.recentMessages.keys.sorted(by: { chatUserId1, chatUserId2 -> Bool in
                     if let messages1 = vm.recentMessages[chatUserId1],
                        let messages2 = vm.recentMessages[chatUserId2],
                        let recentMessage1 = messages1.last,
-                       let recentMessage2 = messages2.last {
+                       let recentMessage2 = messages2.last
+                    {
                         return recentMessage1.timestamp.dateValue() > recentMessage2.timestamp.dateValue()
                     }
                     return false
                 }), id: \.self) { chatUserId in
                     if let messages = vm.recentMessages[chatUserId],
-                       let recentMessage = messages.last {
+                       let recentMessage = messages.last
+                    {
                         if !search.isEmpty && search.contains(chatUserId) {
-                            RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser)
-                        } else {
+                            RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser, vm: vm)
+                        } else if searchMessages.isEmpty {
                             RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser, vm: vm)
                         }
                     }
@@ -76,6 +81,6 @@ struct MessagesTab: View {
 
 struct MessagesTab_Previews: PreviewProvider {
     static var previews: some View {
-        MessagesTab()
+        MessagesTab(vm: MainMessagesViewModel())
     }
 }

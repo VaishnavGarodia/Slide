@@ -43,7 +43,7 @@ struct EventEditView: View {
             VStack(alignment: .center) {
                 if !show {
                     ZStack(alignment: .topTrailing) {
-                        SearchView(map: $map, location: $destination, event: $event, detail: $show, eventView: .constant(false), createEventSearch: createEventSearch, frame: 280)
+                        SearchView(map: $map, location: $destination, event: $event, detail: $show, eventView: .constant(false), placeholder: .constant("Search for a Location"), createEventSearch: createEventSearch, frame: 280)
                             .padding(.top, -15)
                         Button {
                             presentationMode.wrappedValue.dismiss()

@@ -130,6 +130,6 @@ struct ChatView: View {
 
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(chatUser: .init(uid: "", email: "", profileImageUrl: ""))
+        ChatView(chatUser: .init(uid: "", profileImageUrl: ""))
     }
 }

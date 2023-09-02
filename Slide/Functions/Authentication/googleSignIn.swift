@@ -59,7 +59,6 @@ func googleSignIn(registered: Bool, completion: @escaping (String) -> Void) {
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
                 let user = Auth.auth().currentUser
                 let username = email.components(separatedBy: "@").first?.lowercased()
-                errorMessage = addUserToDatabases(username: username!, email: email, password: password, google: true, profilePic: gUser.profile?.imageURL(withDimension: 120)?.absoluteString ?? "")
                 let usernameRef = db.collection("Usernames").whereField("Email", isEqualTo: email.lowercased())
                 usernameRef.getDocuments { document, error in
                     if let error = error {
@@ -71,6 +70,7 @@ func googleSignIn(registered: Bool, completion: @escaping (String) -> Void) {
                         // The username is already taken, handle this scenario (e.g., show an error message)
                         completion("")
                     } else {
+                        errorMessage = addUserToDatabases(username: username!, email: email, password: password, google: true, profilePic: gUser.profile?.imageURL(withDimension: 120)?.absoluteString ?? "")
                         // The username is available, update the display name
                         let changeRequest = user!.createProfileChangeRequest()
                         changeRequest.displayName = username

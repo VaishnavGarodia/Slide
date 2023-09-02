@@ -26,6 +26,7 @@ struct MapView: UIViewRepresentable {
         map.delegate = context.coordinator
         manager.delegate = context.coordinator
         map.showsUserLocation = true
+        map.showsPointsOfInterest = false
         return map
     }
 
@@ -44,7 +45,7 @@ struct MapView: UIViewRepresentable {
             } else {
                 parent.manager.startUpdatingLocation()
                 if let location = parent.manager.location?.coordinate {
-                    let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+                    let span = MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015)
                     let region = MKCoordinateRegion(center: location, span: span)
                     parent.map.setRegion(region, animated: true)
                 }
@@ -90,7 +91,7 @@ struct MapView: UIViewRepresentable {
             annotationView.animatesWhenAdded = true
             annotationView.markerTintColor = color
             annotationView.glyphImage = UIImage(systemName: eventData.icon)
-            annotationView.glyphTintColor = .yellow
+            annotationView.glyphTintColor = .white
             return annotationView
         }
 
