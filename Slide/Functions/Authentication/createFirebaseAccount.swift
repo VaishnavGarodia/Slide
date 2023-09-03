@@ -13,6 +13,16 @@ func createFirebaseAccount(email: String, password: String, username: String, co
         completion("Oops, you did not fill out all the fields.")
         return
     }
+    
+//    if let result = generateSaltedHash(for: "your_input_string", cycles: 1) {
+//        let (hashedValue, salt, cycles) = result
+//        print("Hashed value: \(hashedValue.map { String(format: "%02hhx", $0) }.joined())")
+//        print("Salt value: \(salt.map { String(format: "%02hhx", $0) }.joined())")
+//        print("Cycles: \(cycles)")
+//    } else {
+//        print("Hash generation failed.")
+//    }
+
 
     if email.hasSuffix("@stanford.edu") {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
@@ -36,7 +46,7 @@ func createFirebaseAccount(email: String, password: String, username: String, co
                     }
                 }
                 
-                let errorMessage = addUserToDatabases(username: username, email: email, password: password, google: false, profilePic: "")
+                let errorMessage = addUserToDatabases(username: username, email: email, google: false, profilePic: "")
                 completion(errorMessage)
             }
         }

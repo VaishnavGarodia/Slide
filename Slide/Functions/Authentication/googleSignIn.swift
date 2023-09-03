@@ -59,7 +59,7 @@ func googleSignIn(registered: Bool, completion: @escaping (String) -> Void) {
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
                 let user = Auth.auth().currentUser
                 let username = email.components(separatedBy: "@").first?.lowercased()
-                errorMessage = addUserToDatabases(username: username!, email: email, password: password, google: true, profilePic: gUser.profile?.imageURL(withDimension: 120)?.absoluteString ?? "")
+                errorMessage = addUserToDatabases(username: username!, email: email, google: true, profilePic: gUser.profile?.imageURL(withDimension: 120)?.absoluteString ?? "")
                 let usernameRef = db.collection("Usernames").whereField("Email", isEqualTo: email.lowercased())
                 usernameRef.getDocuments { document, error in
                     if let error = error {
