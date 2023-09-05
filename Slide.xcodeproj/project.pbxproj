@@ -131,6 +131,7 @@
 		E807DF4A29A2B06B0093C87C /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E807DF4929A2B06B0093C87C /* FirebaseFirestoreSwift */; };
 		E9BA986B2A95E79100A1D3A1 /* EventEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BA986A2A95E79000A1D3A1 /* EventEditView.swift */; };
 		E9BA986D2A97380200A1D3A1 /* UserSlidedProfileBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BA986C2A97380200A1D3A1 /* UserSlidedProfileBox.swift */; };
+		E9BA986F2A9FE2A200A1D3A1 /* hashPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BA986E2A9FE2A200A1D3A1 /* hashPassword.swift */; };
 		E9C902482A72569F0049FC81 /* EventGalleryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C902472A72569F0049FC81 /* EventGalleryCard.swift */; };
 		E9C9024B2A72587C0049FC81 /* getHighlightInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C9024A2A72587C0049FC81 /* getHighlightInfo.swift */; };
 		E9C9024E2A7348620049FC81 /* EventDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C9024D2A7348620049FC81 /* EventDisplay.swift */; };
@@ -255,6 +256,7 @@
 		9BE277EF2A7218FE007AD2EC /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		E9BA986A2A95E79000A1D3A1 /* EventEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEditView.swift; sourceTree = "<group>"; };
 		E9BA986C2A97380200A1D3A1 /* UserSlidedProfileBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSlidedProfileBox.swift; sourceTree = "<group>"; };
+		E9BA986E2A9FE2A200A1D3A1 /* hashPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hashPassword.swift; sourceTree = "<group>"; };
 		E9C902472A72569F0049FC81 /* EventGalleryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventGalleryCard.swift; sourceTree = "<group>"; };
 		E9C9024A2A72587C0049FC81 /* getHighlightInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getHighlightInfo.swift; sourceTree = "<group>"; };
 		E9C9024D2A7348620049FC81 /* EventDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDisplay.swift; sourceTree = "<group>"; };
@@ -599,6 +601,7 @@
 				797B1AC72A5F435100DD6B89 /* Contacts */,
 				791C336C2A6193600020DEAC /* AddUserToDatabases.swift */,
 				791C336E2A6197300020DEAC /* createFirebaseAccount.swift */,
+				E9BA986E2A9FE2A200A1D3A1 /* hashPassword.swift */,
 				791C33722A619E150020DEAC /* googleSignIn.swift */,
 				791C337C2A6339410020DEAC /* LogInFunction.swift */,
 				7957B2E62A6A15EE00F94CB4 /* EmailAndPasswordChecks.swift */,
@@ -946,6 +949,7 @@
 				791C336D2A6193600020DEAC /* AddUserToDatabases.swift in Sources */,
 				79A538462A8E896100CAA51E /* HideNav1.swift in Sources */,
 				797A58F92A7EB1D100F333DC /* ChatUser.swift in Sources */,
+				E9BA986F2A9FE2A200A1D3A1 /* hashPassword.swift in Sources */,
 				793E7E112A87E2B500B0562E /* CustomSegmentedView.swift in Sources */,
 				79F4A0B32A92935C00D5336C /* PasswordView.swift in Sources */,
 				79A538522A8FD22100CAA51E /* EventDetailsView.swift in Sources */,
