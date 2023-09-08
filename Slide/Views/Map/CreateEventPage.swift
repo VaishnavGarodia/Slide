@@ -188,10 +188,12 @@ struct CreateEventPage: View {
                     image: selectedImage ?? UIImage(),
                     event: event,
                     preview: true,
-                    eventView: .constant(false)
+                    eventView: .constant(false),
+                    showEditButton: false
                 )
                 Button(action: {
                     createEvent()
+                    isShowingPreview = false
                 }) {
                     Text("Publish Event")
                         .foregroundColor(.white)
@@ -202,12 +204,15 @@ struct CreateEventPage: View {
                 .padding()
             }
         }
+        .onAppear {
+            event.hostUID = Auth.auth().currentUser!.uid
+        }
     }
     
     func createEvent() {
         let doc = db.collection("Events").document()
         
-        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": event.icon, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low", "Associated Highlights": [String](), "SLIDES": [String]()]) { err in
+        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.eventDescription, "Icon": event.icon, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low", "Associated Highlights": [String](), "SLIDES": [String]()]) { err in
             if err != nil {
                 print((err?.localizedDescription)!)
                 return

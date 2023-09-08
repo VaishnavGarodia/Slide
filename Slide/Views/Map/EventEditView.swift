@@ -23,7 +23,7 @@ struct EventEditView: View {
     @State private var createEventSearch: Bool = true
     @State private var alert = false
     @State private var isShowingImagePicker = false
-    @State private var selectedImage: UIImage? = UIImage()
+    @State var selectedImage: UIImage? = UIImage()
     @State private var wasSelected: Bool = false
     @State private var isShowingPreview = false
     @State private var icon = 0
@@ -83,7 +83,7 @@ struct EventEditView: View {
                                             .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
                                             .frame(width: 50, height: 50)
                                     } else {
-                                        Image(uiImage: selectedImage!)
+                                        Image(uiImage: selectedImage ?? UIImage())
                                             .resizable()
                                             .frame(width: 50, height: 50)
                                             .cornerRadius(10)
@@ -181,12 +181,14 @@ struct EventEditView: View {
                     image: selectedImage ?? UIImage(),
                     event: event,
                     preview: true,
-                    eventView: .constant(false)
+                    eventView: .constant(false),
+                    showEditButton: false
                 )
                 Button(action: {
-                    createEvent()
+                    updateEvent()
+                    isShowingPreview = false
                 }) {
-                    Text("Publish Event")
+                    Text("Update Event")
                         .foregroundColor(.white)
                         .padding(.vertical, 10)
                         .frame(width: UIScreen.main.bounds.width / 2)
@@ -195,27 +197,39 @@ struct EventEditView: View {
                 .padding()
             }
         }
+        .onAppear {
+            if event.bannerURL.starts(with: "https://firebasestorage") {
+                let storage = Storage.storage()
+                let storageRef = storage.reference(forURL: event.bannerURL)
+                
+                // Download the image data
+                storageRef.getData(maxSize: 10 * 1024 * 1024) { data, error in
+                    if let error = error {
+                        print("Error downloading image: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    // Create a UIImage from the downloaded data
+                    if let imageData = data, let imageFromBanner = UIImage(data: imageData) {
+                        // Now you have a UIImage from the Firebase Storage URL
+                        // You can use 'image' in your UI elements or wherever needed
+                        selectedImage = imageFromBanner
+                    }
+                }
+            }
+        }
     }
     
-    func createEvent() {
-        let doc = db.collection("Events").document()
+    func updateEvent() {
+        let doc = db.collection("Events").document(event.id)
         print("Creating event for location: ", event.coordinate)
         
-        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.description, "Icon": event.icon, "Host": Auth.auth().currentUser!.displayName!, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low", "Associated Highlights": [String](), "SLIDES": [String]()]) { err in
+        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.eventDescription, "Icon": event.icon, "Host": Auth.auth().currentUser!.displayName!, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low", "Associated Highlights": [String](), "SLIDES": [String]()]) { err in
             if err != nil {
                 print((err?.localizedDescription)!)
                 return
             } else {
                 uploadBannerToFirebaseStorage(image: selectedImage ?? UIImage(), documentID: doc.documentID)
-            }
-        }
-        
-        let userDoc = db.collection("Users").document(Auth.auth().currentUser!.uid)
-        userDoc.updateData(["Events": FieldValue.arrayUnion([doc.documentID])]) { error in
-            if let error = error {
-                print("Error updating events array: \(error)")
-            } else {
-                print("Events array updated successfully!")
             }
         }
     }
