@@ -12,6 +12,7 @@ import SwiftUI
 
 struct CreateEventPage: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Binding var isPresentingCreateEventPage: Bool
     @State private var isPhotoLibraryAuthorized = false
     @State private var map = MKMapView()
     @State private var event = Event()
@@ -140,6 +141,7 @@ struct CreateEventPage: View {
                             .onAppear {
                                 UIDatePicker.appearance().minuteInterval = 15
                             }
+                            .datePickerStyle(.compact)
                             .padding(.horizontal)
                                 
                         HorizontalPicker($icon, items: icons) { iconImage in
@@ -175,7 +177,7 @@ struct CreateEventPage: View {
             }
         }
         .sheet(isPresented: $isShowingImagePicker) {
-            ImagePicker(sourceType: .photoLibrary, selectedImage: $selectedImage, wasSelected: wasSelected)
+            ImagePicker(sourceType: .photoLibrary, selectedImage: $selectedImage)
                 .onAppear {
                     checkPhotoLibraryPermission()
                     if !isPhotoLibraryAuthorized {
@@ -191,11 +193,11 @@ struct CreateEventPage: View {
                     preview: true,
                     eventView: $isShowingPreview,
                     showEditButton: false
-                    
                 )
                 Button(action: {
-                    createEvent()
                     isShowingPreview = false
+                    isPresentingCreateEventPage = false
+                    createEvent()
                 }) {
                     Text("Publish Event")
                         .foregroundColor(.white)
@@ -320,6 +322,6 @@ struct CreateEventPage: View {
     
 struct CreateEventPage_Previews: PreviewProvider {
     static var previews: some View {
-        CreateEventPage()
+        CreateEventPage(isPresentingCreateEventPage: .constant(false))
     }
 }

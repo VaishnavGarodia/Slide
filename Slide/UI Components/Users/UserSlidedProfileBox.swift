@@ -5,51 +5,58 @@
 //  Created by Thomas on 8/24/23.
 //
 
-import SwiftUI
+import FirebaseAuth
 import Kingfisher
+import SwiftUI
 
 struct UserSlidedProfileBox: View {
-    @State var uid: String
-    @State var username: String = ""
-    @State var profilePicUrl: String = ""
-    @State var friend: Bool
-    
-    let boxSize: CGFloat = UIScreen.main.bounds.width / 3
-    
+    let friendSlides: [String]
+    let strangerSlides: [String]
+    @State private var usernames: [String] = []
+    @State private var profileURLs: [String] = []
+
     var body: some View {
-        VStack {
-            if (profilePicUrl != "") {
-                KFImage(URL(string: profilePicUrl)!)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: boxSize, height: boxSize)
-                    .clipShape(Circle())
-            }
-            //TODO: Add else case and populate with necessary placeholder
-            Text(username)
-                .font(.headline)
-            if (friend) {
-                Text("Friend")
+        HStack {
+            ForEach(Array(friendSlides.enumerated()), id: \.element) { index, _ in
+                if index < profileURLs.count - 1 {
+                    UserProfilePictures(photoURL: profileURLs[index], dimension: 25)
+                        .padding()
+                }
             }
         }
-        .frame(width: boxSize)
-        .padding()
-        .background(Color.gray.opacity(0.2))
-        .cornerRadius(boxSize / 2)
-        .padding(.horizontal)
         .onAppear {
-            fetchUserData()
+            fetchUserDatas()
         }
     }
 
+    private func fetchUserDatas() {
+        let group = DispatchGroup()
 
-    func fetchUserData() {
-        fetchUsernameAndPhotoURL(for: self.uid) { fetchedUsername, fetchedProfilePicURL in
-            DispatchQueue.main.async {
-                self.username = fetchedUsername ?? ""
-                self.profilePicUrl = fetchedProfilePicURL ?? ""
+        for slide in friendSlides {
+            group.enter()
+            fetchUserData(uid: slide) { fetchedUsername, fetchedURL in
+                defer {
+                    group.leave()
+                }
+                if let username = fetchedUsername,
+                   let photoURL = fetchedURL
+                {
+                    DispatchQueue.main.async {
+                        usernames.append(username)
+                        profileURLs.append(photoURL)
+                    }
+                }
             }
         }
+
+        group.notify(queue: .main) {
+            // All data has been fetched, you can update profileURLs here if needed
+        }
     }
 
+    private func fetchUserData(uid: String, completion: @escaping (String?, String?) -> Void) {
+        fetchUsernameAndPhotoURL(for: uid) { fetchedUsername, fetchedProfilePicURL in
+            completion(fetchedUsername, fetchedProfilePicURL)
+        }
+    }
 }

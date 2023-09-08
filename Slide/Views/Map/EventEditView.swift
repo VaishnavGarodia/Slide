@@ -15,6 +15,7 @@ import SwiftUI
 
 struct EventEditView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Binding var showEventEditSheet: Bool
     @State private var isPhotoLibraryAuthorized = false
     @State private var map = MKMapView()
     @State var event: Event
@@ -63,10 +64,7 @@ struct EventEditView: View {
                         VStack(alignment: .leading) {
                             Button(action: {
                                 withAnimation {
-                                    map.removeOverlays(map.overlays)
-                                    map.removeAnnotations(map.annotations)
-                                    destination = nil
-                                    show.toggle()
+                                    showEventEditSheet.toggle()
                                 }
                             }) {
                                 Text("Cancel")
@@ -160,6 +158,7 @@ struct EventEditView: View {
                                 Text("Preview Event")
                                     .foregroundColor(.white)
                                     .filledBubble()
+                                    .padding()
                             }
                         }
                     }
@@ -167,7 +166,7 @@ struct EventEditView: View {
             }
         }
         .sheet(isPresented: $isShowingImagePicker) {
-            ImagePicker(sourceType: .photoLibrary, selectedImage: $selectedImage, wasSelected: wasSelected)
+            ImagePicker(sourceType: .photoLibrary, selectedImage: $selectedImage)
                 .onAppear {
                     checkPhotoLibraryPermission()
                     if !isPhotoLibraryAuthorized {
@@ -181,12 +180,13 @@ struct EventEditView: View {
                     image: selectedImage ?? UIImage(),
                     event: event,
                     preview: true,
+                    fromMap: false,
                     eventView: .constant(false),
                     showEditButton: false
                 )
                 Button(action: {
-                    updateEvent()
                     isShowingPreview = false
+                    updateEvent()
                 }) {
                     Text("Update Event")
                         .foregroundColor(.white)
@@ -199,7 +199,6 @@ struct EventEditView: View {
         }
         .onAppear {
             if event.bannerURL.starts(with: "https://firebasestorage") {
-                let storage = Storage.storage()
                 let storageRef = storage.reference(forURL: event.bannerURL)
                 
                 // Download the image data

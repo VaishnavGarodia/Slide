@@ -57,7 +57,7 @@ struct ImageConfirmation: View {
         }
         
         .sheet(isPresented: $isShowingImagePicker) {
-            ImagePicker(sourceType: .photoLibrary, selectedImage: $selectedImage, wasSelected: true)
+            ImagePicker(sourceType: .photoLibrary, selectedImage: $selectedImage)
                 .onAppear {
                     checkPhotoLibraryPermission()
                     if !isPhotoLibraryAuthorized {

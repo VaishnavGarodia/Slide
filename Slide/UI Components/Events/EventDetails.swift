@@ -4,11 +4,10 @@
 
 import FirebaseAuth
 import FirebaseFirestore
+import FirebaseStorage
 import Foundation
 import SwiftUI
 import UIKit
-import FirebaseStorage
-
 
 struct EventDetails: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -28,7 +27,7 @@ struct EventDetails: View {
     @State private var friendSlides: [String] = []
     @State private var nonFriendSlides: [String] = []
     @State private var showEventEditSheet = false
-    @State private var bannerImage: UIImage = UIImage()
+    @State private var bannerImage: UIImage = .init()
     @State var showEditButton: Bool
 
     var body: some View {
@@ -99,9 +98,11 @@ struct EventDetails: View {
                                 .cornerRadius(15)
                                 .padding()
                         } else if image != UIImage() {
-                            EventBanner(image: image)
-                                .frame(width: UIScreen.main.bounds.width * 0.95)
-                                .frame(maxHeight: UIScreen.main.bounds.width * 0.95 * 3 / 4)
+                            Image(uiImage: image)
+
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: UIScreen.main.bounds.width * 0.95, height: UIScreen.main.bounds.width * 0.95 * 3 / 4)
                                 .cornerRadius(15)
                                 .padding()
                         } else {
@@ -147,6 +148,11 @@ struct EventDetails: View {
                 }
                 .padding()
 
+                Group {
+                    UserSlidedProfileBox(friendSlides: friendSlides, strangerSlides: nonFriendSlides)
+                        .padding(.horizontal) // Add some padding to the HStack
+                }
+
                 if event.hostUID != Auth.auth().currentUser!.uid && !preview {
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
@@ -159,23 +165,6 @@ struct EventDetails: View {
                     .onChange(of: isRSVPed) { isRSVPed in
                         guard !isRSVPed else { return }
                         simulateRequest()
-                    }
-                }
-                Group {
-                    if !friendSlides.isEmpty && !nonFriendSlides.isEmpty {
-                        Text("Attendees")
-                        ScrollView(.horizontal) {
-                            HStack(spacing: 16) { // Adjust spacing as needed
-                                ForEach(friendSlides, id: \.self) { friendID in
-                                    UserSlidedProfileBox(uid: friendID, friend: true)
-                                }
-                                ForEach(nonFriendSlides, id: \.self) { nonFriendID in
-                                    UserSlidedProfileBox(uid: nonFriendID, friend: false)
-                                }
-                            }
-                            .padding(.horizontal) // Add some padding to the HStack
-                            // Start the new stuff (First section is gonna be fellow slides)
-                        }
                     }
                 }
             }
@@ -203,7 +192,7 @@ struct EventDetails: View {
             SlidesView(nonFriendsList: nonFriendSlides, friendsList: friendSlides)
         }
         .sheet(isPresented: $showEventEditSheet) {
-            EventEditView(event: event, destination: event.coordinate)
+            EventEditView(showEventEditSheet: $showEventEditSheet, event: event, destination: event.coordinate)
         }
         .fullScreenCover(isPresented: $profileView) {
             UserProfileView(user: $selectedUser)

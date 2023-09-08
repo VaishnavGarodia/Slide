@@ -64,7 +64,7 @@ struct MapPage: View {
             checkHype()
         }
         .fullScreenCover(isPresented: $isPresentingCreateEventPage) {
-            CreateEventPage()
+            CreateEventPage(isPresentingCreateEventPage: $isPresentingCreateEventPage)
         }
     }
     

@@ -45,18 +45,18 @@ func googleSignIn(registered: Bool, completion: @escaping (String) -> Void) {
             }
             
             let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
-            
+            let group = DispatchGroup()
+            group.enter()
             // Use the credential to authenticate with Firebase
             Auth.auth().signIn(with: credential) { _, error in
                 if let error = error {
                     completion(error.localizedDescription)
-                    return
                 }
+                group.leave()
             }
-            
             var errorMessage = ""
-            let password = ""
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            
+            group.notify(queue: .main) {
                 let user = Auth.auth().currentUser
                 let username = email.components(separatedBy: "@").first?.lowercased()
                 let usernameRef = db.collection("Usernames").whereField("Email", isEqualTo: email.lowercased())
@@ -65,32 +65,34 @@ func googleSignIn(registered: Bool, completion: @escaping (String) -> Void) {
                         completion("Error checking username: \(error.localizedDescription)")
                         return
                     }
-                    
-                    if document != nil {
+                    if let document = document {
                         // The username is already taken, handle this scenario (e.g., show an error message)
-                        completion("")
-                    } else {
-                        errorMessage = addUserToDatabases(username: username!, email: email, password: password, google: true, profilePic: gUser.profile?.imageURL(withDimension: 120)?.absoluteString ?? "")
-                        // The username is available, update the display name
-                        let changeRequest = user!.createProfileChangeRequest()
-                        changeRequest.displayName = username
-                        changeRequest.commitChanges { error in
-                            if let error = error {
-                                completion("Error updating display name: \(error.localizedDescription)")
-                            } else {
-                                // Now the display name is updated, call the completion handler with the username
-                                completion(username!)
+                        if document.isEmpty {
+                            errorMessage = addUserToDatabases(username: username!, email: email, google: true, profilePic: gUser.profile?.imageURL(withDimension: 120)?.absoluteString ?? "")
+                            // The username is available, update the display name
+                            let changeRequest = user!.createProfileChangeRequest()
+                            changeRequest.displayName = username
+                            changeRequest.commitChanges { error in
+                                if let error = error {
+                                    completion("Error updating display name: \(error.localizedDescription)")
+                                } else {
+                                    // Now the display name is updated, call the completion handler with the username
+                                    completion(username!)
+                                }
                             }
+                            
+                        } else {
+                            completion("")
                         }
                     }
                 }
-            }
                 
-            if errorMessage.isEmpty {
-                print("no error")
-                completion("") // No error, empty string
-            } else {
-                completion(errorMessage)
+                if errorMessage.isEmpty {
+                    print("no error")
+                    completion("") // No error, empty string
+                } else {
+                    completion(errorMessage)
+                }
             }
         }
     } else {
