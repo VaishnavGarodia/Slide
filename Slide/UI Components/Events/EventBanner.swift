@@ -22,11 +22,10 @@ struct EventBanner: View {
                 .scaledToFill()
                 .frame(width: UIScreen.main.bounds.width * 0.95, height: height)
         } else {
-            GeometryReader { _ in
-                Image(uiImage: image!)
-                    .resizable()
-                    .scaledToFill()
-            }
+            Image(uiImage: image!)
+                .resizable()
+                .scaledToFill()
+                .frame(width: UIScreen.main.bounds.width * 0.95, height: UIScreen.main.bounds.width * 0.95 * 3 / 4)
         }
     }
 }

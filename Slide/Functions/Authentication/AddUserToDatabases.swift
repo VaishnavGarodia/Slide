@@ -34,8 +34,6 @@ func addUserToDatabases(username: String, email: String, google: Bool, profilePi
         } else {
             let userData: [String: Any] = [
                 "Email": email,
-//                For the love of god why would we save the password...
-//                "Password": password,
                 "Username": username.lowercased(),
                 "ProfilePictureURL": profilePic ,
                 "Phone Number" : "",

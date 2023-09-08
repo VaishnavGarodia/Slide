@@ -5,7 +5,6 @@ import PhotosUI
 import SwiftUI
 import UIKit
 
-// TODO: Extract this into a new file please
 struct PostCreationView: View {
     @State private var appearances = 0
     @Binding var source: UIImagePickerController.SourceType
@@ -17,7 +16,6 @@ struct PostCreationView: View {
     @State private var selectedEvent: EventDisplay?
     @State private var eligibleEvents: [EventDisplay] = []
     @State private var hasSelected: Bool = false
-    @State private var hasSelectedImage: Bool = false
 
     var body: some View {
         VStack {
@@ -90,16 +88,16 @@ struct PostCreationView: View {
         }
         .sheet(isPresented: $showImagePicker) {
             if source == .camera {
-                ImagePicker(sourceType: .camera, selectedImage: $image, wasSelected: hasSelectedImage)
+                ImagePicker(sourceType: .camera, selectedImage: $image)
                     .onDisappear {
-                        if hasSelectedImage == false && appearances == 0 {
+                        if image == nil && appearances == 0 {
                             presentationMode.wrappedValue.dismiss()
                         }
                     }
             } else {
-                PhotoLibraryLimitedPicker(isImageSelected: $hasSelectedImage, selectedImage: $image)
+                PhotoLibraryLimitedPicker(selectedImage: $image)
                     .onDisappear {
-                        if hasSelectedImage == false && appearances == 0 {
+                        if image == nil && appearances == 0 {
                             presentationMode.wrappedValue.dismiss()
                         }
                     }

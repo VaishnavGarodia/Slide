@@ -3,7 +3,6 @@ import SwiftUI
 
 struct PhotoLibraryLimitedPicker: View {
     @Environment(\.presentationMode) var presentationMode
-    @Binding var isImageSelected: Bool
     @Binding var selectedImage: UIImage?
     @State private var images: [UIImage] = [] // Store fetched images here
 
@@ -21,7 +20,6 @@ struct PhotoLibraryLimitedPicker: View {
                             .scaledToFit()
                             .onTapGesture {
                                 selectedImage = image
-                                isImageSelected = true
                                 presentationMode.wrappedValue.dismiss()
                             }
                     }
