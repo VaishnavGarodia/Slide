@@ -6,6 +6,9 @@ import FirebaseAuth
 import FirebaseFirestore
 import Foundation
 import SwiftUI
+import UIKit
+import FirebaseStorage
+
 
 struct EventDetails: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -25,6 +28,8 @@ struct EventDetails: View {
     @State private var friendSlides: [String] = []
     @State private var nonFriendSlides: [String] = []
     @State private var showEventEditSheet = false
+    @State private var bannerImage: UIImage = UIImage()
+    @State var showEditButton: Bool
 
     var body: some View {
         ScrollView {
@@ -62,7 +67,7 @@ struct EventDetails: View {
                         .font(.title)
                         .fontWeight(.bold)
                     Spacer()
-                    if event.hostUID == Auth.auth().currentUser!.uid && event.start > Date() {
+                    if showEditButton && event.hostUID == Auth.auth().currentUser!.uid && event.start > Date() {
                         // Then display the edit button
                         Button(action: {
                             showEventEditSheet.toggle()

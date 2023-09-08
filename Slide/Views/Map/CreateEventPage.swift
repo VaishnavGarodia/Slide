@@ -189,10 +189,13 @@ struct CreateEventPage: View {
                     image: selectedImage ?? UIImage(),
                     event: event,
                     preview: true,
-                    eventView: $isShowingPreview
+                    eventView: $isShowingPreview,
+                    showEditButton: false
+                    
                 )
                 Button(action: {
                     createEvent()
+                    isShowingPreview = false
                 }) {
                     Text("Publish Event")
                         .foregroundColor(.white)
@@ -202,6 +205,9 @@ struct CreateEventPage: View {
                 .filledBubble()
                 .padding()
             }
+        }
+        .onAppear {
+            event.hostUID = Auth.auth().currentUser!.uid
         }
     }
     
