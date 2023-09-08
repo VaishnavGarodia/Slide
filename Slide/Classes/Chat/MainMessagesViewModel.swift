@@ -8,9 +8,10 @@ import Foundation
 class MainMessagesViewModel: ObservableObject {
     @Published var chatUser: ChatUser?
     @Published var recentMessages = [String: [RecentMessage]]() // Dictionary to store messages
+    var snapshotChangedHandler: ((RecentMessage) -> Void)?
+    var initial = true
 
     init() {
-        fetchCurrentUser()
         fetchRecentMessages()
     }
 
@@ -40,6 +41,13 @@ class MainMessagesViewModel: ObservableObject {
                     } else {
                         self.recentMessages[otherUserId]?.append(message)
                     }
+
+                    if !self.initial {
+                        self.snapshotChangedHandler?(message)
+                    }
+                }
+                if self.initial {
+                    self.initial = false
                 }
             }
     }
@@ -48,26 +56,5 @@ class MainMessagesViewModel: ObservableObject {
         if let index = recentMessages[message.toId]?.firstIndex(where: { $0.documentId == message.documentId }) {
             recentMessages[message.toId]?.remove(at: index)
         }
-    }
-
-    private func fetchCurrentUser() {
-        guard let uid = Auth.auth().currentUser?.uid else {
-            return
-        }
-
-        db.collection("users")
-            .document(uid).getDocument { snapshot, error in
-                if let error = error {
-                    print(error)
-                    return
-                }
-
-                guard let data = snapshot?.data() else { return }
-                let uid = data["uid"] as? String ?? ""
-                let email = data["email"] as? String ?? ""
-                let profileImageUrl = data["profileImageUrl"] as? String ?? ""
-
-                self.chatUser = ChatUser(uid: uid, email: email, profileImageUrl: profileImageUrl)
-            }
     }
 }

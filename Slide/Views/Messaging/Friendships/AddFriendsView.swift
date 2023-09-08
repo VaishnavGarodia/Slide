@@ -39,6 +39,8 @@ struct AddFriendsView: View {
                 .bubbleStyle(color: .primary)
                 .padding()
             }
+            .padding()
+            .padding(.bottom, -10)
 
             if searchQuery.isEmpty {
                 if !pendingFriendRequests.isEmpty {

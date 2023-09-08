@@ -16,6 +16,7 @@ struct SearchView: View {
     @Binding var event: Event
     @Binding var detail: Bool
     @Binding var eventView: Bool
+    @Binding var placeholder: String
     var searchForEvents: Bool = false
     @State var txt = ""
     @State var createEventSearch: Bool = true
@@ -31,7 +32,7 @@ struct SearchView: View {
             }
             GeometryReader { _ in
                 VStack(alignment: .leading) {
-                    SearchBar(map: self.$map, result: self.$result, txt: self.$txt)
+                    SearchBar(map: self.$map, result: self.$result, txt: self.$txt, placeholder: self.$placeholder)
                         .frame(width: self.frame)
                         .padding(-25)
                         .bubbleStyle(color: .primary)
@@ -196,6 +197,7 @@ struct SearchBar: UIViewRepresentable {
     @Binding var map: MKMapView
     @Binding var result: [SearchData]
     @Binding var txt: String
+    @Binding var placeholder: String
     
     func makeCoordinator() -> Coordinator {
         return SearchBar.Coordinator(parent: self)
@@ -204,7 +206,7 @@ struct SearchBar: UIViewRepresentable {
     func makeUIView(context: Context) -> UISearchBar {
         let view = UISearchBar()
         view.clearBackgroundColor()
-        view.placeholder = "Search for events"
+        view.placeholder = self.placeholder
         view.isTranslucent = false
         view.searchBarStyle = .prominent
         view.autocorrectionType = .no
@@ -269,6 +271,6 @@ struct SearchData: Identifiable, Equatable {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView(map: .constant(MKMapView()), location: .constant(CLLocationCoordinate2D()), event: .constant(Event()), detail: .constant(true), eventView: .constant(false), frame: 400)
+        SearchView(map: .constant(MKMapView()), location: .constant(CLLocationCoordinate2D()), event: .constant(Event()), detail: .constant(true), eventView: .constant(false), placeholder: .constant(""), frame: 400)
     }
 }

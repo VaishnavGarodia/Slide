@@ -7,7 +7,6 @@
 
 import CoreLocation
 import Firebase
-import FirebaseFirestore
 import Foundation
 
 func getEventGalleries(completion: @escaping ([Event]?, Error?) -> Void) {

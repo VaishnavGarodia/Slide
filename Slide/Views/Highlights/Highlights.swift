@@ -6,8 +6,7 @@ import SwiftUI
 
 struct Highlights: View {
     @Binding var source: UIImagePickerController.SourceType
-    @State private var galleries: [Event] = []
-    @State private var highlights: [HighlightInfo] = []
+    @ObservedObject var highlights: HighlightObject
     @Binding var isPresentingPostCreationView: Bool
     let user = Auth.auth().currentUser
     @State private var profileView = false
@@ -19,10 +18,10 @@ struct Highlights: View {
         ZStack(alignment: .bottom) {
             ScrollView {
                 VStack(spacing: 50) {
-                    ForEach(galleries, id: \.name) { gallery in
+                    ForEach(highlights.galleries, id: \.name) { gallery in
                         EventGalleryCard(event: gallery, profileView: $profileView, selectedUser: $selectedUser, eventView: $eventView, selectedEvent: $selectedEvent)
                     }
-                    ForEach(highlights) { highlight in
+                    ForEach(highlights.highlights) { highlight in
                         HighlightCard(highlight: highlight, selectedUser: $selectedUser, profileView: $profileView)
                     }
                 }
@@ -60,93 +59,18 @@ struct Highlights: View {
             }
         )
         .refreshable {
-            fetchHighlights()
-            fetchGalleries()
+//            fetchHighlights()
+//            fetchGalleries()
         }
         .onAppear {
-            fetchHighlights()
-            fetchGalleries()
-        }
-    }
-
-    func fetchHighlights() {
-        let postsCollectionRef = db.collection("Posts")
-
-        let twoDaysAgo = Calendar.current.date(byAdding: .hour, value: -48, to: Date())!
-
-        postsCollectionRef.whereField("PostTime", isGreaterThan: twoDaysAgo).getDocuments { snapshot, error in
-            if let error = error {
-                print("Error fetching highlights: \(error.localizedDescription)")
-                return
-            }
-
-            var newHighlights: [HighlightInfo] = []
-            let dispatchGroup = DispatchGroup()
-
-            for document in snapshot?.documents ?? [] {
-                if let caption = document.data()["ImageCaption"] as? String,
-                   let userDocumentID = document.data()["User"] as? String,
-                   let imagePath = document.data()["PostImage"] as? String
-                {
-                    print("Found Something")
-
-                    guard let currentUserID = user?.uid else {
-                        return
-                    }
-                    let userDocumentRef = db.collection("Users").document(currentUserID)
-
-                    // Step 1: Access the User document using the given document ID
-                    userDocumentRef.getDocument(completion: { d2, _ in
-                        if let d2 = d2, d2.exists {
-                            let docID = document.documentID
-                            var friendsArray: [String] = []
-                            if let tempFriendsArray = d2.data()?["Friends"] as? [String] {
-                                friendsArray = tempFriendsArray
-                            }
-                            var likedUsersArray: [String] = []
-                            if let tempLikedUsersArray = d2.data()?["Liked Users"] as? [String] {
-                                likedUsersArray = tempLikedUsersArray
-                            }
-                            if friendsArray.contains(userDocumentID) {
-                                dispatchGroup.enter()
-
-                                fetchUsernameAndPhotoURL(for: userDocumentID) { username, photoURL in
-                                    if let username = username, let photoURL = photoURL {
-                                        let highlight = HighlightInfo(
-                                            uid: currentUserID, postID: docID, imageName: imagePath, profileImageName: photoURL, username: username, highlightTitle: caption, likedUsers: likedUsersArray
-                                        )
-                                        newHighlights.append(highlight)
-                                        dispatchGroup.leave()
-                                    }
-                                }
-                            }
-                        }
-                        dispatchGroup.notify(queue: .main) {
-                            self.highlights = newHighlights
-                        }
-                    })
-                }
-            }
-        }
-    }
-
-    func fetchGalleries() {
-        getEventGalleries { eventGalleries, error in
-            if let error = error {
-                print("Error fetching event galleries: \(error.localizedDescription)")
-                return
-            }
-
-            if let temp = eventGalleries {
-                galleries = temp
-                return
-            }
+//            fetchHighlights()
+//            fetchGalleries()
         }
     }
 }
 
 struct Highlights_Previews: PreviewProvider {
     static var previews: some View {
-        Highlights(source: .constant(.camera), isPresentingPostCreationView: .constant(false))
+        Highlights(source: .constant(.camera), highlights: HighlightObject(), isPresentingPostCreationView: .constant(false))
     }
 }
