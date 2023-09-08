@@ -6,5 +6,5 @@ import Foundation
 import SwiftUI
 
 struct ChatUser {
-    let uid, email, profileImageUrl: String
+    let uid, profileImageUrl: String
 }

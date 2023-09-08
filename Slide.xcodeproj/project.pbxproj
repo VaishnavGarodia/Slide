@@ -521,7 +521,6 @@
 		797A58FE2A7EB27500F333DC /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				797A58F42A7E96EA00F333DC /* RecentMessage.swift */,
 				797A58F82A7EB1D100F333DC /* ChatUser.swift */,
 				797A58FC2A7EB25000F333DC /* ChatMessage.swift */,
 			);
@@ -706,8 +705,9 @@
 		79DC7CF92A7F366900503C4D /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				797A58F22A7E96B900F333DC /* MainMessagesViewModel.swift */,
 				797A58FA2A7EB22300F333DC /* ChatViewModel.swift */,
+				797A58F22A7E96B900F333DC /* MainMessagesViewModel.swift */,
+				797A58F42A7E96EA00F333DC /* RecentMessage.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";

@@ -3,7 +3,7 @@
 //  Created by Thomas on 7/27/23.
 
 import CoreLocation
-import FirebaseFirestore
+import Firebase
 import Foundation
 import SwiftUI
 
@@ -71,7 +71,7 @@ struct EventGalleryCard: View {
             dispatchGroup.enter()
             getHighlightInfo(highlightID: postId) { highlightInfo in
                 if let highlightInfo = highlightInfo {
-                    if !tempHighlights.contains(highlightInfo) {
+                    if !tempHighlights.contains(highlightInfo) && highlightInfo.uid != Auth.auth().currentUser!.uid {
                         tempHighlights.append(highlightInfo)
                     }
                 }

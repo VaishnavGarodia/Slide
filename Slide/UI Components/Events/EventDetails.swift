@@ -42,22 +42,23 @@ struct EventDetails: View {
                         Button {
                             self.presentationMode.wrappedValue.dismiss()
                         } label: {
-                            Image(systemName: "chevron.left")
+                            Image(systemName: "chevron.left.circle")
+                                .imageScale(.large)
                                 .padding(.leading)
                         }
-
                     } else {
                         Button {
                             withAnimation {
                                 eventView.toggle()
                             }
                         } label: {
-                            Image(systemName: "chevron.left")
+                            Image(systemName: "chevron.left.circle")
+                                .imageScale(.large)
                                 .padding(.leading)
                         }
                     }
                     Spacer()
-                    if !event.bannerURL.isEmpty && image != UIImage() {
+                    if !event.bannerURL.isEmpty || image != UIImage() {
                         Image(systemName: event.icon)
                             .imageScale(.large)
                     }
@@ -75,11 +76,20 @@ struct EventDetails: View {
                                 .imageScale(.large)
                                 .padding(.trailing)
                         }
+                    } else {
+                        UserProfilePictures(photoURL: photoURL, dimension: 35)
+                            .padding(.trailing)
+                            .onTapGesture {
+                                if username != Auth.auth().currentUser?.displayName && !preview {
+                                    selectedUser = UserData(userID: event.hostUID, username: username, photoURL: photoURL)
+                                    profileView.toggle()
+                                }
+                            }
                     }
                 }
                 .padding()
 
-                Group {
+                Group { // EventBanner
                     Capsule()
                         .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
                         .foregroundColor(.primary)
@@ -110,39 +120,32 @@ struct EventDetails: View {
                         .frame(width: UIScreen.main.bounds.width * 0.85, height: 3)
                         .foregroundColor(.primary)
                 }
+                VStack {
+                    Text(formatDate(date: event.start) + " - " + formatDate(date: event.end))
+                        .font(.callout)
 
-                HStack {
-                    UserProfilePictures(photoURL: photoURL, dimension: 25)
-                        .padding(.trailing, -5)
-                    Text(username)
-                        .fontWeight(.semibold)
-                }
-                .onTapGesture {
-                    selectedUser = UserData(userID: event.hostUID, username: username, photoURL: photoURL)
-                    profileView.toggle()
-                }
-
-                Text(formatDate(date: event.start) + " - " + formatDate(date: event.end))
-                    .font(.callout)
-
-                HStack {
-                    Image(systemName: "mappin")
-                    Text(event.address)
-                        .multilineTextAlignment(.center)
-                }
-
-                Button {
-                    withAnimation {
-                        showDescription.toggle()
+                    HStack {
+                        Image(systemName: "mappin")
+                        Text(event.address)
+                            .font(.callout)
+                            .multilineTextAlignment(.center)
                     }
-                } label: {
-                    Text(showDescription ? "Hide Description" : "Show Description").font(.caption).foregroundColor(.gray)
-                }
 
-                if showDescription {
-                    Text(event.eventDescription)
-                        .font(.caption)
+                    Button {
+                        withAnimation {
+                            showDescription.toggle()
+                        }
+                    } label: {
+                        Text(showDescription ? "Hide Description" : "Show Description").font(.caption).foregroundColor(.gray)
+                            .multilineTextAlignment(.center)
+                    }
+
+                    if showDescription {
+                        Text(event.eventDescription)
+                            .font(.caption)
+                    }
                 }
+                .padding()
 
                 if event.hostUID != Auth.auth().currentUser!.uid && !preview {
                     GeometryReader { geometry in
@@ -152,28 +155,27 @@ struct EventDetails: View {
                         }
                     }
                     .frame(height: 50)
-                    .padding(.horizontal)
+                    .padding()
                     .onChange(of: isRSVPed) { isRSVPed in
                         guard !isRSVPed else { return }
                         simulateRequest()
                     }
-                    if showDescription {
-                        Text(event.eventDescription)
-                    }
                 }
                 Group {
-                    Text("Attendees")
-                    ScrollView(.horizontal) {
-                        HStack(spacing: 16) { // Adjust spacing as needed
-                            ForEach(friendSlides, id: \.self) { friendID in
-                                UserSlidedProfileBox(uid: friendID, friend: true)
+                    if !friendSlides.isEmpty && !nonFriendSlides.isEmpty {
+                        Text("Attendees")
+                        ScrollView(.horizontal) {
+                            HStack(spacing: 16) { // Adjust spacing as needed
+                                ForEach(friendSlides, id: \.self) { friendID in
+                                    UserSlidedProfileBox(uid: friendID, friend: true)
+                                }
+                                ForEach(nonFriendSlides, id: \.self) { nonFriendID in
+                                    UserSlidedProfileBox(uid: nonFriendID, friend: false)
+                                }
                             }
-                            ForEach(nonFriendSlides, id: \.self) { nonFriendID in
-                                UserSlidedProfileBox(uid: nonFriendID, friend: false)
-                            }
+                            .padding(.horizontal) // Add some padding to the HStack
+                            // Start the new stuff (First section is gonna be fellow slides)
                         }
-                        .padding(.horizontal) // Add some padding to the HStack
-                        // Start the new stuff (First section is gonna be fellow slides)
                     }
                 }
             }
@@ -182,13 +184,18 @@ struct EventDetails: View {
         .scrollIndicators(.never)
         .onAppear {
             isRSVPed = event.slides.contains(Auth.auth().currentUser?.uid ?? "")
-            extractFriendSlides(event: event) { friendSlidesTemp, nonFriendSlidesTemp in
-                self.friendSlides = friendSlidesTemp
-                self.nonFriendSlides = nonFriendSlidesTemp
-            }
-            fetchUsernameAndPhotoURL(for: event.hostUID) { temp, temp2 in
-                username = temp!
-                photoURL = temp2!
+            if !preview {
+                extractFriendSlides(event: event) { friendSlidesTemp, nonFriendSlidesTemp in
+                    self.friendSlides = friendSlidesTemp
+                    self.nonFriendSlides = nonFriendSlidesTemp
+                }
+                fetchUsernameAndPhotoURL(for: event.hostUID) { temp, temp2 in
+                    username = temp!
+                    photoURL = temp2!
+                }
+            } else {
+                username = (Auth.auth().currentUser?.displayName)!
+                photoURL = Auth.auth().currentUser?.photoURL?.absoluteString ?? ""
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -202,11 +209,10 @@ struct EventDetails: View {
             UserProfileView(user: $selectedUser)
         }
     }
-                         
 
     func formatDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "M/d h:mm a"
+        dateFormatter.dateFormat = "MMMM d, h:mm a"
         return dateFormatter.string(from: date)
     }
 

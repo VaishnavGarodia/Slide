@@ -32,8 +32,9 @@ struct NewChat: View {
                     .bubbleStyle(color: .primary)
                     .padding()
                 }
+                .padding()
                 .padding(.bottom, -10)
-                .padding(.top, -10)
+                
                 ScrollView {
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                         ForEach(Array(friendList.enumerated()), id: \.element.0) { index, element in
@@ -45,7 +46,7 @@ struct NewChat: View {
                                         .foregroundColor(.primary)
                                     Button {
                                         withAnimation {
-                                            chatUser = ChatUser(uid: idList[index], email: "", profileImageUrl: photoURL)
+                                            chatUser = ChatUser(uid: idList[index], profileImageUrl: photoURL)
                                             chatView.toggle()
                                         }
                                     } label: {

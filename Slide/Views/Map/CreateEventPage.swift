@@ -35,7 +35,7 @@ struct CreateEventPage: View {
                 .ignoresSafeArea()
             if searchForAddress {
                 ZStack(alignment: .topTrailing) {
-                    SearchView(map: $map, location: $destination, event: $event, detail: $show, eventView: .constant(false), createEventSearch: createEventSearch, frame: 280)
+                    SearchView(map: $map, location: $destination, event: $event, detail: $show, eventView: .constant(false), placeholder: .constant("Search for a Location"), createEventSearch: createEventSearch, frame: 280)
                         .padding(.top, -15)
                     Button {
                         presentationMode.wrappedValue.dismiss()
@@ -156,12 +156,13 @@ struct CreateEventPage: View {
                         Button(action: {
                             if event.name.isEmpty {
                                 errorMessage = "Oops, you left the event name empty!"
+                            } else if event.address.isEmpty {
+                                errorMessage = "Oops, you forgot to put an address!"
                             } else {
                                 event.coordinate = CLLocationCoordinate2D(latitude: destination.latitude, longitude: destination.longitude)
                                 event.icon = icons[icon]
                                 isShowingPreview = true
                             }
-                                    
                         }) {
                             Text("Preview Event")
                                 .foregroundColor(.white)
@@ -188,8 +189,9 @@ struct CreateEventPage: View {
                     image: selectedImage ?? UIImage(),
                     event: event,
                     preview: true,
-                    eventView: .constant(false),
+                    eventView: $isShowingPreview,
                     showEditButton: false
+                    
                 )
                 Button(action: {
                     createEvent()
