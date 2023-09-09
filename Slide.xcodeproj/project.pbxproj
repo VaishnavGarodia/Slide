@@ -132,6 +132,7 @@
 		E9BA986B2A95E79100A1D3A1 /* EventEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BA986A2A95E79000A1D3A1 /* EventEditView.swift */; };
 		E9BA986D2A97380200A1D3A1 /* UserSlidedProfileBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BA986C2A97380200A1D3A1 /* UserSlidedProfileBox.swift */; };
 		E9BA986F2A9FE2A200A1D3A1 /* hashPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BA986E2A9FE2A200A1D3A1 /* hashPassword.swift */; };
+		E9C04ECC2AABF6270043F397 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C04ECB2AABF6270043F397 /* TutorialView.swift */; };
 		E9C902482A72569F0049FC81 /* EventGalleryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C902472A72569F0049FC81 /* EventGalleryCard.swift */; };
 		E9C9024B2A72587C0049FC81 /* getHighlightInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C9024A2A72587C0049FC81 /* getHighlightInfo.swift */; };
 		E9C9024E2A7348620049FC81 /* EventDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C9024D2A7348620049FC81 /* EventDisplay.swift */; };
@@ -257,6 +258,7 @@
 		E9BA986A2A95E79000A1D3A1 /* EventEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEditView.swift; sourceTree = "<group>"; };
 		E9BA986C2A97380200A1D3A1 /* UserSlidedProfileBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSlidedProfileBox.swift; sourceTree = "<group>"; };
 		E9BA986E2A9FE2A200A1D3A1 /* hashPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hashPassword.swift; sourceTree = "<group>"; };
+		E9C04ECB2AABF6270043F397 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		E9C902472A72569F0049FC81 /* EventGalleryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventGalleryCard.swift; sourceTree = "<group>"; };
 		E9C9024A2A72587C0049FC81 /* getHighlightInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getHighlightInfo.swift; sourceTree = "<group>"; };
 		E9C9024D2A7348620049FC81 /* EventDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDisplay.swift; sourceTree = "<group>"; };
@@ -673,6 +675,7 @@
 		79BB5D732950B515007E5342 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E9C04EC42AABBD730043F397 /* Tutorial */,
 				79FC9E07294D605300EBD520 /* ContentView.swift */,
 				795C5BF9295418D7007FDA83 /* MainView.swift */,
 				79BB5D742950B522007E5342 /* Authentication */,
@@ -757,6 +760,14 @@
 				793F554E2A6D6D3200215845 /* GoogleService-Info.plist */,
 			);
 			path = Slide;
+			sourceTree = "<group>";
+		};
+		E9C04EC42AABBD730043F397 /* Tutorial */ = {
+			isa = PBXGroup;
+			children = (
+				E9C04ECB2AABF6270043F397 /* TutorialView.swift */,
+			);
+			path = Tutorial;
 			sourceTree = "<group>";
 		};
 		E9C902492A7258680049FC81 /* Highlights */ = {
@@ -855,6 +866,7 @@
 				7953525D29CE587700C99B48 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				790BD0352A4526CF0006213A /* XCRemoteSwiftPackageReference "iPhoneNumberField" */,
 				792E490A2A5EDF0F00D73D7C /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				E9C04EC32AAB83C00043F397 /* XCRemoteSwiftPackageReference "StepperView" */,
 			);
 			productRefGroup = 79FC9E03294D605300EBD520 /* Products */;
 			projectDirPath = "";
@@ -948,6 +960,7 @@
 				796CD0122A716891008599EA /* updateUsername.swift in Sources */,
 				791C336D2A6193600020DEAC /* AddUserToDatabases.swift in Sources */,
 				79A538462A8E896100CAA51E /* HideNav1.swift in Sources */,
+				E9C04ECC2AABF6270043F397 /* TutorialView.swift in Sources */,
 				797A58F92A7EB1D100F333DC /* ChatUser.swift in Sources */,
 				E9BA986F2A9FE2A200A1D3A1 /* hashPassword.swift in Sources */,
 				793E7E112A87E2B500B0562E /* CustomSegmentedView.swift in Sources */,
@@ -1261,6 +1274,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 9.0.0;
+			};
+		};
+		E9C04EC32AAB83C00043F397 /* XCRemoteSwiftPackageReference "StepperView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/badrinathvm/StepperView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
