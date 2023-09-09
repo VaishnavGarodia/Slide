@@ -10,9 +10,28 @@ import Firebase
 import Foundation
 
 func getEventGalleries(completion: @escaping ([Event]?, Error?) -> Void) {
+    var user = Auth.auth().currentUser
+
+    var friendList: [String] = []
+    let group = DispatchGroup()
+    guard let currentUserID = user?.uid else {
+        return
+    }
+    let userDocumentRef = db.collection("Users").document(currentUserID)
+    group.enter()
+    userDocumentRef.getDocument(completion: { d2, _ in
+        if let d2 = d2, d2.exists {
+            if let tempFriendsArray = d2.data()?["Friends"] as? [String] {
+                friendList = tempFriendsArray
+            }
+        }
+        group.leave()
+    })
+    print(friendList)
+
+                                
     let eventsCollection = db.collection("Events")
     var eventGalleries: [Event] = []
-    let group = DispatchGroup()
 
     group.enter()
     eventsCollection.whereField("Associated Highlights", isNotEqualTo: [String]())
@@ -40,7 +59,39 @@ func getEventGalleries(completion: @escaping ([Event]?, Error?) -> Void) {
                     slides: data["SLIDES"] as? [String] ?? [],
                     highlights: data["Associated Highlights"] as? [String] ?? []
                 )
-                eventGalleries.append(event)
+                print(event.hostUID)
+                if friendList.contains(event.hostUID) {
+                    eventGalleries.append(event)
+                    print("Added")
+                }
+                else {
+                    var add = false
+                    for highlightID in event.highlights {
+                        let highlightDocRef = db.collection("Posts").document(highlightID)
+                        group.enter()
+                        highlightDocRef.getDocument(completion: {d3, e3 in
+                            if let d3 = d3, d3.exists {
+                                if let postUserID = d3.data()?["User"] as? String {
+                                    print(postUserID)
+                                    if friendList.contains(postUserID) {
+                                        add = true
+                                        return
+                                    }
+                                }
+                            }
+                            group.leave()
+                        })
+                    }
+                    if add {
+                        eventGalleries.append(event)
+                        print("Added")
+                    }
+                    else if event.slides.contains(currentUserID) {
+                        eventGalleries.append(event)
+                        print("Added")
+                    }
+                }
+                
             }
             group.leave()
         }

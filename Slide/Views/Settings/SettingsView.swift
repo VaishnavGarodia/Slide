@@ -14,6 +14,8 @@ struct SettingsView: View {
     @Binding var selectedColorScheme: String
     let user = Auth.auth().currentUser
     @State private var updatedUsername: String = ""
+    @State private var isShowingTutorial = false
+
     
     var body: some View {
         List {
@@ -167,6 +169,11 @@ struct SettingsView: View {
                 if clicks[5] {
                     SignOutView()
                 }
+                Button {
+                    isShowingTutorial.toggle()
+                } label: {
+                    Text("Tutorial")
+                }
             }
         }
         
@@ -175,6 +182,10 @@ struct SettingsView: View {
         }
         .onAppear {
             selectedColorScheme = UserDefaults.standard.string(forKey: "colorSchemePreference") ?? "dark"
+        }
+        
+        .fullScreenCover(isPresented: $isShowingTutorial) {
+            TutorialView(isShowingTutorial: $isShowingTutorial)
         }
     }
     
