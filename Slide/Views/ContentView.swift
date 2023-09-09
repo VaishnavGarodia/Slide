@@ -13,6 +13,8 @@ struct ContentView: View {
     @StateObject private var locationPermission = LocationPermission()
     @StateObject private var contactsPermission = ContactsPermission()
     @StateObject private var notificationsPermission = NotificationPermission()
+    @State private var userSignedUp = false
+
 
     var body: some View {
         /*
@@ -34,13 +36,13 @@ struct ContentView: View {
                                 NotificationPermissionsView(notificationsPermission: notificationsPermission)
 
                             } else {
-                                MainView()
+                                MainView(isShowingTutorial: userSignedUp)
                             }
                         }
                     }
             }
         } else {
-            AccountCreationView()
+            AccountCreationView(userSignedUp: $userSignedUp)
         }
     }
 }

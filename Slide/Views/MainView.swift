@@ -19,6 +19,8 @@ struct MainView: View {
     @State private var source: UIImagePickerController.SourceType = .camera
     @StateObject private var vm = MainMessagesViewModel()
     @StateObject private var highlights = HighlightObject()
+    @State var isShowingTutorial: Bool
+    
     var user = Auth.auth().currentUser
 
     var body: some View {
@@ -142,6 +144,9 @@ struct MainView: View {
                 }
             }
         }
+        .fullScreenCover(isPresented: $isShowingTutorial) {
+            TutorialView(isShowingTutorial: $isShowingTutorial)
+        }
     }
 
     func showBubble(_ message: RecentMessage) {
@@ -234,11 +239,5 @@ struct MainView: View {
                 return
             }
         }
-    }
-}
-
-struct MainView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView()
     }
 }
