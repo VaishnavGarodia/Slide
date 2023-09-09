@@ -107,22 +107,25 @@ struct MapPage: View {
                 for document in documents {
                     let data = document.data()
                     let coordinate = data["Coordinate"] as? GeoPoint ?? GeoPoint(latitude: 0.0, longitude: 0.0)
-                    let event = Event(
-                        name: data["Name"] as? String ?? "",
-                        description: data["Description"] as? String ?? "",
-                        address: data["Address"] as? String ?? "",
-                        start: (data["Start"] as? Timestamp)?.dateValue() ?? Date(),
-                        end: (data["End"] as? Timestamp)?.dateValue() ?? Date(),
-                        hostUID: data["HostUID"] as? String ?? "",
-                        icon: data["Icon"] as? String ?? "",
-                        coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
-                        bannerURL: data["BannerURL"] as? String ?? "",
-                        hype: data["Hype"] as? String ?? "",
-                        id: document.documentID,
-                        slides: data["SLIDES"] as? [String] ?? [],
-                        highlights: data["Associated Highlights"] as? [String] ?? []
-                    )
-                    newEvents.append(event)
+                    let ModerationCheckPassed = data["ModerationCheckPassed"] as? String ?? ""
+                    if ModerationCheckPassed != "false"{
+                        let event = Event(
+                            name: data["Name"] as? String ?? "",
+                            description: data["Description"] as? String ?? "",
+                            address: data["Address"] as? String ?? "",
+                            start: (data["Start"] as? Timestamp)?.dateValue() ?? Date(),
+                            end: (data["End"] as? Timestamp)?.dateValue() ?? Date(),
+                            hostUID: data["HostUID"] as? String ?? "",
+                            icon: data["Icon"] as? String ?? "",
+                            coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude),
+                            bannerURL: data["BannerURL"] as? String ?? "",
+                            hype: data["Hype"] as? String ?? "",
+                            id: document.documentID,
+                            slides: data["SLIDES"] as? [String] ?? [],
+                            highlights: data["Associated Highlights"] as? [String] ?? []
+                        )
+                        newEvents.append(event)
+                    }
                 }
                 events = newEvents
                 map.addAnnotations(events)
