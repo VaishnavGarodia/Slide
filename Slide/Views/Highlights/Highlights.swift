@@ -2,8 +2,6 @@ import Firebase
 import FirebaseFirestore
 import SwiftUI
 
-/* Tom Holland test data: [HighlightInfo(imageName: "https://m.media-amazon.com/images/M/MV5BNzZiNTEyNTItYjNhMS00YjI2LWIwMWQtZmYwYTRlNjMyZTJjXkEyXkFqcGdeQXVyMTExNzQzMDE0._V1_FMjpg_UX1000_.jpg", profileImageName: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", username: "User 1", highlightTitle: "Highlight 1"), HighlightInfo(imageName: "https://www.advocate.com/media-library/tom-holland.jpg?id=34342705&width=980&quality=85", profileImageName: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", username: "User 1", highlightTitle: "Highlight 1")] */
-
 struct Highlights: View {
     @Binding var source: UIImagePickerController.SourceType
     @ObservedObject var highlights: HighlightObject
@@ -16,18 +14,24 @@ struct Highlights: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            ScrollView {
-                VStack(spacing: 50) {
-                    ForEach(highlights.galleries, id: \.name) { gallery in
-                        EventGalleryCard(event: gallery, profileView: $profileView, selectedUser: $selectedUser, eventView: $eventView, selectedEvent: $selectedEvent)
-                    }
-                    ForEach(highlights.highlights) { highlight in
-                        HighlightCard(highlight: highlight, selectedUser: $selectedUser, profileView: $profileView)
+            GeometryReader { geometry in
+                ScrollView {
+                    if highlights.galleries.isEmpty && highlights.highlights.isEmpty {
+                        NoHighlightsView()
+                            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+                    } else {
+                        VStack(spacing: 50) {
+                            ForEach(highlights.galleries, id: \.name) { gallery in
+                                EventGalleryCard(event: gallery, profileView: $profileView, selectedUser: $selectedUser, eventView: $eventView, selectedEvent: $selectedEvent)
+                            }
+                            ForEach(highlights.highlights) { highlight in
+                                HighlightCard(highlight: highlight, selectedUser: $selectedUser, profileView: $profileView)
+                            }
+                        }
+                        .padding()
                     }
                 }
-                .padding()
             }
-            .scrollIndicators(.hidden)
         }
         .fullScreenCover(isPresented: $isPresentingPostCreationView) {
             VStack {
@@ -59,12 +63,26 @@ struct Highlights: View {
             }
         )
         .refreshable {
-//            fetchHighlights()
-//            fetchGalleries()
+            // fetchHighlights()
+            // fetchGalleries()
         }
         .onAppear {
-//            fetchHighlights()
-//            fetchGalleries()
+            // fetchHighlights()
+            // fetchGalleries()
+        }
+    }
+
+    struct NoHighlightsView: View {
+        var body: some View {
+            VStack {
+                Text("Welcome to Highlights!")
+                    .font(.title)
+                    .bold()
+                Text("There's nothing here now, but come back once you've attended some events!")
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 20)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }
