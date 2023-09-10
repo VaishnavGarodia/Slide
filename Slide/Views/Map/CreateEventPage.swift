@@ -211,6 +211,9 @@ struct CreateEventPage: View {
         .onAppear {
             event.hostUID = Auth.auth().currentUser!.uid
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
     
     func createEvent() {
@@ -319,6 +322,7 @@ struct CreateEventPage: View {
         }
     }
 }
+
     
 struct CreateEventPage_Previews: PreviewProvider {
     static var previews: some View {

@@ -35,6 +35,9 @@ struct EventEditView: View {
         ZStack {
             CreateEventView(map: $map, event: $event, alert: $alert, show: $show, destination: $destination, searchForAddress: .constant(false))
                 .ignoresSafeArea()
+                .onTapGesture {
+                    hideKeyboard()
+                }
             
             if destination != nil && show {
                 Rectangle()
@@ -317,4 +320,4 @@ struct EventEditView: View {
         }
     }
 }
-    
+

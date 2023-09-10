@@ -199,6 +199,7 @@ struct SearchBar: UIViewRepresentable {
     @Binding var txt: String
     @Binding var placeholder: String
     
+    
     func makeCoordinator() -> Coordinator {
         return SearchBar.Coordinator(parent: self)
     }
@@ -232,6 +233,9 @@ class Coordinator: NSObject, UISearchBarDelegate, MKLocalSearchCompleterDelegate
     init(parent: SearchBar) {
         self.parent = parent
     }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+            searchBar.resignFirstResponder()
+        }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         self.parent.txt = searchText
