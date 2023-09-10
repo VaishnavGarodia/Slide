@@ -18,10 +18,14 @@ struct MapPage: View {
     @State var selectedEvent: Event = .init()
     @State private var isPresentingCreateEventPage = false
     
+    
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             MapView(map: $map, manager: $manager, alert: $alert, destination: $destination, show: $show, events: $events, eventView: $eventView, selectedEvent: $selectedEvent)
                 .ignoresSafeArea()
+                .onTapGesture {
+                    hideKeyboard()
+                }
             
             ZStack(alignment: .topLeading) {
                 HStack {
@@ -59,6 +63,9 @@ struct MapPage: View {
             }
             
             EventDrawer(events: $events, selectedEvent: $selectedEvent, map: $map, eventView: $eventView)
+                .onTapGesture {
+                    hideKeyboard()
+                }
         }
         .onAppear {
             checkHype()
@@ -137,6 +144,12 @@ struct MapPage: View {
             let region = MKCoordinateRegion(center: userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.015, longitudeDelta: 0.015))
             map.setRegion(region, animated: true)
         }
+    }
+}
+
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 
