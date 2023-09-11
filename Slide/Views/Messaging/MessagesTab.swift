@@ -83,6 +83,9 @@ struct MessagesTab: View {
         .fullScreenCover(isPresented: $profileView) {
             UserProfileView(user: $selectedUser)
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
 }
 
