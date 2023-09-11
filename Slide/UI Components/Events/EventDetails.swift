@@ -163,7 +163,7 @@ struct EventDetails: View {
                     .frame(height: 50)
                     .padding()
                     .onChange(of: isRSVPed) { isRSVPed in
-                        guard !isRSVPed else { return }
+                        print("we out here")
                         simulateRequest()
                     }
                 }
@@ -211,7 +211,9 @@ struct EventDetails: View {
         let eventID = event.id
         let eventDoc = db.collection("Events").document(eventID)
         let userDoc = db.collection("Users").document(userID)
-
+        
+        var needsNoti = true
+        
         // Update user's SLIDES array
         userDoc.getDocument { userDocument, error in
             if let error = error {
@@ -229,10 +231,13 @@ struct EventDetails: View {
 
             if slidesArray.contains(eventID) {
                 slidesArray.removeAll { $0 == eventID }
+                needsNoti = false
+
             } else {
                 slidesArray.append(eventID)
+                needsNoti = true
             }
-
+            print(needsNoti)
             userDoc.setData(["SLIDES": slidesArray], merge: true) { error in
                 if let error = error {
                     print("Error updating user document: \(error)")
@@ -271,8 +276,54 @@ struct EventDetails: View {
                     print("Error updating user document: \(error)")
                 }
             }
-        }
+            
+            if needsNoti,
+               let eventData = eventDocument?.data() {
+                print("All the way")
+                let name = eventData["Name"] as? String ?? ""
+//                let description = eventData["Description"] as? String ?? ""
+                let eventID = eventDocument!.documentID
+                if let start = (eventData["Start"] as? Timestamp)?.dateValue() {
+                    print("more")
+                    let identifier = eventID + "|" + userID
+                    let title = "Starting Soon!"
+                    let body = name + " is starting soon"
+                    
+                    let notificationCenter = UNUserNotificationCenter.current()
+                    let content = UNMutableNotificationContent()
+                    content.title = title
+                    content.body = body
+                    content.sound = .default
+                    
+                    
+                    let calendar = Calendar.current
+                    let start20 = calendar.date(byAdding: .minute, value: -20, to: start)
+                    let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: start20!)
+                    let year = components.year
+                    let month = components.month
+                    let day = components.day
+                    let hour = components.hour
+                    let minute = components.minute
 
+                    var dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current)
+                    
+                    dateComponents.year = year
+                    dateComponents.month = month
+                    dateComponents.day = day
+                    dateComponents.hour = hour
+                    dateComponents.minute = minute
+                                        
+                    let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+                    let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+                    
+//                    you might think you're being clean, but do us all a favor and don't delete this
+//                    notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+                    notificationCenter.add(request)
+                    print("Added")
+                }
+            }
+        }
+        
         isLoading = false
     }
 }

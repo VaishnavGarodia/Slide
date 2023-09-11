@@ -19,7 +19,7 @@ struct UserSearchResults: View {
                 if friend.added ?? false {
                     Button {} label: {
                         HStack {
-                            Text("Added")
+                            Text("Requested")
                         }
                         .padding(5)
                         .foregroundColor(.gray)
@@ -35,7 +35,7 @@ struct UserSearchResults: View {
                             searchResults[index] = updatedFriend
                         }
                     } label: {
-                        Text("Add")
+                        Text("Request")
                             .foregroundColor(.primary)
                             .padding(5)
                             .padding(.horizontal)
