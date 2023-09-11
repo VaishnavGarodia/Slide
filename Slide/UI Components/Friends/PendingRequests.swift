@@ -34,7 +34,7 @@ struct PendingRequests: View {
                         confirmFriendship(u1: user?.uid ?? "SimUser", u2: friend.userID)
                         refreshPending.toggle()
                     } label: {
-                        Text("Add Back")
+                        Text("Accept")
                             .foregroundColor(.primary)
                             .padding(5)
                             .padding(.horizontal, 5)

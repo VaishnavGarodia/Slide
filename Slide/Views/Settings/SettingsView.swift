@@ -15,6 +15,7 @@ struct SettingsView: View {
     let user = Auth.auth().currentUser
     @State private var updatedUsername: String = ""
     @State private var isShowingTutorial = false
+    @StateObject var notificationPermission = NotificationPermission()
 
     
     var body: some View {
@@ -170,6 +171,7 @@ struct SettingsView: View {
                     SignOutView()
                 }
                 Button {
+                    dispatchNotification()
                     isShowingTutorial.toggle()
                 } label: {
                     Text("Tutorial")
@@ -197,6 +199,33 @@ struct SettingsView: View {
         }
         clicks[count].toggle()
     }
+    
+    func dispatchNotification() {
+        if notificationPermission.isNotificationPermission {
+            let identifier = "bithces_notification"
+            let title = "Go get bitches"
+            let body = "You have 0 bitches"
+            
+            let notificationCenter = UNUserNotificationCenter.current()
+            let content = UNMutableNotificationContent()
+            content.title = title
+            content.body = body
+            content.sound = .default
+            
+            let calendar = Calendar.current
+            var dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current)
+            dateComponents.hour = 22
+            dateComponents.minute = 2
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+            
+            notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+            notificationCenter.add(request)
+            print("Added")
+        }
+    }
+
 }
 
 struct SettingsView_Previews: PreviewProvider {
