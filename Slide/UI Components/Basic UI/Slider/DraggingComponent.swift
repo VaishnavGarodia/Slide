@@ -45,20 +45,20 @@ struct DraggingComponent: View {
             .simultaneousGesture(
                 DragGesture()
                     .onChanged { value in
-                        guard isRSVPed else { return }
+                        guard !isRSVPed else { return }
                         if value.translation.width > 0 {
                             width = min(max(value.translation.width + minWidth, minWidth), maxWidth)
                         }
                     }
                     .onEnded { _ in
-                        guard isRSVPed else { return }
+                        guard !isRSVPed else { return }
                         if width < maxWidth {
                             width = minWidth
                             UINotificationFeedbackGenerator().notificationOccurred(.warning)
                         } else {
                             UINotificationFeedbackGenerator().notificationOccurred(.success)
                             withAnimation(.spring().delay(0.5)) {
-                                isRSVPed = false
+                                isRSVPed = true
                             }
                         }
                     }
