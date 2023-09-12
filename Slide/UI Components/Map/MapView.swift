@@ -100,6 +100,7 @@ struct MapView: UIViewRepresentable {
 
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
             guard let event = view.annotation as? Event else { return }
+            print("annotation got tapped")
             parent.selectedEvent = event
             parent.eventView = true
         }

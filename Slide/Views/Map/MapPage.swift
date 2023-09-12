@@ -17,7 +17,12 @@ struct MapPage: View {
     @State var events: [Event] = []
     @State var selectedEvent: Event = .init()
     @State private var isPresentingCreateEventPage = false
+    @State var isFilterActionSheetPresented: Bool = false
+    @State var currentFilter: EventFilter = .thisWeek
     
+    enum EventFilter {
+        case showAll, thisWeek, nextTwoDays, rightNow
+    }
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -31,6 +36,37 @@ struct MapPage: View {
                 HStack {
                     Spacer()
                     Button(action: {
+                                isFilterActionSheetPresented.toggle()
+                            }) {
+                                Image(systemName: "line.horizontal.3.decrease.circle")
+                                    .padding(-5)
+                                    .filledBubble()
+                                    .frame(width: 60)
+                                    .padding(.trailing)
+                                    .padding(.top, -15)
+                            }
+                            .actionSheet(isPresented: $isFilterActionSheetPresented) {
+                                ActionSheet(title: Text("Filter Events"), buttons: [
+                                    currentFilter == .showAll ?
+                                        .destructive(Text("Show all Events")) { filterEventsFor(.showAll) } :
+                                        .default(Text("Show all Events")) { filterEventsFor(.showAll) },
+
+                                    currentFilter == .thisWeek ?
+                                        .destructive(Text("Happening This Week")) { filterEventsFor(.thisWeek) } :
+                                        .default(Text("Happening This Week")) { filterEventsFor(.thisWeek) },
+
+                                    currentFilter == .nextTwoDays ?
+                                        .destructive(Text("Happening in Next 2 Days")) { filterEventsFor(.nextTwoDays) } :
+                                        .default(Text("Happening in Next 2 Days")) { filterEventsFor(.nextTwoDays) },
+
+                                    currentFilter == .rightNow ?
+                                        .destructive(Text("Happening Right Now")) { filterEventsFor(.rightNow) } :
+                                        .default(Text("Happening Right Now")) { filterEventsFor(.rightNow) },
+
+                                    .cancel()
+                                ])
+                            }
+                    Button(action: {
                         isPresentingCreateEventPage = true
                     }) {
                         Image(systemName: "plus")
@@ -42,7 +78,7 @@ struct MapPage: View {
                     }
                 }
                 
-                SearchView(map: $map, location: $destination, event: $selectedEvent, detail: $show, eventView: $eventView, placeholder: .constant("Search for Events"), searchForEvents: true, frame: 300)
+                SearchView(map: $map, location: $destination, event: $selectedEvent, detail: $show, eventView: $eventView, placeholder: .constant("Search for Events"), searchForEvents: true, frame: 220)
                     .padding(.top, -15)
             }
             .alert(isPresented: self.$alert) { () -> Alert in
@@ -96,15 +132,34 @@ struct MapPage: View {
                 group.leave()
             }
             group.notify(queue: .main) {
-                fetchEvents()
+                filterEventsFor(currentFilter)
             }
         }
     }
     
-    func fetchEvents() {
+    func filterEventsFor(_ filter: EventFilter) {
         let currentDate = Date()
-//        let fiveHoursLater = Calendar.current.date(byAdding: .hour, value: 5, to: currentDate)!
-        db.collection("Events").whereField("End", isGreaterThan: currentDate)
+        currentFilter = filter
+        switch filter {
+        case .showAll:
+            let twoWeeksFromNow = Calendar.current.date(byAdding: .day, value: 14, to: currentDate)!
+            fetchEvents(from: currentDate, to: twoWeeksFromNow)
+        case .thisWeek:
+            // Logic to get events from the last Sunday to the next Sunday
+            let startOfWeek = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: currentDate))!
+            let endOfWeek = Calendar.current.date(byAdding: .day, value: 7, to: startOfWeek)!
+            fetchEvents(from: currentDate, to: endOfWeek)
+        case .nextTwoDays:
+            let twoDaysLater = Calendar.current.date(byAdding: .day, value: 2, to: currentDate)!
+            fetchEvents(from: currentDate, to: twoDaysLater)
+        case .rightNow:
+            fetchEvents(from: currentDate, to: nil)
+        }
+    }
+
+    func fetchEvents(from startDate: Date, to endDate: Date?) {
+        db.collection("Events")
+            .whereField("Start", isLessThanOrEqualTo: endDate ?? Date())
             .addSnapshotListener { querySnapshot, error in
                 guard let documents = querySnapshot?.documents else {
                     print("Error fetching documents: \(error!)")
@@ -115,7 +170,8 @@ struct MapPage: View {
                     let data = document.data()
                     let coordinate = data["Coordinate"] as? GeoPoint ?? GeoPoint(latitude: 0.0, longitude: 0.0)
                     let ModerationCheckPassed = data["ModerationCheckPassed"] as? String ?? ""
-                    if ModerationCheckPassed != "false"{
+                    let End = (data["End"] as? Timestamp)?.dateValue() ?? Date()
+                    if ModerationCheckPassed != "false" && End > startDate{
                         let event = Event(
                             name: data["Name"] as? String ?? "",
                             description: data["Description"] as? String ?? "",
@@ -135,9 +191,12 @@ struct MapPage: View {
                     }
                 }
                 events = newEvents
+                let currentAnnotations = map.annotations
+                map.removeAnnotations(currentAnnotations)
                 map.addAnnotations(events)
             }
     }
+
 
     func zoomToUserLocation() {
         if let userLocation = map.userLocation.location {
