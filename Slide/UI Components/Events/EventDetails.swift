@@ -316,8 +316,54 @@ struct EventDetails: View {
                     print("Added")
                 }
             }
-        }
+            
+            if needsNoti,
+               let eventData = eventDocument?.data() {
+                print("All the way")
+                let name = eventData["Name"] as? String ?? ""
+//                let description = eventData["Description"] as? String ?? ""
+                let eventID = eventDocument!.documentID
+                if let start = (eventData["Start"] as? Timestamp)?.dateValue() {
+                    print("more")
+                    let identifier = eventID + "|" + userID
+                    let title = "Starting Soon!"
+                    let body = "An event you slid into is starting soon"
+                    
+                    let notificationCenter = UNUserNotificationCenter.current()
+                    let content = UNMutableNotificationContent()
+                    content.title = title
+                    content.body = body
+                    content.sound = .default
+                    
+                    
+                    let calendar = Calendar.current
+                    let start20 = calendar.date(byAdding: .minute, value: -20, to: start)
+                    let components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: start20!)
+                    let year = components.year
+                    let month = components.month
+                    let day = components.day
+                    let hour = components.hour
+                    let minute = components.minute
 
+                    var dateComponents = DateComponents(calendar: calendar, timeZone: TimeZone.current)
+                    
+                    dateComponents.year = year
+                    dateComponents.month = month
+                    dateComponents.day = day
+                    dateComponents.hour = hour
+                    dateComponents.minute = minute
+                                        
+                    let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+                    let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+                    
+//                    you might think you're being clean, but do us all a favor and don't delete this
+//                    notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+                    notificationCenter.add(request)
+                    print("Added")
+                }
+            }
+        }
+        
         isLoading = false
     }
 }

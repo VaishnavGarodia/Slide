@@ -694,6 +694,7 @@
 		79BB5D732950B515007E5342 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E9C04EC42AABBD730043F397 /* Tutorial */,
 				79FC9E07294D605300EBD520 /* ContentView.swift */,
 				795C5BF9295418D7007FDA83 /* MainView.swift */,
 				79BB5D742950B522007E5342 /* Authentication */,

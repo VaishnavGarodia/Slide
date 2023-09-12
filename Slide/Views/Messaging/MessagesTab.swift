@@ -44,6 +44,12 @@ struct MessagesTab: View {
             .padding()
             .padding(.bottom, -10)
             .padding(.top, -10)
+            
+            // Main Content
+            GeometryReader { geometry in
+                ScrollView {
+                    VStack {
+                        Spacer(minLength: geometry.size.height/2 - 50)  // Adjust for vertical centering
 
             // Main Content
             GeometryReader { geometry in
@@ -76,6 +82,8 @@ struct MessagesTab: View {
                                 }
                             }
                         }
+                        
+                        Spacer(minLength: geometry.size.height/2 - 50)  // Adjust for vertical centering
                     }
                 }
             }
@@ -95,15 +103,16 @@ struct NoMessagesView: View {
             Text("Welcome to Messages!")
                 .font(.title)
                 .bold()
-                .multilineTextAlignment(.center) // Center align text
+                .multilineTextAlignment(.center)  // Center align text
             Text("You don't have any messages yet. Start a conversation to see them here.")
                 .font(.subheadline)
-                .multilineTextAlignment(.center) // Center align text
+                .multilineTextAlignment(.center)  // Center align text
                 .padding(.horizontal, 20)
         }
-        .frame(maxWidth: .infinity) // This will stretch the VStack to use full available width
+        .frame(maxWidth: .infinity)  // This will stretch the VStack to use full available width
     }
 }
+
 
 struct MessagesTab_Previews: PreviewProvider {
     static var previews: some View {
