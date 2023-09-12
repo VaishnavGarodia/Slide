@@ -191,6 +191,8 @@ struct MapPage: View {
                     }
                 }
                 events = newEvents
+                let currentAnnotations = map.annotations
+                map.removeAnnotations(currentAnnotations)
                 map.addAnnotations(events)
             }
     }
