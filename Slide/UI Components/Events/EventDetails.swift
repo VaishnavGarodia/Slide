@@ -287,7 +287,7 @@ struct EventDetails: View {
                     print("more")
                     let identifier = eventID + "|" + userID
                     let title = "Starting Soon!"
-                    let body = name + " is starting soon"
+                    let body = "An event you slid into is starting soon"
                     
                     let notificationCenter = UNUserNotificationCenter.current()
                     let content = UNMutableNotificationContent()
