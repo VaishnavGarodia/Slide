@@ -236,49 +236,8 @@ struct EventEditView: View {
         }
     }
         
-    func compressImageToTargetSize(_ image: UIImage, targetSizeInKB: Int) -> Data? {
-        let targetWidth: CGFloat = 1024 // Choose the desired width here
-        let targetHeight = targetWidth * (image.size.height / image.size.width)
-        let size = CGSize(width: targetWidth, height: targetHeight)
-            
-        UIGraphicsBeginImageContext(size)
-        image.draw(in: CGRect(origin: .zero, size: size))
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-            
-        // Check if the scaled image data is already below the target size
-        if let scaledImageData = scaledImage?.jpegData(compressionQuality: 1.0) {
-            let scaledSizeInKB = scaledImageData.count / 1024
-            if scaledSizeInKB <= targetSizeInKB {
-                return scaledImageData
-            }
-        }
-        var compressionQuality: CGFloat = 1.0
-        var imageData: Data?
-            
-        // Binary search to find the optimal compression quality
-        var minQuality: CGFloat = 0.0
-        var maxQuality: CGFloat = 1.0
-        while minQuality <= maxQuality {
-            compressionQuality = (minQuality + maxQuality) / 2.0
-            if let compressedData = scaledImage?.jpegData(compressionQuality: compressionQuality) ?? image.jpegData(compressionQuality: compressionQuality) {
-                let currentSizeInKB = compressedData.count / 1024
-                if currentSizeInKB > targetSizeInKB {
-                    maxQuality = compressionQuality - 0.0001
-                } else {
-                    imageData = compressedData
-                    minQuality = compressionQuality + 0.0001
-                }
-            } else {
-                break
-            }
-        }
-            
-        return imageData
-    }
-        
     func uploadBannerToFirebaseStorage(image: UIImage, documentID: String) {
-        guard let imageData = compressImageToTargetSize(image, targetSizeInKB: 100) else {
+        guard let imageData = compressImageToTargetSize(image, targetSizeInKB: 200) else {
             print("Failed to compress image.")
             return
         }

@@ -25,11 +25,19 @@ struct DraggingComponent: View {
             .opacity(width / maxWidth)
             .frame(width: width)
             .overlay(
-                Button(action: {}) {
+                Button(action: {
+                    guard isRSVPed else { return }
+                    withAnimation {
+                        isRSVPed = false
+                        width = minWidth
+                    }
+                }) {
                     ZStack {
-                        image(name: "arrowshape.right", isShown: !isRSVPed)
+                        image(name: "icon", isShown: !isRSVPed)
                         progressView(isShown: isLoading)
-                        image(name: "arrowshape.right.fill", isShown: isRSVPed && !isLoading)
+                        if isRSVPed && !isLoading {
+                            Image(systemName: "xmark")
+                        }
                     }
                     .animation(.easeIn(duration: 0.35).delay(0.55), value: isRSVPed && !isLoading)
                 }
@@ -67,11 +75,10 @@ struct DraggingComponent: View {
     }
 
     private func image(name: String, isShown: Bool) -> some View {
-        Image(systemName: name)
-            .font(.system(size: 20, weight: .regular, design: .rounded))
-            .foregroundColor(Color.blue)
+        Image(name)
+            .resizable()
             .frame(width: 42, height: 42)
-            .background(RoundedRectangle(cornerRadius: 14).fill(.white))
+            .background(RoundedRectangle(cornerRadius: 14).fill(Color.darkGray))
             .padding(4)
             .opacity(isShown ? 1 : 0)
             .scaleEffect(isShown ? 1 : 0.01)

@@ -19,9 +19,10 @@ func fetchUserDetails(userID: String, completion: @escaping (UserData?) -> Void)
         if let document = document,
            let username = document.data()?["Username"] as? String,
            let photoURL = document.data()?["ProfilePictureURL"] as? String,
-           let incoming = document.data()?["Incoming"] as? [String]
+           let incoming = document.data()?["Incoming"] as? [String],
+           let friends = document.data()?["Friends"] as? [String]
         {
-            let added = incoming.contains(user?.uid ?? "SimUser")
+            let added = incoming.contains(user?.uid ?? "SimUser") || friends.contains(user?.uid ?? "SimUser")
             let userDetails = UserData(userID: userID, username: username, photoURL: photoURL, added: added)
             completion(userDetails)
         }

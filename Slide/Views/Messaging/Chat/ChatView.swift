@@ -4,7 +4,6 @@
 
 import FirebaseAuth
 import FirebaseFirestore
-import MessageKit
 import SwiftUI
 
 struct ChatView: View {

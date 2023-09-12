@@ -1,15 +1,18 @@
-//  UserSearchResults.swift
+//
+//  ContactRecommendations.swift
 //  Slide
-//  Created by Ethan Harianto on 7/30/23.
+//
+//  Created by Ethan Harianto on 9/11/23.
+//
 
 import SwiftUI
 
-struct UserSearchResults: View {
-    @Binding var searchResults: [UserData]
+struct ContactRecommendations: View {
+    @Binding var contacts: Set<UserData>
     @State private var showingConfirmationDialog = false
 
     var body: some View {
-        ForEach(searchResults, id: \.userID) { friend in
+        ForEach(Array(contacts), id: \.self) { friend in
             HStack {
                 UserProfilePictures(photoURL: friend.photoURL, dimension: 40)
                 Text(friend.username)
@@ -28,10 +31,10 @@ struct UserSearchResults: View {
                 } else {
                     Button {
                         sendFriendRequest(selectedUser: friend)
-                        if let index = searchResults.firstIndex(where: { $0.userID == friend.userID }) {
-                            var updatedFriend = friend
-                            updatedFriend.added = true
-                            searchResults[index] = updatedFriend
+                        if let index = Array(contacts).firstIndex(where: { $0.userID == friend.userID }) {
+                            var updatedContacts = Array(contacts)
+                            updatedContacts[index].added = true
+                            contacts = Set(updatedContacts)
                         }
                     } label: {
                         Text("Request")
@@ -47,8 +50,8 @@ struct UserSearchResults: View {
     }
 }
 
-struct UserSearchResults_Previews: PreviewProvider {
+struct ContactRecommendations_Previews: PreviewProvider {
     static var previews: some View {
-        UserSearchResults(searchResults: .constant([UserData(userID: "mwahah", username: "baesuzy", photoURL: "https://m.media-amazon.com/images/M/MV5BZWQ5YTFhZDAtMTg3Yi00NzIzLWIyY2EtNDQ2YWNjOWJkZWQxXkEyXkFqcGdeQXVyMjQ2OTU4Mjg@._V1_.jpg", added: false), UserData(userID: "mwahahah", username: "tomholland", photoURL: "https://static.foxnews.com/foxnews.com/content/uploads/2023/07/GettyImages-1495234870.jpg", added: false)]))
+        ContactRecommendations(contacts: .constant([]))
     }
 }

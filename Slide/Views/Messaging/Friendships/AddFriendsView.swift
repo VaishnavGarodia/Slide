@@ -17,6 +17,7 @@ struct AddFriendsView: View {
     @State private var searchResults: [UserData] = []
     @State private var pendingFriendRequests: [UserData] = []
     @State private var friendList: [UserData] = []
+    @State private var recommendations: Set<UserData> = []
     @State private var refreshPending = false
     @State private var refreshSearch = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -52,6 +53,15 @@ struct AddFriendsView: View {
                                 .font(.caption)
                         }
                     }
+                } else if !recommendations.isEmpty {
+                    List {
+                        Section {
+                            ContactRecommendations(contacts: $recommendations)
+                        } header: {
+                            Text("Contacts on Slide")
+                                .font(.caption)
+                        }
+                    }
                 } else {
                     Spacer()
                 }
@@ -82,11 +92,62 @@ struct AddFriendsView: View {
         }
         .onAppear {
             fetchPendingFriendRequests()
+            fetchRecommendations()
         }
         .refreshable {
             fetchPendingFriendRequests()
+            fetchRecommendations()
         }
         .navigationBarBackButtonHidden(true)
+    }
+
+    func fetchRecommendations() {
+        guard let currentUserID = user?.uid else {
+            return
+        }
+        let userDocumentRef = db.collection("Users").document(currentUserID)
+        var recommendations: Set<UserData> = []
+
+        let group = DispatchGroup() // Create a DispatchGroup
+
+        // Step 1: Access the User document using the given document ID
+        userDocumentRef.getDocument { document, _ in
+            if let document = document, document.exists {
+                let contacts = document.data()?["Contacts"] as? [String: Any] ?? [:]
+                for number in contacts.keys {
+                    group.enter() // Enter the DispatchGroup before starting each fetchUserDetails call
+                    let query = db.collection("Users").whereField("Phone Number", isGreaterThanOrEqualTo: number)
+                    query.getDocuments { querySnapshot, error in
+                        if let error = error {
+                            print(error)
+                            group.leave() // Make sure to leave the DispatchGroup in case of an error
+                            return
+                        }
+
+                        if let document = querySnapshot?.documents.first {
+                            fetchUserDetails(userID: document.documentID) { userDetails in
+                                if let userDetails = userDetails {
+                                    // Handle userDetails if it's not nil
+                                    if !userDetails.added! && userDetails.userID != user!.uid {
+                                        recommendations.insert(userDetails)
+                                    }
+                                }
+                                group.leave() // Leave the DispatchGroup after the fetchUserDetails call is completed
+                            }
+                        } else {
+                            // If no document is found for this number, still leave the DispatchGroup
+                            group.leave()
+                        }
+                    }
+                }
+
+                group.notify(queue: .main) {
+                    // This closure will be called when all fetchUserDetails calls are completed
+                    self.recommendations = recommendations
+                    print(self.recommendations)
+                }
+            }
+        }
     }
 
     func fetchPendingFriendRequests() {

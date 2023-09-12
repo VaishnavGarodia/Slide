@@ -28,6 +28,14 @@
 				<string>com.googleusercontent.apps.1019532523456-9ndru8n9k0thbpphs89s1lhi3oqhrqse</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-1019532523456-ios-f1f36f240dbc70b899fa25</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -57,7 +65,7 @@
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIImageName</key>
-		<string>logo</string>
+		<string>launch</string>
 	</dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

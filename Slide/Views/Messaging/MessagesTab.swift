@@ -51,26 +51,34 @@ struct MessagesTab: View {
                     VStack {
                         Spacer(minLength: geometry.size.height/2 - 50)  // Adjust for vertical centering
 
-                        if vm.recentMessages.isEmpty {
-                            NoMessagesView()
-                                .frame(width: geometry.size.width, alignment: .center)  // Force width to be the screen width and center content
-                        } else {
-                            ForEach(vm.recentMessages.keys.sorted(by: { chatUserId1, chatUserId2 -> Bool in
-                                if let messages1 = vm.recentMessages[chatUserId1],
-                                   let messages2 = vm.recentMessages[chatUserId2],
-                                   let recentMessage1 = messages1.last,
-                                   let recentMessage2 = messages2.last {
-                                    return recentMessage1.timestamp.dateValue() > recentMessage2.timestamp.dateValue()
-                                }
-                                return false
-                            }), id: \.self) { chatUserId in
-                                if let messages = vm.recentMessages[chatUserId],
-                                   let recentMessage = messages.last {
-                                    if !search.isEmpty && search.contains(chatUserId) {
-                                        RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser, vm: vm)
-                                    } else if searchMessages.isEmpty {
-                                        RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser, vm: vm)
-                                    }
+            // Main Content
+            GeometryReader { geometry in
+                if vm.recentMessages.isEmpty {
+                    VStack {
+                        Spacer(minLength: geometry.size.height/2 - 50) // Adjust for vertical centering
+                        NoMessagesView()
+                            .frame(width: geometry.size.width, alignment: .center) // Force width to be the screen width and center content
+                        Spacer(minLength: geometry.size.height/2 - 50)
+                    }
+                } else {
+                    List {
+                        ForEach(vm.recentMessages.keys.sorted(by: { chatUserId1, chatUserId2 -> Bool in
+                            if let messages1 = vm.recentMessages[chatUserId1],
+                               let messages2 = vm.recentMessages[chatUserId2],
+                               let recentMessage1 = messages1.last,
+                               let recentMessage2 = messages2.last
+                            {
+                                return recentMessage1.timestamp.dateValue() > recentMessage2.timestamp.dateValue()
+                            }
+                            return false
+                        }), id: \.self) { chatUserId in
+                            if let messages = vm.recentMessages[chatUserId],
+                               let recentMessage = messages.last
+                            {
+                                if !search.isEmpty && search.contains(chatUserId) {
+                                    RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser, vm: vm)
+                                } else if searchMessages.isEmpty {
+                                    RecentMessageRow(recentMessage: recentMessage, profileView: $profileView, selectedUser: $selectedUser, vm: vm)
                                 }
                             }
                         }

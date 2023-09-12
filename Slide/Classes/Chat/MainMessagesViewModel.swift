@@ -53,8 +53,18 @@ class MainMessagesViewModel: ObservableObject {
     }
 
     func hideMessage(_ message: RecentMessage) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        let otherUserId = message.fromId == uid ? message.toId : message.fromId
+        
         if let index = recentMessages[message.toId]?.firstIndex(where: { $0.documentId == message.documentId }) {
             recentMessages[message.toId]?.remove(at: index)
+            db.collection("recent_messages")
+                .document(uid)
+                .collection("messages")
+                .document(otherUserId)
+                .delete()
         }
     }
 }

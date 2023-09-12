@@ -5,7 +5,11 @@
 import Foundation
 import SwiftUI
 
-struct UserData: Codable {
+struct UserData: Codable, Hashable {
+    static func ==(lhs: UserData, rhs: UserData) -> Bool {
+        return lhs.userID == rhs.userID
+    }
+    
     let userID: String
     let username: String
     let photoURL: String
