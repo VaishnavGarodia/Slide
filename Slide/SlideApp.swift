@@ -26,30 +26,39 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         return true
     }
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification notification: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("\(#function)")
+        if Auth.auth().canHandleNotification(notification) {
+            completionHandler(.noData)
+            return
+        }
+    }
 }
 
 @main
 struct SlideApp: App {
-    @AppStorage("colorSchemePreference") var colorSchemePreference: String = "dark"
+//    @AppStorage("colorSchemePreference") var colorSchemePreference: String = "dark"
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-
+    let persistenceController = PersistenceController.shared
     var body: some Scene {
         WindowGroup {
             NavigationView {
                 ContentView()
-                    .preferredColorScheme(getColorScheme())
+                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
+//                    .preferredColorScheme(getColorScheme())
             }
         }
     }
-
-    func getColorScheme() -> ColorScheme {
-        switch colorSchemePreference {
-        case "light":
-            return .light
-        case "dark":
-            return .dark
-        default:
-            return .dark
-        }
-    }
+//
+//    func getColorScheme() -> ColorScheme {
+//        switch colorSchemePreference {
+//        case "light":
+//            return .light
+//        case "dark":
+//            return .dark
+//        default:
+//            return .dark
+//        }
+//    }
 }

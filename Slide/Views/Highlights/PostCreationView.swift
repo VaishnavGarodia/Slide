@@ -162,7 +162,7 @@ struct PostCreationView: View {
     }
 
     func uploadImageToFirebaseStorage(image: UIImage, documentID: String) {
-        guard let imageData = compressImageToTargetSize(image, targetSizeInKB: 100) else {
+        guard let imageData = compressImageToTargetSize(image, targetSizeInKB: 200) else {
             print("Failed to compress image.")
             return
         }

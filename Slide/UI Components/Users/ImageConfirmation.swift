@@ -74,7 +74,7 @@ struct ImageConfirmation: View {
     
     func uploadProfilePicture() {
         let image = selectedImage
-        guard let imageData = compressImageToTargetSize(image!, targetSizeInKB: 100) else {
+        guard let imageData = compressImageToTargetSize(image!, targetSizeInKB: 200) else {
             print("Failed to compress image.")
             return
         }

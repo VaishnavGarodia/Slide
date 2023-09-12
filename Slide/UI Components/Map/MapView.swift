@@ -22,11 +22,14 @@ struct MapView: UIViewRepresentable {
     @Binding var events: [Event]
     @Binding var eventView: Bool
     @Binding var selectedEvent: Event
+
     func makeUIView(context: Context) -> MKMapView {
         map.delegate = context.coordinator
         manager.delegate = context.coordinator
+        map.mapType = .standard
         map.showsUserLocation = true
-        map.showsPointsOfInterest = false
+        map.pointOfInterestFilter = .excludingAll
+        map.overrideUserInterfaceStyle = .dark
         return map
     }
 

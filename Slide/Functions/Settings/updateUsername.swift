@@ -10,7 +10,7 @@ import Foundation
 
 func updateUsername(username: String, completion: @escaping (String) -> Void) {
     let user = Auth.auth().currentUser
-    var usernameRef = db.collection("Usernames").document(username)
+    var usernameRef = db.collection("Usernames").document(username.lowercased())
     usernameRef.getDocument { document, error in
         if let error = error {
             completion("Error checking username: \(error.localizedDescription)")

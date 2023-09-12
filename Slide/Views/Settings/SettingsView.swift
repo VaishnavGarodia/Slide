@@ -96,6 +96,7 @@ struct SettingsView: View {
                                 .foregroundColor(.primary)
                             if !(user?.phoneNumber ?? "").isEmpty {
                                 Text(user?.phoneNumber ?? "")
+                                    .foregroundColor(.secondary)
                             }
                         }
                         Spacer()
@@ -105,6 +106,13 @@ struct SettingsView: View {
                         }
                         Image(systemName: "chevron.right")
                             .rotationEffect(.degrees(clicks[2] ? 90 : 0))
+                    }
+                }
+                if clicks[2] {
+                    if (user?.phoneNumber ?? "").isEmpty {
+                        PhoneNumberView()
+                    } else {
+                        Text("You've already set your phone number.")
                     }
                 }
             }
@@ -131,25 +139,25 @@ struct SettingsView: View {
             }
             
             // App Appearance
-            Group {
-                Button {
-                    withAnimation {
-                        toggleClicks(count: 4)
-                    }
-                } label: {
-                    HStack {
-                        Text("App Appearance")
-                            .foregroundColor(.primary)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .rotationEffect(.degrees(clicks[4] ? 90 : 0))
-                    }
-                }
-                            
-                if clicks[4] {
-                    AppAppearanceView(selectedColorScheme: $selectedColorScheme)
-                }
-            }
+//            Group {
+//                Button {
+//                    withAnimation {
+//                        toggleClicks(count: 4)
+//                    }
+//                } label: {
+//                    HStack {
+//                        Text("App Appearance")
+//                            .foregroundColor(.primary)
+//                        Spacer()
+//                        Image(systemName: "chevron.right")
+//                            .rotationEffect(.degrees(clicks[4] ? 90 : 0))
+//                    }
+//                }
+//
+//                if clicks[4] {
+//                    AppAppearanceView(selectedColorScheme: $selectedColorScheme)
+//                }
+//            }
             
             // Sign Out
             Group {

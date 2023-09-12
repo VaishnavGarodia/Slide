@@ -63,12 +63,7 @@ struct Highlights: View {
             }
         )
         .refreshable {
-            // fetchHighlights()
-            // fetchGalleries()
-        }
-        .onAppear {
-            // fetchHighlights()
-            // fetchGalleries()
+            highlights.fetch()
         }
     }
 
@@ -79,6 +74,7 @@ struct Highlights: View {
                     .font(.title)
                     .bold()
                 Text("There's nothing here now, but come back once you've attended some events!")
+                    .font(.subheadline)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 20)
             }

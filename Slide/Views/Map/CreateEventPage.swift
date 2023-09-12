@@ -18,7 +18,6 @@ struct CreateEventPage: View {
     @State private var event = Event()
     @State private var destination: CLLocationCoordinate2D!
     @State private var show = false
-    @State private var createEventSearch: Bool = true
     @State private var alert = false
     @State private var isShowingImagePicker = false
     @State private var selectedImage: UIImage? = UIImage()
@@ -36,7 +35,7 @@ struct CreateEventPage: View {
                 .ignoresSafeArea()
             if searchForAddress {
                 ZStack(alignment: .topTrailing) {
-                    SearchView(map: $map, location: $destination, event: $event, detail: $show, eventView: .constant(false), placeholder: .constant("Search for a Location"), createEventSearch: createEventSearch, frame: 280)
+                    SearchView(map: $map, location: $destination, event: $event, detail: $show, eventView: .constant(false), placeholder: .constant("Search for a Location"), createEventSearch: true, frame: 280)
                         .padding(.top, -15)
                     Button {
                         presentationMode.wrappedValue.dismiss()
@@ -75,9 +74,13 @@ struct CreateEventPage: View {
                                 isShowingImagePicker.toggle()
                             } label: {
                                 if selectedImage == UIImage() {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
-                                        .frame(width: 50, height: 50)
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(LinearGradient(colors: [.accentColor, .blue], startPoint: .topLeading, endPoint: .bottomTrailing))
+                                            .frame(width: 50, height: 50)
+                                        Image(systemName: "camera")
+                                            .imageScale(.large)
+                                    }
                                 } else {
                                     Image(uiImage: selectedImage!)
                                         .resizable()
@@ -280,7 +283,7 @@ struct CreateEventPage: View {
     }
     
     func uploadBannerToFirebaseStorage(image: UIImage, documentID: String) {
-        guard let imageData = compressImageToTargetSize(image, targetSizeInKB: 100) else {
+        guard let imageData = compressImageToTargetSize(image, targetSizeInKB: 200) else {
             print("Failed to compress image.")
             return
         }

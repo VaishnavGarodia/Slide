@@ -19,7 +19,7 @@ struct SearchView: View {
     @Binding var placeholder: String
     var searchForEvents: Bool = false
     @State var txt = ""
-    @State var createEventSearch: Bool = true
+    @State var createEventSearch: Bool = false
     @State var events: [Event] = []
  
     var frame: CGFloat
