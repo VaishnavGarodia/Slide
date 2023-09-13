@@ -5,6 +5,7 @@
 import Foundation
 import SwiftUI
 import UIKit
+import Combine
 
 extension View {
     func bubbleStyle(color: Color) -> some View {

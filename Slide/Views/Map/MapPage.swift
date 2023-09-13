@@ -39,10 +39,9 @@ struct MapPage: View {
                                 isFilterActionSheetPresented.toggle()
                             }) {
                                 Image(systemName: "line.horizontal.3.decrease.circle")
-                                    .padding(-5)
+                                    .padding(-7.5)
                                     .filledBubble()
                                     .frame(width: 60)
-                                    .padding(.trailing)
                                     .padding(.top, -15)
                             }
                             .actionSheet(isPresented: $isFilterActionSheetPresented) {
@@ -78,7 +77,7 @@ struct MapPage: View {
                     }
                 }
                 
-                SearchView(map: $map, location: $destination, event: $selectedEvent, detail: $show, eventView: $eventView, placeholder: .constant("Search for Events"), searchForEvents: true, frame: 220)
+                SearchView(map: $map, location: $destination, event: $selectedEvent, detail: $show, eventView: $eventView, placeholder: .constant("Search for Events"), searchForEvents: true, frame: 230)
                     .padding(.top, -15)
             }
             .alert(isPresented: self.$alert) { () -> Alert in
