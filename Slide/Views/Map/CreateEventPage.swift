@@ -163,7 +163,14 @@ struct CreateEventPage: View {
                                 errorMessage = "Oops, you left the event name empty!"
                             } else if event.address.isEmpty {
                                 errorMessage = "Oops, you forgot to put an address!"
-                            } else {
+                            }
+                            else if event.end <= event.start {
+                                errorMessage = "Oops, the event's end time should be strictly after its start time!"
+                            }
+                            else if (destination == nil) {
+                                errorMessage = "Oops, you need to click on choose location and pick a location on the map!!"
+                            }
+                            else {
                                 event.coordinate = CLLocationCoordinate2D(latitude: destination.latitude, longitude: destination.longitude)
                                 event.icon = icons[icon]
                                 isShowingPreview = true
@@ -220,6 +227,7 @@ struct CreateEventPage: View {
     }
     
     func createEvent() {
+        
         let doc = db.collection("Events").document()
         
         doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.eventDescription, "Icon": event.icon, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low", "Associated Highlights": [String](), "SLIDES": [String](), "ModerationCheckPassed":"unknown"]) { err in
