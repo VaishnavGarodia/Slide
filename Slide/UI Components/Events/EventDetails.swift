@@ -29,6 +29,8 @@ struct EventDetails: View {
     @State private var showEventEditSheet = false
     @State private var bannerImage: UIImage = .init()
     @State var showEditButton: Bool
+    @StateObject var notificationPermission = NotificationPermission()
+
 
     var body: some View {
         ScrollView {
@@ -236,7 +238,6 @@ struct EventDetails: View {
                 slidesArray.append(eventID)
                 needsNoti = true
             }
-            print(needsNoti)
             userDoc.setData(["SLIDES": slidesArray], merge: true) { error in
                 if let error = error {
                     print("Error updating user document: \(error)")
@@ -316,24 +317,29 @@ struct EventDetails: View {
                     print("Added")
                 }
             }
-            
-            if needsNoti,
+            if needsNoti && notificationPermission.isNotificationPermission,
+//            if needsNoti,
                let eventData = eventDocument?.data() {
-                print("All the way")
                 let name = eventData["Name"] as? String ?? ""
 //                let description = eventData["Description"] as? String ?? ""
                 let eventID = eventDocument!.documentID
                 if let start = (eventData["Start"] as? Timestamp)?.dateValue() {
-                    print("more")
-                    let identifier = eventID + "|" + userID
+                    let identifier = "Event|" + eventID + "|" + userID
                     let title = "Starting Soon!"
                     let body = "An event you slid into is starting soon"
+                    let identifier2 = "Post|" + eventID + "|" + userID
+                    let title2 = "Time to make your post!"
+                    let body2 = "Make your post for " + name
                     
                     let notificationCenter = UNUserNotificationCenter.current()
                     let content = UNMutableNotificationContent()
                     content.title = title
                     content.body = body
                     content.sound = .default
+                    let content2 = UNMutableNotificationContent()
+                    content2.title = title2
+                    content2.body = body2
+                    content2.sound = .default
                     
                     
                     let calendar = Calendar.current
@@ -357,9 +363,48 @@ struct EventDetails: View {
                     let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
                     
 //                    you might think you're being clean, but do us all a favor and don't delete this
-//                    notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
+                    notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
                     notificationCenter.add(request)
-                    print("Added")
+                    print("Added Event Reminder")
+                    
+                    // If end wasn't specified set it to 3 hours after the start
+                    let end = (eventData["End"] as? Timestamp)?.dateValue() ?? Calendar.current.date(byAdding: .hour, value: 3, to: start)!
+                    // Calculate the time interval between date1 and date2
+                    let duration = end.timeIntervalSince(start)
+
+                    // Calculate a Date that is 1/5th of the way between date1 and date2
+                    let oneFifthDuration = duration / 5
+                    let oneFifthDate = start.addingTimeInterval(oneFifthDuration)
+                    
+                    // Calculate a Date that is exactly 1/2 of the way between date1 and date2
+                    let halfDuration = duration / 2
+                    let halfwayDate = start.addingTimeInterval(halfDuration)
+                    
+                    let postReminderDate = randomDateBetween(start: oneFifthDate, end: halfwayDate)
+
+                    let postReminderDateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: postReminderDate)
+                    let postYear = postReminderDateComponents.year
+                    let postMonth = postReminderDateComponents.month
+                    let postDay = postReminderDateComponents.day
+                    let postHour = postReminderDateComponents.hour
+                    let postMinute = postReminderDateComponents.minute
+
+                    var dateComponentsPostReminder = DateComponents(calendar: Calendar.current, timeZone: TimeZone.current)
+                    
+                    dateComponentsPostReminder.year = postYear
+                    dateComponentsPostReminder.month = postMonth
+                    dateComponentsPostReminder.day = postDay
+                    dateComponentsPostReminder.hour = postHour
+                    dateComponentsPostReminder.minute = postMinute
+
+                    let trigger2 = UNCalendarNotificationTrigger(dateMatching: dateComponentsPostReminder, repeats: false)
+                    let request2 = UNNotificationRequest(identifier: identifier2, content: content2, trigger: trigger2)
+                    
+//                    you might think you're being clean, but do us all a favor and don't delete this
+                    notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier2])
+                    notificationCenter.add(request2)
+                    print("Added Post Reminder")
+                    
                 }
             }
         }
@@ -367,3 +412,4 @@ struct EventDetails: View {
         isLoading = false
     }
 }
+

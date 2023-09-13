@@ -236,11 +236,11 @@ struct PasswordView_Previews: PreviewProvider {
 //                    completion(String(password == passwordField))
 //                } else {
 //                    // If "google" field is missing or not a Bool value, return false
-//                    completion("shit")
+//                    completion("Error 132")
 //                }
 //            } else {
 //                // User not found, return false
-//                completion("fook")
+//                completion("Error 131")
 //            }
 //        }
 //    }
