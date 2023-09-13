@@ -23,4 +23,5 @@ struct HighlightInfo: Identifiable, Equatable {
     var username: String
     var highlightTitle: String
     var likedUsers: [String] // List of user document ids that liked the post
+    var postTime: Date
 }

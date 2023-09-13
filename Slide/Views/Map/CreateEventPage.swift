@@ -80,6 +80,7 @@ struct CreateEventPage: View {
                                             .frame(width: 50, height: 50)
                                         Image(systemName: "camera")
                                             .imageScale(.large)
+                                            .foregroundColor(.primary)
                                     }
                                 } else {
                                     Image(uiImage: selectedImage!)
@@ -128,11 +129,12 @@ struct CreateEventPage: View {
                                         searchForAddress.toggle()
                                     }
                                 } label: {
-                                    Text("Choose location")
+                                    Text(event.address == "" ? "Choose location" : "Change location")
                                 }
                                 .padding(.horizontal)
                             }
                         }
+                        
                         DatePicker("Start Time", selection: $event.start, in: .now...)
                             .onAppear {
                                 UIDatePicker.appearance().minuteInterval = 15
@@ -140,13 +142,13 @@ struct CreateEventPage: View {
                             .datePickerStyle(.compact)
                             .padding(.horizontal)
                                 
-                        DatePicker("End Time", selection: $event.end, in: event.start...)
+                        DatePicker("End Time", selection: $event.end, in: event.start.addingTimeInterval(900)...)
                             .onAppear {
                                 UIDatePicker.appearance().minuteInterval = 15
                             }
                             .datePickerStyle(.compact)
                             .padding(.horizontal)
-                                
+                            
                         HorizontalPicker($icon, items: icons) { iconImage in
                             GeometryReader { reader in
                                 Image(systemName: iconImage)
@@ -163,14 +165,12 @@ struct CreateEventPage: View {
                                 errorMessage = "Oops, you left the event name empty!"
                             } else if event.address.isEmpty {
                                 errorMessage = "Oops, you forgot to put an address!"
-                            }
-                            else if event.end <= event.start {
+                            } else if event.end <= event.start {
                                 errorMessage = "Oops, the event's end time should be strictly after its start time!"
-                            }
-                            else if (destination == nil) {
-                                errorMessage = "Oops, you need to click on choose location and pick a location on the map!!"
-                            }
-                            else {
+                            } else if event.coordinate == CLLocationCoordinate2D() {
+                                print("")
+                                errorMessage = "Oops, you forgot to choose a location!"
+                            } else {
                                 event.coordinate = CLLocationCoordinate2D(latitude: destination.latitude, longitude: destination.longitude)
                                 event.icon = icons[icon]
                                 isShowingPreview = true
@@ -227,10 +227,9 @@ struct CreateEventPage: View {
     }
     
     func createEvent() {
-        
         let doc = db.collection("Events").document()
         
-        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.eventDescription, "Icon": event.icon, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low", "Associated Highlights": [String](), "SLIDES": [String](), "ModerationCheckPassed":"unknown"]) { err in
+        doc.setData(["HostUID": Auth.auth().currentUser!.uid, "Name": event.name, "Description": event.eventDescription, "Icon": event.icon, "Address": event.address, "Coordinate": GeoPoint(latitude: event.coordinate.latitude, longitude: event.coordinate.longitude), "Start": event.start, "End": event.end, "Hype": "low", "Associated Highlights": [String](), "SLIDES": [String](), "ModerationCheckPassed": "unknown"]) { err in
             if err != nil {
                 print((err?.localizedDescription)!)
                 return
@@ -334,7 +333,6 @@ struct CreateEventPage: View {
     }
 }
 
-    
 struct CreateEventPage_Previews: PreviewProvider {
     static var previews: some View {
         CreateEventPage(isPresentingCreateEventPage: .constant(false))

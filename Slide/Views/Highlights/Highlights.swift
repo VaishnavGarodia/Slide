@@ -13,7 +13,39 @@ struct Highlights: View {
     @State private var selectedEvent: Event? = Event()
 
     var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack(alignment: .top) {
+            HStack {
+//                Image("icon")
+//                    .resizable()
+//                    .frame(width: 45, height: 45)
+//                    .padding()
+                Spacer()
+                Menu {
+                    Button {
+                        withAnimation {
+                            source = .camera
+                            isPresentingPostCreationView = true
+                        }
+                    } label: {
+                        Label("Post with Camera", systemImage: "camera")
+                    }
+                    Button {
+                        withAnimation {
+                            source = .photoLibrary
+                            isPresentingPostCreationView = true
+                        }
+                    } label: {
+                        Label("Post from Library", systemImage: "photo")
+                    }
+                } label: {
+                    Image(systemName: "plus.app")
+                        .foregroundColor(.primary)
+                        .imageScale(.large)
+                        .padding(7.5)
+                        .background(Color.accentColor.clipShape(Circle()))
+                        .padding()
+                }
+            }
             GeometryReader { geometry in
                 ScrollView {
                     if highlights.galleries.isEmpty && highlights.highlights.isEmpty {
@@ -21,11 +53,16 @@ struct Highlights: View {
                             .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
                     } else {
                         VStack(spacing: 50) {
-                            ForEach(highlights.galleries, id: \.name) { gallery in
-                                EventGalleryCard(event: gallery, profileView: $profileView, selectedUser: $selectedUser, eventView: $eventView, selectedEvent: $selectedEvent)
-                            }
-                            ForEach(highlights.highlights) { highlight in
-                                HighlightCard(highlight: highlight, selectedUser: $selectedUser, profileView: $profileView)
+                            ForEach(highlights.posts) { combinedPost in
+                                switch combinedPost.content {
+                                case .highlight(let highlight):
+                                    // Create a view for HighlightInfo
+                                    HighlightCard(highlight: highlight, selectedUser: $selectedUser, profileView: $profileView)
+                                    
+                                case .gallery(let event):
+                                    // Create a view for Event
+                                    EventGalleryCard(event: event, profileView: $profileView, selectedUser: $selectedUser, eventView: $eventView, selectedEvent: $selectedEvent)
+                                }
                             }
                         }
                         .padding()
