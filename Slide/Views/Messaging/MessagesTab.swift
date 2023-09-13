@@ -44,22 +44,12 @@ struct MessagesTab: View {
             .padding()
             .padding(.bottom, -10)
             .padding(.top, -10)
-            
-            // Main Content
-            GeometryReader { geometry in
-                ScrollView {
-                    VStack {
-                        Spacer(minLength: geometry.size.height/2 - 50)  // Adjust for vertical centering
 
-            // Main Content
-            GeometryReader { geometry in
+            VStack {
                 if vm.recentMessages.isEmpty {
-                    VStack {
-                        Spacer(minLength: geometry.size.height/2 - 50) // Adjust for vertical centering
-                        NoMessagesView()
-                            .frame(width: geometry.size.width, alignment: .center) // Force width to be the screen width and center content
-                        Spacer(minLength: geometry.size.height/2 - 50)
-                    }
+                    Spacer() // Adjust for vertical centering
+                    NoMessagesView()
+                    Spacer()
                 } else {
                     List {
                         ForEach(vm.recentMessages.keys.sorted(by: { chatUserId1, chatUserId2 -> Bool in
@@ -82,17 +72,15 @@ struct MessagesTab: View {
                                 }
                             }
                         }
-                        
-                        Spacer(minLength: geometry.size.height/2 - 50)  // Adjust for vertical centering
                     }
                 }
             }
-        }
-        .fullScreenCover(isPresented: $profileView) {
-            UserProfileView(user: $selectedUser)
-        }
-        .onTapGesture {
-            hideKeyboard()
+            .fullScreenCover(isPresented: $profileView) {
+                UserProfileView(user: $selectedUser)
+            }
+            .onTapGesture {
+                hideKeyboard()
+            }
         }
     }
 }
@@ -103,16 +91,14 @@ struct NoMessagesView: View {
             Text("Welcome to Messages!")
                 .font(.title)
                 .bold()
-                .multilineTextAlignment(.center)  // Center align text
+                .multilineTextAlignment(.center) // Center align text
             Text("You don't have any messages yet. Start a conversation to see them here.")
                 .font(.subheadline)
-                .multilineTextAlignment(.center)  // Center align text
+                .multilineTextAlignment(.center) // Center align text
                 .padding(.horizontal, 20)
         }
-        .frame(maxWidth: .infinity)  // This will stretch the VStack to use full available width
     }
 }
-
 
 struct MessagesTab_Previews: PreviewProvider {
     static var previews: some View {
