@@ -15,7 +15,7 @@ func getContacts(_ contactsGranted: Bool) -> [ContactInfo] {
         let fetchedContacts = fetchingContacts()
         contactList.append(contentsOf: fetchedContacts)
     } else {
-        print("fuck")
+        print("Error 130")
     }
     return contactList
 }

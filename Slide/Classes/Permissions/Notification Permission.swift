@@ -15,6 +15,7 @@ class NotificationPermission: NSObject, ObservableObject {
     override init() {
         super.init()
         self.authorizationStatus = checkNotificationPermission()
+        handleNotificationPermissionStatus(self.authorizationStatus)
     }
 
     func checkNotificationPermission() -> UNAuthorizationStatus {
@@ -29,6 +30,7 @@ class NotificationPermission: NSObject, ObservableObject {
     func requestNotificationPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             DispatchQueue.main.async {
+                self.authorizationStatus = granted ? .authorized : .denied
                 self.handleNotificationPermissionStatus(granted ? .authorized : .denied)
             }
         }
@@ -37,12 +39,16 @@ class NotificationPermission: NSObject, ObservableObject {
     private func handleNotificationPermissionStatus(_ status: UNAuthorizationStatus) {
         switch status {
         case .authorized, .provisional:
+            print("'1'")
             isNotificationPermission = true
         case .denied:
+            print("'2'")
             isNotificationPermission = false
         case .notDetermined:
+            print("'3'")
             isNotificationPermission = false
         default:
+            print("'4'")
             isNotificationPermission = false
         }
     }

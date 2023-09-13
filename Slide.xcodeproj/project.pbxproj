@@ -140,6 +140,7 @@
 		E9BA986D2A97380200A1D3A1 /* UserSlidedProfileBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BA986C2A97380200A1D3A1 /* UserSlidedProfileBox.swift */; };
 		E9BA986F2A9FE2A200A1D3A1 /* hashPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BA986E2A9FE2A200A1D3A1 /* hashPassword.swift */; };
 		E9C04ECC2AABF6270043F397 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C04ECB2AABF6270043F397 /* TutorialView.swift */; };
+		E9C04EE32AB0CF6E0043F397 /* Dates.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C04EE22AB0CF6E0043F397 /* Dates.swift */; };
 		E9C902482A72569F0049FC81 /* EventGalleryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C902472A72569F0049FC81 /* EventGalleryCard.swift */; };
 		E9C9024B2A72587C0049FC81 /* getHighlightInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C9024A2A72587C0049FC81 /* getHighlightInfo.swift */; };
 		E9C9024E2A7348620049FC81 /* EventDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C9024D2A7348620049FC81 /* EventDisplay.swift */; };
@@ -273,6 +274,7 @@
 		E9BA986C2A97380200A1D3A1 /* UserSlidedProfileBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSlidedProfileBox.swift; sourceTree = "<group>"; };
 		E9BA986E2A9FE2A200A1D3A1 /* hashPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hashPassword.swift; sourceTree = "<group>"; };
 		E9C04ECB2AABF6270043F397 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
+		E9C04EE22AB0CF6E0043F397 /* Dates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dates.swift; sourceTree = "<group>"; };
 		E9C902472A72569F0049FC81 /* EventGalleryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventGalleryCard.swift; sourceTree = "<group>"; };
 		E9C9024A2A72587C0049FC81 /* getHighlightInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getHighlightInfo.swift; sourceTree = "<group>"; };
 		E9C9024D2A7348620049FC81 /* EventDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDisplay.swift; sourceTree = "<group>"; };
@@ -813,6 +815,7 @@
 			children = (
 				E9C902502A7348C40049FC81 /* EligibleEvents.swift */,
 				E9C902522A76413C0049FC81 /* getEventGalleryInfos.swift */,
+				E9C04EE22AB0CF6E0043F397 /* Dates.swift */,
 				E9C902612A9170D50049FC81 /* ExtractFriendSlides.swift */,
 				79E47C3F2A98F2350076EC89 /* searchEvents.swift */,
 			);
@@ -937,6 +940,7 @@
 				796BA08D2A6B126C00EB0DB4 /* Notification Permission.swift in Sources */,
 				796F0CB62A73FD15006538B9 /* SignOutView.swift in Sources */,
 				792712A32A85C13700E42BC3 /* PhotoLibraryPermission.swift in Sources */,
+				E9C04EE32AB0CF6E0043F397 /* Dates.swift in Sources */,
 				791C33712A6197B80020DEAC /* getContacts.swift in Sources */,
 				792712AB2A871EC300E42BC3 /* fetchCurrentFriendsCount.swift in Sources */,
 				9B8081F62A71D13D001153E5 /* MapView.swift in Sources */,
