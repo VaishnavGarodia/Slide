@@ -5,13 +5,14 @@
 //  Created by Ethan Harianto on 9/9/23.
 //
 
-import Foundation
 import Firebase
+import Foundation
 
 class HighlightObject: ObservableObject {
     @Published var highlights: [HighlightInfo] = []
     @Published var lastSnapshot: DocumentSnapshot?
     @Published var galleries: [Event] = []
+    @Published var posts: [CombinedPost] = []
 
     func fetchHighlights() {
         let postsCollectionRef = db.collection("Posts")
@@ -30,7 +31,8 @@ class HighlightObject: ObservableObject {
             for document in snapshot?.documents ?? [] {
                 if let caption = document.data()["ImageCaption"] as? String,
                    let userDocumentID = document.data()["User"] as? String,
-                   let imagePath = document.data()["PostImage"] as? String
+                   let imagePath = document.data()["PostImage"] as? String,
+                   let postTime = (document.data()["Post Time"] as? Timestamp)?.dateValue()
                 {
                     guard let currentUserID = Auth.auth().currentUser?.uid else {
                         return
@@ -55,7 +57,7 @@ class HighlightObject: ObservableObject {
                                 fetchUsernameAndPhotoURL(for: userDocumentID) { username, photoURL in
                                     if let username = username, let photoURL = photoURL {
                                         let highlight = HighlightInfo(
-                                            uid: currentUserID, postID: docID, imageName: imagePath, profileImageName: photoURL, username: username, highlightTitle: caption, likedUsers: likedUsersArray
+                                            uid: currentUserID, postID: docID, imageName: imagePath, profileImageName: photoURL, username: username, highlightTitle: caption, likedUsers: likedUsersArray, postTime: postTime
                                         )
                                         newHighlights.append(highlight)
                                         dispatchGroup.leave()
@@ -85,9 +87,37 @@ class HighlightObject: ObservableObject {
             }
         }
     }
-    
+
+    func combineAndSortPosts() {
+        var combinedPosts: [CombinedPost] = []
+
+        for highlight in highlights {
+            combinedPosts.append(CombinedPost(timestamp: highlight.postTime, content: .highlight(highlight)))
+        }
+
+        for gallery in galleries {
+            combinedPosts.append(CombinedPost(timestamp: gallery.start, content: .gallery(gallery)))
+        }
+
+        combinedPosts.sort { $0.timestamp > $1.timestamp }
+
+        posts = combinedPosts
+    }
+
+    struct CombinedPost: Identifiable {
+        let id = UUID()
+        let timestamp: Date
+        let content: PostContent
+    }
+
+    enum PostContent {
+        case highlight(HighlightInfo)
+        case gallery(Event)
+    }
+
     func fetch() {
         fetchHighlights()
         fetchGalleries()
+        combineAndSortPosts()
     }
 }

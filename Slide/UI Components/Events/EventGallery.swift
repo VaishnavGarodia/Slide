@@ -51,14 +51,15 @@ struct EventGallery: View {
                                 let userLikes = document2.data()?["Liked Users"] as? [String] ?? []
                                 if let uid = document2.data()?["User"] as? String,
                                    let imageName = document2.data()?["PostImage"] as? String,
-                                   let highlightTitle = document2.data()?["ImageCaption"] as? String
+                                   let highlightTitle = document2.data()?["ImageCaption"] as? String,
+                                   let postTime = (document.data()?["Post Time"] as? Timestamp)?.dateValue()
                                 {
                                     // Fetch the user document using the extracted uid
                                     group.enter() // Enter the DispatchGroup before starting each fetchUserDetails call
                                     fetchUserDetails(userID: uid) { userDetails in
                                         let userDetails = userDetails
                                         userData = userDetails
-                                        temp.append(HighlightInfo(uid: uid, postID: document2.documentID, imageName: imageName, profileImageName: userData?.photoURL ?? imageName, username: userData?.username ?? "", highlightTitle: highlightTitle, likedUsers: userLikes))
+                                        temp.append(HighlightInfo(uid: uid, postID: document2.documentID, imageName: imageName, profileImageName: userData?.photoURL ?? imageName, username: userData?.username ?? "", highlightTitle: highlightTitle, likedUsers: userLikes, postTime: postTime))
                                         group.leave() // Leave the DispatchGroup after the fetchUserDetails call is completed
                                     }
                                 }

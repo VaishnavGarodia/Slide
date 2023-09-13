@@ -22,6 +22,7 @@
 		791C33782A61AF590020DEAC /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C33772A61AF590020DEAC /* View.swift */; };
 		791C337B2A61B73A0020DEAC /* PasswordField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C337A2A61B73A0020DEAC /* PasswordField.swift */; };
 		791C337D2A6339410020DEAC /* LogInFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791C337C2A6339410020DEAC /* LogInFunction.swift */; };
+		791D9AEA2AB18CC000533607 /* CLLocationCoordinate2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791D9AE92AB18CC000533607 /* CLLocationCoordinate2D.swift */; };
 		792712A32A85C13700E42BC3 /* PhotoLibraryPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792712A22A85C13700E42BC3 /* PhotoLibraryPermission.swift */; };
 		792712AB2A871EC300E42BC3 /* fetchCurrentFriendsCount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792712AA2A871EC300E42BC3 /* fetchCurrentFriendsCount.swift */; };
 		792712AE2A87223700E42BC3 /* EventBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792712AD2A87223700E42BC3 /* EventBanner.swift */; };
@@ -169,6 +170,7 @@
 		791C33772A61AF590020DEAC /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		791C337A2A61B73A0020DEAC /* PasswordField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordField.swift; sourceTree = "<group>"; };
 		791C337C2A6339410020DEAC /* LogInFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInFunction.swift; sourceTree = "<group>"; };
+		791D9AE92AB18CC000533607 /* CLLocationCoordinate2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2D.swift; sourceTree = "<group>"; };
 		792712A22A85C13700E42BC3 /* PhotoLibraryPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryPermission.swift; sourceTree = "<group>"; };
 		792712AA2A871EC300E42BC3 /* fetchCurrentFriendsCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fetchCurrentFriendsCount.swift; sourceTree = "<group>"; };
 		792712AD2A87223700E42BC3 /* EventBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBanner.swift; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 			isa = PBXGroup;
 			children = (
 				797A58F62A7EB1A600F333DC /* Color.swift */,
+				791D9AE92AB18CC000533607 /* CLLocationCoordinate2D.swift */,
 				797A58E82A7B14E100F333DC /* UITabBar.swift */,
 				79D643102A78AE4E00BB42E3 /* UISearchBar.swift */,
 				791C33772A61AF590020DEAC /* View.swift */,
@@ -696,7 +699,6 @@
 		79BB5D732950B515007E5342 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E9C04EC42AABBD730043F397 /* Tutorial */,
 				79FC9E07294D605300EBD520 /* ContentView.swift */,
 				795C5BF9295418D7007FDA83 /* MainView.swift */,
 				79BB5D742950B522007E5342 /* Authentication */,
@@ -1009,6 +1011,7 @@
 				795C5BF629540B00007FDA83 /* SettingsView.swift in Sources */,
 				79C899862A8DB4D2004A9D1B /* HorizontalPicker.swift in Sources */,
 				79DCC255295611D6000FCD6F /* MapPage.swift in Sources */,
+				791D9AEA2AB18CC000533607 /* CLLocationCoordinate2D.swift in Sources */,
 				79FC9E06294D605300EBD520 /* SlideApp.swift in Sources */,
 				796CD0182A718CA2008599EA /* ProfileInfo.swift in Sources */,
 				79167C842A8B184600D6AE54 /* DraggingComponent.swift in Sources */,

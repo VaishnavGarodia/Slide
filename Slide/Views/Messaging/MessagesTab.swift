@@ -8,6 +8,7 @@ struct MessagesTab: View {
     @State private var selectedUser: UserData? = nil
     @State private var profileView = false
     @State private var search: [String] = []
+    @FocusState private var keyboard
 
     @ObservedObject var vm: MainMessagesViewModel
 
@@ -18,6 +19,7 @@ struct MessagesTab: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                     TextField("Search", text: $searchMessages)
+                        .focused($keyboard)
                 }
                 .checkMarkTextField()
                 .bubbleStyle(color: .primary)
@@ -47,9 +49,11 @@ struct MessagesTab: View {
 
             VStack {
                 if vm.recentMessages.isEmpty {
-                    Spacer() // Adjust for vertical centering
-                    NoMessagesView()
-                    Spacer()
+                    ScrollView {
+                        Spacer(minLength: 250) // Adjust for vertical centering
+                        NoMessagesView()
+                        Spacer()
+                    }
                 } else {
                     List {
                         ForEach(vm.recentMessages.keys.sorted(by: { chatUserId1, chatUserId2 -> Bool in
@@ -77,9 +81,6 @@ struct MessagesTab: View {
             }
             .fullScreenCover(isPresented: $profileView) {
                 UserProfileView(user: $selectedUser)
-            }
-            .onTapGesture {
-                hideKeyboard()
             }
         }
     }
