@@ -137,6 +137,7 @@
 		9BE277EE2A7218F4007AD2EC /* NewChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE277ED2A7218F4007AD2EC /* NewChat.swift */; };
 		9BE277F02A7218FE007AD2EC /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BE277EF2A7218FE007AD2EC /* ChatView.swift */; };
 		E807DF4A29A2B06B0093C87C /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E807DF4929A2B06B0093C87C /* FirebaseFirestoreSwift */; };
+		E991FCEB2AB254C700F4549A /* fetchFriendList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E991FCEA2AB254C700F4549A /* fetchFriendList.swift */; };
 		E9BA986B2A95E79100A1D3A1 /* EventEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BA986A2A95E79000A1D3A1 /* EventEditView.swift */; };
 		E9BA986D2A97380200A1D3A1 /* UserSlidedProfileBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BA986C2A97380200A1D3A1 /* UserSlidedProfileBox.swift */; };
 		E9BA986F2A9FE2A200A1D3A1 /* hashPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BA986E2A9FE2A200A1D3A1 /* hashPassword.swift */; };
@@ -272,6 +273,7 @@
 		9B8081F52A71D13D001153E5 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		9BE277ED2A7218F4007AD2EC /* NewChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChat.swift; sourceTree = "<group>"; };
 		9BE277EF2A7218FE007AD2EC /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		E991FCEA2AB254C700F4549A /* fetchFriendList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fetchFriendList.swift; sourceTree = "<group>"; };
 		E9BA986A2A95E79000A1D3A1 /* EventEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEditView.swift; sourceTree = "<group>"; };
 		E9BA986C2A97380200A1D3A1 /* UserSlidedProfileBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSlidedProfileBox.swift; sourceTree = "<group>"; };
 		E9BA986E2A9FE2A200A1D3A1 /* hashPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hashPassword.swift; sourceTree = "<group>"; };
@@ -438,6 +440,7 @@
 			isa = PBXGroup;
 			children = (
 				7936F9F82A76C23D0057DB8A /* searchUsersByUsername.swift */,
+				E991FCEA2AB254C700F4549A /* fetchFriendList.swift */,
 				79E47C3D2A983FF20076EC89 /* searchMessagesByUsername.swift */,
 				7936F9FB2A76C2A70057DB8A /* fetchUserDetails.swift */,
 				7936F9FD2A76C2E60057DB8A /* confirmFriendship.swift */,
@@ -1033,6 +1036,7 @@
 				79E47C3E2A983FF20076EC89 /* searchMessagesByUsername.swift in Sources */,
 				E9CD46F82A6BA65200E24317 /* AddFriendsView.swift in Sources */,
 				790FFCBD2AACEBED00F46C89 /* HighlightObject.swift in Sources */,
+				E991FCEB2AB254C700F4549A /* fetchFriendList.swift in Sources */,
 				79B822702A647262003133BC /* LocationPermissionsView.swift in Sources */,
 				79D643112A78AE4E00BB42E3 /* UISearchBar.swift in Sources */,
 				79B1FF7A2A6B337A00012B38 /* Contacts Permission.swift in Sources */,

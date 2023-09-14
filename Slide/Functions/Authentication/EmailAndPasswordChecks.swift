@@ -35,15 +35,16 @@ func isEmailValid(_ email: String) -> String {
     let validEmails = [
         "stanford.edu",
     ]
-    
+
     let domain = email.components(separatedBy: "@").last
-    
+
     if validEmails.contains(domain ?? "") {
         return ""
     }
 
     // Password meets all criteria
     return "Oops, Slide isn't available for your school yet!"
+//    return ""
 }
 
 func isGoogleUser(email: String, completion: @escaping (Bool, Error?) -> Void) {

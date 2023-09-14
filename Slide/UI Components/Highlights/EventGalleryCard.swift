@@ -66,7 +66,6 @@ struct EventGalleryCard: View {
 
     private func fetchHighlights() {
         let dispatchGroup = DispatchGroup()
-
         for postId in event.highlights {
             dispatchGroup.enter()
             getHighlightInfo(highlightID: postId) { highlightInfo in
