@@ -7,6 +7,9 @@ import SwiftUI
 struct UserSearchResults: View {
     @Binding var searchResults: [UserData]
     @State private var showingConfirmationDialog = false
+    @State private var tapped = false
+    @State private var isPresented = false
+    @State private var selectedUser: UserData? = nil
 
     var body: some View {
         ForEach(searchResults, id: \.userID) { friend in
@@ -16,33 +19,30 @@ struct UserSearchResults: View {
                     .foregroundColor(.white)
 
                 Spacer()
-                if friend.added ?? false {
-                    Button {} label: {
-                        HStack {
-                            Text("Requested")
-                        }
-                        .padding(5)
-                        .foregroundColor(.gray)
-                        .background(RoundedRectangle(cornerRadius: 10).foregroundColor(.primary))
-                    }
-                } else {
-                    Button {
+                Button {
+                    withAnimation {
                         sendFriendRequest(selectedUser: friend)
-                        if let index = searchResults.firstIndex(where: { $0.userID == friend.userID }) {
-                            var updatedFriend = friend
-                            updatedFriend.added = true
-                            searchResults[index] = updatedFriend
-                        }
-                    } label: {
-                        Text("Request")
-                            .foregroundColor(.primary)
-                            .padding(5)
-                            .padding(.horizontal)
-                            .background(RoundedRectangle(cornerRadius: 10).foregroundColor(.accentColor))
+                        tapped.toggle()
                     }
+                } label: {
+                    Text(tapped ? "Requested" : "Request")
+                        .foregroundColor(tapped ? .gray : .primary)
+                        .padding(tapped ? 2.5 : 5)
+                        .padding(.horizontal)
+                        .background(RoundedRectangle(cornerRadius: 10).foregroundColor(tapped ? .primary : .accentColor))
                 }
             }
+            .onTapGesture {
+                selectedUser = friend
+                isPresented.toggle()
+            }
+            .onAppear {
+                tapped = friend.added ?? false
+            }
             .buttonStyle(BorderlessButtonStyle())
+        }
+        .sheet(isPresented: $isPresented) {
+            UserProfileView(user: $selectedUser)
         }
     }
 }

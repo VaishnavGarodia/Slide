@@ -16,7 +16,7 @@ struct RecentMessageRow: View {
         NavigationLink(destination: ChatView(chatUser: ChatUser(uid: recentMessage.toId == Auth.auth().currentUser?.uid ? recentMessage.fromId : recentMessage.toId, profileImageUrl: photoURL))) {
             HStack {
                 Button {
-                    selectedUser = UserData(userID: recentMessage.toId, username: username, photoURL: photoURL, added: true)
+                    selectedUser = UserData(userID: recentMessage.toId == Auth.auth().currentUser?.uid ? recentMessage.fromId : recentMessage.toId, username: username, photoURL: photoURL, added: true)
                     withAnimation {
                         profileView.toggle()
                     }

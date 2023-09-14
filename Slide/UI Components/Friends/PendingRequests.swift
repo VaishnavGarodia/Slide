@@ -13,6 +13,8 @@ struct PendingRequests: View {
     @Binding var refreshPending: Bool
     @State private var showingConfirmationDialog = false
     let user = Auth.auth().currentUser
+    @State private var isPresented = false
+    @State private var selectedUser: UserData? = nil
 
     var body: some View {
         ForEach(pendingFriendRequests, id: \.userID) { friend in
@@ -50,7 +52,14 @@ struct PendingRequests: View {
                         .foregroundColor(.gray)
                 }
             }
+            .onTapGesture {
+                selectedUser = friend
+                isPresented.toggle()
+            }
             .buttonStyle(.borderless)
+        }
+        .sheet(isPresented: $isPresented) {
+            UserProfileView(user: $selectedUser)
         }
     }
 }

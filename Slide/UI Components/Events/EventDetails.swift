@@ -149,9 +149,16 @@ struct EventDetails: View {
                 }
                 .padding()
 
-                Group {
-                    UserSlidedProfileBox(friendSlides: friendSlides, strangerSlides: nonFriendSlides)
-                        .padding(.horizontal) // Add some padding to the HStack
+                ScrollView(.horizontal) {
+                    HStack(spacing: 16) { // Adjust spacing as needed
+                        ForEach(friendSlides, id: \.self) { friendID in
+                            UserSlidedProfileBox(uid: friendID, friend: true, profileView: $profileView, selectedUser: $selectedUser)
+                        }
+                        ForEach(nonFriendSlides, id: \.self) { nonFriendID in
+                            UserSlidedProfileBox(uid: nonFriendID, friend: false, profileView: $profileView, selectedUser: $selectedUser)
+                        }
+                    }
+                    .padding(.horizontal) // Add some padding to the HStack
                 }
 
                 if event.hostUID != Auth.auth().currentUser!.uid && !preview {

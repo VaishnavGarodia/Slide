@@ -10,7 +10,9 @@ import SwiftUI
 struct ContactRecommendations: View {
     @Binding var contacts: Set<UserData>
     @State private var showingConfirmationDialog = false
-
+    @State private var isPresented = false
+    @State private var selectedUser: UserData? = nil
+    
     var body: some View {
         ForEach(Array(contacts), id: \.self) { friend in
             HStack {
@@ -44,6 +46,13 @@ struct ContactRecommendations: View {
                             .background(RoundedRectangle(cornerRadius: 10).foregroundColor(.accentColor))
                     }
                 }
+            }
+            .onTapGesture {
+                selectedUser = friend
+                isPresented.toggle()
+            }
+            .sheet(isPresented: $isPresented) {
+                UserProfileView(user: $selectedUser)
             }
             .buttonStyle(BorderlessButtonStyle())
         }
