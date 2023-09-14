@@ -70,7 +70,8 @@ struct EventGalleryCard: View {
             dispatchGroup.enter()
             getHighlightInfo(highlightID: postId) { highlightInfo in
                 if let highlightInfo = highlightInfo {
-                    if !tempHighlights.contains(highlightInfo) && highlightInfo.uid != Auth.auth().currentUser!.uid {
+//                    if !tempHighlights.contains(highlightInfo) && highlightInfo.uid != Auth.auth().currentUser!.uid {
+                    if !tempHighlights.contains(highlightInfo) {
                         tempHighlights.append(highlightInfo)
                     }
                 }

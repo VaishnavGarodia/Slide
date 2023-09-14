@@ -132,7 +132,7 @@ struct PostCreationView: View {
             "User": currentUser.uid,
             "ImageCaption": imageCaption,
             "Likes": 0,
-            "Post Time": postTime,
+            "PostTime": postTime,
             "Event": selectedEvent.id // Save the selected event ID along with other post details
         ]
         let newPostDocument = postsCollection.document()

@@ -199,7 +199,7 @@ struct EventDetails: View {
             UserProfileView(user: $selectedUser)
         }
     }
-
+    
     func formatDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM d, h:mm a"
@@ -275,12 +275,10 @@ struct EventDetails: View {
             if needsNoti,
                let eventData = eventDocument?.data()
             {
-                print("All the way")
                 let name = eventData["Name"] as? String ?? ""
 //                let description = eventData["Description"] as? String ?? ""
                 let eventID = eventDocument!.documentID
                 if let start = (eventData["Start"] as? Timestamp)?.dateValue() {
-                    print("more")
                     let identifier = eventID + "|" + userID
                     let title = "Starting Soon!"
                     let body = name + " is starting soon"
@@ -314,7 +312,6 @@ struct EventDetails: View {
 //                    you might think you're being clean, but do us all a favor and don't delete this
 //                    notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
                     notificationCenter.add(request)
-                    print("Added")
                 }
             }
             if needsNoti && notificationPermission.isNotificationPermission,
@@ -365,7 +362,6 @@ struct EventDetails: View {
 //                    you might think you're being clean, but do us all a favor and don't delete this
                     notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier])
                     notificationCenter.add(request)
-                    print("Added Event Reminder")
                     
                     // If end wasn't specified set it to 3 hours after the start
                     let end = (eventData["End"] as? Timestamp)?.dateValue() ?? Calendar.current.date(byAdding: .hour, value: 3, to: start)!
@@ -403,8 +399,6 @@ struct EventDetails: View {
 //                    you might think you're being clean, but do us all a favor and don't delete this
                     notificationCenter.removePendingNotificationRequests(withIdentifiers: [identifier2])
                     notificationCenter.add(request2)
-                    print("Added Post Reminder")
-                    
                 }
             }
         }

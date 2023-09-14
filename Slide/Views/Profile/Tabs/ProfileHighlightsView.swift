@@ -61,7 +61,7 @@ struct ProfileHighlightsView: View {
             for document in snapshot?.documents ?? [] {
                 if let caption = document.data()["ImageCaption"] as? String,
                    let imagePath = document.data()["PostImage"] as? String,
-                   let postTime = (document.data()["Post Time"] as? Timestamp)?.dateValue()
+                   let postTime = (document.data()["PostTime"] as? Timestamp)?.dateValue()
                 {
                     dispatchGroup.enter()
                     var likedUsersArray: [String] = []
