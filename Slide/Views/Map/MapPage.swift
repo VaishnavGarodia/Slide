@@ -104,6 +104,7 @@ struct MapPage: View {
         }
         .onAppear {
             checkHype()
+            filterEventsFor(currentFilter)
         }
         .fullScreenCover(isPresented: $isPresentingCreateEventPage) {
             CreateEventPage(isPresentingCreateEventPage: $isPresentingCreateEventPage)
@@ -190,6 +191,7 @@ struct MapPage: View {
                     }
                 }
                 events = newEvents
+                print("all current events", events)
                 let currentAnnotations = map.annotations
                 map.removeAnnotations(currentAnnotations)
                 map.addAnnotations(events)
