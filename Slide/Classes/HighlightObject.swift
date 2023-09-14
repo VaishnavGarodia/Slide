@@ -14,7 +14,7 @@ class HighlightObject: ObservableObject {
     @Published var galleries: [Event] = []
     @Published var posts: [CombinedPost] = []
 
-    func fetchHighlights() {
+    func fetchHighlights(completion: @escaping ([HighlightInfo]?) -> Void) {
         let postsCollectionRef = db.collection("Posts")
 
         let twoDaysAgo = Calendar.current.date(byAdding: .hour, value: -48, to: Date())!
@@ -22,7 +22,7 @@ class HighlightObject: ObservableObject {
         postsCollectionRef.whereField("PostTime", isGreaterThan: twoDaysAgo).getDocuments { snapshot, error in
             if let error = error {
                 print("Error fetching highlights: \(error.localizedDescription)")
-                return
+                completion(nil)
             }
 
             var newHighlights: [HighlightInfo] = []
@@ -32,9 +32,10 @@ class HighlightObject: ObservableObject {
                 if let caption = document.data()["ImageCaption"] as? String,
                    let userDocumentID = document.data()["User"] as? String,
                    let imagePath = document.data()["PostImage"] as? String,
-                   let postTime = (document.data()["Post Time"] as? Timestamp)?.dateValue()
+                   let postTime = (document.data()["PostTime"] as? Timestamp)?.dateValue()
                 {
                     guard let currentUserID = Auth.auth().currentUser?.uid else {
+                        completion(nil)
                         return
                     }
                     let userDocumentRef = db.collection("Users").document(currentUserID)
@@ -48,7 +49,7 @@ class HighlightObject: ObservableObject {
                                 friendsArray = tempFriendsArray
                             }
                             var likedUsersArray: [String] = []
-                            if let tempLikedUsersArray = d2.data()?["Liked Users"] as? [String] {
+                            if let tempLikedUsersArray = document.data()["Liked Users"] as? [String] {
                                 likedUsersArray = tempLikedUsersArray
                             }
                             if friendsArray.contains(userDocumentID), userDocumentID != currentUserID {
@@ -67,6 +68,7 @@ class HighlightObject: ObservableObject {
                         }
                         dispatchGroup.notify(queue: .main) {
                             self.highlights = newHighlights
+                            completion(newHighlights)
                         }
                     })
                 }
@@ -74,23 +76,23 @@ class HighlightObject: ObservableObject {
         }
     }
 
-    func fetchGalleries() {
+    func fetchGalleries(completion: @escaping ([Event]?) -> Void) {
         getEventGalleries { eventGalleries, error in
             if let error = error {
                 print("Error fetching event galleries: \(error.localizedDescription)")
-                return
+                completion(nil)
             }
 
             if let temp = eventGalleries {
                 self.galleries = temp
-                return
+                completion(temp)
             }
         }
     }
 
     func combineAndSortPosts() {
         var combinedPosts: [CombinedPost] = []
-
+        
         for highlight in highlights {
             combinedPosts.append(CombinedPost(timestamp: highlight.postTime, content: .highlight(highlight)))
         }
@@ -100,7 +102,6 @@ class HighlightObject: ObservableObject {
         }
 
         combinedPosts.sort { $0.timestamp > $1.timestamp }
-
         posts = combinedPosts
     }
 
@@ -116,8 +117,14 @@ class HighlightObject: ObservableObject {
     }
 
     func fetch() {
-        fetchHighlights()
-        fetchGalleries()
-        combineAndSortPosts()
+        fetchHighlights { fetchedHighlightsReturn in
+            if let fetchedHighlightsReturn = fetchedHighlightsReturn {
+                self.fetchGalleries { fetchedGalleriesReturn in
+                    if let fetechedGalleriesReturn = fetchedGalleriesReturn {
+                        self.combineAndSortPosts()
+                    }
+                }
+            }
+        }
     }
 }

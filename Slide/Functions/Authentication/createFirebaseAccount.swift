@@ -25,6 +25,7 @@ func createFirebaseAccount(email: String, password: String, username: String, co
 
 
     if email.hasSuffix("@stanford.edu") {
+//    if true {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if let error = error {
                 completion(error.localizedDescription)

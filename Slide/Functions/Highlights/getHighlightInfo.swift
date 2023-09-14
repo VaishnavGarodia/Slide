@@ -14,7 +14,7 @@ func getHighlightInfo(highlightID: String, completion: @escaping (HighlightInfo?
             if let caption = pdocument.data()?["ImageCaption"] as? String,
                let userDocumentID = pdocument.data()?["User"] as? String,
                let imagePath = pdocument.data()?["PostImage"] as? String,
-               let postTime = (pdocument.data()?["Post Time"] as? Timestamp)?.dateValue()
+               let postTime = (pdocument.data()?["PostTime"] as? Timestamp)?.dateValue()
             {
                 var likedUsersArray: [String] = []
                 if let tempLikedUsersArray = pdocument.data()?["Liked Users"] as? [String] {
