@@ -31,7 +31,7 @@ func updateUsername(username: String, completion: @escaping (String) -> Void) {
                 
                 if let document = document, document.exists {
                     let data = document.data()
-                    db.collection("Usernames").document(username).setData(data!) { error in
+                    db.collection("Usernames").document(username.lowercased()).setData(data!) { error in
                         if let error = error {
                             print("Error adding document: \(error)")
                         }
@@ -40,14 +40,14 @@ func updateUsername(username: String, completion: @escaping (String) -> Void) {
                         print(error?.localizedDescription as Any)
                     }
                     let changeRequest = user!.createProfileChangeRequest()
-                    changeRequest.displayName = username
+                    changeRequest.displayName = username.lowercased()
                     changeRequest.commitChanges { error in
                         if let error = error {
                             completion("Error updating display name: \(error.localizedDescription)")
                         } else {
                             // Now the display name is updated, call the completion handler with the username
                             let userRef = db.collection("Users").document(user?.uid ?? "Sim User")
-                            userRef.updateData(["Username": username]) { error in
+                            userRef.updateData(["Username": username.lowercased()]) { error in
                                 if let error = error {
                                     print("Error adding document: \(error)")
                                 }

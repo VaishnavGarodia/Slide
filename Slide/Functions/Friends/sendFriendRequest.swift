@@ -2,9 +2,9 @@
 //  Slide
 //  Created by Ethan Harianto on 7/30/23.
 
-import Foundation
 import FirebaseAuth
 import FirebaseStorage
+import Foundation
 
 func sendFriendRequest(selectedUser: UserData?) {
     guard let currentUserID = Auth.auth().currentUser?.uid,
@@ -26,6 +26,9 @@ func sendFriendRequest(selectedUser: UserData?) {
                 // Step 2: Add the new string to the list
                 if !outgoingList.contains(selectedUserID) {
                     outgoingList.append(selectedUserID)
+                } else {
+                    var index = outgoingList.firstIndex(of: selectedUserID)
+                    outgoingList.remove(at: index!)
                 }
                 // Step 3: Update the User document with the modified "Outgoing" field
                 currentUserDocumentRef.updateData(["Outgoing": outgoingList]) { error in
@@ -53,7 +56,12 @@ func sendFriendRequest(selectedUser: UserData?) {
             else {
                 var incomingList = document.data()?["Incoming"] as? [String] ?? []
                 // Step 2: Add the new string to the list
-                incomingList.append(currentUserID)
+                if !incomingList.contains(currentUserID) {
+                    incomingList.append(currentUserID)
+                } else {
+                    var index = incomingList.firstIndex(of: currentUserID)
+                    incomingList.remove(at: index!)
+                }
                 // Step 3: Update the User document with the modified "Outgoing" field
                 selectedUserDocumentRef.updateData(["Incoming": incomingList]) { error in
                     if let error = error {

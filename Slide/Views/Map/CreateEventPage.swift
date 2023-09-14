@@ -167,7 +167,7 @@ struct CreateEventPage: View {
                                 errorMessage = "Oops, you forgot to put an address!"
                             } else if event.end <= event.start {
                                 errorMessage = "Oops, the event's end time should be strictly after its start time!"
-                            } else if event.coordinate == CLLocationCoordinate2D() {
+                            } else if destination == nil {
                                 print("")
                                 errorMessage = "Oops, you forgot to choose a location!"
                             } else {

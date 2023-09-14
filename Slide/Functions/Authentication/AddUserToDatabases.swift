@@ -17,12 +17,11 @@ func addUserToDatabases(username: String, email: String, google: Bool, profilePi
     }
     
     let uid = user.uid
-    
+    var username = username.lowercased()
     var errormessage = ""
     
-    
     let usersRef = db.collection("Users").document(uid)
-    let usernameRef = db.collection("Usernames").document(username.lowercased())
+    let usernameRef = db.collection("Usernames").document(username)
     
     usersRef.getDocument { document, error in
         if let error = error {
@@ -34,7 +33,7 @@ func addUserToDatabases(username: String, email: String, google: Bool, profilePi
         } else {
             let userData: [String: Any] = [
                 "Email": email,
-                "Username": username.lowercased(),
+                "Username": username,
                 "ProfilePictureURL": profilePic ,
                 "Phone Number" : "",
                 "Incoming": [String](),

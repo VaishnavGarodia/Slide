@@ -33,15 +33,10 @@ struct Highlights: View {
                                 }
                             }
                         }
-                        .padding()
                     }
                 }
             }
             HStack {
-//                Image("icon")
-//                    .resizable()
-//                    .frame(width: 45, height: 45)
-//                    .padding()
                 Spacer()
                 Menu {
                     Button {
@@ -69,7 +64,6 @@ struct Highlights: View {
                         .padding()
                 }
             }
-
         }
         .fullScreenCover(isPresented: $isPresentingPostCreationView) {
             VStack {
