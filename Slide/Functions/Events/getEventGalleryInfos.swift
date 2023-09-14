@@ -60,37 +60,40 @@ func getEventGalleries(completion: @escaping ([Event]?, Error?) -> Void) {
                         slides: data["SLIDES"] as? [String] ?? [],
                         highlights: data["Associated Highlights"] as? [String] ?? []
                     )
-                    if friendList.contains(event.hostUID) {
-                        eventGalleries.append(event)
-                        print("Added")
-                    }
-                    else {
-                        let innerGroup = DispatchGroup()
-                        var add = false
-                        for highlightID in event.highlights {
-                            let highlightDocRef = db.collection("Posts").document(highlightID)
-                            innerGroup.enter()
-                            group.enter()
-                            highlightDocRef.getDocument(completion: {d3, e3 in
-                                if let d3 = d3, d3.exists {
-                                    if let postUserID = d3.data()?["User"] as? String {
-                                        if friendList.contains(postUserID) {
-                                            add = true
+                    let timeInterval = event.end.timeIntervalSince(Date())
+                    // Calculate the number of seconds in 4 days (96 hours)
+                    let fourDaysInSeconds: TimeInterval = 4 * 24 * 60 * 60
+
+                    if timeInterval <= fourDaysInSeconds {
+                        if friendList.contains(event.hostUID) || event.hostUID == currentUserID {
+                            eventGalleries.append(event)
+                        }
+                        else {
+                            let innerGroup = DispatchGroup()
+                            var add = false
+                            for highlightID in event.highlights {
+                                let highlightDocRef = db.collection("Posts").document(highlightID)
+                                innerGroup.enter()
+                                group.enter()
+                                highlightDocRef.getDocument(completion: {d3, e3 in
+                                    if let d3 = d3, d3.exists {
+                                        if let postUserID = d3.data()?["User"] as? String {
+                                            if friendList.contains(postUserID) {
+                                                add = true
+                                            }
                                         }
                                     }
-                                }
-                                innerGroup.leave()
-                                group.leave()
-                            })
-                        }
-                        innerGroup.notify(queue: .main) {
-                            if add {
-                                eventGalleries.append(event)
-                                print("Added")
+                                    innerGroup.leave()
+                                    group.leave()
+                                })
                             }
-                            else if event.slides.contains(currentUserID) {
-                                eventGalleries.append(event)
-                                print("Added")
+                            innerGroup.notify(queue: .main) {
+                                if add {
+                                    eventGalleries.append(event)
+                                }
+                                else if event.slides.contains(currentUserID) {
+                                    eventGalleries.append(event)
+                                }
                             }
                         }
                     }

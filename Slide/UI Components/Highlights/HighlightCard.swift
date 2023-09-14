@@ -15,6 +15,9 @@ struct HighlightCard: View {
     @State private var currentUserLiked: Bool = false
     @Binding var selectedUser: UserData?
     @Binding var profileView: Bool
+    @State private var isShowingAlert = false
+    @State private var reportDetails = ""
+
 
     var body: some View {
         ZStack {
@@ -78,12 +81,67 @@ struct HighlightCard: View {
                     .shadow(radius: 10)
                 }
             }
+//          Do not under any circumstances delete this comment
+//            Button(action: {
+//                isShowingAlert = true
+//            }) {
+//                Image(systemName: "ellipsis")
+//                    .foregroundColor(.black)
+//                    .padding()
+//                    .background(Color.gray)
+//                    .cornerRadius(10)
+//            }
+//            .contextMenu {
+//                Button(action: {
+//                    // Handle the "Report" action here
+//                    isShowingAlert = true
+//                }) {
+//                    Text("Report Image")
+//                    Image(systemName: "exclamationmark.triangle.fill")
+//                }
+//            }
         }
         .onAppear {
             currentUserLiked = isCurUserLiking()
         }
+        
+// Do not under any circumstances delete this comment
+//        .alert("Report Image", isPresented: $isShowingAlert, actions: {
+//            TextField("Please add more details", text: $reportDetails)
+//            Button("Report", action: {reportImage()})
+//            Button("Cancel", role: .cancel, action: {})
+//        }, message: {
+//            Text("Do you want to report this image?")
+//        })
     }
-
+    
+    
+    // Do not under any circumstances delete this comment
+    // This function has to add the image to a reported field in the user document and then it also needs to add the report to a reports database in firebase
+//    func reportImage() {
+//        let currentUser = Auth.auth().currentUser!.uid
+//        // Step 1: Deal with adding to the user document
+//        let userDocRef = db.collection("Users").document(currentUser)
+//        userDocRef.getDocument { document, _ in
+//            if let document = document, document.exists {
+//                var highlightReportList = document.data()?["highlightsReported"] as? [String] ?? []
+//                highlightReportList.append(highlight.uid)
+//                userDocRef.updateData(["highlightsReport": highlightReportList])
+//            }
+//        }
+//        
+//        // Step 2: Deal with adding to the report database
+//        let highlightReportDoc = db.collection("HighlightReports").document()
+//        highlightReportDoc.setData(["highlightID": highlight.uid, "reportDescription": reportDetails, "reporterID": currentUser]) { err in
+//            if err != nil {
+//                print((err?.localizedDescription)!)
+//                return
+//            }
+//        }
+//
+//        print("Image reported")
+//    }
+    
     func isCurUserLiking() -> Bool {
         guard let currentUserID = user?.uid else {
             return false

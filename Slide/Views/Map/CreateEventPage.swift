@@ -46,7 +46,7 @@ struct CreateEventPage: View {
                 }
             } else {
                 Rectangle()
-                    .foregroundColor(.black.opacity(0.7))
+                    .foregroundColor(.black.opacity(0.8))
                     .ignoresSafeArea()
                 VStack(alignment: .center) {
                     if !errorMessage.isEmpty {
@@ -148,7 +148,7 @@ struct CreateEventPage: View {
                             }
                             .datePickerStyle(.compact)
                             .padding(.horizontal)
-                            
+
                         HorizontalPicker($icon, items: icons) { iconImage in
                             GeometryReader { reader in
                                 Image(systemName: iconImage)

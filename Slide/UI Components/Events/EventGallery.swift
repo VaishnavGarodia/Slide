@@ -27,7 +27,6 @@ struct EventGallery: View {
         .scrollIndicators(.hidden)
         .onAppear {
             loadAssociatedPosts()
-            print(posts)
         }
         .sheet(item: $highlight) { highlight in
             // Present the highlight card using the sheet modifier
@@ -52,7 +51,7 @@ struct EventGallery: View {
                                 if let uid = document2.data()?["User"] as? String,
                                    let imageName = document2.data()?["PostImage"] as? String,
                                    let highlightTitle = document2.data()?["ImageCaption"] as? String,
-                                   let postTime = (document.data()?["Post Time"] as? Timestamp)?.dateValue()
+                                   let postTime = (document2.data()?["PostTime"] as? Timestamp)?.dateValue()
                                 {
                                     // Fetch the user document using the extracted uid
                                     group.enter() // Enter the DispatchGroup before starting each fetchUserDetails call

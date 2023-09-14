@@ -14,6 +14,29 @@ struct Highlights: View {
 
     var body: some View {
         ZStack(alignment: .top) {
+            GeometryReader { geometry in
+                ScrollView {
+                    if highlights.galleries.isEmpty && highlights.highlights.isEmpty {
+                        NoHighlightsView()
+                            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+                    } else {
+                        VStack(spacing: 50) {
+                            ForEach(highlights.posts) { combinedPost in
+                                switch combinedPost.content {
+                                case .highlight(let highlight):
+                                    // Create a view for HighlightInfo
+                                    HighlightCard(highlight: highlight, selectedUser: $selectedUser, profileView: $profileView)
+                                    
+                                case .gallery(let event):
+                                    // Create a view for Event
+                                    EventGalleryCard(event: event, profileView: $profileView, selectedUser: $selectedUser, eventView: $eventView, selectedEvent: $selectedEvent)
+                                }
+                            }
+                        }
+                        .padding()
+                    }
+                }
+            }
             HStack {
 //                Image("icon")
 //                    .resizable()
@@ -46,29 +69,7 @@ struct Highlights: View {
                         .padding()
                 }
             }
-            GeometryReader { geometry in
-                ScrollView {
-                    if highlights.galleries.isEmpty && highlights.highlights.isEmpty {
-                        NoHighlightsView()
-                            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
-                    } else {
-                        VStack(spacing: 50) {
-                            ForEach(highlights.posts) { combinedPost in
-                                switch combinedPost.content {
-                                case .highlight(let highlight):
-                                    // Create a view for HighlightInfo
-                                    HighlightCard(highlight: highlight, selectedUser: $selectedUser, profileView: $profileView)
-                                    
-                                case .gallery(let event):
-                                    // Create a view for Event
-                                    EventGalleryCard(event: event, profileView: $profileView, selectedUser: $selectedUser, eventView: $eventView, selectedEvent: $selectedEvent)
-                                }
-                            }
-                        }
-                        .padding()
-                    }
-                }
-            }
+
         }
         .fullScreenCover(isPresented: $isPresentingPostCreationView) {
             VStack {
