@@ -16,7 +16,8 @@ struct SettingsView: View {
     @State private var updatedUsername: String = ""
     @State private var isShowingTutorial = false
     @StateObject var notificationPermission = NotificationPermission()
-
+    @State private var isDeleteErrorVisible = false
+    @State private var deleteErrorMessage = ""
     
     var body: some View {
         List {
@@ -158,6 +159,34 @@ struct SettingsView: View {
 //                    AppAppearanceView(selectedColorScheme: $selectedColorScheme)
 //                }
 //            }
+            // Delete Account
+            Group {
+                Button {
+                    withAnimation {
+                        toggleClicks(count: 6)
+                    }
+                } label: {
+                    HStack {
+                        Text("Delete Account")
+                            .foregroundColor(.primary)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .rotationEffect(.degrees(clicks[6] ? 90 : 0))
+                    }
+                }
+                            
+                if clicks[6] {
+                    Button("Confirm Delete") {
+                        deleteAccount()
+                    }
+                    .foregroundColor(.red)
+                    .alert(isPresented: $isDeleteErrorVisible) {
+                        Alert(title: Text("Error"), message: Text(deleteErrorMessage), dismissButton: .default(Text("OK")))
+                    }
+                }
+            }
+        }
+        
             
             // Sign Out
             Group {
@@ -184,7 +213,6 @@ struct SettingsView: View {
                     Text("Tutorial")
                 }
             }
-        }
         
         .onChange(of: selectedColorScheme) { value in
             UserDefaults.standard.set(value, forKey: "colorSchemePreference")
@@ -205,6 +233,19 @@ struct SettingsView: View {
             }
         }
         clicks[count].toggle()
+    }
+    
+    func deleteAccount() {
+        Auth.auth().currentUser?.delete { error in
+            if let error = error {
+                print("Error deleting user: \(error)")
+                deleteErrorMessage = error.localizedDescription
+                isDeleteErrorVisible.toggle()
+            } else {
+                print("User account deleted successfully.")
+                // Add any additional logic if you wish to navigate the user away, etc.
+            }
+        }
     }
 }
 
