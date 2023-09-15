@@ -247,12 +247,17 @@ struct SettingsView: View {
         // Posts
         deletePosts(for: currentUserID)
         
-        // TODO: Messages (sent and received?) MAKE SURE YOU DELETE THIS USERID FROM INCOMING OUTGOING AND FRIENDSHIPS FOR ALL OTHER USERS!!!!!! YOU CAN FIGURE OUT WHICH ONES YOU NEED TO DO THIS FOR BY CHECKING THE CURRENT USER DOCUMENT. HOWEVER NOTE THAT THAT DOCUMENT IS GOING TO GET DELETED RIGHT AFTER THIS, SO THIS STEP HAS TO HAPPEN BEFORE THE NEXT TWO FUNCTIONS GET CALLED!
+        // TODO: AS THE THIRD TODO REITERATES, deleteFriendDocuments MUST BE COMPLETED BEFORE deleteUserDocument Starts
+        // Friendships and outgoings/incomings
+        deleteFriendDocuments(for: currentUserID)
+        
+        // TODO: Messages (sent and received?)
         
         
         // User and Username docs
         // TODO: deleteUsernameDocument has to COMPLETE before deleteUserDocument STARTS
         deleteUsernameDocument(for: currentUserID)
+        // TODO: U basically just need this function to not run until everything above has run
         deleteUserDocument(for: currentUserID)
         
         //Firebase Auth
@@ -311,6 +316,64 @@ struct SettingsView: View {
                         print("Error deleting document: \(error.localizedDescription)")
                     } else {
                         print("Document successfully deleted!")
+                    }
+                }
+            }
+        }
+    }
+    func deleteFriendDocuments(for userID: String) {
+        let userDocument = db.collection("User").document(userID)
+        userDocument.getDocument { document, _ in
+            if let document = document, document.exists {
+                let incomingList = document.data()?["Incoming"] as? [String] ?? []
+                let outgoingList = document.data()?["Outgoing"] as? [String] ?? []
+                let friendList = document.data()?["Friends"] as? [String] ?? []
+                for incoming in incomingList {
+                    let incomingDocument = db.collection("User").document(incoming)
+                    incomingDocument.getDocument { incomingDoc, _ in
+                        if let incomingDoc = incomingDoc, incomingDoc.exists {
+                            var incomingList = incomingDoc.data()?["Incoming"] as? [String] ?? []
+                            incomingList.removeAll { $0 == userID }
+                            incomingDocument.updateData(["Incoming": incomingList]) { error in
+                                if let error = error {
+                                    print("Error updating document: \(error)")
+                                } else {
+                                    print("Document successfully updated with new score.")
+                                }
+                            }
+                        }
+                    }
+                }
+                for outgoing in outgoingList {
+                    let outgoingDocument = db.collection("User").document(outgoing)
+                    outgoingDocument.getDocument { outgoingDoc, _ in
+                        if let outgoingDoc = outgoingDoc, outgoingDoc.exists {
+                            var outgoingList = outgoingDoc.data()?["Outgoing"] as? [String] ?? []
+                            outgoingList.removeAll { $0 == userID }
+                            outgoingDocument.updateData(["Outgoing": outgoingList]) { error in
+                                if let error = error {
+                                    print("Error updating document: \(error)")
+                                } else {
+                                    print("Document successfully updated with new score.")
+                                }
+                            }
+                        }
+                    }
+                }
+                for friend in friendList {
+                    let friendDocument = db.collection("User").document(friend)
+                    friendDocument.getDocument { friendDoc, _ in
+                        if let friendDoc = friendDoc, friendDoc.exists {
+                            var friendList = friendDoc.data()?["Friends"] as? [String] ?? []
+                            friendList.removeAll { $0 == userID }
+                            friendDocument.updateData(["Friends": friendList]) { error in
+                                if let error = error {
+                                    print("Error updating document: \(error)")
+                                } else {
+                                    print("Document successfully updated with new score.")
+                                }
+                            }
+                        }
                     }
                 }
             }
