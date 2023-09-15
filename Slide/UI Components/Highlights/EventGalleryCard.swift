@@ -65,22 +65,45 @@ struct EventGalleryCard: View {
     }
 
     private func fetchHighlights() {
-        let dispatchGroup = DispatchGroup()
-        for postId in event.highlights {
-            dispatchGroup.enter()
-            getHighlightInfo(highlightID: postId) { highlightInfo in
-                if let highlightInfo = highlightInfo {
-//                    if !tempHighlights.contains(highlightInfo) && highlightInfo.uid != Auth.auth().currentUser!.uid {
-                    if !tempHighlights.contains(highlightInfo) {
-                        tempHighlights.append(highlightInfo)
-                    }
-                }
-                dispatchGroup.leave()
+        let user = Auth.auth().currentUser
+
+        var friendList: [String] = []
+        var reportedHighlightsList: [String] = []
+        guard let currentUserID = user?.uid else {
+            return
+        }
+        
+        let initialGroup = DispatchGroup()
+        initialGroup.enter()
+        fetchFriendListAndReports { friendListFetched, highlightsReportedFetched, error in
+            if let error = error {
+                print("Error: \(error)")
+                initialGroup.leave()
+            } else if let friendListFetched = friendListFetched, let highlightsReportedFetched = highlightsReportedFetched {
+                friendList = friendListFetched
+                reportedHighlightsList = highlightsReportedFetched
+                initialGroup.leave()
             }
         }
-
-        dispatchGroup.notify(queue: .main) {
-            // All async calls are completed, the @onChange will be called to update highlightData
+        
+        initialGroup.notify(queue: .main) {
+            let dispatchGroup = DispatchGroup()
+            for postId in event.highlights {
+                dispatchGroup.enter()
+                getHighlightInfo(highlightID: postId) { highlightInfo in
+                    if let highlightInfo = highlightInfo {
+                        //                    if !tempHighlights.contains(highlightInfo) && highlightInfo.uid != Auth.auth().currentUser!.uid {
+                        if !tempHighlights.contains(highlightInfo) && !reportedHighlightsList.contains(highlightInfo.postID) {
+                            tempHighlights.append(highlightInfo)
+                        }
+                    }
+                    dispatchGroup.leave()
+                }
+            }
+            
+            dispatchGroup.notify(queue: .main) {
+                // All async calls are completed, the @onChange will be called to update highlightData
+            }
         }
     }
 }
