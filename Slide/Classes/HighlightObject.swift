@@ -29,6 +29,7 @@ class HighlightObject: ObservableObject {
             let dispatchGroup = DispatchGroup()
 
             for document in snapshot?.documents ?? [] {
+                let postDocumentID = document.documentID
                 if let caption = document.data()["ImageCaption"] as? String,
                    let userDocumentID = document.data()["User"] as? String,
                    let imagePath = document.data()["PostImage"] as? String,
@@ -52,7 +53,15 @@ class HighlightObject: ObservableObject {
                             if let tempLikedUsersArray = document.data()["Liked Users"] as? [String] {
                                 likedUsersArray = tempLikedUsersArray
                             }
-                            if friendsArray.contains(userDocumentID), userDocumentID != currentUserID {
+                            var reportedHighlights: [String] = []
+                            if let tempReportedHighlights = d2.data()?["highlightsReport"] as? [String] {
+                                reportedHighlights = tempReportedHighlights
+                            }
+                            print("RIGHT HERE")
+                            print(reportedHighlights)
+                            print(postDocumentID)
+                            if friendsArray.contains(userDocumentID) && userDocumentID != currentUserID && !reportedHighlights.contains(postDocumentID) {
+                                print("Why'd we make it?")
                                 dispatchGroup.enter()
 
                                 fetchUsernameAndPhotoURL(for: userDocumentID) { username, photoURL in

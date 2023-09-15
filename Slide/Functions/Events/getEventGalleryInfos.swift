@@ -13,18 +13,20 @@ func getEventGalleries(completion: @escaping ([Event]?, Error?) -> Void) {
     let user = Auth.auth().currentUser
 
     var friendList: [String] = []
+    var reportedHighlightsList: [String] = []
     guard let currentUserID = user?.uid else {
         return
     }
     
     let initialGroup = DispatchGroup()
     initialGroup.enter()
-    fetchFriendList { friendListFetched, error in
+    fetchFriendListAndReports { friendListFetched, highlightsReportedFetched, error in
         if let error = error {
             print("Error: \(error)")
             initialGroup.leave()
-        } else if let friendListFetched = friendListFetched {
+        } else if let friendListFetched = friendListFetched, let highlightsReportedFetched = highlightsReportedFetched {
             friendList = friendListFetched
+            reportedHighlightsList = highlightsReportedFetched
             initialGroup.leave()
         }
     }
@@ -41,7 +43,6 @@ func getEventGalleries(completion: @escaping ([Event]?, Error?) -> Void) {
                     completion(nil, error)
                     return
                 }
-                
                 for document in snapshot!.documents {
                     let data = document.data()
                     let coordinate = data["Coordinate"] as? GeoPoint ?? GeoPoint(latitude: 0.0, longitude: 0.0)
@@ -63,8 +64,7 @@ func getEventGalleries(completion: @escaping ([Event]?, Error?) -> Void) {
                     let timeInterval = event.end.timeIntervalSince(Date())
                     // Calculate the number of seconds in 4 days (96 hours)
                     let fourDaysInSeconds: TimeInterval = 4 * 24 * 60 * 60
-
-                    if timeInterval <= fourDaysInSeconds {
+                    if timeInterval <= fourDaysInSeconds || event.end >= Date() {
                         if friendList.contains(event.hostUID) || event.hostUID == currentUserID {
                             eventGalleries.append(event)
                         }

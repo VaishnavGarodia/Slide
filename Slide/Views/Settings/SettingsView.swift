@@ -40,12 +40,12 @@ struct SettingsView: View {
                             .rotationEffect(.degrees(clicks[0] ? 90 : 0))
                     }
                 }
-                            
+                
                 if clicks[0] {
                     updateUsernameView(updatedUsername: $updatedUsername, clicked: $clicks[0])
                 }
             }
-
+            
             // Email
             Group {
                 Button {
@@ -83,7 +83,7 @@ struct SettingsView: View {
                 
                 if clicks[1] {}
             }
-
+            
             // Phone #
             Group {
                 Button {
@@ -133,32 +133,32 @@ struct SettingsView: View {
                             .rotationEffect(.degrees(clicks[3] ? 90 : 0))
                     }
                 }
-                        
+                
                 if clicks[3] {
                     PasswordView()
                 }
             }
             
             // App Appearance
-//            Group {
-//                Button {
-//                    withAnimation {
-//                        toggleClicks(count: 4)
-//                    }
-//                } label: {
-//                    HStack {
-//                        Text("App Appearance")
-//                            .foregroundColor(.primary)
-//                        Spacer()
-//                        Image(systemName: "chevron.right")
-//                            .rotationEffect(.degrees(clicks[4] ? 90 : 0))
-//                    }
-//                }
-//
-//                if clicks[4] {
-//                    AppAppearanceView(selectedColorScheme: $selectedColorScheme)
-//                }
-//            }
+            //            Group {
+            //                Button {
+            //                    withAnimation {
+            //                        toggleClicks(count: 4)
+            //                    }
+            //                } label: {
+            //                    HStack {
+            //                        Text("App Appearance")
+            //                            .foregroundColor(.primary)
+            //                        Spacer()
+            //                        Image(systemName: "chevron.right")
+            //                            .rotationEffect(.degrees(clicks[4] ? 90 : 0))
+            //                    }
+            //                }
+            //
+            //                if clicks[4] {
+            //                    AppAppearanceView(selectedColorScheme: $selectedColorScheme)
+            //                }
+            //            }
             // Delete Account
             Group {
                 Button {
@@ -174,7 +174,7 @@ struct SettingsView: View {
                             .rotationEffect(.degrees(clicks[6] ? 90 : 0))
                     }
                 }
-                            
+                
                 if clicks[6] {
                     Button("Confirm Delete") {
                         deleteAccount()
@@ -185,8 +185,8 @@ struct SettingsView: View {
                     }
                 }
             }
-        }
-        
+            
+            
             
             // Sign Out
             Group {
@@ -203,7 +203,7 @@ struct SettingsView: View {
                             .rotationEffect(.degrees(clicks[5] ? 90 : 0))
                     }
                 }
-                            
+                
                 if clicks[5] {
                     SignOutView()
                 }
@@ -213,6 +213,7 @@ struct SettingsView: View {
                     Text("Tutorial")
                 }
             }
+        }
         
         .onChange(of: selectedColorScheme) { value in
             UserDefaults.standard.set(value, forKey: "colorSchemePreference")
@@ -236,6 +237,25 @@ struct SettingsView: View {
     }
     
     func deleteAccount() {
+        guard let currentUserID = user?.uid else {
+            return
+        }
+        
+        // Events
+        deleteEvents(for: currentUserID)
+        
+        // Posts
+        deletePosts(for: currentUserID)
+        
+        // TODO: Messages (sent and received?) MAKE SURE YOU DELETE THIS USERID FROM INCOMING OUTGOING AND FRIENDSHIPS FOR ALL OTHER USERS!!!!!! YOU CAN FIGURE OUT WHICH ONES YOU NEED TO DO THIS FOR BY CHECKING THE CURRENT USER DOCUMENT. HOWEVER NOTE THAT THAT DOCUMENT IS GOING TO GET DELETED RIGHT AFTER THIS, SO THIS STEP HAS TO HAPPEN BEFORE THE NEXT TWO FUNCTIONS GET CALLED!
+        
+        
+        // User and Username docs
+        // TODO: deleteUsernameDocument has to COMPLETE before deleteUserDocument STARTS
+        deleteUsernameDocument(for: currentUserID)
+        deleteUserDocument(for: currentUserID)
+        
+        //Firebase Auth
         Auth.auth().currentUser?.delete { error in
             if let error = error {
                 print("Error deleting user: \(error)")
@@ -244,6 +264,87 @@ struct SettingsView: View {
             } else {
                 print("User account deleted successfully.")
                 // Add any additional logic if you wish to navigate the user away, etc.
+            }
+        }
+    }
+    
+    func deletePosts(for userID: String) {
+        let postsCollectionRef = db.collection("Posts")
+
+        var query = postsCollectionRef.whereField("User", isEqualTo: userID)
+
+        query.getDocuments { snapshot, error in
+            if let error = error {
+                print("Error fetching highlights: \(error.localizedDescription)")
+                return
+            }
+
+            for document in snapshot?.documents ?? [] {
+                let postID = document.documentID
+                let postReference = db.collection("Posts").document(postID)
+                postReference.delete { error in
+                    if let error = error {
+                        print("Error deleting document: \(error.localizedDescription)")
+                    } else {
+                        print("Document successfully deleted!")
+                    }
+                }
+            }
+        }
+    }
+    func deleteEvents(for userID: String) {
+        let eventsCollectionRef = db.collection("Events")
+
+        var query = eventsCollectionRef.whereField("User", isEqualTo: userID)
+
+        query.getDocuments { snapshot, error in
+            if let error = error {
+                print("Error fetching highlights: \(error.localizedDescription)")
+                return
+            }
+
+            for document in snapshot?.documents ?? [] {
+                let eventID = document.documentID
+                let eventReference = db.collection("Events").document(eventID)
+                eventReference.delete { error in
+                    if let error = error {
+                        print("Error deleting document: \(error.localizedDescription)")
+                    } else {
+                        print("Document successfully deleted!")
+                    }
+                }
+            }
+        }
+    }
+    func deleteUsernameDocument(for userID: String) {
+        let userDocument = db.collection("User").document(userID)
+        userDocument.getDocument { (document, error) in
+            if let document = document, document.exists {
+                // Document data exists, so you can access fields
+                if let username = document.data()?["Username"] as? String {
+                    let usernameDocumentRef = db.collection("Usernames").document(username)
+                    usernameDocumentRef.delete { error in
+                        if let error = error {
+                            print("Error deleting document: \(error.localizedDescription)")
+                        } else {
+                            print("Document successfully deleted!")
+                        }
+                    }
+                } else {
+                    print("Field doesn't exist or is not a string.")
+                }
+            } else {
+                print("Document does not exist or there was an error: \(error?.localizedDescription ?? "Unknown error")")
+            }
+        }
+    }
+    func deleteUserDocument(for userID: String) {
+        let userDocument = db.collection("User").document(userID)
+        userDocument.delete { error in
+            if let error = error {
+                print("Error deleting document: \(error.localizedDescription)")
+            } else {
+                print("Document successfully deleted!")
             }
         }
     }
