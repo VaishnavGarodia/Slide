@@ -252,7 +252,7 @@ struct SettingsView: View {
         deleteFriendDocuments(for: currentUserID)
         
         // TODO: Messages (sent and received?)
-        
+        deleteMessages(for: currentUserID)
         
         // User and Username docs
         // TODO: deleteUsernameDocument has to COMPLETE before deleteUserDocument STARTS
@@ -277,23 +277,16 @@ struct SettingsView: View {
         let postsCollectionRef = db.collection("Posts")
 
         var query = postsCollectionRef.whereField("User", isEqualTo: userID)
-
+        
         query.getDocuments { snapshot, error in
             if let error = error {
-                print("Error fetching highlights: \(error.localizedDescription)")
                 return
             }
 
             for document in snapshot?.documents ?? [] {
                 let postID = document.documentID
                 let postReference = db.collection("Posts").document(postID)
-                postReference.delete { error in
-                    if let error = error {
-                        print("Error deleting document: \(error.localizedDescription)")
-                    } else {
-                        print("Document successfully deleted!")
-                    }
-                }
+                postReference.delete { _ in }
             }
         }
     }
@@ -304,20 +297,13 @@ struct SettingsView: View {
 
         query.getDocuments { snapshot, error in
             if let error = error {
-                print("Error fetching highlights: \(error.localizedDescription)")
                 return
             }
 
             for document in snapshot?.documents ?? [] {
                 let eventID = document.documentID
                 let eventReference = db.collection("Events").document(eventID)
-                eventReference.delete { error in
-                    if let error = error {
-                        print("Error deleting document: \(error.localizedDescription)")
-                    } else {
-                        print("Document successfully deleted!")
-                    }
-                }
+                eventReference.delete { _ in }
             }
         }
     }
@@ -334,13 +320,7 @@ struct SettingsView: View {
                         if let incomingDoc = incomingDoc, incomingDoc.exists {
                             var incomingList = incomingDoc.data()?["Incoming"] as? [String] ?? []
                             incomingList.removeAll { $0 == userID }
-                            incomingDocument.updateData(["Incoming": incomingList]) { error in
-                                if let error = error {
-                                    print("Error updating document: \(error)")
-                                } else {
-                                    print("Document successfully updated with new score.")
-                                }
-                            }
+                            incomingDocument.updateData(["Incoming": incomingList]) { _ in}
                         }
                     }
                 }
@@ -350,13 +330,7 @@ struct SettingsView: View {
                         if let outgoingDoc = outgoingDoc, outgoingDoc.exists {
                             var outgoingList = outgoingDoc.data()?["Outgoing"] as? [String] ?? []
                             outgoingList.removeAll { $0 == userID }
-                            outgoingDocument.updateData(["Outgoing": outgoingList]) { error in
-                                if let error = error {
-                                    print("Error updating document: \(error)")
-                                } else {
-                                    print("Document successfully updated with new score.")
-                                }
-                            }
+                            outgoingDocument.updateData(["Outgoing": outgoingList]) { _ in}
                         }
                     }
                 }
@@ -366,50 +340,31 @@ struct SettingsView: View {
                         if let friendDoc = friendDoc, friendDoc.exists {
                             var friendList = friendDoc.data()?["Friends"] as? [String] ?? []
                             friendList.removeAll { $0 == userID }
-                            friendDocument.updateData(["Friends": friendList]) { error in
-                                if let error = error {
-                                    print("Error updating document: \(error)")
-                                } else {
-                                    print("Document successfully updated with new score.")
-                                }
-                            }
+                            friendDocument.updateData(["Friends": friendList]) { _ in}
                         }
                     }
                 }
             }
         }
     }
+    func deleteMessages(for userID: String) {}
     func deleteUsernameDocument(for userID: String) {
         let userDocument = db.collection("User").document(userID)
         userDocument.getDocument { (document, error) in
             if let document = document, document.exists {
-                // Document data exists, so you can access fields
                 if let username = document.data()?["Username"] as? String {
                     let usernameDocumentRef = db.collection("Usernames").document(username)
-                    usernameDocumentRef.delete { error in
-                        if let error = error {
-                            print("Error deleting document: \(error.localizedDescription)")
-                        } else {
-                            print("Document successfully deleted!")
-                        }
-                    }
+                    usernameDocumentRef.delete { _ in }
                 } else {
-                    print("Field doesn't exist or is not a string.")
+                    
                 }
             } else {
-                print("Document does not exist or there was an error: \(error?.localizedDescription ?? "Unknown error")")
             }
         }
     }
     func deleteUserDocument(for userID: String) {
         let userDocument = db.collection("User").document(userID)
-        userDocument.delete { error in
-            if let error = error {
-                print("Error deleting document: \(error.localizedDescription)")
-            } else {
-                print("Document successfully deleted!")
-            }
-        }
+        userDocument.delete { _ in }
     }
 }
 
