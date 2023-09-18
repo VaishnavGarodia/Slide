@@ -22,7 +22,7 @@ struct EventDetailsView: View {
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
         if selectedTab == 0 && !event.highlights.isEmpty {
-            Text("Swipe see highlights posted to this event")
+            Text("Swipe to see highlights posted to this event")
                 .padding(.bottom, 2)
         }
     }

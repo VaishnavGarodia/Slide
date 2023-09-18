@@ -18,6 +18,8 @@ struct SettingsView: View {
     @StateObject var notificationPermission = NotificationPermission()
     @State private var isDeleteErrorVisible = false
     @State private var deleteErrorMessage = ""
+    @State private var isPrivacyPolicyVisible = false
+
     
     var body: some View {
         List {
@@ -211,6 +213,15 @@ struct SettingsView: View {
                     isShowingTutorial.toggle()
                 } label: {
                     Text("Tutorial")
+                }
+                
+                Button(action: {
+                    if let url = URL(string: "https://slidesocial.app/privacy.html") {
+                        UIApplication.shared.open(url)
+                    }
+                }) {
+                    Text("Privacy Policy")
+                        .foregroundColor(.blue)
                 }
             }
         }

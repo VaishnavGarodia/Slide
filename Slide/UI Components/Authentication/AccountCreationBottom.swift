@@ -12,6 +12,7 @@ struct AccountCreationBottom: View {
     let text: String
     let buttonText: String
     @Binding var logIn: Bool
+    
     var body: some View {
         HStack {
             Text(text)
