@@ -1,7 +1,3 @@
-// ChatView.swift
-// Slide
-// Created by Nidhish Jain on 7/26/23.
-
 import FirebaseAuth
 import FirebaseFirestore
 import SwiftUI
@@ -61,8 +57,9 @@ struct ChatView: View {
                                             Text(message.text)
                                                 .font(.system(size: 20))
                                                 .foregroundColor(.white)
+                                                .padding(7)
                                         }
-                                        .padding(5)
+                                        .frame(minWidth: 30) // Base width
                                         .background(Color.accentColor)
                                         .cornerRadius(12)
                                     }
@@ -73,8 +70,9 @@ struct ChatView: View {
                                             Text(message.text)
                                                 .font(.system(size: 20))
                                                 .foregroundColor(.white)
+                                                .padding(7)
                                         }
-                                        .padding(5)
+                                        .frame(minWidth: 30) // Base width
                                         .background(Color.darkGray)
                                         .cornerRadius(12)
                                         Spacer()
