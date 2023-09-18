@@ -10,7 +10,7 @@ import SwiftUI
 import UIKit
 
 struct SettingsView: View {
-    @State private var clicks = [false, false, false, false, false, false, false]
+    @State private var clicks = [false, false, false, false, false, false, false, false]
     @Binding var selectedColorScheme: String
     let user = Auth.auth().currentUser
     @State private var updatedUsername: String = ""
@@ -213,6 +213,33 @@ struct SettingsView: View {
                     Text("Tutorial")
                 }
                 
+                Group {
+                    Button {
+                        withAnimation {
+                            toggleClicks(count: 7)
+                        }
+                    } label: {
+                        HStack {
+                            Text("Contact Us")
+                                .foregroundColor(.primary)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .rotationEffect(.degrees(clicks[7] ? 90 : 0))
+                        }
+                    }
+
+                    if clicks[7] {
+                        Button(action: {
+                            if let url = URL(string: "mailto:hello@slidesocial.app") {
+                                UIApplication.shared.open(url)
+                            }
+                        }) {
+                            Text("hello@slidesocial.app")
+                                .foregroundColor(.blue)
+                        }
+                    }
+                }
+                
                 Button(action: {
                     if let url = URL(string: "https://slidesocial.app/privacy.html") {
                         UIApplication.shared.open(url)
@@ -221,6 +248,8 @@ struct SettingsView: View {
                     Text("Privacy Policy")
                         .foregroundColor(.blue)
                 }
+                
+                
             }
         }
         
