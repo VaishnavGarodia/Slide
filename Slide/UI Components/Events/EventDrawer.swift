@@ -89,9 +89,9 @@ struct EventDrawer: View {
                             offset = -maxHeight
                         } else if -offset > 30, -offset < maxHeight / 3, offset < lastOffset {
                             // Mid...
-                            offset = (-(maxHeight / 3) > -CGFloat(events.count * 110) + 20 || -(maxHeight / 3) < -CGFloat(events.count * 110) - 20) ? -CGFloat(events.count * 110) : -(maxHeight / 3)
+                            offset = (-(maxHeight / 3) > -CGFloat(events.count * 120) + 20 || -(maxHeight / 3) < -CGFloat(events.count * 120) - 20) ? -CGFloat(events.count * 120) : -(maxHeight / 3)
                         } else if -offset > maxHeight / 3 {
-                            offset = (events.count >= 7 || eventView) ? -maxHeight : -CGFloat(events.count * 110)
+                            offset = (events.count >= 7 || eventView) ? -maxHeight : -CGFloat(events.count * 120)
                         } else {
                             offset = 10
                         }

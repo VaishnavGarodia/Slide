@@ -13,6 +13,8 @@ struct Register: View {
     @State public var errorMessage = ""
     @State private var username = ""
     @Binding var logIn: Bool
+    @State private var isPrivacyPolicyChecked = false // Added state for the checkbox
+
     
     var body: some View {
         ZStack {
@@ -55,12 +57,37 @@ struct Register: View {
                                     errorMessage = isPasswordValid(newText)
                                 })
                         }
+
+                        HStack {
+                            Image(systemName: isPrivacyPolicyChecked ? "checkmark.square.fill" : "square")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(isPrivacyPolicyChecked ? .blue : .secondary)
+                                .onTapGesture {
+                                    isPrivacyPolicyChecked.toggle()
+                                }
+
+                            // Hyperlink to the privacy policy
+                            Button(action: {
+                                if let url = URL(string: "https://slidesocial.app/privacy.html") {
+                                    UIApplication.shared.open(url)
+                                }
+                            }) {
+                                Text("Please acknowledge that you've read and consented to the privacy policy")
+//                                    .foregroundColor(.primary)
+                            }
+                        }
+                        .padding(.top, 10)
+                        .padding(.bottom, 20)
+
                     }
                     
                     Button(action: {
-                        createFirebaseAccount(email: email, password: password, username: username) { error in
-                            if !error.isEmpty {
-                                errorMessage = error
+                        if errorMessage == "" && isPrivacyPolicyChecked {
+                            createFirebaseAccount(email: email, password: password, username: username) { error in
+                                if !error.isEmpty {
+                                    errorMessage = error
+                                }
                             }
                         }
                     }) {
