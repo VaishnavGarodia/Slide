@@ -96,7 +96,7 @@ struct Register: View {
                     }
                 }
                 .padding()
-                AccountCreationBottom(text: "Already have an account?", buttonText: "Log In", logIn: $logIn)
+                AccountCreationBottom(text: "Already have an account?", buttonText: "Log In", logIn: $logIn, privacyAcknowledgment: $isPrivacyPolicyChecked)
             }
         }
     }

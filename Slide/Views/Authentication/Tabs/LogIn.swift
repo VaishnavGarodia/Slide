@@ -61,7 +61,7 @@ struct LogIn: View {
                 }
             }
             .padding()
-            AccountCreationBottom(text: "Don't have an account?", buttonText: "Sign Up", logIn: $logIn)
+            AccountCreationBottom(text: "Don't have an account?", buttonText: "Sign Up", logIn: $logIn, privacyAcknowledgment: .constant(true))
         }
     }
 }

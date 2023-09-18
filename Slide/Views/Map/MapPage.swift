@@ -28,9 +28,6 @@ struct MapPage: View {
         ZStack(alignment: .bottomTrailing) {
             MapView(map: $map, manager: $manager, alert: $alert, destination: $destination, show: $show, events: $events, eventView: $eventView, selectedEvent: $selectedEvent)
                 .ignoresSafeArea()
-                .onTapGesture {
-                    hideKeyboard()
-                }
             
             ZStack(alignment: .topLeading) {
                 HStack {

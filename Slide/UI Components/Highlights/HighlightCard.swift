@@ -18,7 +18,6 @@ struct HighlightCard: View {
     @State private var isShowingAlert = false
     @State private var reportDetails = ""
 
-
     var body: some View {
         ZStack {
             HighlightImage(imageURL: URL(string: highlight.imageName)!)
@@ -58,6 +57,23 @@ struct HighlightCard: View {
                     .padding()
                     .shadow(radius: 10)
                     Spacer()
+                    Button(action: {
+                        isShowingAlert = true
+                    }) {
+                        Image(systemName: "ellipsis")
+                            .foregroundColor(.primary)
+                            .padding()
+                            .cornerRadius(10)
+                    }
+                    .contextMenu {
+                        Button(action: {
+                            // Handle the "Report" action here
+                            isShowingAlert = true
+                        }) {
+                            Text("Report Image")
+                            Image(systemName: "exclamationmark.triangle.fill")
+                        }
+                    }
                 }
                 Spacer()
                 HStack {
@@ -81,38 +97,19 @@ struct HighlightCard: View {
                     .shadow(radius: 10)
                 }
             }
-            Button(action: {
-                isShowingAlert = true
-            }) {
-                Image(systemName: "ellipsis")
-                    .foregroundColor(.black)
-                    .padding()
-                    .background(Color.gray)
-                    .cornerRadius(10)
-            }
-            .contextMenu {
-                Button(action: {
-                    // Handle the "Report" action here
-                    isShowingAlert = true
-                }) {
-                    Text("Report Image")
-                    Image(systemName: "exclamationmark.triangle.fill")
-                }
-            }
         }
         .onAppear {
             currentUserLiked = isCurUserLiking()
         }
         .alert("Report Image", isPresented: $isShowingAlert, actions: {
             TextField("Please add more details", text: $reportDetails)
-            Button("Report", action: {reportImage()})
+            Button("Report", action: { reportImage() })
             Button("Cancel", role: .cancel, action: {})
         }, message: {
             Text("Do you want to report this image?")
         })
     }
-    
-    
+
 //     This function has to add the image to a reported field in the user document and then it also needs to add the report to a reports database in firebase
     func reportImage() {
         let currentUser = Auth.auth().currentUser!.uid
@@ -125,7 +122,7 @@ struct HighlightCard: View {
                 userDocRef.updateData(["highlightsReport": highlightReportList])
             }
         }
-        
+
         // Step 2: Deal with adding to the report database
         let highlightReportDoc = db.collection("HighlightReports").document()
         highlightReportDoc.setData(["highlightID": highlight.postID, "reportDescription": reportDetails, "reporterID": currentUser]) { err in
@@ -137,7 +134,7 @@ struct HighlightCard: View {
 
         print("Image reported")
     }
-    
+
     func isCurUserLiking() -> Bool {
         guard let currentUserID = user?.uid else {
             return false
@@ -172,6 +169,13 @@ struct HighlightCard: View {
         }
     }
 }
+
+struct HighlightCard_Previews: PreviewProvider {
+    static var previews: some View {
+        HighlightCard(highlight: HighlightInfo(uid: "", postID: "s", imageName: "https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg", profileImageName: "", username: "tommy", highlightTitle: "", likedUsers: [], postTime: .now), selectedUser: .constant(nil), profileView: .constant(false))
+    }
+}
+
 
 struct SmallHighlightCard: View {
     var highlight: HighlightInfo

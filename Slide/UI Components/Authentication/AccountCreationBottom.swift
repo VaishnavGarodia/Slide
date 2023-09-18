@@ -12,6 +12,7 @@ struct AccountCreationBottom: View {
     let text: String
     let buttonText: String
     @Binding var logIn: Bool
+    @Binding var privacyAcknowledgment: Bool
     
     var body: some View {
         HStack {
@@ -26,6 +27,6 @@ struct AccountCreationBottom: View {
             .fontWeight(.bold)
         }
 
-        GoogleButton(registered: false)
+        GoogleButton(privacyAcknowledgement: $privacyAcknowledgment, registered: false)
     }
 }

@@ -188,8 +188,6 @@ struct SettingsView: View {
                 }
             }
             
-            
-            
             // Sign Out
             Group {
                 Button {
@@ -256,70 +254,95 @@ struct SettingsView: View {
         deleteEvents(for: currentUserID)
         
         // Posts
-        deletePosts(for: currentUserID)
         
         // TODO: AS THE THIRD TODO REITERATES, deleteFriendDocuments MUST BE COMPLETED BEFORE deleteUserDocument Starts
         // Friendships and outgoings/incomings
-        deleteFriendDocuments(for: currentUserID)
         
         // TODO: Messages (sent and received?)
-        deleteMessages(for: currentUserID)
-        
+//        deleteMessages(for: currentUserID)
         // User and Username docs
         // TODO: deleteUsernameDocument has to COMPLETE before deleteUserDocument STARTS
-        deleteUsernameDocument(for: currentUserID)
         // TODO: U basically just need this function to not run until everything above has run
-        deleteUserDocument(for: currentUserID)
-        
-        //Firebase Auth
-        Auth.auth().currentUser?.delete { error in
-            if let error = error {
-                print("Error deleting user: \(error)")
-                deleteErrorMessage = error.localizedDescription
-                isDeleteErrorVisible.toggle()
-            } else {
-                print("User account deleted successfully.")
-                // Add any additional logic if you wish to navigate the user away, etc.
-            }
-        }
     }
+
+//
+//    func deleteMessages(for userID: String) {
+//        print("fuck1")
+//        let messageUserRef = db.collection("messages").document(userID)
+//        messageUserRef.delete { error in
+//            if let error = error {
+//                print("Error deleting user: \(error)")
+//            }
+//        }
+//
+//        let messageRef = db.collection("messages")
+//        messageRef.getDocuments { snapshot, _ in
+//            print("fuck2")
+//            for document in snapshot?.documents ?? [] {
+//                print("fuck3")
+//                document.reference.collection(userID).getDocuments { snapshot, _ in
+//                    for document in snapshot?.documents ?? [] {
+//                        print("fuck4")
+//                        document.reference.delete()
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     func deletePosts(for userID: String) {
         let postsCollectionRef = db.collection("Posts")
-
-        var query = postsCollectionRef.whereField("User", isEqualTo: userID)
         
+        var query = postsCollectionRef.whereField("User", isEqualTo: userID)
+        let group = DispatchGroup()
+        group.enter()
         query.getDocuments { snapshot, error in
             if let error = error {
                 return
             }
 
             for document in snapshot?.documents ?? [] {
+                print("fook")
                 let postID = document.documentID
                 let postReference = db.collection("Posts").document(postID)
-                postReference.delete { _ in }
+                postReference.delete { _ in
+                }
             }
+            group.leave()
+        }
+        group.notify(queue: .main) {
+            deleteFriendDocuments(for: userID)
         }
     }
+
     func deleteEvents(for userID: String) {
         let eventsCollectionRef = db.collection("Events")
-
-        var query = eventsCollectionRef.whereField("User", isEqualTo: userID)
-
+        let query = eventsCollectionRef.whereField("HostUID", isEqualTo: userID)
+        let group = DispatchGroup()
+        group.enter()
         query.getDocuments { snapshot, error in
             if let error = error {
                 return
             }
-
+            
             for document in snapshot?.documents ?? [] {
+                print("shit")
                 let eventID = document.documentID
                 let eventReference = db.collection("Events").document(eventID)
                 eventReference.delete { _ in }
             }
+            group.leave()
+        }
+        
+        group.notify(queue: .main) {
+            deletePosts(for: userID)
         }
     }
+
     func deleteFriendDocuments(for userID: String) {
-        let userDocument = db.collection("User").document(userID)
+        let group = DispatchGroup()
+        group.enter()
+        let userDocument = db.collection("Users").document(userID)
         userDocument.getDocument { document, _ in
             if let document = document, document.exists {
                 let incomingList = document.data()?["Incoming"] as? [String] ?? []
@@ -331,51 +354,72 @@ struct SettingsView: View {
                         if let incomingDoc = incomingDoc, incomingDoc.exists {
                             var incomingList = incomingDoc.data()?["Incoming"] as? [String] ?? []
                             incomingList.removeAll { $0 == userID }
-                            incomingDocument.updateData(["Incoming": incomingList]) { _ in}
+                            incomingDocument.updateData(["Incoming": incomingList]) { _ in }
                         }
                     }
                 }
                 for outgoing in outgoingList {
-                    let outgoingDocument = db.collection("User").document(outgoing)
+                    let outgoingDocument = db.collection("Users").document(outgoing)
                     outgoingDocument.getDocument { outgoingDoc, _ in
                         if let outgoingDoc = outgoingDoc, outgoingDoc.exists {
                             var outgoingList = outgoingDoc.data()?["Outgoing"] as? [String] ?? []
                             outgoingList.removeAll { $0 == userID }
-                            outgoingDocument.updateData(["Outgoing": outgoingList]) { _ in}
+                            outgoingDocument.updateData(["Outgoing": outgoingList]) { _ in }
                         }
                     }
                 }
                 for friend in friendList {
-                    let friendDocument = db.collection("User").document(friend)
+                    let friendDocument = db.collection("Users").document(friend)
                     friendDocument.getDocument { friendDoc, _ in
                         if let friendDoc = friendDoc, friendDoc.exists {
                             var friendList = friendDoc.data()?["Friends"] as? [String] ?? []
                             friendList.removeAll { $0 == userID }
-                            friendDocument.updateData(["Friends": friendList]) { _ in}
+                            friendDocument.updateData(["Friends": friendList]) { _ in }
+                        }
+                    }
+                }
+            }
+            group.leave()
+        }
+        group.notify(queue: .main) {
+            deleteUsernameDocument(for: userID)
+        }
+    }
+
+    func deleteMessages(for userID: String) {}
+    
+    func deleteUsernameDocument(for userID: String) {
+        let userDocument = db.collection("Users").document(userID)
+        userDocument.getDocument { document, _ in
+            if let document = document, document.exists {
+                if let username = document.data()?["Username"] as? String {
+                    let usernameDocumentRef = db.collection("Usernames").document(username)
+                    usernameDocumentRef.delete { error in
+                        if error == nil {
+                            deleteUserDocument(for: userID)
                         }
                     }
                 }
             }
         }
     }
-    func deleteMessages(for userID: String) {}
-    func deleteUsernameDocument(for userID: String) {
-        let userDocument = db.collection("User").document(userID)
-        userDocument.getDocument { (document, error) in
-            if let document = document, document.exists {
-                if let username = document.data()?["Username"] as? String {
-                    let usernameDocumentRef = db.collection("Usernames").document(username)
-                    usernameDocumentRef.delete { _ in }
-                } else {
-                    
+
+    func deleteUserDocument(for userID: String) {
+        let userDocument = db.collection("Users").document(userID)
+        userDocument.delete { error in
+            if error == nil {
+                Auth.auth().currentUser?.delete { error in
+                    if let error = error {
+                        print("Error deleting user: \(error)")
+                        deleteErrorMessage = error.localizedDescription
+                        isDeleteErrorVisible.toggle()
+                    } else {
+                        print("User account deleted successfully.")
+                        // Add any additional logic if you wish to navigate the user away, etc.
+                    }
                 }
-            } else {
             }
         }
-    }
-    func deleteUserDocument(for userID: String) {
-        let userDocument = db.collection("User").document(userID)
-        userDocument.delete { _ in }
     }
 }
 
