@@ -10,24 +10,23 @@ import GoogleSignIn
 import SwiftUI
 
 struct GoogleButton: View {
+    @Binding var privacyAcknowledgement: Bool
     @State private var errorMessage: String = ""
-    @State private var registered: Bool
-    init(registered: Bool) {
-        _registered = State(initialValue: registered)
-    }
-    
+    let registered: Bool
+
     var body: some View {
         VStack {
-            
             // Sign-In with Google Button
             Button(action: {
-                googleSignIn(registered: false) { error in
-                    // Handle the completion result
-                    if error.isEmpty {
-                        // User signed in successfully
-                    } else {
-                        self.errorMessage = error
+                if privacyAcknowledgement {
+                    googleSignIn(registered: false) { error in
+                        // Handle the completion result
+                        if !error.isEmpty {
+                            self.errorMessage = error
+                        }
                     }
+                } else {
+                    self.errorMessage = "Please acknowledge the privacy policy."
                 }
             }) {
                 Image("google_logo")
@@ -35,7 +34,7 @@ struct GoogleButton: View {
                     .frame(width: 20, height: 20)
             }
             .bubbleStyle(color: .primary)
-            
+
             if !errorMessage.isEmpty {
                 Text(errorMessage)
                     .foregroundColor(.red)
@@ -45,11 +44,8 @@ struct GoogleButton: View {
     }
 }
 
-
-
-
 struct GoogleButton_Previews: PreviewProvider {
     static var previews: some View {
-        GoogleButton(registered: false)
+        GoogleButton(privacyAcknowledgement: .constant(false), registered: false)
     }
 }
