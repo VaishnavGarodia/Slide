@@ -16,7 +16,10 @@ struct EventDrawer: View {
     @State var lastOffset: CGFloat = 10
     @State var storedOffset: CGFloat = 0
     @GestureState var gestureOffset: CGFloat = 0
-
+    var sortedEvents: [Event] {
+        return events.sorted { $0.slides.count > $1.slides.count }
+    }
+    
     var body: some View {
         GeometryReader { proxy -> AnyView in
             let height = proxy.frame(in: .global).height
@@ -26,7 +29,6 @@ struct EventDrawer: View {
                     BlurView(style: .systemThinMaterial)
                         .clipShape(CustomCorner(corners: [.topLeft, .topRight], radius: 20))
                         .edgesIgnoringSafeArea(.bottom)
-
                     if eventView {
                         VStack {
                             EventDetailsView(
@@ -61,8 +63,17 @@ struct EventDrawer: View {
                                 .padding(.top, -5)
 
                             ScrollView {
-                                ForEach($events, id: \.name) { event in
-                                    ListedEvent(event: event, selectedEvent: $selectedEvent, eventView: $eventView)
+                                ForEach(events.sorted { $0.slides.count > $1.slides.count }, id: \.name) { event in
+                                    let eventBinding = Binding(
+                                        get: { events.first(where: { $0.id == event.id })! },
+                                        set: { newValue in
+                                            if let index = events.firstIndex(where: { $0.id == newValue.id }) {
+                                                events[index] = newValue
+                                            }
+                                        }
+                                    )
+                                    
+                                    ListedEvent(event: eventBinding, selectedEvent: $selectedEvent, eventView: $eventView)
                                         .padding(.bottom)
                                 }
                             }
